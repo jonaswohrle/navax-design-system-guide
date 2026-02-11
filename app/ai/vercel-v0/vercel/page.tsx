@@ -158,9 +158,7 @@ export default function VercelPlatformPage() {
             <SectionHeading
               badge="Open Source"
               title="Built on Open Source"
-              description="Vercel's most impactful tools are free and open-source. Hundreds of thousands of developers
-              build with these projects every day. The open-source foundation ensures no vendor lock-in
-              and a thriving community."
+              description="Vercel's most impactful tools are free and open-source -- downloaded over 100 million times per week. The open-source foundation ensures no vendor lock-in and a thriving community that shapes the modern web."
             />
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -183,22 +181,22 @@ export default function VercelPlatformPage() {
                 accentClass="bg-secondary/10 text-secondary"
               />
               <OssCard
-                name="SWR"
-                description="React Hooks for data fetching. Stale-while-revalidate strategy, cache management, real-time updates, pagination, SSR support, and automatic revalidation."
-                stats="31k+ Stars"
+                name="Nuxt"
+                description="The intuitive Vue framework. Server-side rendering, file-based routing, auto imports, and a rich module ecosystem. Vercel provides first-class deployment support."
+                stats="56k+ Stars"
                 accentClass="bg-info/10 text-info"
               />
               <OssCard
-                name="Vercel CLI"
-                description="Command-line interface for deploying and managing Vercel projects. Local development, environment variables, domain management, and CI/CD integration."
-                stats="Open Source"
+                name="SvelteKit"
+                description="The Svelte application framework for building fast web apps. Server-side rendering, code splitting, and zero-JS hydration patterns. Natively supported on Vercel."
+                stats="19k+ Stars"
                 accentClass="bg-muted text-muted-foreground"
               />
               <OssCard
-                name="Geist"
-                description="Vercel's typeface family designed for readability at every size. Geist Sans for UI and Geist Mono for code -- both optimized for screens."
-                stats="Open Source"
-                accentClass="bg-muted text-muted-foreground"
+                name="shadcn/ui"
+                description="Beautifully designed, accessible UI components built with Radix UI and Tailwind CSS. Copy-paste into your project -- you own the code. Powers design systems worldwide."
+                stats="82k+ Stars"
+                accentClass="bg-primary/10 text-primary"
               />
             </div>
 
@@ -227,8 +225,8 @@ export default function VercelPlatformPage() {
               automatically provisions what you need."
             />
 
-            <div className="mt-8 grid gap-4 lg:grid-cols-2">
-              <div className="flex flex-col gap-4">
+            <div className="mt-8 grid items-stretch gap-4 lg:grid-cols-2">
+              <div className="flex flex-col justify-between gap-4">
                 <InfraLayer
                   icon={Globe}
                   title="Edge Network"
@@ -255,8 +253,8 @@ export default function VercelPlatformPage() {
                 />
               </div>
 
-              <Card className="border-border">
-                <CardContent className="flex flex-col gap-5 p-6">
+              <Card className="border-border h-full">
+                <CardContent className="flex h-full flex-col gap-5 p-6">
                   <div className="flex items-center gap-2">
                     <Zap className="h-4 w-4 text-primary" />
                     <h3 className="text-sm font-heading font-semibold text-foreground uppercase tracking-wider">
@@ -315,33 +313,33 @@ export default function VercelPlatformPage() {
                 accentClass="bg-primary/10 text-primary"
               />
               <FeatureCard
-                icon={Zap}
-                title="Turbopack"
-                description="The Rust-powered successor to Webpack. 700x faster cold starts, incremental computation, and native support for React Server Components, TypeScript, and CSS modules."
-                accentClass="bg-secondary/10 text-secondary"
-              />
-              <FeatureCard
                 icon={Layers}
                 title="Vercel Toolbar"
                 description="In-page collaboration for your team. Visual feedback, feature flags, draft mode, and performance insights -- all accessible directly in the preview deployment."
-                accentClass="bg-info/10 text-info"
+                accentClass="bg-secondary/10 text-secondary"
               />
               <FeatureCard
                 icon={Globe}
-                title="Analytics & Speed Insights"
-                description="Real-user performance metrics. Core Web Vitals, audience insights, and custom events. Track LCP, CLS, and INP across every deployment."
+                title="Observability"
+                description="Full-stack visibility with Vercel Analytics, Speed Insights, and Logs. Track Core Web Vitals (LCP, CLS, INP), real-user metrics, audience insights, and function performance."
+                accentClass="bg-info/10 text-info"
+              />
+              <FeatureCard
+                icon={Cloud}
+                title="AI Gateway"
+                description="Unified API for every AI provider. Route requests to OpenAI, Anthropic, Google, or AWS Bedrock through a single endpoint. Built-in rate limiting, cost tracking, and fallback routing."
                 accentClass="bg-primary/10 text-primary"
+              />
+              <FeatureCard
+                icon={Zap}
+                title="Workflows"
+                description="Durable, resumable workflows that survive restarts. Multi-step orchestration, pause for external events, retry on failure, and long-running agent tasks with built-in observability."
+                accentClass="bg-secondary/10 text-secondary"
               />
               <FeatureCard
                 icon={Shield}
                 title="Firewall & Protection"
                 description="Built-in web application firewall, bot protection, and rate limiting. Block malicious traffic at the edge before it reaches your application."
-                accentClass="bg-secondary/10 text-secondary"
-              />
-              <FeatureCard
-                icon={Server}
-                title="Fluid Compute"
-                description="Serverless functions that can reuse compute across multiple requests. Reduced cold starts, lower costs, and better tail latency for high-traffic applications."
                 accentClass="bg-info/10 text-info"
               />
             </div>
