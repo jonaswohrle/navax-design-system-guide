@@ -14,6 +14,7 @@ import { ShowcaseTemplateConfig } from "@/components/showcase/template-config"
 import { ShowcaseComposite } from "@/components/showcase/composite"
 import { ShowcaseAdvanced } from "@/components/showcase/advanced"
 import { Section, Heading, Text, Divider, StatusBadge, NavaxLogo } from "@/components/ds"
+import { OpenAllInV0Button } from "@/components/open-in-v0-button"
 
 export default function Page() {
   return (
@@ -36,6 +37,9 @@ export default function Page() {
             Install any component with a single CLI command, or use it
             directly in v0 via your Rules panel.
           </Text>
+          <div className="mt-2">
+            <OpenAllInV0Button />
+          </div>
         </div>
       </section>
 

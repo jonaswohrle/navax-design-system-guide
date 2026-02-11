@@ -1,4 +1,5 @@
 import { Text } from "@/components/ds"
+import { OpenInV0Button, OpenAllInV0Button } from "@/components/open-in-v0-button"
 
 const COMPONENTS = [
   { name: "heading", cat: "Typography" },
@@ -64,9 +65,11 @@ export function ShowcaseRegistryInfo() {
 
       {/* Component index */}
       <div className="rounded-lg border border-border bg-card p-6">
-        <p className="text-base font-semibold text-foreground mb-4">
-          {COMPONENTS.length} Components
-        </p>
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-base font-semibold text-foreground">
+            {COMPONENTS.length} Components
+          </p>
+        </div>
         <div className="flex flex-col gap-6">
           {CATEGORIES.map((cat) => (
             <div key={cat}>
@@ -75,12 +78,16 @@ export function ShowcaseRegistryInfo() {
               </p>
               <div className="flex flex-wrap gap-2">
                 {COMPONENTS.filter((c) => c.cat === cat).map((c) => (
-                  <span
+                  <div
                     key={c.name}
-                    className="inline-flex items-center rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-mono text-foreground"
+                    className="group inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-mono text-foreground"
                   >
-                    {c.name}
-                  </span>
+                    <span>{c.name}</span>
+                    <OpenInV0Button
+                      componentName={c.name}
+                      className="h-5 px-1 py-0 opacity-60 group-hover:opacity-100 transition-opacity"
+                    />
+                  </div>
                 ))}
               </div>
             </div>
@@ -88,15 +95,16 @@ export function ShowcaseRegistryInfo() {
         </div>
       </div>
 
-      {/* Open in v0 */}
-      <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-6 text-center">
-        <p className="text-sm font-medium text-primary mb-1">
-          Use in v0
+      {/* Import all CTA */}
+      <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-6 flex flex-col items-center gap-3 text-center">
+        <p className="text-sm font-medium text-primary">
+          Import the entire design system into v0
         </p>
-        <Text variant="small">
-          Add your deployed registry URL in v0 Rules, and every new project
-          will have access to your design system components.
+        <Text variant="small" className="max-w-md">
+          One click to open all {COMPONENTS.length} components in v0, ready to
+          use in your next project.
         </Text>
+        <OpenAllInV0Button className="mt-1 bg-primary text-primary-foreground hover:bg-primary/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90" />
       </div>
     </div>
   )
