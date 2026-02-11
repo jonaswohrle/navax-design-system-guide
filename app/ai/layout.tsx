@@ -21,7 +21,8 @@ const aiSidebarItems = [
     label: "Vercel & v0",
     icon: Triangle,
     children: [
-      { label: "Overview", href: "/ai/vercel-v0" },
+      { label: "Vercel Platform", href: "/ai/vercel-v0/vercel" },
+      { label: "v0 & Workflows", href: "/ai/vercel-v0" },
     ],
   },
 ]
