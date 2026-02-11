@@ -10,9 +10,11 @@ import { ShowcaseFeedback } from "@/components/showcase/feedback"
 import { ShowcaseNavigation } from "@/components/showcase/navigation"
 import { ShowcaseForms } from "@/components/showcase/forms"
 import { ShowcaseRegistryInfo } from "@/components/showcase/registry-info"
+import { ShowcaseTemplateConfig } from "@/components/showcase/template-config"
 import { ShowcaseComposite } from "@/components/showcase/composite"
 import { ShowcaseAdvanced } from "@/components/showcase/advanced"
 import { Section, Heading, Text, Divider, StatusBadge, NavaxLogo } from "@/components/ds"
+import { OpenAllInV0Button } from "@/components/open-in-v0-button"
 
 export default function Page() {
   return (
@@ -35,6 +37,9 @@ export default function Page() {
             Install any component with a single CLI command, or use it
             directly in v0 via your Rules panel.
           </Text>
+          <div className="mt-2">
+            <OpenAllInV0Button />
+          </div>
         </div>
       </section>
 
@@ -45,6 +50,18 @@ export default function Page() {
           Install components via the shadcn CLI from your deployed URL.
         </Text>
         <ShowcaseRegistryInfo />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
+
+      {/* v0 & AI Editor Integration */}
+      <Section>
+        <Heading level={2}>{"Use with v0 & AI Editors"}</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Set up v0 Rules, create a template, or configure MCP for AI code
+          editors -- everything you need to start using the design system.
+        </Text>
+        <ShowcaseTemplateConfig />
       </Section>
 
       <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
