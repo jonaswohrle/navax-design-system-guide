@@ -640,18 +640,63 @@ function Message({
             )
           }
 
-          if (part.type === "tool-invocation") {
-            const { toolInvocation } = part
-            const { toolName, state, toolCallId } = toolInvocation
+          if (part.type.startsWith("tool-")) {
+            const toolPart = part as {
+              type: string
+              toolCallId: string
+              state: string
+              input?: unknown
+              output?: unknown
+            }
+            const toolName = toolPart.type.replace("tool-", "")
+            const { state, toolCallId } = toolPart
 
-            // Loading states
+            // Client-side tools: render interactive component in ALL states except input-streaming
+            if (toolName === "promptBattle") {
+              if (state === "input-streaming") {
+                return <ToolLoading key={idx} toolName={toolName} />
+              }
+              const args = (toolPart.input || {}) as Parameters<
+                typeof BattleComponent
+              >[0]["data"]
+              return (
+                <BattleComponent
+                  key={idx}
+                  data={args}
+                  disabled={state === "output-available"}
+                  onSelect={(choice) =>
+                    onToolInteraction(toolCallId, toolName, choice)
+                  }
+                />
+              )
+            }
+
+            if (toolName === "promptChallenge") {
+              if (state === "input-streaming") {
+                return <ToolLoading key={idx} toolName={toolName} />
+              }
+              const args = (toolPart.input || {}) as Parameters<
+                typeof ChallengeComponent
+              >[0]["data"]
+              return (
+                <ChallengeComponent
+                  key={idx}
+                  data={args}
+                  disabled={state === "output-available"}
+                  onAnswer={(answer) =>
+                    onToolInteraction(toolCallId, toolName, answer)
+                  }
+                />
+              )
+            }
+
+            // Server-side tools: show loading while streaming/waiting, render card on output
             if (state === "input-streaming" || state === "input-available") {
               return <ToolLoading key={idx} toolName={toolName} />
             }
 
-            // Rendered output for server-side tools
             if (state === "output-available") {
-              const output = toolInvocation.output as Record<string, unknown>
+              const output = toolPart.output as Record<string, unknown>
               if (toolName === "showScorecard") {
                 return (
                   <ScorecardComponent
@@ -668,45 +713,6 @@ function Message({
                   />
                 )
               }
-              if (toolName === "promptBattle") {
-                return <span key={idx} />
-              }
-              if (toolName === "promptChallenge") {
-                return <span key={idx} />
-              }
-            }
-
-            // Client-side tools awaiting interaction
-            if (toolName === "promptBattle") {
-              const args = ("args" in toolInvocation ? toolInvocation.args : {}) as Parameters<
-                typeof BattleComponent
-              >[0]["data"]
-              return (
-                <BattleComponent
-                  key={idx}
-                  data={args}
-                  disabled={state === "output-available"}
-                  onSelect={(choice) =>
-                    onToolInteraction(toolCallId, toolName, choice)
-                  }
-                />
-              )
-            }
-
-            if (toolName === "promptChallenge") {
-              const args = ("args" in toolInvocation ? toolInvocation.args : {}) as Parameters<
-                typeof ChallengeComponent
-              >[0]["data"]
-              return (
-                <ChallengeComponent
-                  key={idx}
-                  data={args}
-                  disabled={state === "output-available"}
-                  onAnswer={(answer) =>
-                    onToolInteraction(toolCallId, toolName, answer)
-                  }
-                />
-              )
             }
           }
 
@@ -724,11 +730,17 @@ export default function PromptCoachPage() {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
+  const transport = React.useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: "/api/ai/chat",
+        body: { model },
+      }),
+    [model]
+  )
+
   const { messages, sendMessage, addToolOutput, status } = useChat({
-    transport: new DefaultChatTransport({
-      api: "/api/ai/chat",
-      body: { model },
-    }),
+    transport,
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
   })
 
