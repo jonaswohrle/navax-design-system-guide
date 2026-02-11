@@ -10,6 +10,7 @@ import {
   MessageSquare,
   ImagePlus,
   GitBranch,
+  Triangle,
   type LucideIcon,
 } from "lucide-react"
 import { NavaxLogo } from "@/components/ds/navax-logo"
@@ -151,10 +152,10 @@ export default function Page() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/ai/prompt-coach">
+              <Link href="/ai/vercel-v0/vercel">
                 <Button variant="outline" size="lg" className="gap-2">
-                  <MessageSquare className="h-4 w-4" />
-                  Try Prompt Coach
+                  <Triangle className="h-4 w-4" />
+                  Learn about Vercel & v0
                 </Button>
               </Link>
             </div>

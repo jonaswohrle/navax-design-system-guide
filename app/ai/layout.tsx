@@ -8,6 +8,14 @@ import { Sparkles, LayoutDashboard, Triangle } from "lucide-react"
 const aiSidebarItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   {
+    label: "Vercel & v0",
+    icon: Triangle,
+    children: [
+      { label: "Vercel Platform", href: "/ai/vercel-v0/vercel" },
+      { label: "v0 & Workflows", href: "/ai/vercel-v0" },
+    ],
+  },
+  {
     label: "AI Showcases",
     icon: Sparkles,
     children: [
@@ -15,14 +23,6 @@ const aiSidebarItems = [
       { label: "Prompt Coach", href: "/ai/prompt-coach" },
       { label: "Image Studio", href: "/ai/image-studio" },
       { label: "Content Pipeline", href: "/ai/content-pipeline" },
-    ],
-  },
-  {
-    label: "Vercel & v0",
-    icon: Triangle,
-    children: [
-      { label: "Vercel Platform", href: "/ai/vercel-v0/vercel" },
-      { label: "v0 & Workflows", href: "/ai/vercel-v0" },
     ],
   },
 ]
