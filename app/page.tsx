@@ -58,8 +58,12 @@ export default function Page() {
       <Section>
         <Heading level={2}>Setup</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          Everything you need to use the design system in v0, AI editors,
-          or any Next.js project.
+          Publish{" "}
+          <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono font-semibold">
+            @navax/design-system
+          </code>{" "}
+          to npm, then create a v0 template so every project starts with
+          the full design system ready to import.
         </Text>
         <ShowcaseTemplateConfig />
       </Section>
