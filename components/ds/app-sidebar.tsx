@@ -55,7 +55,12 @@ export function AppSidebar({
   user = { name: "Maria Schmidt", email: "m.schmidt@navax.com" },
 }: AppSidebarProps) {
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed)
-  const [openSections, setOpenSections] = React.useState<string[]>([])
+  const [openSections, setOpenSections] = React.useState<string[]>(() => {
+    // Auto-expand sections that contain the active path
+    return (items ?? defaultItems)
+      .filter((item) => item.children?.some((child) => activePath.startsWith(child.href)))
+      .map((item) => item.label)
+  })
 
   const toggleSection = (label: string) => {
     setOpenSections((prev) =>
