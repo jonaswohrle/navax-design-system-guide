@@ -67,6 +67,26 @@
       "registryDependencies": []
     },
     {
+      "name": "command-menu",
+      "type": "registry:ui",
+      "title": "Command Menu",
+      "description": "Spotlight-style command palette with search, groups, and keyboard shortcuts.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Data Table",
+      "description": "Generic sortable data table with typed columns, hover states, and empty state.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "divider",
       "type": "registry:ui",
       "title": "Divider",
@@ -79,6 +99,14 @@
       "type": "registry:ui",
       "title": "Empty State",
       "description": "Empty state placeholder with icon, title, description, and action.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "feature-card",
+      "type": "registry:ui",
+      "title": "Feature Card",
+      "description": "Feature highlight card with icon, title, description, and optional link.",
       "dependencies": [],
       "registryDependencies": []
     },
@@ -123,6 +151,14 @@
       "registryDependencies": []
     },
     {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Keyboard shortcut hint with styled key caps and separator.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
       "name": "navax-logo",
       "type": "registry:ui",
       "title": "Navax Logo",
@@ -145,6 +181,18 @@
       "description": "Page header with title, description, actions, and breadcrumb slots.",
       "dependencies": [],
       "registryDependencies": []
+    },
+    {
+      "name": "pricing-card",
+      "type": "registry:ui",
+      "title": "Pricing Card",
+      "description": "Pricing tier card with feature list, highlight badge, and CTA button.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "progress-bar",
@@ -215,10 +263,28 @@
       "registryDependencies": []
     },
     {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "Step progress indicator with horizontal and vertical orientations.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": []
+    },
+    {
       "name": "tab-nav",
       "type": "registry:ui",
       "title": "Tab Nav",
       "description": "Underline-style tab navigation with counts and active state.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "testimonial-card",
+      "type": "registry:ui",
+      "title": "Testimonial Card",
+      "description": "Customer testimonial card with quote, avatar, star rating, and attribution.",
       "dependencies": [],
       "registryDependencies": []
     },
@@ -246,6 +312,16 @@
       "title": "Toggle Button Group",
       "description": "Segmented control / toggle group with radio-like behavior.",
       "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "user-menu",
+      "type": "registry:ui",
+      "title": "User Menu",
+      "description": "Avatar dropdown user menu with profile, settings, and sign-out actions.",
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": []
     }
   ]

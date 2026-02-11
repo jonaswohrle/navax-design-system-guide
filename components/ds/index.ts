@@ -37,6 +37,20 @@ export { FileUpload } from "./file-upload"
 // Brand
 export { NavaxLogo } from "./navax-logo"
 
+// Data (advanced)
+export { DataTable } from "./data-table"
+
+// Marketing
+export { PricingCard } from "./pricing-card"
+export { TestimonialCard } from "./testimonial-card"
+export { FeatureCard } from "./feature-card"
+
+// Interactive
+export { CommandMenu } from "./command-menu"
+export { UserMenu } from "./user-menu"
+export { Stepper } from "./stepper"
+export { Kbd } from "./kbd"
+
 // Complex / Composite
 export { AppHeader } from "./app-header"
 export { AppSidebar } from "./app-sidebar"

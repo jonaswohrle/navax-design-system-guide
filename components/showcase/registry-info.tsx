@@ -23,10 +23,18 @@ const COMPONENTS = [
   { name: "app-header", cat: "Composite" },
   { name: "app-sidebar", cat: "Composite" },
   { name: "app-footer", cat: "Composite" },
+  { name: "data-table", cat: "Data Display" },
   { name: "form-field", cat: "Forms" },
   { name: "search-input", cat: "Forms" },
   { name: "toggle-button-group", cat: "Forms" },
   { name: "file-upload", cat: "Forms" },
+  { name: "pricing-card", cat: "Marketing" },
+  { name: "testimonial-card", cat: "Marketing" },
+  { name: "feature-card", cat: "Marketing" },
+  { name: "command-menu", cat: "Interactive" },
+  { name: "user-menu", cat: "Interactive" },
+  { name: "stepper", cat: "Interactive" },
+  { name: "kbd", cat: "Interactive" },
 ]
 
 const CATEGORIES = [

@@ -11,6 +11,7 @@ import { ShowcaseNavigation } from "@/components/showcase/navigation"
 import { ShowcaseForms } from "@/components/showcase/forms"
 import { ShowcaseRegistryInfo } from "@/components/showcase/registry-info"
 import { ShowcaseComposite } from "@/components/showcase/composite"
+import { ShowcaseAdvanced } from "@/components/showcase/advanced"
 import { Section, Heading, Text, Divider, StatusBadge, NavaxLogo } from "@/components/ds"
 
 export default function Page() {
@@ -26,7 +27,7 @@ export default function Page() {
               Design System
             </Heading>
             <StatusBadge status="success" dot={false}>
-              26 components
+              34 components
             </StatusBadge>
           </div>
           <Text className="max-w-2xl text-white/80">
@@ -55,6 +56,17 @@ export default function Page() {
           Full-scale header, sidebar, and footer patterns for app layouts.
         </Text>
         <ShowcaseComposite />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
+
+      {/* Advanced Components */}
+      <Section>
+        <Heading level={2}>{"Advanced & Marketing"}</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Data tables, stepper, command menu, pricing, testimonials, feature cards, and more.
+        </Text>
+        <ShowcaseAdvanced />
       </Section>
 
       <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
