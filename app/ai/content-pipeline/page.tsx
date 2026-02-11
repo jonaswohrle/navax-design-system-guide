@@ -212,7 +212,7 @@ function ContentOutput({ content, title }: { content: string; title: string }) {
 }
 
 export default function ContentPipelinePage() {
-  const [model, setModel] = React.useState("openai/gpt-4o")
+  const [model, setModel] = React.useState("openai/gpt-5.2")
   const [topic, setTopic] = React.useState("")
   const [steps, setSteps] = React.useState<PipelineStep[]>(INITIAL_STEPS)
   const [isRunning, setIsRunning] = React.useState(false)

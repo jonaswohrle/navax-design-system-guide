@@ -2,7 +2,7 @@ import { streamText, tool, convertToModelMessages, Output } from "ai"
 import { z } from "zod"
 
 export async function POST(req: Request) {
-  const { messages, model = "openai/gpt-4o" } = await req.json()
+  const { messages, model = "openai/gpt-5.2" } = await req.json()
 
   const result = streamText({
     model: model,

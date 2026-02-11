@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/select"
 
 const MODELS = [
-  { id: "openai/gpt-4o", label: "GPT-4o", provider: "OpenAI" },
-  { id: "anthropic/claude-sonnet-4-20250514", label: "Claude Sonnet 4", provider: "Anthropic" },
-  { id: "xai/grok-3-fast", label: "Grok 3 Fast", provider: "xAI" },
-  { id: "google/gemini-2.5-flash", label: "Gemini 2.5 Flash", provider: "Google" },
+  { id: "openai/gpt-5.2", label: "GPT-5.2", provider: "OpenAI" },
+  { id: "anthropic/claude-opus-4.5", label: "Claude Opus 4.5", provider: "Anthropic" },
+  { id: "xai/grok-4.1-fast-non-reasoning", label: "Grok 4.1 Fast", provider: "xAI" },
+  { id: "google/gemini-3-pro", label: "Gemini 3 Pro", provider: "Google" },
 ]
 
 interface ModelSelectorProps {

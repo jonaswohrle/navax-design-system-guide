@@ -157,7 +157,7 @@ function RewriteCard({ data }: { data: Record<string, unknown> }) {
 }
 
 export default function PromptCoachPage() {
-  const [model, setModel] = React.useState("openai/gpt-4o")
+  const [model, setModel] = React.useState("openai/gpt-5.2")
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({

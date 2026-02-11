@@ -109,7 +109,7 @@ Make sure the content is engaging, accurate, and actionable for developers learn
 }
 
 export async function POST(req: Request) {
-  const { topic, model = "openai/gpt-4o" } = await req.json()
+  const { topic, model = "openai/gpt-5.2" } = await req.json()
 
   if (!topic || typeof topic !== "string") {
     return Response.json({ error: "Topic is required" }, { status: 400 })

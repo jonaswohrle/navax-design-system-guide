@@ -219,7 +219,7 @@ const STARTERS = [
 ]
 
 export default function InteractiveToolsPage() {
-  const [model, setModel] = React.useState("openai/gpt-4o")
+  const [model, setModel] = React.useState("openai/gpt-5.2")
 
   const { messages, sendMessage, addToolOutput, status } = useChat({
     transport: new DefaultChatTransport({
