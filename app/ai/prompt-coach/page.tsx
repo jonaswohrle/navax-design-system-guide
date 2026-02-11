@@ -2,159 +2,221 @@
 
 import * as React from "react"
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithToolCalls,
+} from "ai"
 import type { UIMessage } from "ai"
 import { ModelSelector } from "@/components/ai/model-selector"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   SendHorizontal,
   Loader2,
   Lightbulb,
   Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  AlertTriangle,
   User,
   Bot,
   BookOpen,
   Target,
   Zap,
+  CheckCircle2,
+  XCircle,
+  Trophy,
+  Swords,
+  GraduationCap,
+  ArrowRight,
+  TrendingUp,
   Copy,
   Check,
-  ChevronDown,
-  TrendingUp,
-  Eye,
-  FileText,
-  Layers,
-  Ruler,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Markdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
+/* ─── Starters ───────────────────────────────────────────────── */
 const STARTERS = [
   {
-    label: "Analyze a prompt",
-    text: 'Can you analyze this prompt for me? "Write a blog post about AI"',
+    label: "Analyze my prompt",
+    text: 'Analyze this prompt: "Write a blog post about AI"',
     icon: Target,
-    description: "See how a vague prompt scores and get a rewrite",
+    desc: "Watch the AI score your prompt and challenge you",
   },
   {
-    label: "Learn prompting",
-    text: "What are the most important principles for writing effective prompts?",
+    label: "Teach me prompting",
+    text: "Teach me the most important prompting technique",
     icon: BookOpen,
-    description: "Core techniques for better AI output",
+    desc: "Interactive quiz to test your knowledge",
   },
   {
-    label: "System prompt",
-    text: "Help me write a system prompt for a customer support chatbot that handles refund requests",
+    label: "System prompt help",
+    text: "Help me write a system prompt for a customer support chatbot",
     icon: Zap,
-    description: "Build a production-ready system prompt",
+    desc: "Build a production prompt step-by-step",
   },
   {
-    label: "Improve a prompt",
-    text: 'Can you improve this prompt? "Make me a website that looks good and has all the features"',
+    label: "Vibe coding prompt",
+    text: 'Analyze this prompt: "Make me a website that looks good and has all the features"',
     icon: Sparkles,
-    description: "Before/after transformation with explanation",
+    desc: "Learn why vague prompts fail spectacularly",
   },
 ]
 
-const SCORE_ICONS: Record<string, React.ElementType> = {
-  Clarity: Eye,
-  Specificity: Target,
-  Context: FileText,
-  Structure: Layers,
-  Constraints: Ruler,
-}
-
+/* ─── Copy button ────────────────────────────────────────────── */
 function CopyBtn({ text }: { text: string }) {
   const [copied, setCopied] = React.useState(false)
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="h-7 gap-1.5 text-xs"
+    <button
       onClick={() => {
         navigator.clipboard.writeText(text)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
       }}
+      className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
     >
-      {copied ? <Check className="h-3 w-3 text-success" /> : <Copy className="h-3 w-3" />}
+      {copied ? (
+        <Check className="h-3 w-3 text-success" />
+      ) : (
+        <Copy className="h-3 w-3" />
+      )}
       {copied ? "Copied" : "Copy"}
-    </Button>
+    </button>
   )
 }
 
-function AnimatedScore({ score, delay = 0 }: { score: number; delay?: number }) {
-  const [show, setShow] = React.useState(false)
-  React.useEffect(() => {
-    const t = setTimeout(() => setShow(true), delay)
-    return () => clearTimeout(t)
-  }, [delay])
+/* ─── Scorecard ──────────────────────────────────────────────── */
+function ScorecardComponent({
+  data,
+}: {
+  data: {
+    promptText: string
+    overall: number
+    clarity: number
+    specificity: number
+    context: number
+    structure: number
+    constraints: number
+    verdict: string
+    topTip: string
+  }
+}) {
+  const dimensions = [
+    { label: "Clarity", score: data.clarity },
+    { label: "Specificity", score: data.specificity },
+    { label: "Context", score: data.context },
+    { label: "Structure", score: data.structure },
+    { label: "Constraints", score: data.constraints },
+  ]
 
-  const color =
-    score >= 8 ? "text-success" : score >= 5 ? "text-warning" : "text-destructive"
-  const bg =
-    score >= 8 ? "bg-success/10" : score >= 5 ? "bg-warning/10" : "bg-destructive/10"
+  const scoreColor = (s: number) =>
+    s >= 8
+      ? "text-success"
+      : s >= 5
+        ? "text-warning"
+        : "text-destructive"
+  const barColor = (s: number) =>
+    s >= 8 ? "bg-success" : s >= 5 ? "bg-warning" : "bg-destructive"
+  const overallBg =
+    data.overall >= 8
+      ? "bg-success/10 border-success/30 text-success"
+      : data.overall >= 5
+        ? "bg-warning/10 border-warning/30 text-warning"
+        : "bg-destructive/10 border-destructive/30 text-destructive"
 
   return (
-    <div
-      className={cn(
-        "flex h-11 w-11 items-center justify-center rounded-xl text-lg font-bold transition-all duration-500",
-        bg,
-        color,
-        show ? "scale-100 opacity-100" : "scale-75 opacity-0"
-      )}
-    >
-      {score}
-    </div>
+    <Card className="w-full overflow-hidden border-border/60 shadow-sm">
+      <div className="flex items-start justify-between gap-4 border-b border-border/40 bg-muted/30 px-5 py-4">
+        <div className="flex-1">
+          <div className="mb-1 flex items-center gap-2">
+            <Target className="h-4 w-4 text-primary" />
+            <span className="text-xs font-heading font-bold uppercase tracking-wider text-primary">
+              Prompt Scorecard
+            </span>
+          </div>
+          <p className="rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground italic leading-relaxed">
+            {'"'}
+            {data.promptText}
+            {'"'}
+          </p>
+        </div>
+        <div
+          className={cn(
+            "flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl border-2",
+            overallBg
+          )}
+        >
+          <span className="text-2xl font-bold leading-none">{data.overall}</span>
+          <span className="text-[8px] font-bold uppercase tracking-widest opacity-70">
+            /10
+          </span>
+        </div>
+      </div>
+
+      <CardContent className="p-5">
+        <div className="mb-4 flex flex-col gap-2">
+          {dimensions.map((d, i) => (
+            <DimensionBar key={d.label} {...d} index={i} />
+          ))}
+        </div>
+
+        <div className="rounded-xl bg-primary/5 border border-primary/10 p-4">
+          <p className="text-xs font-bold text-primary mb-1">Verdict</p>
+          <p className="text-sm text-foreground leading-relaxed">{data.verdict}</p>
+          <div className="mt-3 flex items-start gap-2 rounded-lg bg-background/80 px-3 py-2">
+            <TrendingUp className="mt-0.5 h-3.5 w-3.5 shrink-0 text-secondary" />
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              <span className="font-semibold text-foreground">Top tip: </span>
+              {data.topTip}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
-function ScoreRow({
+function DimensionBar({
   label,
   score,
-  delay,
+  index,
 }: {
   label: string
   score: number
-  delay: number
+  index: number
 }) {
   const [width, setWidth] = React.useState(0)
-  const Icon = SCORE_ICONS[label] || Target
-
   React.useEffect(() => {
-    const t = setTimeout(() => setWidth(score * 10), delay)
+    const t = setTimeout(() => setWidth(score * 10), 100 + index * 80)
     return () => clearTimeout(t)
-  }, [score, delay])
+  }, [score, index])
 
-  const barColor =
+  const bg = score >= 8 ? "bg-success" : score >= 5 ? "bg-warning" : "bg-destructive"
+  const color =
     score >= 8
-      ? "bg-success"
+      ? "text-success"
       : score >= 5
-        ? "bg-warning"
-        : "bg-destructive"
+        ? "text-warning"
+        : "text-destructive"
 
   return (
     <div className="flex items-center gap-3">
-      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted">
-        <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-      </div>
-      <span className="w-20 shrink-0 text-xs font-medium text-foreground">{label}</span>
-      <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-muted">
+      <span className="w-24 shrink-0 text-xs font-medium text-muted-foreground">
+        {label}
+      </span>
+      <div className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-muted">
         <div
-          className={cn("absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out", barColor)}
+          className={cn(
+            "absolute inset-y-0 left-0 rounded-full transition-all duration-700 ease-out",
+            bg
+          )}
           style={{ width: `${width}%` }}
         />
       </div>
       <span
         className={cn(
-          "w-6 text-right text-sm font-bold tabular-nums",
-          score >= 8 ? "text-success" : score >= 5 ? "text-warning" : "text-destructive"
+          "w-5 text-right text-xs font-bold tabular-nums",
+          color
         )}
       >
         {score}
@@ -163,256 +225,372 @@ function ScoreRow({
   )
 }
 
-function AnalysisCard({ data }: { data: Record<string, unknown> }) {
-  const [detailsOpen, setDetailsOpen] = React.useState(false)
-  const d = data as {
-    overallScore: number
-    clarity: number
-    specificity: number
-    context: number
-    structure: number
-    constraints: number
-    strengths: string[]
-    weaknesses: string[]
+/* ─── Prompt Battle (client-side interactive) ────────────────── */
+function BattleComponent({
+  data,
+  onSelect,
+  disabled,
+}: {
+  data: {
+    question: string
+    optionA: string
+    optionB: string
+    correctOption: string
+    explanation: string
+  }
+  onSelect: (choice: string) => void
+  disabled: boolean
+}) {
+  const [selected, setSelected] = React.useState<string | null>(null)
+  const answered = selected !== null
+
+  const handleSelect = (option: string) => {
+    if (answered || disabled) return
+    setSelected(option)
+    const isCorrect = option === data.correctOption
+    onSelect(
+      `I chose Option ${option}. ${isCorrect ? "I think this one is better!" : "Let me know if I'm wrong."}`
+    )
   }
 
-  const scoreLabel =
-    d.overallScore >= 8
-      ? "Excellent"
-      : d.overallScore >= 6
-        ? "Good"
-        : d.overallScore >= 4
-          ? "Needs Work"
-          : "Poor"
-
-  const scoreBadgeVariant =
-    d.overallScore >= 8
-      ? "bg-success/10 text-success border-success/20"
-      : d.overallScore >= 6
-        ? "bg-info/10 text-info border-info/20"
-        : d.overallScore >= 4
-          ? "bg-warning/10 text-warning border-warning/20"
-          : "bg-destructive/10 text-destructive border-destructive/20"
-
-  const dimensions = [
-    { label: "Clarity", score: d.clarity },
-    { label: "Specificity", score: d.specificity },
-    { label: "Context", score: d.context },
-    { label: "Structure", score: d.structure },
-    { label: "Constraints", score: d.constraints },
-  ]
+  const isCorrect = selected === data.correctOption
 
   return (
-    <Card className="w-full max-w-lg overflow-hidden border-border/60 shadow-md">
-      {/* Header with score */}
-      <div className="flex items-center justify-between border-b border-border/40 bg-muted/30 px-5 py-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
-            <Target className="h-4.5 w-4.5 text-primary" />
-          </div>
-          <div>
-            <h3 className="text-sm font-heading font-semibold text-foreground">Prompt Analysis</h3>
-            <div className={cn("mt-0.5 inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider", scoreBadgeVariant)}>
-              {scoreLabel}
-            </div>
-          </div>
-        </div>
-        <AnimatedScore score={d.overallScore} delay={100} />
+    <Card className="w-full overflow-hidden border-border/60 shadow-sm">
+      <div className="flex items-center gap-2 border-b border-border/40 bg-muted/30 px-5 py-3">
+        <Swords className="h-4 w-4 text-secondary" />
+        <span className="text-xs font-heading font-bold uppercase tracking-wider text-secondary">
+          Prompt Battle
+        </span>
       </div>
 
-      <CardContent className="flex flex-col gap-4 p-5">
-        {/* Score bars */}
-        <div className="flex flex-col gap-2.5">
-          {dimensions.map((dim, i) => (
-            <ScoreRow key={dim.label} label={dim.label} score={dim.score} delay={200 + i * 120} />
-          ))}
-        </div>
+      <CardContent className="p-5">
+        <p className="mb-4 text-sm font-semibold text-foreground leading-relaxed">
+          {data.question}
+        </p>
 
-        {/* Expandable details */}
-        <button
-          onClick={() => setDetailsOpen(!detailsOpen)}
-          className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <ChevronDown
-            className={cn("h-3.5 w-3.5 transition-transform duration-200", detailsOpen && "rotate-180")}
-          />
-          {detailsOpen ? "Hide details" : "Show strengths & weaknesses"}
-          {d.strengths?.length > 0 && d.weaknesses?.length > 0 && (
-            <span className="ml-auto text-[10px] text-muted-foreground/60">
-              {d.strengths.length + d.weaknesses.length} items
-            </span>
-          )}
-        </button>
+        <div className="flex flex-col gap-3">
+          {(["A", "B"] as const).map((opt) => {
+            const text = opt === "A" ? data.optionA : data.optionB
+            const isThis = selected === opt
+            const isRight = data.correctOption === opt
+            let borderClass = "border-border hover:border-primary/40 hover:bg-primary/5"
+            if (answered) {
+              if (isRight) borderClass = "border-success/50 bg-success/5"
+              else if (isThis && !isRight) borderClass = "border-destructive/50 bg-destructive/5"
+              else borderClass = "border-border/40 opacity-60"
+            }
 
-        <div
-          className={cn(
-            "grid grid-cols-1 gap-3 overflow-hidden transition-all duration-300 sm:grid-cols-2",
-            detailsOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-          )}
-        >
-          {d.strengths?.length > 0 && (
-            <div className="rounded-xl border border-success/15 bg-success/5 p-3.5">
-              <div className="mb-2.5 flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-success" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-success">Strengths</span>
-              </div>
-              <ul className="flex flex-col gap-2">
-                {d.strengths.map((s, i) => (
-                  <li key={i} className="text-xs leading-relaxed text-muted-foreground">{s}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {d.weaknesses?.length > 0 && (
-            <div className="rounded-xl border border-warning/15 bg-warning/5 p-3.5">
-              <div className="mb-2.5 flex items-center gap-1.5">
-                <AlertTriangle className="h-3.5 w-3.5 text-warning" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-warning">To Improve</span>
-              </div>
-              <ul className="flex flex-col gap-2">
-                {d.weaknesses.map((w, i) => (
-                  <li key={i} className="text-xs leading-relaxed text-muted-foreground">{w}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-
-function RewriteCard({ data }: { data: Record<string, unknown> }) {
-  const d = data as {
-    originalPrompt: string
-    improvedPrompt: string
-    changes: string[]
-  }
-
-  return (
-    <Card className="w-full max-w-lg overflow-hidden border-border/60 shadow-md">
-      <div className="flex items-center gap-3 border-b border-border/40 bg-muted/30 px-5 py-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-secondary/10">
-          <TrendingUp className="h-4.5 w-4.5 text-secondary" />
-        </div>
-        <div>
-          <h3 className="text-sm font-heading font-semibold text-foreground">Improved Prompt</h3>
-          <p className="text-[11px] text-muted-foreground">Ready to copy and use</p>
-        </div>
-      </div>
-
-      <CardContent className="p-0">
-        <Tabs defaultValue="compare" className="w-full">
-          <TabsList className="mx-5 mt-4 h-8 w-auto rounded-lg bg-muted p-0.5">
-            <TabsTrigger value="compare" className="h-7 rounded-md px-3 text-xs">
-              Compare
-            </TabsTrigger>
-            <TabsTrigger value="improved" className="h-7 rounded-md px-3 text-xs">
-              Improved Only
-            </TabsTrigger>
-            <TabsTrigger value="changes" className="h-7 rounded-md px-3 text-xs">
-              What Changed
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="compare" className="mx-5 mb-5 mt-3 flex flex-col gap-3">
-            <div className="rounded-xl bg-destructive/5 p-4">
-              <div className="mb-2 flex items-center gap-1.5">
-                <div className="h-1.5 w-1.5 rounded-full bg-destructive" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-destructive/70">Original</span>
-              </div>
-              <p className="text-sm leading-relaxed text-muted-foreground">{d.originalPrompt}</p>
-            </div>
-            <div className="flex items-center justify-center">
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-secondary/10">
-                <ArrowRight className="h-3 w-3 text-secondary" />
-              </div>
-            </div>
-            <div className="rounded-xl border border-secondary/20 bg-secondary/5 p-4">
-              <div className="mb-2 flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <div className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-secondary">Improved</span>
+            return (
+              <button
+                key={opt}
+                onClick={() => handleSelect(opt)}
+                disabled={answered || disabled}
+                className={cn(
+                  "group relative flex items-start gap-3 rounded-xl border-2 p-4 text-left transition-all",
+                  borderClass,
+                  !answered && !disabled && "cursor-pointer"
+                )}
+              >
+                <div
+                  className={cn(
+                    "flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors",
+                    answered && isRight
+                      ? "bg-success text-success-foreground"
+                      : answered && isThis && !isRight
+                        ? "bg-destructive text-destructive-foreground"
+                        : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
+                  )}
+                >
+                  {answered && isRight ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : answered && isThis && !isRight ? (
+                    <XCircle className="h-4 w-4" />
+                  ) : (
+                    opt
+                  )}
                 </div>
-                <CopyBtn text={d.improvedPrompt} />
-              </div>
-              <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">{d.improvedPrompt}</p>
-            </div>
-          </TabsContent>
+                <div className="flex-1">
+                  <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">
+                    {text}
+                  </p>
+                </div>
+              </button>
+            )
+          })}
+        </div>
 
-          <TabsContent value="improved" className="mx-5 mb-5 mt-3">
-            <div className="rounded-xl border border-secondary/20 bg-secondary/5 p-4">
-              <div className="mb-2 flex items-center justify-between">
-                <Badge variant="outline" className="border-secondary/30 text-secondary text-[10px]">
-                  Ready to use
-                </Badge>
-                <CopyBtn text={d.improvedPrompt} />
-              </div>
-              <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">{d.improvedPrompt}</p>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="changes" className="mx-5 mb-5 mt-3">
-            {d.changes?.length > 0 && (
-              <div className="flex flex-col gap-2">
-                {d.changes.map((c, i) => (
-                  <div key={i} className="flex items-start gap-3 rounded-lg bg-muted/50 p-3">
-                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-secondary/10 text-[10px] font-bold text-secondary">
-                      {i + 1}
-                    </div>
-                    <p className="text-xs leading-relaxed text-muted-foreground">{c}</p>
-                  </div>
-                ))}
-              </div>
+        {answered && (
+          <div
+            className={cn(
+              "mt-4 rounded-xl border p-4 transition-all",
+              isCorrect
+                ? "border-success/20 bg-success/5"
+                : "border-warning/20 bg-warning/5"
             )}
-          </TabsContent>
-        </Tabs>
+          >
+            <div className="mb-2 flex items-center gap-2">
+              {isCorrect ? (
+                <>
+                  <Trophy className="h-4 w-4 text-success" />
+                  <span className="text-xs font-bold text-success uppercase tracking-wider">
+                    Correct!
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Lightbulb className="h-4 w-4 text-warning" />
+                  <span className="text-xs font-bold text-warning uppercase tracking-wider">
+                    Not quite
+                  </span>
+                </>
+              )}
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {data.explanation}
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
 }
 
-function ToolLoading({ toolName }: { toolName: string }) {
+/* ─── Challenge (client-side interactive) ────────────────────── */
+function ChallengeComponent({
+  data,
+  onAnswer,
+  disabled,
+}: {
+  data: {
+    question: string
+    options: { label: string; text: string }[]
+    correctLabel: string
+    explanation: string
+    concept: string
+  }
+  onAnswer: (answer: string) => void
+  disabled: boolean
+}) {
+  const [selected, setSelected] = React.useState<string | null>(null)
+  const answered = selected !== null
+
+  const handleSelect = (label: string) => {
+    if (answered || disabled) return
+    setSelected(label)
+    const isCorrect = label === data.correctLabel
+    onAnswer(
+      `I chose ${label}. ${isCorrect ? "I think this is right!" : "I'm not sure about this one."}`
+    )
+  }
+
+  const isCorrect = selected === data.correctLabel
+
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-border/50 bg-card px-4 py-3 shadow-sm">
-      <div className="relative flex h-8 w-8 items-center justify-center">
+    <Card className="w-full overflow-hidden border-border/60 shadow-sm">
+      <div className="flex items-center justify-between border-b border-border/40 bg-muted/30 px-5 py-3">
+        <div className="flex items-center gap-2">
+          <GraduationCap className="h-4 w-4 text-primary" />
+          <span className="text-xs font-heading font-bold uppercase tracking-wider text-primary">
+            Challenge
+          </span>
+        </div>
+        <Badge
+          variant="outline"
+          className="border-primary/20 text-primary text-[10px]"
+        >
+          {data.concept}
+        </Badge>
+      </div>
+
+      <CardContent className="p-5">
+        <p className="mb-4 text-sm font-semibold text-foreground leading-relaxed">
+          {data.question}
+        </p>
+
+        <div className="flex flex-col gap-2">
+          {data.options.map((opt) => {
+            const isThis = selected === opt.label
+            const isRight = data.correctLabel === opt.label
+            let cls =
+              "border-border hover:border-primary/40 hover:bg-primary/5"
+            if (answered) {
+              if (isRight) cls = "border-success/50 bg-success/5"
+              else if (isThis && !isRight)
+                cls = "border-destructive/50 bg-destructive/5"
+              else cls = "border-border/40 opacity-60"
+            }
+
+            return (
+              <button
+                key={opt.label}
+                onClick={() => handleSelect(opt.label)}
+                disabled={answered || disabled}
+                className={cn(
+                  "group flex items-start gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all",
+                  cls,
+                  !answered && !disabled && "cursor-pointer"
+                )}
+              >
+                <div
+                  className={cn(
+                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[10px] font-bold transition-colors",
+                    answered && isRight
+                      ? "bg-success text-success-foreground"
+                      : answered && isThis && !isRight
+                        ? "bg-destructive text-destructive-foreground"
+                        : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary"
+                  )}
+                >
+                  {answered && isRight ? (
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                  ) : answered && isThis && !isRight ? (
+                    <XCircle className="h-3.5 w-3.5" />
+                  ) : (
+                    opt.label
+                  )}
+                </div>
+                <p className="text-sm leading-relaxed text-foreground">
+                  {opt.text}
+                </p>
+              </button>
+            )
+          })}
+        </div>
+
+        {answered && (
+          <div
+            className={cn(
+              "mt-4 rounded-xl border p-4",
+              isCorrect
+                ? "border-success/20 bg-success/5"
+                : "border-warning/20 bg-warning/5"
+            )}
+          >
+            <div className="mb-2 flex items-center gap-2">
+              {isCorrect ? (
+                <>
+                  <Trophy className="h-4 w-4 text-success" />
+                  <span className="text-xs font-bold text-success uppercase tracking-wider">
+                    Nailed it!
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Lightbulb className="h-4 w-4 text-warning" />
+                  <span className="text-xs font-bold text-warning uppercase tracking-wider">
+                    The answer was {data.correctLabel}
+                  </span>
+                </>
+              )}
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {data.explanation}
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
+/* ─── Tip Card (server-side) ─────────────────────────────────── */
+function TipComponent({
+  data,
+}: {
+  data: {
+    title: string
+    concept: string
+    badExample: string
+    goodExample: string
+  }
+}) {
+  return (
+    <Card className="w-full overflow-hidden border-border/60 shadow-sm">
+      <div className="flex items-center gap-2 border-b border-border/40 bg-secondary/5 px-5 py-3">
+        <Lightbulb className="h-4 w-4 text-secondary" />
+        <span className="text-xs font-heading font-bold uppercase tracking-wider text-secondary">
+          Pro Tip
+        </span>
+      </div>
+
+      <CardContent className="p-5">
+        <h4 className="mb-2 text-sm font-heading font-bold text-foreground">
+          {data.title}
+        </h4>
+        <p className="mb-4 text-sm text-muted-foreground leading-relaxed">
+          {data.concept}
+        </p>
+
+        <div className="flex flex-col gap-3">
+          <div className="rounded-xl bg-destructive/5 border border-destructive/10 p-4">
+            <div className="mb-2 flex items-center gap-1.5">
+              <XCircle className="h-3 w-3 text-destructive" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-destructive">
+                Without this technique
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed italic whitespace-pre-wrap">
+              {data.badExample}
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <ArrowRight className="h-4 w-4 text-muted-foreground/40" />
+          </div>
+          <div className="rounded-xl bg-success/5 border border-success/10 p-4">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-3 w-3 text-success" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-success">
+                  With this technique
+                </span>
+              </div>
+              <CopyBtn text={data.goodExample} />
+            </div>
+            <p className="text-xs text-foreground leading-relaxed whitespace-pre-wrap">
+              {data.goodExample}
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+/* ─── Loading pill ───────────────────────────────────────────── */
+function ToolLoading({ toolName }: { toolName: string }) {
+  const labels: Record<string, string> = {
+    showScorecard: "Scoring your prompt...",
+    promptBattle: "Setting up a battle...",
+    promptChallenge: "Creating a challenge...",
+    showTip: "Preparing a tip...",
+  }
+  return (
+    <div className="flex items-center gap-2.5 rounded-xl border border-border/50 bg-card px-4 py-3 shadow-sm">
+      <div className="relative flex h-6 w-6 items-center justify-center">
         <div className="absolute inset-0 animate-ping rounded-full bg-primary/20" />
-        <Loader2 className="h-4 w-4 animate-spin text-primary" />
+        <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
       </div>
-      <div>
-        <p className="text-xs font-medium text-foreground">
-          {toolName === "analyzePrompt" ? "Analyzing your prompt..." : "Generating improved version..."}
-        </p>
-        <p className="text-[10px] text-muted-foreground">
-          {toolName === "analyzePrompt" ? "Scoring across 5 dimensions" : "Applying best practices"}
-        </p>
-      </div>
+      <p className="text-xs font-medium text-muted-foreground">
+        {labels[toolName] || "Working..."}
+      </p>
     </div>
   )
 }
 
-function Message({ message }: { message: UIMessage }) {
+/* ─── Message renderer ───────────────────────────────────────── */
+function Message({
+  message,
+  onToolInteraction,
+}: {
+  message: UIMessage
+  onToolInteraction: (
+    toolCallId: string,
+    toolName: string,
+    output: string
+  ) => void
+}) {
   const isUser = message.role === "user"
-
-  const toolRenderer = React.useCallback(
-    (part: Extract<UIMessage["parts"][number], { type: "tool-invocation" }>) => {
-      const { toolInvocation } = part
-      const { toolName, state } = toolInvocation
-
-      if (state === "output-available") {
-        const data = toolInvocation.output as Record<string, unknown>
-        if (toolName === "analyzePrompt") return <AnalysisCard data={data} />
-        if (toolName === "rewritePrompt") return <RewriteCard data={data} />
-      }
-
-      if (state === "input-streaming" || state === "input-available") {
-        return <ToolLoading toolName={toolName} />
-      }
-
-      return null
-    },
-    []
-  )
 
   return (
     <div className={cn("flex gap-3", isUser ? "flex-row-reverse" : "flex-row")}>
@@ -424,10 +602,19 @@ function Message({ message }: { message: UIMessage }) {
             : "border border-border bg-card text-muted-foreground"
         )}
       >
-        {isUser ? <User className="h-3.5 w-3.5" /> : <Bot className="h-3.5 w-3.5" />}
+        {isUser ? (
+          <User className="h-3.5 w-3.5" />
+        ) : (
+          <Bot className="h-3.5 w-3.5" />
+        )}
       </div>
 
-      <div className={cn("flex max-w-[88%] flex-col gap-3", isUser ? "items-end" : "items-start")}>
+      <div
+        className={cn(
+          "flex max-w-[min(88%,560px)] flex-col gap-3",
+          isUser ? "items-end" : "items-start"
+        )}
+      >
         {message.parts.map((part, idx) => {
           if (part.type === "text" && part.text.trim()) {
             return (
@@ -443,8 +630,10 @@ function Message({ message }: { message: UIMessage }) {
                 {isUser ? (
                   <p className="whitespace-pre-wrap">{part.text}</p>
                 ) : (
-                  <div className="prose prose-sm max-w-none text-foreground [&_p]:my-1.5 [&_ul]:my-1.5 [&_ol]:my-1.5 [&_li]:my-0.5 [&_pre]:bg-foreground/5 [&_pre]:rounded-lg [&_pre]:p-3 [&_code]:text-xs [&_code]:font-mono [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:mt-3 [&_h3]:mb-1 [&_strong]:text-foreground [&_a]:text-primary">
-                    <Markdown remarkPlugins={[remarkGfm]}>{part.text}</Markdown>
+                  <div className="prose prose-sm max-w-none text-foreground [&_p]:my-1 [&_strong]:text-foreground [&_a]:text-primary">
+                    <Markdown remarkPlugins={[remarkGfm]}>
+                      {part.text}
+                    </Markdown>
                   </div>
                 )}
               </div>
@@ -452,7 +641,73 @@ function Message({ message }: { message: UIMessage }) {
           }
 
           if (part.type === "tool-invocation") {
-            return <React.Fragment key={idx}>{toolRenderer(part)}</React.Fragment>
+            const { toolInvocation } = part
+            const { toolName, state, toolCallId } = toolInvocation
+
+            // Loading states
+            if (state === "input-streaming" || state === "input-available") {
+              return <ToolLoading key={idx} toolName={toolName} />
+            }
+
+            // Rendered output for server-side tools
+            if (state === "output-available") {
+              const output = toolInvocation.output as Record<string, unknown>
+              if (toolName === "showScorecard") {
+                return (
+                  <ScorecardComponent
+                    key={idx}
+                    data={output as Parameters<typeof ScorecardComponent>[0]["data"]}
+                  />
+                )
+              }
+              if (toolName === "showTip") {
+                return (
+                  <TipComponent
+                    key={idx}
+                    data={output as Parameters<typeof TipComponent>[0]["data"]}
+                  />
+                )
+              }
+              if (toolName === "promptBattle") {
+                return <span key={idx} />
+              }
+              if (toolName === "promptChallenge") {
+                return <span key={idx} />
+              }
+            }
+
+            // Client-side tools awaiting interaction
+            if (toolName === "promptBattle") {
+              const args = ("args" in toolInvocation ? toolInvocation.args : {}) as Parameters<
+                typeof BattleComponent
+              >[0]["data"]
+              return (
+                <BattleComponent
+                  key={idx}
+                  data={args}
+                  disabled={state === "output-available"}
+                  onSelect={(choice) =>
+                    onToolInteraction(toolCallId, toolName, choice)
+                  }
+                />
+              )
+            }
+
+            if (toolName === "promptChallenge") {
+              const args = ("args" in toolInvocation ? toolInvocation.args : {}) as Parameters<
+                typeof ChallengeComponent
+              >[0]["data"]
+              return (
+                <ChallengeComponent
+                  key={idx}
+                  data={args}
+                  disabled={state === "output-available"}
+                  onAnswer={(answer) =>
+                    onToolInteraction(toolCallId, toolName, answer)
+                  }
+                />
+              )
+            }
           }
 
           return null
@@ -462,17 +717,19 @@ function Message({ message }: { message: UIMessage }) {
   )
 }
 
+/* ─── Main Page ──────────────────────────────────────────────── */
 export default function PromptCoachPage() {
   const [model, setModel] = React.useState("openai/gpt-5.2")
   const [input, setInput] = React.useState("")
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, addToolOutput, status } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/ai/chat",
       body: { model },
     }),
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
   })
 
   const isDisabled = status === "streaming" || status === "submitted"
@@ -482,6 +739,17 @@ export default function PromptCoachPage() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [messages])
+
+  const handleToolInteraction = React.useCallback(
+    (toolCallId: string, toolName: string, output: string) => {
+      addToolOutput({
+        tool: toolName,
+        toolCallId,
+        output,
+      })
+    },
+    [addToolOutput]
+  )
 
   const handleSubmit = (text?: string) => {
     const value = text || input.trim()
@@ -500,12 +768,18 @@ export default function PromptCoachPage() {
             <Lightbulb className="h-4.5 w-4.5 text-primary" />
           </div>
           <div>
-            <h1 className="text-sm font-heading font-semibold text-foreground">Prompt Coach</h1>
-            <p className="text-[11px] text-muted-foreground">
-              Interactive prompt analysis with{" "}
-              <code className="rounded bg-muted px-1 py-0.5 text-[10px] font-mono text-foreground">useChat</code>
-              {" + "}
-              <code className="rounded bg-muted px-1 py-0.5 text-[10px] font-mono text-foreground">tool()</code>
+            <h1 className="text-sm font-heading font-semibold text-foreground">
+              Prompt Coach
+            </h1>
+            <p className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              Interactive learning game with{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-[10px] font-mono text-foreground">
+                useChat
+              </code>
+              {" + client-side "}
+              <code className="rounded bg-muted px-1 py-0.5 text-[10px] font-mono text-foreground">
+                tool()
+              </code>
             </p>
           </div>
         </div>
@@ -522,22 +796,30 @@ export default function PromptCoachPage() {
                   <Sparkles className="h-8 w-8 text-primary" />
                 </div>
                 <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
-                  <Target className="h-3 w-3" />
+                  <Trophy className="h-3 w-3" />
                 </div>
               </div>
               <div>
                 <h2 className="text-xl font-heading font-semibold text-foreground text-balance">
-                  Write better prompts
+                  The Prompt Engineering Game
                 </h2>
                 <p className="mt-1.5 max-w-md text-sm text-muted-foreground leading-relaxed">
-                  Share any prompt and get interactive quality scoring, visual analysis across 5 dimensions, and an improved rewrite with tabbed comparison.
+                  Learn prompting through interactive challenges, prompt battles, and live scoring.
+                  Pick the better prompt, answer quizzes, and level up your skills.
                 </p>
               </div>
 
-              {/* SDK concepts */}
               <div className="flex flex-wrap justify-center gap-2 mt-1">
-                {["AI SDK useChat", "Server-side Tools", "Structured Output", "Multi-step Agent"].map((concept) => (
-                  <span key={concept} className="rounded-full border border-border bg-card px-3 py-1 text-[10px] font-medium text-muted-foreground">
+                {[
+                  "Client-side Tools",
+                  "Prompt Battles",
+                  "Interactive Quizzes",
+                  "Live Scoring",
+                ].map((concept) => (
+                  <span
+                    key={concept}
+                    className="rounded-full border border-border bg-card px-3 py-1 text-[10px] font-medium text-muted-foreground"
+                  >
                     {concept}
                   </span>
                 ))}
@@ -555,8 +837,12 @@ export default function PromptCoachPage() {
                     <s.icon className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">{s.label}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground leading-relaxed">{s.description}</p>
+                    <p className="text-sm font-semibold text-foreground">
+                      {s.label}
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted-foreground leading-relaxed">
+                      {s.desc}
+                    </p>
                   </div>
                 </button>
               ))}
@@ -565,20 +851,25 @@ export default function PromptCoachPage() {
         ) : (
           <div className="mx-auto flex max-w-3xl flex-col gap-5 px-4 py-6 lg:px-8">
             {messages.map((msg) => (
-              <Message key={msg.id} message={msg} />
+              <Message
+                key={msg.id}
+                message={msg}
+                onToolInteraction={handleToolInteraction}
+              />
             ))}
-            {isDisabled && messages[messages.length - 1]?.role === "user" && (
-              <div className="flex gap-3">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-muted-foreground">
-                  <Bot className="h-3.5 w-3.5" />
+            {isDisabled &&
+              messages[messages.length - 1]?.role === "user" && (
+                <div className="flex gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-muted-foreground">
+                    <Bot className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-md bg-muted/60 px-4 py-3">
+                    <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:-0.3s]" />
+                    <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:-0.15s]" />
+                    <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/40" />
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-md bg-muted/60 px-4 py-3">
-                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:-0.3s]" />
-                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/40 [animation-delay:-0.15s]" />
-                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/40" />
-                </div>
-              </div>
-            )}
+              )}
           </div>
         )}
       </div>
@@ -601,7 +892,7 @@ export default function PromptCoachPage() {
                   handleSubmit()
                 }
               }}
-              placeholder="Paste a prompt to analyze, or ask about prompting techniques..."
+              placeholder="Share a prompt to analyze, or ask me to teach you..."
               rows={1}
               disabled={isDisabled}
               className="min-h-[36px] max-h-[160px] flex-1 resize-none border-0 bg-transparent text-sm leading-relaxed outline-none placeholder:text-muted-foreground disabled:opacity-50"
