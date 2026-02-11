@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Check, Copy, Info, ExternalLink } from "lucide-react"
+import { Check, Copy, Info, ExternalLink, Terminal, FileCode2 } from "lucide-react"
 import { Text } from "@/components/ds"
 import { Switch } from "@/components/ui/switch"
+import { OpenStarterInV0Button } from "@/components/open-in-v0-button"
 import {
   Tooltip,
   TooltipContent,
@@ -13,34 +14,41 @@ import {
 
 const REGISTRY_URL = "https://v0-navax-design-system-guide.vercel.app"
 
-const V0_RULES_TEXT = `Always use the NAVAX design system registry at ${REGISTRY_URL}/r when building components.
-
-When I ask you to build UI, use the NAVAX design system components from the registry:
-- Install components via: npx shadcn@latest add ${REGISTRY_URL}/r/<component-name>.json
-- Available components: heading, text, stack, section, divider, icon-button, status-badge, navax-logo, stat-card, avatar-group, progress-bar, timeline, alert-banner, empty-state, skeleton-card, navbar, breadcrumbs, tab-nav, page-header, app-header, app-sidebar, app-footer, data-table, form-field, search-input, toggle-button-group, file-upload, pricing-card, testimonial-card, feature-card, command-menu, user-menu, stepper, kbd
-- Use the NAVAX brand colors and design tokens from the registry
-- Prefer design system components over custom implementations`
-
-const STEPS = [
-  {
-    number: 1,
-    title: "Deploy this registry",
-    description:
-      "Deploy this project to Vercel (or any host). Your deployed URL becomes the registry base URL.",
-  },
-  {
-    number: 2,
-    title: "Add v0 Rules",
-    description:
-      'In v0, go to the sidebar and click "Rules". Paste the rules below so v0 knows about your design system.',
-  },
-  {
-    number: 3,
-    title: "Create a v0 Template (optional)",
-    description:
-      "If you want every new v0 chat to start with the design system pre-loaded, create a template with the settings below.",
-  },
+const COMPONENT_NAMES = [
+  "heading", "text", "stack", "section", "divider", "icon-button",
+  "status-badge", "navax-logo", "stat-card", "avatar-group", "progress-bar",
+  "timeline", "alert-banner", "empty-state", "skeleton-card", "navbar",
+  "breadcrumbs", "tab-nav", "page-header", "app-header", "app-sidebar",
+  "app-footer", "data-table", "form-field", "search-input",
+  "toggle-button-group", "file-upload", "pricing-card", "testimonial-card",
+  "feature-card", "command-menu", "user-menu", "stepper", "kbd",
 ]
+
+const V0_RULES_TEXT = `Always use the NAVAX design system when building UI.
+
+Registry URL: ${REGISTRY_URL}/r
+
+Install components with:
+npx shadcn@latest add ${REGISTRY_URL}/r/<component-name>.json
+
+Import from @/components/ds/<component-name>
+
+Available components: ${COMPONENT_NAMES.join(", ")}
+
+Use NAVAX design system components instead of custom implementations.
+Always use the NAVAX brand tokens defined in globals.css (primary = magenta, secondary = teal).`
+
+const MCP_CONFIG = `{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["-y", "shadcn@canary", "registry:mcp"],
+      "env": {
+        "REGISTRY_URL": "${REGISTRY_URL}/r/registry.json"
+      }
+    }
+  }
+}`
 
 function CopyButton({ text, label }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false)
@@ -59,7 +67,7 @@ function CopyButton({ text, label }: { text: string; label?: string }) {
     >
       {copied ? (
         <>
-          <Check className="h-3.5 w-3.5 text-success" />
+          <Check className="h-3.5 w-3.5 text-green-500" />
           <span>Copied</span>
         </>
       ) : (
@@ -87,253 +95,187 @@ function InfoTooltip({ text }: { text: string }) {
   )
 }
 
+function SectionCard({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
+  return (
+    <div className={`rounded-lg border border-border bg-card p-6 ${className || ""}`}>
+      {children}
+    </div>
+  )
+}
+
+function StepNumber({ n }: { n: number }) {
+  return (
+    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+      {n}
+    </span>
+  )
+}
+
+function CodeBlock({ code, label }: { code: string; label?: string }) {
+  return (
+    <div className="relative rounded-md bg-muted p-4">
+      <div className="flex items-start justify-between gap-3">
+        <pre className="flex-1 whitespace-pre-wrap break-words text-xs font-mono text-foreground leading-relaxed overflow-x-auto">
+          {code}
+        </pre>
+        <div className="shrink-0">
+          <CopyButton text={code} label={label} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function ShowcaseTemplateConfig() {
   return (
-    <div className="flex flex-col gap-6">
-      {/* How it works */}
-      <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-6">
-        <p className="text-sm font-medium text-primary mb-1">
-          How the design system works with v0
-        </p>
-        <Text variant="small">
-          This project is a <strong>shadcn registry</strong> -- a collection of
-          components served from a URL. When you install a component via{" "}
-          <code className="rounded bg-muted px-1 py-0.5 text-[11px] font-mono">
-            npx shadcn
-          </code>
-          , it fetches the source code and its dependencies automatically. You
-          do not need to install all packages upfront.
-        </Text>
-      </div>
+    <div className="flex flex-col gap-8">
 
-      {/* Steps overview */}
-      <div className="rounded-lg border border-border bg-card p-6">
-        <p className="text-base font-semibold text-foreground mb-4">
-          Setup Steps
-        </p>
-        <div className="flex flex-col gap-4">
-          {STEPS.map((step) => (
-            <div key={step.number} className="flex gap-4">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
-                {step.number}
-              </div>
-              <div className="flex flex-col gap-0.5 pt-0.5">
-                <p className="text-sm font-medium text-foreground">
-                  {step.title}
-                </p>
-                <Text variant="caption">{step.description}</Text>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Registry URL */}
-      <div className="rounded-lg border border-border bg-card p-6">
-        <div className="flex items-center gap-2 mb-2">
-          <p className="text-base font-semibold text-foreground">
-            Registry URL
+      {/* Quick Start */}
+      <div>
+        <div className="flex items-center gap-2.5 mb-1">
+          <Terminal className="h-5 w-5 text-primary" />
+          <p className="text-lg font-semibold text-foreground">
+            Quick Start
           </p>
-          <InfoTooltip text="This is the base URL where your component registry is hosted. Replace with your own deployed URL if different." />
-        </div>
-        <Text variant="small" className="mb-4">
-          The base URL for installing components. Replace with your own domain
-          after deploying.
-        </Text>
-
-        <div className="rounded-md bg-muted p-4">
-          <div className="flex items-center justify-between gap-3">
-            <pre className="flex-1 text-sm font-mono text-foreground overflow-x-auto">
-              {REGISTRY_URL}/r
-            </pre>
-            <CopyButton
-              text={`${REGISTRY_URL}/r`}
-              label="Copy registry URL"
-            />
-          </div>
-        </div>
-
-        <Text variant="caption" className="mt-3">
-          Example install command:{" "}
-          <code className="rounded bg-muted px-1 py-0.5 text-[11px] font-mono">
-            npx shadcn@latest add {REGISTRY_URL}/r/stat-card.json
-          </code>
-        </Text>
-      </div>
-
-      {/* v0 Rules */}
-      <div className="rounded-lg border border-border bg-card p-6">
-        <div className="flex items-center gap-2 mb-2">
-          <p className="text-base font-semibold text-foreground">
-            v0 Rules
-          </p>
-          <InfoTooltip text="Paste these rules into v0's Rules panel (sidebar) so it knows to use your design system components when generating code." />
-        </div>
-        <Text variant="small" className="mb-4">
-          Copy and paste into{" "}
-          <strong>
-            v0 Sidebar {">"} Rules
-          </strong>{" "}
-          so v0 automatically uses your design system.
-        </Text>
-
-        <div className="relative rounded-md bg-muted p-4">
-          <div className="flex items-start justify-between gap-3">
-            <pre className="flex-1 whitespace-pre-wrap break-words text-xs font-mono text-foreground leading-relaxed">
-              {V0_RULES_TEXT}
-            </pre>
-            <div className="shrink-0">
-              <CopyButton text={V0_RULES_TEXT} label="Copy v0 rules" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Template Config section */}
-      <div className="rounded-lg border border-border bg-card p-6">
-        <div className="flex items-center gap-2 mb-1">
-          <p className="text-base font-semibold text-foreground">
-            v0 Template Settings
-          </p>
-          <span className="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
-            Optional
-          </span>
         </div>
         <Text variant="small" className="mb-6">
-          If you want to create a reusable v0 template, use these values in the{" "}
-          <strong>Create Template</strong> dialog.
+          Open the starter template in v0 to get a project with the NAVAX
+          header, footer, brand tokens, and fonts already configured.
+          Then add more components from the registry as you build.
         </Text>
 
-        {/* NPM Packages */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
-            <p className="text-sm font-medium text-foreground">NPM Packages</p>
-            <InfoTooltip text="Leave this empty. Component dependencies are resolved automatically when you install via the registry. Only add packages here if you want them pre-installed in every new project from this template." />
-          </div>
-          <div className="rounded-md bg-muted p-4">
-            <p className="text-xs font-mono text-muted-foreground italic">
-              Leave empty -- dependencies are auto-resolved per component
-            </p>
-          </div>
-          <Text variant="caption" className="mt-2">
-            Each registry component declares its own dependencies (e.g.{" "}
-            <code className="rounded bg-muted px-1 py-0.5 text-[11px] font-mono">
-              class-variance-authority
-            </code>
-            ,{" "}
-            <code className="rounded bg-muted px-1 py-0.5 text-[11px] font-mono">
-              lucide-react
-            </code>
-            ). They get installed automatically when you add a component via the
-            CLI.
+        <div className="rounded-lg border-2 border-primary/20 bg-primary/5 p-6 flex flex-col items-center gap-4 text-center">
+          <OpenStarterInV0Button />
+          <Text variant="caption" className="max-w-md">
+            Creates a new v0 project with the NAVAX app shell.
+            All {COMPONENT_NAMES.length} components are available to add on demand.
           </Text>
         </div>
+      </div>
 
-        {/* Environment Variables */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
-            <p className="text-sm font-medium text-foreground">
-              Environment Variables
-            </p>
-            <InfoTooltip text="Only required if your registry is behind authentication or your npm packages are in a private scope." />
-          </div>
-
-          <div className="rounded-md bg-muted p-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4 flex-1">
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                    Name
-                  </span>
-                  <code className="text-sm font-mono font-semibold text-foreground">
-                    NPM_TOKEN
-                  </code>
-                </div>
-                <div className="hidden sm:block h-8 w-px bg-border" />
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                    Value
-                  </span>
-                  <code className="text-sm font-mono text-muted-foreground">
-                    npm_xxxxx
-                  </code>
-                </div>
-              </div>
-              <div className="shrink-0 flex gap-2">
-                <CopyButton text="NPM_TOKEN" label="Copy variable name" />
-              </div>
-            </div>
-          </div>
-          <Text variant="caption" className="mt-2">
-            Only needed if you publish packages to a private npm scope. For
-            public registries like this one, you can skip this.
-          </Text>
+      {/* v0 Template Setup */}
+      <div>
+        <div className="flex items-center gap-2.5 mb-1">
+          <FileCode2 className="h-5 w-5 text-primary" />
+          <p className="text-lg font-semibold text-foreground">
+            v0 Template Setup
+          </p>
         </div>
+        <Text variant="small" className="mb-6">
+          Create a reusable v0 template so every new project starts with
+          the design system. Go to{" "}
+          <strong>Settings &rarr; Templates &rarr; Create Template</strong>.
+        </Text>
 
-        {/* Tech Stack */}
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <p className="text-sm font-medium text-foreground">Tech Stack</p>
-            <InfoTooltip text="Enable both toggles -- the design system is built on shadcn/ui + Tailwind CSS." />
-          </div>
-          <div className="flex flex-col gap-0 rounded-md border border-border overflow-hidden">
-            <div className="flex items-center justify-between bg-muted/50 px-4 py-3 border-b border-border">
-              <span className="text-sm font-medium text-foreground">
-                Tailwind CSS
-              </span>
-              <Switch checked disabled aria-label="Tailwind CSS enabled" />
+        <div className="flex flex-col gap-4">
+          {/* NPM Packages */}
+          <SectionCard>
+            <div className="flex items-center gap-3 mb-4">
+              <StepNumber n={1} />
+              <p className="text-sm font-semibold text-foreground">
+                NPM Packages
+              </p>
+              <InfoTooltip text="Leave empty. The design system uses a shadcn registry -- components are installed via CLI, not from npm." />
             </div>
-            <div className="flex items-center justify-between bg-muted/50 px-4 py-3">
-              <span className="text-sm font-medium text-foreground">
-                shadcn/ui
-              </span>
-              <Switch checked disabled aria-label="shadcn/ui enabled" />
+            <div className="ml-9 rounded-md border border-border bg-muted/50 px-4 py-3">
+              <p className="text-sm text-muted-foreground italic">
+                Leave empty -- no npm package required
+              </p>
             </div>
-          </div>
-          <Text variant="caption" className="mt-2">
-            Both must be enabled. The design system extends shadcn/ui
-            primitives with NAVAX brand tokens.
-          </Text>
+            <Text variant="caption" className="mt-2 ml-9">
+              Components are distributed via the shadcn registry and
+              installed individually with{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-[11px] font-mono">
+                npx shadcn@latest add
+              </code>.
+            </Text>
+          </SectionCard>
+
+          {/* Environment Variables */}
+          <SectionCard>
+            <div className="flex items-center gap-3 mb-4">
+              <StepNumber n={2} />
+              <p className="text-sm font-semibold text-foreground">
+                Environment Variables
+              </p>
+              <InfoTooltip text="No secrets needed. The registry is publicly accessible." />
+            </div>
+            <div className="ml-9 rounded-md border border-border bg-muted/50 px-4 py-3">
+              <p className="text-sm text-muted-foreground italic">
+                None required
+              </p>
+            </div>
+          </SectionCard>
+
+          {/* Tech Stack */}
+          <SectionCard>
+            <div className="flex items-center gap-3 mb-4">
+              <StepNumber n={3} />
+              <p className="text-sm font-semibold text-foreground">
+                Tech Stack
+              </p>
+              <InfoTooltip text="Enable both toggles. The design system builds on Tailwind CSS and extends shadcn/ui." />
+            </div>
+            <div className="ml-9 flex flex-col rounded-md border border-border overflow-hidden">
+              <div className="flex items-center justify-between bg-muted/50 px-4 py-3 border-b border-border">
+                <span className="text-sm font-medium text-foreground">
+                  Tailwind CSS
+                </span>
+                <Switch checked disabled aria-label="Tailwind CSS enabled" />
+              </div>
+              <div className="flex items-center justify-between bg-muted/50 px-4 py-3">
+                <span className="text-sm font-medium text-foreground">
+                  shadcn/ui
+                </span>
+                <Switch checked disabled aria-label="shadcn/ui enabled" />
+              </div>
+            </div>
+            <Text variant="caption" className="mt-2 ml-9">
+              Enable both toggles, then click Create.
+            </Text>
+          </SectionCard>
+
+          {/* v0 Rules */}
+          <SectionCard>
+            <div className="flex items-center gap-3 mb-4">
+              <StepNumber n={4} />
+              <p className="text-sm font-semibold text-foreground">
+                Add v0 Rules
+              </p>
+            </div>
+            <Text variant="small" className="mb-4 ml-9">
+              Open the sidebar in v0 and click <strong>Rules</strong>.
+              Paste the following so v0 always uses the design system:
+            </Text>
+            <div className="ml-9">
+              <CodeBlock code={V0_RULES_TEXT} label="Copy v0 rules" />
+            </div>
+          </SectionCard>
         </div>
       </div>
 
       {/* MCP for AI editors */}
-      <div className="rounded-lg border border-border bg-card p-6">
-        <div className="flex items-center gap-2 mb-2">
+      <SectionCard>
+        <div className="flex items-center gap-3 mb-1">
+          <ExternalLink className="h-4 w-4 text-muted-foreground" />
           <p className="text-base font-semibold text-foreground">
             AI Code Editors (Cursor, Windsurf)
           </p>
-          <InfoTooltip text="Use this MCP config to integrate the registry with AI-powered code editors." />
         </div>
-        <Text variant="small" className="mb-4">
-          Add this to your editor&apos;s MCP configuration to use the registry
-          with Cursor, Windsurf, or other AI editors.
+        <Text variant="small" className="mb-4 ml-7">
+          Add this MCP configuration to use the registry with Cursor,
+          Windsurf, or other AI editors.
         </Text>
-
-        <div className="relative rounded-md bg-muted p-4">
-          <div className="flex items-start justify-between gap-3">
-            <pre className="flex-1 whitespace-pre-wrap break-all text-xs font-mono text-foreground leading-relaxed">
-{`{
-  "mcpServers": {
-    "shadcn": {
-      "command": "npx",
-      "args": ["-y", "shadcn@canary", "registry:mcp"],
-      "env": {
-        "REGISTRY_URL": "${REGISTRY_URL}/r/registry.json"
-      }
-    }
-  }
-}`}
-            </pre>
-            <div className="shrink-0">
-              <CopyButton
-                text={`{\n  "mcpServers": {\n    "shadcn": {\n      "command": "npx",\n      "args": ["-y", "shadcn@canary", "registry:mcp"],\n      "env": {\n        "REGISTRY_URL": "${REGISTRY_URL}/r/registry.json"\n      }\n    }\n  }\n}`}
-                label="Copy MCP config"
-              />
-            </div>
-          </div>
+        <div className="ml-7">
+          <CodeBlock code={MCP_CONFIG} label="Copy MCP config" />
         </div>
-      </div>
+      </SectionCard>
     </div>
   )
 }

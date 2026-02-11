@@ -53,15 +53,6 @@ export function AppHeader({
 
   return (
     <header className={cn("sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80", className)}>
-      {/* Top bar */}
-      <div className="hidden border-b border-border bg-muted/50 md:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-end gap-6 px-6 py-1.5 text-xs text-muted-foreground">
-          <Link href="#" className="hover:text-foreground transition-colors">FAQ</Link>
-          <Link href="#" className="hover:text-foreground transition-colors">About</Link>
-          <Link href="#" className="hover:text-foreground transition-colors">Careers</Link>
-        </div>
-      </div>
-
       {/* Main nav */}
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3">
         <Link href="/" className="shrink-0" aria-label="Home">
