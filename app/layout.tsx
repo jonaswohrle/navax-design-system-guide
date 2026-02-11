@@ -9,8 +9,8 @@ const _heading = DM_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '70
 const _mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
 export const metadata: Metadata = {
-  title: 'NAVAX Design System',
-  description: 'NAVAX design system registry - reusable components for v0',
+  title: 'NAVAX',
+  description: 'NAVAX - Future-proof business solutions based on Microsoft technology',
 }
 
 export default function RootLayout({
