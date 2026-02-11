@@ -245,8 +245,8 @@ export default function VercelPlatformPage() {
               automatically provisions what you need."
             />
 
-            <div className="mt-8 grid items-stretch gap-4 lg:grid-cols-2">
-              <div className="flex flex-col justify-between gap-4">
+            <div className="mt-8 grid items-start gap-4 lg:grid-cols-2">
+              <div className="flex flex-col gap-4">
                 <InfraLayer
                   icon={Globe}
                   title="Edge Network"
@@ -273,8 +273,8 @@ export default function VercelPlatformPage() {
                 />
               </div>
 
-              <Card className="border-border h-full">
-                <CardContent className="flex h-full flex-col gap-5 p-6">
+              <Card className="border-border">
+                <CardContent className="flex flex-col gap-4 p-5">
                   <div className="flex items-center gap-2">
                     <Zap className="h-4 w-4 text-primary" />
                     <h3 className="text-sm font-heading font-semibold text-foreground uppercase tracking-wider">
@@ -282,30 +282,28 @@ export default function VercelPlatformPage() {
                     </h3>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    Vercel is moving beyond &quot;infrastructure as code&quot; to infrastructure that drives itself.
-                    The platform learns from production data to automatically optimize performance, detect
-                    issues before they impact users, and recommend code improvements.
+                    Beyond &quot;infrastructure as code&quot; -- infrastructure that drives itself, learning from production data to optimize performance and detect issues automatically.
                   </p>
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2.5">
                     {[
                       {
                         title: "Express Intent, Not Configuration",
-                        desc: "Tell the platform what you need, not how to set it up. Vercel reads your framework, your routes, your data patterns, and provisions the optimal infrastructure.",
+                        desc: "Vercel reads your framework, routes, and data patterns to provision optimal infrastructure.",
                       },
                       {
                         title: "Automatic Issue Detection",
-                        desc: "Production monitoring that doesn't just alert -- it diagnoses. Vercel AI identifies performance regressions, error patterns, and scaling bottlenecks.",
+                        desc: "AI-powered monitoring that diagnoses regressions, error patterns, and bottlenecks.",
                       },
                       {
                         title: "Proactive Optimization",
-                        desc: "The platform continuously analyzes traffic patterns, resource usage, and response times. It adjusts caching strategies, function regions, and edge rules without manual intervention.",
+                        desc: "Continuously adjusts caching, function regions, and edge rules based on traffic patterns.",
                       },
                       {
                         title: "AI-Powered Recommendations",
-                        desc: "Vercel Agent surfaces actionable suggestions: unused dependencies, slow database queries, suboptimal image formats, missing cache headers. Fix with one click.",
+                        desc: "Actionable suggestions for unused dependencies, slow queries, and missing cache headers.",
                       },
                     ].map((item) => (
-                      <div key={item.title} className="rounded-lg bg-muted/60 px-3 py-2.5">
+                      <div key={item.title} className="rounded-lg bg-muted/60 px-3 py-2">
                         <p className="text-xs font-semibold text-foreground">{item.title}</p>
                         <p className="mt-0.5 text-[11px] text-muted-foreground leading-relaxed">{item.desc}</p>
                       </div>
