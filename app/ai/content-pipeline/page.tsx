@@ -121,6 +121,80 @@ function PipelineStatusBar({
   )
 }
 
+/* ── Markdown Components ── */
+const markdownComponents = {
+  h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h1 className="mt-8 mb-4 font-heading text-2xl font-bold tracking-tight text-foreground" {...props}>{children}</h1>
+  ),
+  h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h2 className="mt-8 mb-3 font-heading text-xl font-semibold text-foreground border-b border-border pb-2" {...props}>{children}</h2>
+  ),
+  h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h3 className="mt-6 mb-2 font-heading text-base font-semibold text-foreground" {...props}>{children}</h3>
+  ),
+  h4: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+    <h4 className="mt-4 mb-2 font-heading text-sm font-semibold text-foreground" {...props}>{children}</h4>
+  ),
+  p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+    <p className="my-3 text-sm leading-relaxed text-foreground/90" {...props}>{children}</p>
+  ),
+  ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
+    <ul className="my-3 ml-4 list-disc space-y-1.5 text-sm text-foreground/90" {...props}>{children}</ul>
+  ),
+  ol: ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
+    <ol className="my-3 ml-4 list-decimal space-y-1.5 text-sm text-foreground/90" {...props}>{children}</ol>
+  ),
+  li: ({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) => (
+    <li className="leading-relaxed" {...props}>{children}</li>
+  ),
+  strong: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+    <strong className="font-semibold text-foreground" {...props}>{children}</strong>
+  ),
+  em: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+    <em className="italic text-foreground/80" {...props}>{children}</em>
+  ),
+  a: ({ children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <a className="font-medium text-primary underline decoration-primary/30 underline-offset-2 transition-colors hover:decoration-primary" target="_blank" rel="noopener noreferrer" {...props}>{children}</a>
+  ),
+  blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
+    <blockquote className="my-4 border-l-4 border-primary/30 bg-muted/30 py-2 pl-4 pr-3 text-sm italic text-muted-foreground rounded-r-lg" {...props}>{children}</blockquote>
+  ),
+  code: ({ children, className: codeClassName, ...props }: React.HTMLAttributes<HTMLElement>) => {
+    const isInline = !codeClassName
+    if (isInline) {
+      return (
+        <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs text-primary" {...props}>{children}</code>
+      )
+    }
+    return (
+      <code className={cn("block font-mono text-xs", codeClassName)} {...props}>{children}</code>
+    )
+  },
+  pre: ({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) => (
+    <pre className="my-4 overflow-x-auto rounded-xl border border-border bg-muted/60 p-4 font-mono text-xs leading-relaxed" {...props}>{children}</pre>
+  ),
+  table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
+    <div className="my-4 overflow-x-auto rounded-lg border border-border">
+      <table className="min-w-full text-sm" {...props}>{children}</table>
+    </div>
+  ),
+  thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
+    <thead className="border-b border-border bg-muted/50 text-left font-medium text-foreground" {...props}>{children}</thead>
+  ),
+  th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
+    <th className="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground" {...props}>{children}</th>
+  ),
+  td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
+    <td className="border-t border-border px-4 py-2.5 text-foreground/90" {...props}>{children}</td>
+  ),
+  hr: (props: React.HTMLAttributes<HTMLHRElement>) => (
+    <hr className="my-8 border-border" {...props} />
+  ),
+  img: ({ alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <img alt={alt || ""} className="my-4 rounded-xl border border-border" {...props} />
+  ),
+}
+
 /* ── Blog Preview ── */
 function BlogPreview({ data, steps }: { data: BlogData; steps: PipelineState }) {
   const [copied, setCopied] = React.useState(false)
@@ -224,9 +298,12 @@ function BlogPreview({ data, steps }: { data: BlogData; steps: PipelineState }) 
                 {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
               </button>
             </div>
-            <div className="prose prose-sm max-w-none text-foreground prose-headings:font-heading prose-headings:font-semibold prose-headings:text-foreground prose-h2:mt-8 prose-h2:mb-3 prose-h2:text-xl prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-base prose-p:leading-relaxed prose-p:text-foreground/90 prose-strong:text-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-muted/80 prose-pre:border prose-pre:border-border prose-pre:rounded-lg prose-li:text-foreground/90 prose-ul:my-3 prose-ol:my-3 prose-blockquote:border-primary/30 prose-blockquote:text-muted-foreground prose-img:rounded-lg">
-              <Markdown remarkPlugins={[remarkGfm]}>{data.draftContent}</Markdown>
-            </div>
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              components={markdownComponents}
+            >
+              {data.draftContent}
+            </Markdown>
           </>
         ) : steps.draft === "running" ? (
           <div className="flex flex-col gap-3">
@@ -250,9 +327,12 @@ function BlogPreview({ data, steps }: { data: BlogData; steps: PipelineState }) 
             <span className="ml-1 text-xs text-muted-foreground">(Gemini + Google Search)</span>
           </summary>
           <div className="border-t border-border px-5 py-4">
-            <div className="prose prose-sm max-w-none text-muted-foreground prose-headings:text-foreground prose-strong:text-foreground prose-a:text-primary">
-              <Markdown remarkPlugins={[remarkGfm]}>{data.researchContent}</Markdown>
-            </div>
+            <Markdown
+              remarkPlugins={[remarkGfm]}
+              components={markdownComponents}
+            >
+              {data.researchContent}
+            </Markdown>
           </div>
         </details>
       )}
