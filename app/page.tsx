@@ -50,12 +50,12 @@ export default function Page() {
 
       <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
 
-      {/* v0 Template Config */}
+      {/* v0 & AI Editor Integration */}
       <Section>
-        <Heading level={2}>v0 Template Setup</Heading>
+        <Heading level={2}>{"Use with v0 & AI Editors"}</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          Copy these values into the v0 Create Template dialog to set up a
-          template with all design system dependencies pre-configured.
+          Set up v0 Rules, create a template, or configure MCP for AI code
+          editors -- everything you need to start using the design system.
         </Text>
         <ShowcaseTemplateConfig />
       </Section>
