@@ -52,7 +52,7 @@ export function AppSidebar({
   activePath = "#",
   className,
   defaultCollapsed = false,
-  user = { name: "Maria Schmidt", email: "m.schmidt@navax.com" },
+  user = { name: "Jonas Wöhrle", email: "j.woehrle@navax.com" },
 }: AppSidebarProps) {
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed)
   const [openSections, setOpenSections] = React.useState<string[]>(() => {

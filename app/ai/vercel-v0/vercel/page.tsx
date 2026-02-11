@@ -245,7 +245,7 @@ export default function VercelPlatformPage() {
               automatically provisions what you need."
             />
 
-            <div className="mt-8 grid items-start gap-4 lg:grid-cols-2">
+            <div className="mt-8 grid items-stretch gap-4 lg:grid-cols-2">
               <div className="flex flex-col gap-4">
                 <InfraLayer
                   icon={Globe}
@@ -273,37 +273,41 @@ export default function VercelPlatformPage() {
                 />
               </div>
 
-              <Card className="border-border">
-                <CardContent className="flex flex-col gap-4 p-5">
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-primary" />
-                    <h3 className="text-sm font-heading font-semibold text-foreground uppercase tracking-wider">
-                      Self-Driving Infrastructure
-                    </h3>
+              <Card className="border-border h-full">
+                <CardContent className="flex h-full flex-col justify-between gap-4 p-5">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4 text-primary" />
+                      <h3 className="text-sm font-heading font-semibold text-foreground uppercase tracking-wider">
+                        Self-Driving Infrastructure
+                      </h3>
+                    </div>
+                    <p className="mt-3 text-xs text-muted-foreground leading-relaxed">
+                      Beyond &quot;infrastructure as code&quot; -- infrastructure that drives itself.
+                      The platform learns from production data to automatically optimize performance,
+                      detect issues before they impact users, and recommend code improvements.
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Beyond &quot;infrastructure as code&quot; -- infrastructure that drives itself, learning from production data to optimize performance and detect issues automatically.
-                  </p>
-                  <div className="flex flex-col gap-2.5">
+                  <div className="flex flex-1 flex-col justify-between gap-3">
                     {[
                       {
                         title: "Express Intent, Not Configuration",
-                        desc: "Vercel reads your framework, routes, and data patterns to provision optimal infrastructure.",
+                        desc: "Tell the platform what you need, not how to set it up. Vercel reads your framework, routes, and data patterns to provision the optimal infrastructure automatically.",
                       },
                       {
                         title: "Automatic Issue Detection",
-                        desc: "AI-powered monitoring that diagnoses regressions, error patterns, and bottlenecks.",
+                        desc: "Production monitoring that doesn't just alert -- it diagnoses. Vercel AI identifies performance regressions, error patterns, and scaling bottlenecks in real-time.",
                       },
                       {
                         title: "Proactive Optimization",
-                        desc: "Continuously adjusts caching, function regions, and edge rules based on traffic patterns.",
+                        desc: "Continuously analyzes traffic patterns, resource usage, and response times. Adjusts caching strategies, function regions, and edge rules without manual intervention.",
                       },
                       {
                         title: "AI-Powered Recommendations",
-                        desc: "Actionable suggestions for unused dependencies, slow queries, and missing cache headers.",
+                        desc: "Vercel Agent surfaces actionable suggestions: unused dependencies, slow database queries, suboptimal image formats, and missing cache headers. Fix with one click.",
                       },
                     ].map((item) => (
-                      <div key={item.title} className="rounded-lg bg-muted/60 px-3 py-2">
+                      <div key={item.title} className="rounded-lg bg-muted/60 px-3.5 py-2.5">
                         <p className="text-xs font-semibold text-foreground">{item.title}</p>
                         <p className="mt-0.5 text-[11px] text-muted-foreground leading-relaxed">{item.desc}</p>
                       </div>

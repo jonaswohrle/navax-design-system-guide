@@ -1,9 +1,9 @@
 import Link from "next/link"
+import Image from "next/image"
 import {
   ArrowRight,
   Sparkles,
   Zap,
-  Clock,
   Code2,
   Cpu,
   Layers,
@@ -18,45 +18,75 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
-function StatBlock({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col items-center gap-1 text-center">
-      <span className="text-3xl font-heading font-semibold tracking-tight text-foreground lg:text-4xl">
-        {value}
-      </span>
-      <span className="text-sm text-muted-foreground">{label}</span>
-    </div>
-  )
-}
+/* ── Reusable blocks ── */
 
-function TechCard({
-  icon: Icon,
-  label,
+function AgendaItem({
+  number,
+  title,
   description,
+  href,
   accentClass,
+  icon: Icon,
+  isMain,
 }: {
-  icon: LucideIcon
-  label: string
+  number: string
+  title: string
   description: string
+  href: string
   accentClass: string
+  icon: LucideIcon
+  isMain?: boolean
 }) {
   return (
-    <Card className="border-border">
-      <CardContent className="flex flex-col gap-3 p-5">
-        <div
-          className={cn(
-            "flex h-10 w-10 items-center justify-center rounded-xl",
-            accentClass
+    <Link href={href} className="group block">
+      <Card
+        className={cn(
+          "h-full border-border transition-all hover:shadow-sm",
+          isMain
+            ? "border-primary/30 bg-primary/[0.02] hover:border-primary/50"
+            : "hover:border-primary/30"
+        )}
+      >
+        <CardContent className="flex h-full flex-col gap-4 p-5">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <span
+                className={cn(
+                  "flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold",
+                  isMain
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border text-muted-foreground"
+                )}
+              >
+                {number}
+              </span>
+              <div
+                className={cn(
+                  "flex h-9 w-9 items-center justify-center rounded-xl",
+                  accentClass
+                )}
+              >
+                <Icon className="h-4.5 w-4.5" />
+              </div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-muted-foreground/0 transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-sm font-heading font-semibold text-foreground">
+              {title}
+            </h3>
+            <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+              {description}
+            </p>
+          </div>
+          {isMain && (
+            <span className="self-start rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-semibold text-primary">
+              Hauptteil
+            </span>
           )}
-        >
-          <Icon className="h-5 w-5" />
-        </div>
-        <div>
-          <p className="text-sm font-heading font-semibold text-foreground">{label}</p>
-          <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{description}</p>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }
 
@@ -91,8 +121,12 @@ function DemoCard({
             <ArrowRight className="h-4 w-4 text-muted-foreground/0 transition-all group-hover:translate-x-0.5 group-hover:text-primary" />
           </div>
           <div className="flex-1">
-            <h3 className="text-sm font-heading font-semibold text-foreground">{title}</h3>
-            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{description}</p>
+            <h3 className="text-sm font-heading font-semibold text-foreground">
+              {title}
+            </h3>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              {description}
+            </p>
           </div>
           <div className="flex flex-wrap gap-1.5 border-t border-border pt-3">
             {concepts.map((c) => (
@@ -110,191 +144,188 @@ function DemoCard({
   )
 }
 
+/* ── Reference logos as simple text badges (no external images needed) ── */
+const references = [
+  { name: "OpenAI", src: "/logos/openai.svg" },
+  { name: "Microsoft", src: "/logos/microsoft.svg" },
+  { name: "Amazon", src: "/logos/amazon.svg" },
+  { name: "BCG", src: "/logos/bcg.svg" },
+  { name: "WPP", src: "/logos/wpp.svg" },
+]
+
 export default function Page() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Minimal top bar */}
+      {/* Top bar */}
       <header className="border-b border-border">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <NavaxLogo variant="brand" width={110} />
-          <Link href="/ai">
-            <Button size="sm" className="gap-1.5">
-              <Sparkles className="h-3.5 w-3.5" />
-              AI Showcases
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/ai/vercel-v0/vercel">
+              <Button variant="ghost" size="sm" className="gap-1.5">
+                <Triangle className="h-3.5 w-3.5" />
+                Vercel & v0
+              </Button>
+            </Link>
+            <Link href="/ai">
+              <Button size="sm" className="gap-1.5">
+                <Sparkles className="h-3.5 w-3.5" />
+                AI Showcases
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
       <main>
-        {/* Hero section */}
+        {/* Hero -- Workshop Welcome */}
         <section className="border-b border-border">
           <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-16 lg:py-24">
             <div className="flex items-center gap-2">
               <span className="flex h-6 items-center gap-1.5 rounded-full bg-primary/10 px-3 text-[11px] font-semibold text-primary">
                 <Sparkles className="h-3 w-3" />
-                v0 + AI SDK + AI Gateway
+                Workshop
               </span>
             </div>
-            <h1 className="max-w-2xl text-4xl font-heading font-semibold tracking-tight text-foreground text-balance lg:text-5xl">
-              From 24-Week Cycles to
-              <span className="text-primary"> 12-Day Shipping</span>
+            <h1 className="max-w-3xl text-4xl font-heading font-semibold tracking-tight text-foreground text-balance lg:text-5xl">
+              Willkommen zum
+              <span className="text-primary"> Vercel & v0 </span>
+              Workshop
             </h1>
-            <p className="max-w-xl text-base text-muted-foreground leading-relaxed lg:text-lg">
-              How prompt engineering and AI-powered development tools are
-              transforming the way NAVAX builds products. A practical deep-dive
-              into vibe coding, effective prompting, and modern AI integration.
+            <p className="max-w-2xl text-base text-muted-foreground leading-relaxed lg:text-lg">
+              In diesem Workshop erfahrt ihr, wie v0 die Art und Weise
+              veraendert, wie Software gebaut wird. Wir schauen uns die Vercel-Plattform an,
+              bauen gemeinsam mit v0 und erkunden anhand interaktiver AI Showcases,
+              was mit modernen AI Tools heute moeglich ist.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link href="/ai">
+              <Link href="/ai/vercel-v0/vercel">
                 <Button size="lg" className="gap-2">
-                  Explore AI Use Cases
+                  <Triangle className="h-4 w-4" />
+                  Vercel & v0 kennenlernen
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/ai/vercel-v0/vercel">
+              <Link href="/ai">
                 <Button variant="outline" size="lg" className="gap-2">
-                  <Triangle className="h-4 w-4" />
-                  Learn about Vercel & v0
+                  <Sparkles className="h-4 w-4" />
+                  AI Showcases ansehen
                 </Button>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* The paradigm shift */}
+        {/* Workshop Agenda */}
         <section className="border-b border-border">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <h2 className="text-2xl font-heading font-semibold tracking-tight text-foreground text-balance">
-              The Paradigm Shift
+              Was wir heute machen
             </h2>
             <p className="mt-2 max-w-lg text-sm text-muted-foreground leading-relaxed">
-              Traditional product cycles follow a linear path through idea,
-              requirements, design, build, and test. With prompt engineering,
-              this collapses dramatically.
+              Drei Bloecke -- von der Plattform ueber Hands-on mit v0 bis hin zu
+              Inspirationen fuer eigene Projekte.
             </p>
-
-            <div className="mt-10 grid gap-8 lg:grid-cols-2">
-              {/* Traditional */}
-              <Card className="border-border">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <h3 className="text-sm font-heading font-semibold text-muted-foreground uppercase tracking-wider">
-                      Traditional Workflow
-                    </h3>
-                  </div>
-                  <p className="mt-4 text-4xl font-heading font-semibold tracking-tight text-foreground">
-                    24 Weeks
-                  </p>
-                  <p className="mt-1 text-sm text-muted-foreground">Full development cycle</p>
-                  <div className="mt-6 flex flex-col gap-2">
-                    {["Idea & Discovery", "Requirements", "Design", "Build", "Test & Ship"].map(
-                      (step, i) => (
-                        <div key={step} className="flex items-center gap-3">
-                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border text-[10px] font-semibold text-muted-foreground">
-                            {i + 1}
-                          </div>
-                          <span className="text-sm text-foreground">{step}</span>
-                        </div>
-                      )
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Prompt Engineering */}
-              <Card className="border-primary/20 bg-primary/[0.02]">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-primary" />
-                    <h3 className="text-sm font-heading font-semibold text-primary uppercase tracking-wider">
-                      Prompt Engineering
-                    </h3>
-                  </div>
-                  <p className="mt-4 text-4xl font-heading font-semibold tracking-tight text-primary">
-                    12 Days
-                  </p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    With AI-assisted development
-                  </p>
-                  <div className="mt-6 flex flex-col gap-2">
-                    {["Idea & Prompt", "Iterate & Build", "Ship"].map((step, i) => (
-                      <div key={step} className="flex items-center gap-3">
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
-                          {i + 1}
-                        </div>
-                        <span className="text-sm font-medium text-foreground">{step}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats */}
-        <section className="border-b border-border bg-muted/30">
-          <div className="mx-auto max-w-6xl px-6 py-12">
-            <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-              <StatBlock value="10M+" label="AI SDK weekly downloads" />
-              <StatBlock value="500K+" label="GitHub stars (Next.js)" />
-              <StatBlock value="4.3M" label="shadcn/ui weekly downloads" />
-              <StatBlock value="12x" label="Faster delivery cycles" />
-            </div>
-          </div>
-        </section>
-
-        {/* Tech stack */}
-        <section className="border-b border-border">
-          <div className="mx-auto max-w-6xl px-6 py-16">
-            <h2 className="text-2xl font-heading font-semibold tracking-tight text-foreground text-balance">
-              The Technology Stack
-            </h2>
-            <p className="mt-2 max-w-lg text-sm text-muted-foreground leading-relaxed">
-              Three building blocks that make AI integration practical,
-              production-ready, and model-agnostic.
-            </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              <TechCard
-                icon={Code2}
-                label="AI SDK 6"
-                description="The open-source toolkit for streaming, tool calling, structured output, and agent loops. Works with any LLM provider."
-                accentClass="bg-primary/10 text-primary"
-              />
-              <TechCard
-                icon={Cpu}
-                label="Vercel AI Gateway"
-                description="Unified API for OpenAI, Anthropic, Google, xAI, and more. Switch models with a single string change."
+            <div className="mt-8 grid gap-4 lg:grid-cols-3">
+              <AgendaItem
+                number="1"
+                title="Vercel Platform"
+                description="Die Plattform hinter Next.js, Turborepo und dem AI SDK. Open Source Foundation, Framework-Defined Infrastructure, Developer Tools und AI Cloud."
+                href="/ai/vercel-v0/vercel"
                 accentClass="bg-secondary/10 text-secondary"
-              />
-              <TechCard
                 icon={Layers}
-                label="Multi-Step Pipelines"
-                description="Chain AI calls with structured output at each stage. SSE streaming for real-time progress on every step."
+              />
+              <AgendaItem
+                number="2"
+                title="v0 -- AI-Powered Development"
+                description="Der Hauptteil: v0 veraendert, wer Frontend bauen kann. AI Code Generation, Git-native Workflows, Design System Integration und wie aus Prompts Produkte werden."
+                href="/ai/vercel-v0"
+                accentClass="bg-primary/10 text-primary"
+                icon={Code2}
+                isMain
+              />
+              <AgendaItem
+                number="3"
+                title="AI Showcases -- Projektideen"
+                description="Interaktive Demos als Inspiration: Prompt Coach, Image Studio und Content Pipeline. Fertige Patterns fuer AI SDK, Streaming und Multi-Model Pipelines."
+                href="/ai"
                 accentClass="bg-info/10 text-info"
+                icon={Sparkles}
               />
             </div>
           </div>
         </section>
 
-        {/* Live demos preview */}
+        {/* Why v0 -- Key value props from the attached content */}
+        <section className="border-b border-border bg-muted/30">
+          <div className="mx-auto max-w-6xl px-6 py-16">
+            <h2 className="text-2xl font-heading font-semibold tracking-tight text-foreground text-balance">
+              Warum v0?
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground leading-relaxed">
+              v0 ist nicht nur ein Code-Generator -- es veraendert grundlegend, wie Teams von der Idee
+              zum fertigen Produkt kommen.
+            </p>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                {
+                  title: "Rapid Prototyping",
+                  desc: "Product Manager beschreiben eine Idee in natuerlicher Sprache. v0 generiert einen funktionierenden Prototyp in Minuten statt Wochen -- so wie es Okta, eBay und Procore bereits tun.",
+                  icon: Zap,
+                  accent: "bg-primary/10 text-primary",
+                },
+                {
+                  title: "Vibe Coding fuer Teams",
+                  desc: "Engineering-Teams nutzen v0 als Coding-Accelerator. Boilerplate generieren, Components scaffolden, interne Tools bauen -- wie bei Microsoft (6.000+ Entwickler) und Amazon.",
+                  icon: Code2,
+                  accent: "bg-secondary/10 text-secondary",
+                },
+                {
+                  title: "Design System Integration",
+                  desc: "v0 kennt eure Design Tokens, Components und Patterns. Jeder generierte Code folgt automatisch eurem Design System -- konsistent, accessible und on-brand.",
+                  icon: Cpu,
+                  accent: "bg-info/10 text-info",
+                },
+              ].map((item) => (
+                <Card key={item.title} className="border-border">
+                  <CardContent className="flex flex-col gap-3 p-5">
+                    <div
+                      className={cn(
+                        "flex h-10 w-10 items-center justify-center rounded-xl",
+                        item.accent
+                      )}
+                    >
+                      <item.icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-sm font-heading font-semibold text-foreground">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* AI Showcases preview */}
         <section className="border-b border-border">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="flex flex-col gap-1">
               <h2 className="text-2xl font-heading font-semibold tracking-tight text-foreground text-balance">
-                Live AI Use Cases
+                AI Showcases -- zum Ausprobieren
               </h2>
               <p className="max-w-lg text-sm text-muted-foreground leading-relaxed">
-                Each demo is a fully functional AI feature you can interact with.
-                See the code patterns, try different models, and learn by doing.
+                Jede Demo ist eine funktionierende AI-Anwendung. Testet verschiedene
+                Modelle, schaut euch den Code an und lasst euch fuer eigene Projekte inspirieren.
               </p>
             </div>
             <div className="mt-8 grid gap-4 lg:grid-cols-3">
               <DemoCard
                 title="Prompt Coach"
-                description="Get AI-powered feedback on your prompts. See quality scores, analysis, and rewritten versions side-by-side."
+                description="AI-gestuetztes Feedback zu euren Prompts. Qualitaets-Scores, Analyse und umgeschriebene Versionen im direkten Vergleich."
                 href="/ai/prompt-coach"
                 icon={MessageSquare}
                 concepts={["useChat", "Tool Calling", "Structured Output"]}
@@ -302,7 +333,7 @@ export default function Page() {
               />
               <DemoCard
                 title="AI Image Studio"
-                description="Generate and transform images with Gemini 3 Pro. Upload references, describe transformations, see results."
+                description="Bilder generieren und transformieren mit Gemini 3 Pro. Referenzbilder hochladen, Transformationen beschreiben, Ergebnisse sehen."
                 href="/ai/image-studio"
                 icon={ImagePlus}
                 concepts={["Multimodal", "Image Generation", "File Upload"]}
@@ -310,7 +341,7 @@ export default function Page() {
               />
               <DemoCard
                 title="Content Pipeline"
-                description="Watch a 4-step AI pipeline research, draft, review, and polish content in real-time with structured data."
+                description="Eine 4-Schritt AI Pipeline, die in Echtzeit recherchiert, schreibt, reviewt und Bilder generiert -- alles live gestreamt."
                 href="/ai/content-pipeline"
                 icon={GitBranch}
                 concepts={["SSE Streaming", "Chained AI Calls", "Pipeline"]}
@@ -320,26 +351,60 @@ export default function Page() {
           </div>
         </section>
 
+        {/* References */}
+        <section className="border-b border-border bg-muted/30">
+          <div className="mx-auto max-w-6xl px-6 py-12">
+            <p className="text-center text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              v0 wird bereits eingesetzt bei
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-10 lg:gap-16">
+              {references.map((ref) => (
+                <div key={ref.name} className="flex items-center justify-center grayscale opacity-60 transition-all hover:grayscale-0 hover:opacity-100">
+                  <Image
+                    src={ref.src}
+                    alt={ref.name}
+                    width={120}
+                    height={40}
+                    className="h-8 w-auto object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="bg-primary">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-6 py-16 text-center">
             <h2 className="text-2xl font-heading font-semibold tracking-tight text-primary-foreground text-balance lg:text-3xl">
-              Ready to explore AI-powered development?
+              Bereit loszulegen?
             </h2>
             <p className="max-w-md text-sm text-primary-foreground/80 leading-relaxed">
-              Jump into the interactive showcases and see how AI SDK, the
-              AI Gateway, and prompt engineering work in practice.
+              Startet mit der Vercel-Plattform oder springt direkt in die
+              interaktiven AI Showcases.
             </p>
-            <Link href="/ai">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="gap-2 bg-background text-foreground hover:bg-background/90"
-              >
-                Open AI Showcases
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Link href="/ai/vercel-v0/vercel">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="gap-2 bg-background text-foreground hover:bg-background/90"
+                >
+                  <Triangle className="h-4 w-4" />
+                  Vercel & v0
+                </Button>
+              </Link>
+              <Link href="/ai">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="gap-2 bg-background/20 text-primary-foreground hover:bg-background/30"
+                >
+                  AI Showcases
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       </main>
