@@ -56,7 +56,7 @@ export function OpenInV0Button({
  * Opens the full registry index in v0 -- imports everything at once.
  */
 export function OpenAllInV0Button({ className }: { className?: string }) {
-  const url = `${REGISTRY_BASE_URL}/r/index.json`
+  const url = `${REGISTRY_BASE_URL}/r/navax-ds-all.json`
   const v0Url = `https://v0.dev/chat/api/open?url=${encodeURIComponent(url)}`
 
   return (
