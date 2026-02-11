@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Navbar, NavbarLink, Breadcrumbs, TabNav, PageHeader } from "@/components/ds"
+import { Navbar, NavbarLink, Breadcrumbs, TabNav, PageHeader, NavaxLogo } from "@/components/ds"
 import { Button } from "@/components/ui/button"
 import { Bell, Plus } from "lucide-react"
 
@@ -15,11 +15,7 @@ export function ShowcaseNavigation() {
         <p className="text-sm font-medium mb-3 text-foreground">Navbar</p>
         <div className="rounded-lg border border-border overflow-hidden">
           <Navbar
-            logo={
-              <span className="text-base font-semibold text-foreground">
-                Acme
-              </span>
-            }
+            logo={<NavaxLogo width={100} variant="dark" />}
             actions={
               <>
                 <Button variant="ghost" size="icon" aria-label="Notifications">
@@ -47,7 +43,7 @@ export function ShowcaseNavigation() {
             items={[
               { label: "Home", href: "#" },
               { label: "Projects", href: "#" },
-              { label: "Acme Corp" },
+              { label: "NAVAX" },
             ]}
           />
           <Breadcrumbs
