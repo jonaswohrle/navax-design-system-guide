@@ -1,4 +1,4 @@
-import { generateText, Output } from "ai"
+import { generateText, streamText, Output } from "ai"
 import { google } from "@ai-sdk/google"
 import { z } from "zod"
 
@@ -25,9 +25,7 @@ export async function POST(req: Request) {
 
         const research = await generateText({
           model: "google/gemini-2.5-flash",
-          tools: {
-            google_search: google.tools.googleSearch({}),
-          },
+          tools: { google_search: google.tools.googleSearch({}) },
           prompt: `Research the topic "${topic}" for a professional blog post. 
             Use Google Search to find the latest information.
             Provide key facts, statistics, current trends, expert opinions, and useful context. 
@@ -35,31 +33,29 @@ export async function POST(req: Request) {
             Be thorough and cite specific details.`,
         })
 
-        const sources = research.sources?.map((s) => ({
-          title: ("title" in s ? s.title : s.url) as string,
-          url: s.url,
-        })) ?? []
+        const sources =
+          research.sources?.map((s) => ({
+            title: ("title" in s ? s.title : s.url) as string,
+            url: s.url,
+          })) ?? []
         send("research", { content: research.text, sources })
         send("status", { step: "research", state: "done" })
 
-        /* ── Step 2: Draft + Image in parallel ── */
-        send("status", { step: "draft", state: "running" })
-        send("status", { step: "image", state: "running" })
-
-        // Generate article metadata first (fast structured output)
+        /* ── Step 2: Generate metadata ── */
         const meta = await generateText({
           model: "openai/gpt-5.2",
           output: Output.object({
             schema: z.object({
               title: z.string().describe("Compelling blog post title"),
               subtitle: z.string().describe("One-line subtitle or teaser"),
-              imagePrompt: z.string().describe("A detailed prompt for generating a photorealistic hero image that visually represents the blog topic. Describe scene, lighting, style."),
+              imagePrompt: z
+                .string()
+                .describe(
+                  "A detailed prompt for generating a photorealistic hero image that visually represents the blog topic. Describe scene, lighting, style."
+                ),
             }),
           }),
-          prompt: `Based on this research about "${topic}", generate a blog post title, subtitle, and a hero image prompt.
-
-Research:
-${research.text}`,
+          prompt: `Based on this research about "${topic}", generate a blog post title, subtitle, and a hero image prompt.\n\nResearch:\n${research.text}`,
         })
 
         send("meta", {
@@ -67,10 +63,12 @@ ${research.text}`,
           subtitle: meta.output?.subtitle ?? "",
         })
 
-        // Now run draft and image generation in parallel
-        const [draftResult, imageResult] = await Promise.allSettled([
-          // Draft with GPT-5.2
-          generateText({
+        /* ── Step 3: Draft (streamed token-by-token) + Image in parallel ── */
+        send("status", { step: "draft", state: "running" })
+        send("status", { step: "image", state: "running" })
+
+        const draftPromise = (async () => {
+          const result = streamText({
             model: "openai/gpt-5.2",
             prompt: `You are a senior technical writer. Write a well-structured blog post about "${topic}".
 
@@ -91,52 +89,52 @@ Guidelines:
 - Include a compelling introduction paragraph
 - End with actionable takeaways or a conclusion
 - Make it genuinely useful for developers and tech readers`,
-          }),
+          })
 
-          // Image with Gemini
-          generateText({
-            model: "google/gemini-3-pro-image",
-            messages: [
-              {
-                role: "user",
-                content: [
-                  {
-                    type: "text",
-                    text: meta.output?.imagePrompt ?? `Create a beautiful, modern hero image for a blog post about: ${topic}. Photorealistic, professional, cinematic lighting.`,
-                  },
-                ],
-              },
-            ],
-            providerOptions: {
-              google: { responseModalities: ["TEXT", "IMAGE"] },
-            },
-          }),
-        ])
+          for await (const delta of result.textStream) {
+            send("draft-delta", { delta })
+          }
 
-        // Send draft result
-        if (draftResult.status === "fulfilled") {
-          send("draft", { content: draftResult.value.text })
           send("status", { step: "draft", state: "done" })
-        } else {
-          send("draft", { content: `*Draft generation failed. Please try again.*` })
-          send("status", { step: "draft", state: "error" })
-        }
+        })()
 
-        // Send image result
-        if (imageResult.status === "fulfilled" && imageResult.value.files?.length) {
-          const file = imageResult.value.files[0]
-          if (file.mediaType?.startsWith("image/")) {
-            send("image", {
-              base64: file.base64,
-              mediaType: file.mediaType,
+        const imagePromise = (async () => {
+          try {
+            const imageResult = await generateText({
+              model: "google/gemini-3-pro-image",
+              messages: [
+                {
+                  role: "user",
+                  content: [
+                    {
+                      type: "text",
+                      text:
+                        meta.output?.imagePrompt ??
+                        `Create a beautiful, modern hero image for a blog post about: ${topic}. Photorealistic, professional, cinematic lighting.`,
+                    },
+                  ],
+                },
+              ],
+              providerOptions: {
+                google: { responseModalities: ["TEXT", "IMAGE"] },
+              },
             })
-            send("status", { step: "image", state: "done" })
-          } else {
+
+            if (imageResult.files?.length) {
+              const file = imageResult.files[0]
+              if (file.mediaType?.startsWith("image/")) {
+                send("image", { base64: file.base64, mediaType: file.mediaType })
+                send("status", { step: "image", state: "done" })
+                return
+              }
+            }
+            send("status", { step: "image", state: "error" })
+          } catch {
             send("status", { step: "image", state: "error" })
           }
-        } else {
-          send("status", { step: "image", state: "error" })
-        }
+        })()
+
+        await Promise.allSettled([draftPromise, imagePromise])
 
         send("complete", {})
       } catch (error) {

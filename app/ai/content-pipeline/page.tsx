@@ -200,7 +200,7 @@ function BlogPreview({ data, steps }: { data: BlogData; steps: PipelineState }) 
                 <span className="text-xs font-medium text-primary">AI Generated</span>
               </div>
               <span className="text-xs text-muted-foreground">
-                Research by Perplexity -- Written by GPT-5.2 -- Image by Gemini
+                Research by Gemini Search -- Written by GPT-5.2 -- Image by Gemini
               </span>
             </div>
           </>
@@ -247,7 +247,7 @@ function BlogPreview({ data, steps }: { data: BlogData; steps: PipelineState }) 
           <summary className="flex cursor-pointer items-center gap-2 rounded-t-xl bg-card px-5 py-3 text-sm font-medium text-foreground hover:bg-muted/50">
             <Globe className="h-4 w-4 text-primary" />
             View Research Sources
-            <span className="ml-1 text-xs text-muted-foreground">(Perplexity Sonar Pro)</span>
+            <span className="ml-1 text-xs text-muted-foreground">(Gemini + Google Search)</span>
           </summary>
           <div className="border-t border-border px-5 py-4">
             <div className="prose prose-sm max-w-none text-muted-foreground prose-headings:text-foreground prose-strong:text-foreground prose-a:text-primary">
@@ -275,7 +275,7 @@ function EmptyState({ onSelect }: { onSelect: (topic: string) => void }) {
             Multi-Model Content Pipeline
           </h2>
           <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground leading-relaxed">
-            Watch three AI models collaborate in real-time: Perplexity searches the web for research,
+            Watch three AI models collaborate in real-time: Gemini searches the web for research,
             GPT-5.2 writes the article, and Gemini generates a hero image -- all streaming into a
             live blog preview.
           </p>
@@ -431,8 +431,11 @@ export default function ContentPipelinePage() {
               setBlogData((prev) => ({ ...prev, researchContent: data.content }))
             }
 
-            if (data.event === "draft") {
-              setBlogData((prev) => ({ ...prev, draftContent: data.content }))
+            if (data.event === "draft-delta") {
+              setBlogData((prev) => ({
+                ...prev,
+                draftContent: prev.draftContent + (data.delta as string),
+              }))
             }
 
             if (data.event === "image") {
@@ -468,7 +471,7 @@ export default function ContentPipelinePage() {
           <div>
             <h1 className="text-sm font-heading font-semibold text-foreground">Content Pipeline</h1>
             <p className="text-[11px] text-muted-foreground">
-              Multi-model agent: Perplexity + GPT-5.2 + Gemini
+              Multi-model agent: Gemini Search + GPT-5.2 + Gemini Image
             </p>
           </div>
         </div>
