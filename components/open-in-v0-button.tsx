@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils"
+"use client"
 
-const REGISTRY_BASE_URL = "https://v0-navax-design-system-guide.vercel.app"
+import { cn } from "@/lib/utils"
 
 function V0Logo({ className }: { className?: string }) {
   return (
@@ -23,55 +23,31 @@ function V0Logo({ className }: { className?: string }) {
 }
 
 /**
- * Opens a single component's registry JSON in v0.
- */
-export function OpenInV0Button({
-  componentName,
-  className,
-}: {
-  componentName: string
-  className?: string
-}) {
-  const url = `${REGISTRY_BASE_URL}/r/${componentName}.json`
-  const v0Url = `https://v0.dev/chat/api/open?url=${encodeURIComponent(url)}`
-
-  return (
-    <a
-      href={v0Url}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={`Open ${componentName} in v0`}
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-[6px] bg-black px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80",
-        className,
-      )}
-    >
-      <span className="sr-only">Open in </span>
-      <V0Logo />
-    </a>
-  )
-}
-
-/**
- * Opens the full registry index in v0 -- imports everything at once.
+ * Opens the full registry bundle in v0 -- imports everything at once.
+ * Uses window.location.origin so the URL works on any deployment (preview or production).
  */
 export function OpenAllInV0Button({ className }: { className?: string }) {
-  const url = `${REGISTRY_BASE_URL}/r/navax-ds-all.json`
-  const v0Url = `https://v0.dev/chat/api/open?url=${encodeURIComponent(url)}`
+  function handleClick() {
+    const origin = window.location.origin
+    const url = `${origin}/r/navax-ds-all.json`
+    window.open(
+      `https://v0.dev/chat/api/open?url=${encodeURIComponent(url)}`,
+      "_blank",
+    )
+  }
 
   return (
-    <a
-      href={v0Url}
-      target="_blank"
-      rel="noreferrer"
+    <button
+      type="button"
+      onClick={handleClick}
       aria-label="Open entire NAVAX design system in v0"
       className={cn(
-        "inline-flex items-center gap-2 rounded-[8px] bg-white px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-white/90",
+        "inline-flex items-center gap-2 rounded-[8px] bg-white px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-white/90 cursor-pointer",
         className,
       )}
     >
       Open in
       <V0Logo />
-    </a>
+    </button>
   )
 }
