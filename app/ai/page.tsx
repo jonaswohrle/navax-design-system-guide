@@ -59,8 +59,8 @@ function DemoCard({
           </div>
 
           {/* SDK pattern preview */}
-          <div className="rounded-lg bg-muted/60 px-3 py-2">
-            <pre className="text-[11px] font-mono text-muted-foreground leading-relaxed">
+          <div className="overflow-hidden rounded-lg bg-muted/60 px-3 py-2">
+            <pre className="overflow-x-auto text-[11px] font-mono text-muted-foreground leading-relaxed">
               {sdkPattern}
             </pre>
           </div>
@@ -136,9 +136,9 @@ export default function AIShowcasesPage() {
               <div className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", t.accent)}>
                 <t.icon className="h-4 w-4" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground">{t.label}</p>
-                <p className="text-[11px] text-muted-foreground">{t.desc}</p>
+                <p className="truncate text-[11px] text-muted-foreground">{t.desc}</p>
               </div>
             </div>
           ))}
@@ -166,12 +166,12 @@ export default function AIShowcasesPage() {
           />
           <DemoCard
             title="Content Pipeline"
-            description="Watch a 4-step AI pipeline research, draft, review, and polish content. Each step streams structured data."
+            description="Multi-model agent: Perplexity researches, GPT-5.2 drafts, Gemini generates a hero image -- all streaming into a live blog."
             href="/ai/content-pipeline"
             icon={GitBranch}
-            concepts={["SSE Streaming", "Chained AI", "Structured Output", "Pipeline"]}
+            concepts={["Multi-Model", "Parallel AI", "SSE Streaming", "Pipeline"]}
             accentClass="bg-info/10 text-info group-hover:bg-info group-hover:text-info-foreground"
-            sdkPattern={`generateText({\n  model, output: Output.object({\n    schema: z.object({ ... })\n  })\n})`}
+            sdkPattern={`// 3 models in parallel\nawait Promise.allSettled([\n  generateText({ model: "openai/..." }),\n  generateText({ model: "google/..." })\n])`}
           />
         </div>
 
@@ -196,8 +196,8 @@ export default function AIShowcasesPage() {
                   desc: "Image generation with Gemini, file uploads, base64 handling, and mixed text+image responses.",
                 },
                 {
-                  title: "Pipeline Architecture",
-                  desc: "Chaining multiple AI calls with Server-Sent Events, structured data passing between steps.",
+                  title: "Multi-Model Orchestration",
+                  desc: "Running Perplexity, GPT-5.2, and Gemini in parallel with SSE streaming into a live preview.",
                 },
               ].map((item) => (
                 <div key={item.title} className="flex flex-col gap-1.5">
