@@ -1,6 +1,8 @@
 import { Text } from "@/components/ds"
 import { OpenInV0Button, OpenAllInV0Button } from "@/components/open-in-v0-button"
 
+const REGISTRY_URL = "https://v0-navax-design-system-guide.vercel.app"
+
 const COMPONENTS = [
   { name: "heading", cat: "Typography" },
   { name: "text", cat: "Typography" },
@@ -55,11 +57,10 @@ export function ShowcaseRegistryInfo() {
           command:
         </Text>
         <pre className="rounded-md bg-muted px-4 py-3 text-sm font-mono text-foreground overflow-x-auto">
-          npx shadcn@latest add https://YOUR_DOMAIN/r/stat-card.json
+          {`npx shadcn@latest add ${REGISTRY_URL}/r/stat-card.json`}
         </pre>
         <Text variant="caption" className="mt-3">
-          Replace YOUR_DOMAIN with your deployed URL. Each component resolves
-          its own dependencies automatically.
+          Each component resolves its own dependencies automatically.
         </Text>
       </div>
 
