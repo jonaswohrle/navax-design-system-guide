@@ -10,6 +10,7 @@ import { ShowcaseFeedback } from "@/components/showcase/feedback"
 import { ShowcaseNavigation } from "@/components/showcase/navigation"
 import { ShowcaseForms } from "@/components/showcase/forms"
 import { ShowcaseRegistryInfo } from "@/components/showcase/registry-info"
+import { ShowcaseTemplateConfig } from "@/components/showcase/template-config"
 import { ShowcaseComposite } from "@/components/showcase/composite"
 import { ShowcaseAdvanced } from "@/components/showcase/advanced"
 import { Section, Heading, Text, Divider, StatusBadge, NavaxLogo } from "@/components/ds"
@@ -45,6 +46,18 @@ export default function Page() {
           Install components via the shadcn CLI from your deployed URL.
         </Text>
         <ShowcaseRegistryInfo />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
+
+      {/* v0 Template Config */}
+      <Section>
+        <Heading level={2}>v0 Template Setup</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Copy these values into the v0 Create Template dialog to set up a
+          template with all design system dependencies pre-configured.
+        </Text>
+        <ShowcaseTemplateConfig />
       </Section>
 
       <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
