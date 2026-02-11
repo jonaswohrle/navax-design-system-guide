@@ -144,6 +144,46 @@ const META = {
     dependencies: [],
     registryDependencies: [],
   },
+  "data-table": {
+    description: "Generic sortable data table with typed columns, hover states, and empty state.",
+    dependencies: ["lucide-react"],
+    registryDependencies: [],
+  },
+  stepper: {
+    description: "Step progress indicator with horizontal and vertical orientations.",
+    dependencies: ["lucide-react"],
+    registryDependencies: [],
+  },
+  "user-menu": {
+    description: "Avatar dropdown user menu with profile, settings, and sign-out actions.",
+    dependencies: ["lucide-react"],
+    registryDependencies: [],
+  },
+  "command-menu": {
+    description: "Spotlight-style command palette with search, groups, and keyboard shortcuts.",
+    dependencies: ["lucide-react"],
+    registryDependencies: [],
+  },
+  "pricing-card": {
+    description: "Pricing tier card with feature list, highlight badge, and CTA button.",
+    dependencies: ["lucide-react"],
+    registryDependencies: ["button"],
+  },
+  "testimonial-card": {
+    description: "Customer testimonial card with quote, avatar, star rating, and attribution.",
+    dependencies: [],
+    registryDependencies: [],
+  },
+  "feature-card": {
+    description: "Feature highlight card with icon, title, description, and optional link.",
+    dependencies: [],
+    registryDependencies: [],
+  },
+  kbd: {
+    description: "Keyboard shortcut hint with styled key caps and separator.",
+    dependencies: [],
+    registryDependencies: [],
+  },
 }
 
 // Ensure output directory
