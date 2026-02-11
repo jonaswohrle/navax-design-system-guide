@@ -166,7 +166,7 @@ export default function AIShowcasesPage() {
           />
           <DemoCard
             title="Content Pipeline"
-            description="Multi-model agent: Perplexity researches, GPT-5.2 drafts, Gemini generates a hero image -- all streaming into a live blog."
+            description="Multi-model agent: Gemini researches the web, GPT-5.2 drafts, Gemini generates a hero image -- all streaming into a live blog."
             href="/ai/content-pipeline"
             icon={GitBranch}
             concepts={["Multi-Model", "Parallel AI", "SSE Streaming", "Pipeline"]}
@@ -197,7 +197,7 @@ export default function AIShowcasesPage() {
                 },
                 {
                   title: "Multi-Model Orchestration",
-                  desc: "Running Perplexity, GPT-5.2, and Gemini in parallel with SSE streaming into a live preview.",
+                  desc: "Running Gemini Search, GPT-5.2, and Gemini Image in parallel with SSE streaming into a live preview.",
                 },
               ].map((item) => (
                 <div key={item.title} className="flex flex-col gap-1.5">

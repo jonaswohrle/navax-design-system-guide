@@ -1,4 +1,5 @@
 import { generateText, Output } from "ai"
+import { google } from "@ai-sdk/google"
 import { z } from "zod"
 
 export const maxDuration = 120
@@ -19,18 +20,26 @@ export async function POST(req: Request) {
       }
 
       try {
-        /* ── Step 1: Research with Perplexity (web search) ── */
+        /* ── Step 1: Research with Gemini + Google Search ── */
         send("status", { step: "research", state: "running" })
 
         const research = await generateText({
-          model: "perplexity/sonar-pro",
+          model: "google/gemini-2.5-flash",
+          tools: {
+            google_search: google.tools.googleSearch({}),
+          },
           prompt: `Research the topic "${topic}" for a professional blog post. 
+            Use Google Search to find the latest information.
             Provide key facts, statistics, current trends, expert opinions, and useful context. 
             Focus on practical insights that developers and technical readers would find valuable.
             Be thorough and cite specific details.`,
         })
 
-        send("research", { content: research.text })
+        const sources = research.sources?.map((s) => ({
+          title: ("title" in s ? s.title : s.url) as string,
+          url: s.url,
+        })) ?? []
+        send("research", { content: research.text, sources })
         send("status", { step: "research", state: "done" })
 
         /* ── Step 2: Draft + Image in parallel ── */

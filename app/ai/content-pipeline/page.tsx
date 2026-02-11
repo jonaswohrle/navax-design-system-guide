@@ -41,7 +41,7 @@ interface BlogData {
 }
 
 const STEP_META: { id: StepId; label: string; model: string; icon: React.ElementType }[] = [
-  { id: "research", label: "Web Research", model: "Perplexity Sonar Pro", icon: Globe },
+  { id: "research", label: "Web Research", model: "Gemini + Google Search", icon: Globe },
   { id: "draft", label: "Article Draft", model: "GPT-5.2", icon: FileText },
   { id: "image", label: "Hero Image", model: "Gemini 3 Pro", icon: ImageIcon },
 ]
