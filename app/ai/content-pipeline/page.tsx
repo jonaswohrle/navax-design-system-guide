@@ -2,378 +2,365 @@
 
 import * as React from "react"
 import { ModelSelector } from "@/components/ai/model-selector"
-import { CopyButton } from "@/components/ai/chat-message"
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
-  Search,
+  Globe,
   FileText,
-  CheckCircle2,
-  Sparkles,
+  ImageIcon,
   Play,
   Loader2,
   AlertCircle,
-  ArrowRight,
   Clock,
+  CheckCircle2,
+  ArrowRight,
+  Sparkles,
   Copy,
   Check,
-  ChevronRight,
-  Bot,
-  Zap,
+  Download,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Markdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
-type StepStatus = "pending" | "running" | "done" | "error"
-type StepName = "research" | "draft" | "review" | "polish"
+/* ── Types ── */
+type StepId = "research" | "draft" | "image"
+type StepState = "idle" | "running" | "done" | "error"
 
-interface PipelineStep {
-  name: StepName
-  label: string
-  shortDesc: string
-  icon: React.ElementType
-  status: StepStatus
-  data?: unknown
+interface PipelineState {
+  research: StepState
+  draft: StepState
+  image: StepState
 }
 
-const INITIAL_STEPS: PipelineStep[] = [
-  { name: "research", label: "Research", shortDesc: "Analyze topic", icon: Search, status: "pending" },
-  { name: "draft", label: "Draft", shortDesc: "Write content", icon: FileText, status: "pending" },
-  { name: "review", label: "Review", shortDesc: "Score quality", icon: CheckCircle2, status: "pending" },
-  { name: "polish", label: "Polish", shortDesc: "Final edits", icon: Sparkles, status: "pending" },
+interface BlogData {
+  title: string
+  subtitle: string
+  researchContent: string
+  draftContent: string
+  heroImage: { base64: string; mediaType: string } | null
+}
+
+const STEP_META: { id: StepId; label: string; model: string; icon: React.ElementType }[] = [
+  { id: "research", label: "Web Research", model: "Perplexity Sonar Pro", icon: Globe },
+  { id: "draft", label: "Article Draft", model: "GPT-5.2", icon: FileText },
+  { id: "image", label: "Hero Image", model: "Gemini 3 Pro", icon: ImageIcon },
 ]
 
 const TOPIC_SUGGESTIONS = [
-  "Best practices for few-shot prompting",
-  "How to use chain-of-thought in AI coding",
-  "Building agents with tool calling",
-  "System prompt design patterns",
+  "The rise of AI agents in software development",
+  "Prompt engineering best practices for 2026",
+  "How vibe coding is changing the developer workflow",
+  "Building production AI apps with the Vercel AI SDK",
 ]
 
-/* ── Horizontal Step Indicator ── */
-function StepIndicator({
+/* ── Pipeline Status Bar ── */
+function PipelineStatusBar({
   steps,
-  activeTab,
-  onTabChange,
+  elapsed,
+  isRunning,
 }: {
-  steps: PipelineStep[]
-  activeTab: StepName
-  onTabChange: (name: StepName) => void
+  steps: PipelineState
+  elapsed: number
+  isRunning: boolean
 }) {
-  return (
-    <div className="flex items-center gap-1">
-      {steps.map((step, i) => {
-        const Icon = step.icon
-        const isActive = activeTab === step.name
-        const isClickable = step.status === "done" || step.status === "running"
+  const allDone = steps.research === "done" && steps.draft === "done" && steps.image === "done"
 
+  return (
+    <div className="flex items-center gap-3 text-xs">
+      {STEP_META.map((meta, i) => {
+        const state = steps[meta.id]
+        const Icon = meta.icon
         return (
-          <React.Fragment key={step.name}>
-            <button
-              onClick={() => isClickable && onTabChange(step.name)}
-              disabled={!isClickable}
+          <React.Fragment key={meta.id}>
+            <div
               className={cn(
-                "group flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium transition-all",
-                isActive && step.status === "done" && "bg-success/10 text-success ring-1 ring-success/20",
-                isActive && step.status === "running" && "bg-primary/10 text-primary ring-1 ring-primary/20",
-                isActive && step.status === "pending" && "bg-muted text-muted-foreground",
-                !isActive && step.status === "done" && "text-success/70 hover:bg-success/5 hover:text-success",
-                !isActive && step.status === "running" && "text-primary/70 hover:bg-primary/5 hover:text-primary",
-                !isActive && step.status === "pending" && "text-muted-foreground/50",
-                !isClickable && "cursor-default"
+                "flex items-center gap-1.5 rounded-full px-2.5 py-1 font-medium transition-all",
+                state === "running" && "bg-primary/10 text-primary",
+                state === "done" && "bg-success/10 text-success",
+                state === "error" && "bg-destructive/10 text-destructive",
+                state === "idle" && "text-muted-foreground/50"
               )}
             >
-              <div
-                className={cn(
-                  "flex h-6 w-6 items-center justify-center rounded-md transition-colors",
-                  step.status === "done" && "bg-success/10",
-                  step.status === "running" && "bg-primary/10",
-                  step.status === "pending" && "bg-muted"
-                )}
-              >
-                {step.status === "running" ? (
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                ) : step.status === "done" ? (
-                  <Check className="h-3 w-3" />
-                ) : (
-                  <Icon className="h-3 w-3" />
-                )}
-              </div>
-              <span className="hidden sm:inline">{step.label}</span>
-            </button>
-            {i < steps.length - 1 && (
-              <ChevronRight
+              {state === "running" ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : state === "done" ? (
+                <CheckCircle2 className="h-3 w-3" />
+              ) : state === "error" ? (
+                <AlertCircle className="h-3 w-3" />
+              ) : (
+                <Icon className="h-3 w-3" />
+              )}
+              <span className="hidden sm:inline">{meta.label}</span>
+              <span className="hidden text-[10px] font-normal opacity-60 md:inline">
+                {meta.model}
+              </span>
+            </div>
+            {i < STEP_META.length - 1 && (
+              <ArrowRight
                 className={cn(
                   "h-3 w-3 shrink-0",
-                  step.status === "done" ? "text-success/40" : "text-border"
+                  i === 0 && state === "done" ? "text-success/40" : "text-border"
                 )}
               />
             )}
           </React.Fragment>
         )
       })}
-    </div>
-  )
-}
 
-/* ── Agent Activity Log ── */
-function AgentLog({
-  steps,
-  elapsed,
-  isRunning,
-}: {
-  steps: PipelineStep[]
-  elapsed: number
-  isRunning: boolean
-}) {
-  const logEntries = React.useMemo(() => {
-    const entries: { icon: React.ElementType; text: string; status: StepStatus; step: StepName }[] = []
-    for (const step of steps) {
-      if (step.status === "running") {
-        entries.push({ icon: step.icon, text: `Agent is ${step.shortDesc.toLowerCase()}ing...`, status: "running", step: step.name })
-      }
-      if (step.status === "done") {
-        entries.push({ icon: step.icon, text: `${step.label} complete`, status: "done", step: step.name })
-      }
-    }
-    return entries
-  }, [steps])
-
-  const completedCount = steps.filter((s) => s.status === "done").length
-
-  return (
-    <div className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-2.5">
-      <div className="flex items-center gap-3">
-        <div
-          className={cn(
-            "flex h-7 w-7 items-center justify-center rounded-md",
-            isRunning ? "bg-primary/10" : completedCount === 4 ? "bg-success/10" : "bg-muted"
-          )}
-        >
-          {isRunning ? (
-            <Bot className="h-3.5 w-3.5 animate-pulse text-primary" />
-          ) : completedCount === 4 ? (
-            <CheckCircle2 className="h-3.5 w-3.5 text-success" />
-          ) : (
-            <Bot className="h-3.5 w-3.5 text-muted-foreground" />
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {isRunning && logEntries.length > 0 ? (
-            <span className="text-xs text-foreground">
-              <span className="font-medium">Step {completedCount + 1}/4</span>
-              <span className="mx-1.5 text-muted-foreground">--</span>
-              <span className="text-muted-foreground">{logEntries[logEntries.length - 1].text}</span>
-            </span>
-          ) : completedCount === 4 ? (
-            <span className="text-xs font-medium text-success">All 4 steps complete</span>
-          ) : (
-            <span className="text-xs text-muted-foreground">Agent ready</span>
-          )}
-        </div>
-      </div>
-      {(isRunning || completedCount > 0) && (
-        <div className="flex items-center gap-1.5 text-muted-foreground">
+      <div className="ml-auto flex items-center gap-1.5 text-muted-foreground">
+        {allDone ? (
+          <CheckCircle2 className="h-3 w-3 text-success" />
+        ) : isRunning ? (
           <Clock className="h-3 w-3" />
-          <span className="text-[11px] tabular-nums">{elapsed}s</span>
-        </div>
-      )}
+        ) : null}
+        {(isRunning || allDone) && (
+          <span className="tabular-nums">{elapsed}s</span>
+        )}
+      </div>
     </div>
   )
 }
 
-/* ── Research Output Card ── */
-function ResearchOutput({ data }: { data: { keyPoints: string[]; targetAudience: string; angle: string; relatedTopics: string[] } }) {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div className="rounded-lg border border-primary/10 bg-primary/5 p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-primary/60">Target Audience</p>
-          <p className="mt-1.5 text-sm text-foreground leading-relaxed">{data.targetAudience}</p>
-        </div>
-        <div className="rounded-lg border border-secondary/10 bg-secondary/5 p-4">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-secondary/60">Angle</p>
-          <p className="mt-1.5 text-sm text-foreground leading-relaxed">{data.angle}</p>
-        </div>
-      </div>
-      <div>
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">Key Points</p>
-        <ul className="flex flex-col gap-2">
-          {data.keyPoints.map((point, i) => (
-            <li key={i} className="flex items-start gap-2.5 rounded-md bg-muted/30 px-3 py-2 text-sm text-foreground leading-relaxed">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded bg-primary/10 text-[10px] font-bold text-primary tabular-nums">
-                {i + 1}
-              </span>
-              {point}
-            </li>
-          ))}
-        </ul>
-      </div>
-      {data.relatedTopics.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {data.relatedTopics.map((topic, i) => (
-            <span key={i} className="rounded-full border border-border bg-card px-2.5 py-0.5 text-[11px] text-muted-foreground">
-              {topic}
-            </span>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
+/* ── Blog Preview ── */
+function BlogPreview({ data, steps }: { data: BlogData; steps: PipelineState }) {
+  const [copied, setCopied] = React.useState(false)
 
-/* ── Review Output Card ── */
-function ReviewOutput({ data }: { data: { overallScore: number; clarity: number; accuracy: number; engagement: number; actionability: number; issues: string[]; suggestions: string[] } }) {
-  const scores = [
-    { label: "Clarity", value: data.clarity },
-    { label: "Accuracy", value: data.accuracy },
-    { label: "Engagement", value: data.engagement },
-    { label: "Actionability", value: data.actionability },
-  ]
+  const copyArticle = () => {
+    const text = `# ${data.title}\n\n${data.subtitle}\n\n${data.draftContent}`
+    navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
-  const scoreColor = (v: number) => (v >= 8 ? "text-success" : v >= 5 ? "text-warning" : "text-destructive")
-  const barColor = (v: number) => (v >= 8 ? "bg-success" : v >= 5 ? "bg-warning" : "bg-destructive")
+  const downloadImage = () => {
+    if (!data.heroImage) return
+    const link = document.createElement("a")
+    link.href = `data:${data.heroImage.mediaType};base64,${data.heroImage.base64}`
+    link.download = `${data.title.replace(/[^a-z0-9]/gi, "-").toLowerCase()}-hero.png`
+    link.click()
+  }
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Overall score + dimension scores side by side */}
-      <div className="grid gap-4 sm:grid-cols-[auto_1fr]">
-        <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-card p-4">
-          <span
-            className={cn("text-3xl font-bold tabular-nums", scoreColor(data.overallScore))}
-          >
-            {data.overallScore}
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">/10 Overall</span>
-        </div>
-        <div className="flex flex-col justify-center gap-2.5">
-          {scores.map((s) => (
-            <div key={s.label} className="flex items-center gap-3">
-              <span className="w-24 shrink-0 text-xs text-muted-foreground">{s.label}</span>
-              <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-muted">
-                <div
-                  className={cn("absolute inset-y-0 left-0 rounded-full transition-all duration-700", barColor(s.value))}
-                  style={{ width: `${s.value * 10}%` }}
-                />
+    <article className="mx-auto w-full max-w-3xl">
+      {/* Hero image */}
+      <div className="relative mb-8 overflow-hidden rounded-xl border border-border bg-muted">
+        {data.heroImage ? (
+          <>
+            <img
+              src={`data:${data.heroImage.mediaType};base64,${data.heroImage.base64}`}
+              alt={data.title || "Blog hero image"}
+              className="aspect-[21/9] w-full object-cover"
+            />
+            <button
+              onClick={downloadImage}
+              className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-lg bg-foreground/80 text-background backdrop-blur-sm transition-colors hover:bg-foreground"
+            >
+              <Download className="h-3.5 w-3.5" />
+            </button>
+          </>
+        ) : steps.image === "running" ? (
+          <div className="flex aspect-[21/9] items-center justify-center">
+            <div className="flex flex-col items-center gap-2 text-muted-foreground">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <span className="text-xs font-medium">Gemini is generating the hero image...</span>
+            </div>
+          </div>
+        ) : steps.image === "error" ? (
+          <div className="flex aspect-[21/9] items-center justify-center">
+            <div className="flex flex-col items-center gap-2 text-muted-foreground">
+              <ImageIcon className="h-6 w-6" />
+              <span className="text-xs">Image generation unavailable</span>
+            </div>
+          </div>
+        ) : (
+          <div className="flex aspect-[21/9] items-center justify-center">
+            <div className="flex flex-col items-center gap-2 text-muted-foreground">
+              <ImageIcon className="h-6 w-6" />
+              <span className="text-xs">Hero image will appear here</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Title */}
+      <header className="mb-8">
+        {data.title ? (
+          <>
+            <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground text-balance sm:text-4xl">
+              {data.title}
+            </h1>
+            {data.subtitle && (
+              <p className="mt-3 text-lg text-muted-foreground leading-relaxed text-pretty">
+                {data.subtitle}
+              </p>
+            )}
+            <div className="mt-4 flex items-center gap-3">
+              <div className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1">
+                <Sparkles className="h-3 w-3 text-primary" />
+                <span className="text-xs font-medium text-primary">AI Generated</span>
               </div>
-              <span className={cn("w-5 text-right text-xs font-semibold tabular-nums", scoreColor(s.value))}>
-                {s.value}
+              <span className="text-xs text-muted-foreground">
+                Research by Perplexity -- Written by GPT-5.2 -- Image by Gemini
               </span>
             </div>
-          ))}
-        </div>
+          </>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <div className="h-10 w-3/4 animate-pulse rounded-lg bg-muted" />
+            <div className="h-6 w-1/2 animate-pulse rounded-md bg-muted" />
+          </div>
+        )}
+      </header>
+
+      {/* Article content */}
+      <div className="relative">
+        {data.draftContent ? (
+          <>
+            <div className="absolute -right-2 -top-2 z-10">
+              <button
+                onClick={copyArticle}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
+              </button>
+            </div>
+            <div className="prose prose-sm max-w-none text-foreground prose-headings:font-heading prose-headings:font-semibold prose-headings:text-foreground prose-h2:mt-8 prose-h2:mb-3 prose-h2:text-xl prose-h3:mt-6 prose-h3:mb-2 prose-h3:text-base prose-p:leading-relaxed prose-p:text-foreground/90 prose-strong:text-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:text-xs prose-code:font-mono prose-code:before:content-none prose-code:after:content-none prose-pre:bg-muted/80 prose-pre:border prose-pre:border-border prose-pre:rounded-lg prose-li:text-foreground/90 prose-ul:my-3 prose-ol:my-3 prose-blockquote:border-primary/30 prose-blockquote:text-muted-foreground prose-img:rounded-lg">
+              <Markdown remarkPlugins={[remarkGfm]}>{data.draftContent}</Markdown>
+            </div>
+          </>
+        ) : steps.draft === "running" ? (
+          <div className="flex flex-col gap-3">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-4 animate-pulse rounded bg-muted"
+                style={{ width: `${60 + Math.random() * 40}%`, animationDelay: `${i * 100}ms` }}
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
 
-      {/* Issues + Suggestions */}
-      {(data.issues.length > 0 || data.suggestions.length > 0) && (
-        <div className="grid gap-3 sm:grid-cols-2">
-          {data.issues.length > 0 && (
-            <div className="rounded-lg border border-warning/10 bg-warning/5 p-3">
-              <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-warning/70">Issues Found</p>
-              <ul className="flex flex-col gap-1.5">
-                {data.issues.map((issue, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
-                    <AlertCircle className="mt-0.5 h-3 w-3 shrink-0 text-warning" />
-                    {issue}
-                  </li>
-                ))}
-              </ul>
+      {/* Research sources (collapsible) */}
+      {data.researchContent && (
+        <details className="mt-12 rounded-xl border border-border">
+          <summary className="flex cursor-pointer items-center gap-2 rounded-t-xl bg-card px-5 py-3 text-sm font-medium text-foreground hover:bg-muted/50">
+            <Globe className="h-4 w-4 text-primary" />
+            View Research Sources
+            <span className="ml-1 text-xs text-muted-foreground">(Perplexity Sonar Pro)</span>
+          </summary>
+          <div className="border-t border-border px-5 py-4">
+            <div className="prose prose-sm max-w-none text-muted-foreground prose-headings:text-foreground prose-strong:text-foreground prose-a:text-primary">
+              <Markdown remarkPlugins={[remarkGfm]}>{data.researchContent}</Markdown>
             </div>
-          )}
-          {data.suggestions.length > 0 && (
-            <div className="rounded-lg border border-primary/10 bg-primary/5 p-3">
-              <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-primary/70">Suggestions</p>
-              <ul className="flex flex-col gap-1.5">
-                {data.suggestions.map((s, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-foreground leading-relaxed">
-                    <Sparkles className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
-                    {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+          </div>
+        </details>
       )}
-    </div>
+    </article>
   )
 }
 
-/* ── Content Renderer (Draft/Polish) ── */
-function ContentView({ content }: { content: string }) {
+/* ── Empty State ── */
+function EmptyState({ onSelect }: { onSelect: (topic: string) => void }) {
   return (
-    <div className="relative">
-      <div className="absolute right-0 top-0 z-10">
-        <CopyButton text={content} />
-      </div>
-      <div className="prose prose-sm max-w-none text-foreground [&_p]:my-1.5 [&_h1]:text-lg [&_h1]:font-heading [&_h1]:font-semibold [&_h2]:text-base [&_h2]:font-heading [&_h2]:font-semibold [&_h3]:text-sm [&_h3]:font-semibold [&_pre]:bg-muted [&_pre]:rounded-md [&_pre]:p-3 [&_code]:text-xs [&_code]:font-mono [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_strong]:text-foreground">
-        <Markdown remarkPlugins={[remarkGfm]}>{content}</Markdown>
-      </div>
-    </div>
-  )
-}
-
-/* ── Step Output Panel ── */
-function StepPanel({ step }: { step: PipelineStep }) {
-  if (step.status === "running") {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-          <Loader2 className="h-5 w-5 animate-spin text-primary" />
+    <div className="flex flex-1 flex-col items-center justify-center gap-8 p-8">
+      <div className="flex flex-col items-center gap-4 text-center">
+        <div className="relative">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
+            <Sparkles className="h-8 w-8 text-primary" />
+          </div>
         </div>
         <div>
-          <p className="text-sm font-medium text-foreground">Agent is working on {step.label}...</p>
-          <p className="mt-0.5 text-xs text-muted-foreground">{step.shortDesc}</p>
+          <h2 className="font-heading text-xl font-semibold text-foreground text-balance">
+            Multi-Model Content Pipeline
+          </h2>
+          <p className="mx-auto mt-2 max-w-lg text-sm text-muted-foreground leading-relaxed">
+            Watch three AI models collaborate in real-time: Perplexity searches the web for research,
+            GPT-5.2 writes the article, and Gemini generates a hero image -- all streaming into a
+            live blog preview.
+          </p>
         </div>
       </div>
-    )
-  }
 
-  if (step.status !== "done" || !step.data) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
-          <step.icon className="h-5 w-5 text-muted-foreground/50" />
-        </div>
-        <p className="text-sm text-muted-foreground">Waiting for previous steps to complete</p>
+      {/* Model orchestration diagram */}
+      <div className="flex items-start gap-3">
+        {STEP_META.map((meta, i) => {
+          const Icon = meta.icon
+          return (
+            <React.Fragment key={meta.id}>
+              <div className="flex w-36 flex-col items-center gap-2 rounded-xl border border-border bg-card p-4 text-center">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                  <Icon className="h-5 w-5 text-muted-foreground" />
+                </div>
+                <span className="text-xs font-medium text-foreground">{meta.label}</span>
+                <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-mono text-muted-foreground">
+                  {meta.model}
+                </span>
+                {meta.id === "draft" && (
+                  <span className="rounded bg-secondary/10 px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wider text-secondary">
+                    Parallel
+                  </span>
+                )}
+                {meta.id === "image" && (
+                  <span className="rounded bg-secondary/10 px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wider text-secondary">
+                    Parallel
+                  </span>
+                )}
+              </div>
+              {i < STEP_META.length - 1 && (
+                <ArrowRight className="mt-8 h-4 w-4 shrink-0 text-border" />
+              )}
+            </React.Fragment>
+          )
+        })}
       </div>
-    )
-  }
 
-  switch (step.name) {
-    case "research":
-      return <ResearchOutput data={step.data as { keyPoints: string[]; targetAudience: string; angle: string; relatedTopics: string[] }} />
-    case "draft":
-      return <ContentView content={(step.data as { content: string }).content} />
-    case "review":
-      return <ReviewOutput data={step.data as { overallScore: number; clarity: number; accuracy: number; engagement: number; actionability: number; issues: string[]; suggestions: string[] }} />
-    case "polish":
-      return (
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2 rounded-lg border border-success/20 bg-success/5 px-3 py-2">
-            <CheckCircle2 className="h-3.5 w-3.5 text-success" />
-            <span className="text-xs font-medium text-success">Pipeline complete -- final content ready</span>
-          </div>
-          <ContentView content={(step.data as { content: string }).content} />
+      {/* Topic suggestions */}
+      <div className="flex flex-col items-center gap-3">
+        <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground/60">
+          Try a topic
+        </span>
+        <div className="flex flex-wrap justify-center gap-2">
+          {TOPIC_SUGGESTIONS.map((t) => (
+            <button
+              key={t}
+              onClick={() => onSelect(t)}
+              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
+            >
+              {t}
+            </button>
+          ))}
         </div>
-      )
-    default:
-      return null
-  }
+      </div>
+    </div>
+  )
 }
 
 /* ── Main Page ── */
 export default function ContentPipelinePage() {
   const [model, setModel] = React.useState("openai/gpt-5.2")
   const [topic, setTopic] = React.useState("")
-  const [steps, setSteps] = React.useState<PipelineStep[]>(INITIAL_STEPS)
-  const [activeTab, setActiveTab] = React.useState<StepName>("research")
   const [isRunning, setIsRunning] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const [startTime, setStartTime] = React.useState<number | null>(null)
   const [elapsed, setElapsed] = React.useState(0)
+  const [started, setStarted] = React.useState(false)
 
+  const [steps, setSteps] = React.useState<PipelineState>({
+    research: "idle",
+    draft: "idle",
+    image: "idle",
+  })
+
+  const [blogData, setBlogData] = React.useState<BlogData>({
+    title: "",
+    subtitle: "",
+    researchContent: "",
+    draftContent: "",
+    heroImage: null,
+  })
+
+  // Elapsed timer
   React.useEffect(() => {
     if (!startTime || !isRunning) return
     const interval = setInterval(() => {
@@ -382,34 +369,25 @@ export default function ContentPipelinePage() {
     return () => clearInterval(interval)
   }, [startTime, isRunning])
 
-  // Auto-switch to the currently running or most recently completed step
-  React.useEffect(() => {
-    const running = steps.find((s) => s.status === "running")
-    if (running) {
-      setActiveTab(running.name)
-      return
-    }
-    const doneSteps = steps.filter((s) => s.status === "done")
-    if (doneSteps.length > 0) {
-      setActiveTab(doneSteps[doneSteps.length - 1].name)
-    }
-  }, [steps])
+  const startPipeline = async (topicOverride?: string) => {
+    const t = topicOverride || topic.trim()
+    if (!t || isRunning) return
 
-  const startPipeline = async () => {
-    if (!topic.trim() || isRunning) return
+    if (topicOverride) setTopic(topicOverride)
 
     setIsRunning(true)
+    setStarted(true)
     setError(null)
-    setSteps(INITIAL_STEPS)
-    setActiveTab("research")
     setStartTime(Date.now())
     setElapsed(0)
+    setSteps({ research: "idle", draft: "idle", image: "idle" })
+    setBlogData({ title: "", subtitle: "", researchContent: "", draftContent: "", heroImage: null })
 
     try {
       const res = await fetch("/api/ai/content-pipeline", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic: topic.trim(), model }),
+        body: JSON.stringify({ topic: t, model }),
       })
 
       if (!res.ok) throw new Error("Pipeline request failed")
@@ -429,26 +407,46 @@ export default function ContentPipelinePage() {
 
         for (const line of lines) {
           const trimmed = line.trim()
-          if (trimmed.startsWith("data:")) {
-            try {
-              const data = JSON.parse(trimmed.slice(5).trim())
-              if (data.step === "error") {
-                setError(data.data?.message || "Pipeline failed")
-                break
-              }
-              if (data.step === "complete") break
+          if (!trimmed.startsWith("data:")) continue
 
-              setSteps((prev) =>
-                prev.map((s) => {
-                  if (s.name === data.step) {
-                    return { ...s, status: data.status, data: data.data ?? s.data }
-                  }
-                  return s
-                })
-              )
-            } catch {
-              // Skip invalid JSON
+          try {
+            const data = JSON.parse(trimmed.slice(5).trim())
+
+            if (data.event === "status") {
+              setSteps((prev) => ({
+                ...prev,
+                [data.step as StepId]: data.state as StepState,
+              }))
             }
+
+            if (data.event === "meta") {
+              setBlogData((prev) => ({
+                ...prev,
+                title: data.title,
+                subtitle: data.subtitle,
+              }))
+            }
+
+            if (data.event === "research") {
+              setBlogData((prev) => ({ ...prev, researchContent: data.content }))
+            }
+
+            if (data.event === "draft") {
+              setBlogData((prev) => ({ ...prev, draftContent: data.content }))
+            }
+
+            if (data.event === "image") {
+              setBlogData((prev) => ({
+                ...prev,
+                heroImage: { base64: data.base64, mediaType: data.mediaType },
+              }))
+            }
+
+            if (data.event === "error") {
+              setError(data.message || "Pipeline failed")
+            }
+          } catch {
+            // skip invalid JSON
           }
         }
       }
@@ -459,20 +457,19 @@ export default function ContentPipelinePage() {
     }
   }
 
-  const isIdle = steps.every((s) => s.status === "pending") && !error
-  const activeStep = steps.find((s) => s.name === activeTab) || steps[0]
-
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      {/* Top bar: Header + Model */}
+      {/* Top bar */}
       <div className="flex items-center justify-between border-b border-border bg-card px-6 py-3">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-            <Zap className="h-4 w-4 text-primary" />
+            <Sparkles className="h-4 w-4 text-primary" />
           </div>
           <div>
-            <h1 className="text-sm font-heading font-semibold text-foreground">Content Pipeline Agent</h1>
-            <p className="text-[11px] text-muted-foreground">4-step autonomous agent -- Research, Draft, Review, Polish</p>
+            <h1 className="text-sm font-heading font-semibold text-foreground">Content Pipeline</h1>
+            <p className="text-[11px] text-muted-foreground">
+              Multi-model agent: Perplexity + GPT-5.2 + Gemini
+            </p>
           </div>
         </div>
         <ModelSelector value={model} onChange={setModel} />
@@ -481,126 +478,53 @@ export default function ContentPipelinePage() {
       {/* Input bar */}
       <div className="border-b border-border bg-card/50 px-6 py-3">
         <div className="flex items-center gap-3">
-          <div className="relative flex-1">
-            <input
-              type="text"
-              value={topic}
-              onChange={(e) => setTopic(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && startPipeline()}
-              placeholder="Enter a topic for the agent to research, draft, review, and polish..."
-              disabled={isRunning}
-              className="w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm outline-none transition-colors focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:opacity-50 placeholder:text-muted-foreground"
-            />
-          </div>
-          <Button
-            onClick={startPipeline}
-            disabled={isRunning || !topic.trim()}
-            size="sm"
-          >
+          <input
+            type="text"
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && startPipeline()}
+            placeholder="Enter a topic -- the pipeline will research, write, and illustrate it..."
+            disabled={isRunning}
+            className="flex-1 rounded-lg border border-input bg-background px-3.5 py-2 text-sm outline-none transition-colors focus:ring-2 focus:ring-ring focus:ring-offset-1 disabled:opacity-50 placeholder:text-muted-foreground"
+          />
+          <Button onClick={() => startPipeline()} disabled={isRunning || !topic.trim()} size="sm">
             {isRunning ? (
               <>
                 <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-                Running
+                Generating...
               </>
             ) : (
               <>
                 <Play className="mr-1.5 h-3.5 w-3.5" />
-                Run Agent
+                Generate
               </>
             )}
           </Button>
         </div>
-        {isIdle && (
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {TOPIC_SUGGESTIONS.map((s) => (
-              <button
-                key={s}
-                onClick={() => setTopic(s)}
-                className="rounded-md border border-border bg-card px-2 py-0.5 text-[11px] text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
-      {/* Main area */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {isIdle ? (
-          /* Empty state */
-          <div className="flex flex-1 flex-col items-center justify-center gap-6 p-8 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-              <Bot className="h-8 w-8 text-primary" />
-            </div>
-            <div>
-              <h2 className="text-lg font-heading font-semibold text-foreground text-balance">
-                Autonomous Content Agent
-              </h2>
-              <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground leading-relaxed">
-                This agent chains 4 <code className="rounded bg-muted px-1 py-0.5 text-xs font-mono text-foreground">generateText</code> calls
-                with <code className="rounded bg-muted px-1 py-0.5 text-xs font-mono text-foreground">Output.object()</code> to
-                autonomously research, draft, review, and polish content. Results stream via SSE.
-              </p>
-            </div>
+      {/* Pipeline status bar (only when running/done) */}
+      {started && (
+        <div className="border-b border-border bg-muted/30 px-6 py-2.5">
+          <PipelineStatusBar steps={steps} elapsed={elapsed} isRunning={isRunning} />
+        </div>
+      )}
 
-            {/* Visual pipeline flow */}
-            <div className="flex items-center gap-2">
-              {INITIAL_STEPS.map((step, i) => {
-                const Icon = step.icon
-                return (
-                  <React.Fragment key={step.name}>
-                    <div className="flex flex-col items-center gap-1.5 rounded-lg border border-border bg-card px-4 py-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted">
-                        <Icon className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                      <span className="text-[11px] font-medium text-muted-foreground">{step.label}</span>
-                    </div>
-                    {i < INITIAL_STEPS.length - 1 && (
-                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-border" />
-                    )}
-                  </React.Fragment>
-                )
-              })}
-            </div>
+      {/* Error */}
+      {error && (
+        <div className="mx-6 mt-4 flex items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3">
+          <AlertCircle className="h-4 w-4 shrink-0 text-destructive" />
+          <p className="text-sm text-destructive">{error}</p>
+        </div>
+      )}
 
-            {/* SDK concepts */}
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {["generateText", "Output.object()", "Zod Schema", "SSE Stream", "Chained Calls"].map((concept) => (
-                <span key={concept} className="rounded-full border border-border bg-card px-3 py-1 text-[11px] font-mono text-muted-foreground">
-                  {concept}
-                </span>
-              ))}
-            </div>
-          </div>
+      {/* Main content */}
+      <div className="flex-1 overflow-y-auto">
+        {!started ? (
+          <EmptyState onSelect={(t) => startPipeline(t)} />
         ) : (
-          /* Pipeline running / done */
-          <div className="flex flex-1 flex-col overflow-hidden">
-            {/* Agent status bar */}
-            <div className="px-6 pt-4 pb-2">
-              <AgentLog steps={steps} elapsed={elapsed} isRunning={isRunning} />
-            </div>
-
-            {/* Step tabs */}
-            <div className="flex items-center justify-between border-b border-border px-6 py-2">
-              <StepIndicator steps={steps} activeTab={activeTab} onTabChange={setActiveTab} />
-              <span className="text-[11px] tabular-nums text-muted-foreground">
-                {steps.filter((s) => s.status === "done").length}/4 steps
-              </span>
-            </div>
-
-            {/* Error */}
-            {error && (
-              <div className="mx-6 mt-4 flex items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3">
-                <AlertCircle className="h-4 w-4 text-destructive" />
-                <p className="text-sm text-destructive">{error}</p>
-              </div>
-            )}
-
-            {/* Active step output */}
-            <div className="flex-1 overflow-y-auto p-6">
-              <StepPanel step={activeStep} />
-            </div>
+          <div className="px-6 py-8">
+            <BlogPreview data={blogData} steps={steps} />
           </div>
         )}
       </div>

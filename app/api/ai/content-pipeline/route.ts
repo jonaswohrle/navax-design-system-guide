@@ -1,121 +1,144 @@
 import { generateText, Output } from "ai"
 import { z } from "zod"
 
-const STEPS = ["research", "draft", "review", "polish"] as const
+export const maxDuration = 120
 
-function createSSEStream(topic: string, model: string) {
+export async function POST(req: Request) {
+  const { topic } = await req.json()
+
+  if (!topic || typeof topic !== "string") {
+    return Response.json({ error: "Topic is required" }, { status: 400 })
+  }
+
   const encoder = new TextEncoder()
 
   const stream = new ReadableStream({
     async start(controller) {
-      function send(data: Record<string, unknown>) {
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`))
+      function send(event: string, data: Record<string, unknown>) {
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ event, ...data })}\n\n`))
       }
 
       try {
-        // Step 1: Research
-        send({ step: "research", status: "running" })
+        /* ── Step 1: Research with Perplexity (web search) ── */
+        send("status", { step: "research", state: "running" })
+
         const research = await generateText({
-          model,
+          model: "perplexity/sonar-pro",
+          prompt: `Research the topic "${topic}" for a professional blog post. 
+            Provide key facts, statistics, current trends, expert opinions, and useful context. 
+            Focus on practical insights that developers and technical readers would find valuable.
+            Be thorough and cite specific details.`,
+        })
+
+        send("research", { content: research.text })
+        send("status", { step: "research", state: "done" })
+
+        /* ── Step 2: Draft + Image in parallel ── */
+        send("status", { step: "draft", state: "running" })
+        send("status", { step: "image", state: "running" })
+
+        // Generate article metadata first (fast structured output)
+        const meta = await generateText({
+          model: "openai/gpt-5.2",
           output: Output.object({
             schema: z.object({
-              keyPoints: z.array(z.string()).describe("5-7 key points about the topic"),
-              targetAudience: z.string().describe("Who this content is for"),
-              angle: z.string().describe("The unique angle or perspective to take"),
-              relatedTopics: z.array(z.string()).describe("3-4 related topics to reference"),
+              title: z.string().describe("Compelling blog post title"),
+              subtitle: z.string().describe("One-line subtitle or teaser"),
+              imagePrompt: z.string().describe("A detailed prompt for generating a photorealistic hero image that visually represents the blog topic. Describe scene, lighting, style."),
             }),
           }),
-          prompt: `You are a content researcher. Research the topic "${topic}" for a technical blog post or tutorial.
-          
-Identify key points, the ideal target audience, a unique angle, and related topics that would strengthen the piece.
-Focus on practical, actionable insights that developers and vibe coders would find valuable.`,
+          prompt: `Based on this research about "${topic}", generate a blog post title, subtitle, and a hero image prompt.
+
+Research:
+${research.text}`,
         })
-        send({ step: "research", status: "done", data: research.output })
 
-        // Step 2: Draft
-        send({ step: "draft", status: "running" })
-        const draft = await generateText({
-          model,
-          prompt: `You are a technical writer. Write a blog post about "${topic}".
+        send("meta", {
+          title: meta.output?.title ?? topic,
+          subtitle: meta.output?.subtitle ?? "",
+        })
 
-Use this research to guide your writing:
-${JSON.stringify(research.output, null, 2)}
+        // Now run draft and image generation in parallel
+        const [draftResult, imageResult] = await Promise.allSettled([
+          // Draft with GPT-5.2
+          generateText({
+            model: "openai/gpt-5.2",
+            prompt: `You are a senior technical writer. Write a well-structured blog post about "${topic}".
+
+Title: ${meta.output?.title}
+Subtitle: ${meta.output?.subtitle}
+
+Use this research as your source material:
+${research.text}
 
 Guidelines:
-- Write 400-600 words
-- Use markdown formatting (headings, code blocks, bullet points)
-- Include practical examples and code snippets where relevant
-- Keep the tone professional but approachable
-- Focus on how this relates to prompting and vibe coding
-- Include a compelling introduction and actionable conclusion`,
-        })
-        send({ step: "draft", status: "done", data: { content: draft.text } })
-
-        // Step 3: Review
-        send({ step: "review", status: "running" })
-        const review = await generateText({
-          model,
-          output: Output.object({
-            schema: z.object({
-              overallScore: z.number().min(1).max(10),
-              clarity: z.number().min(1).max(10),
-              accuracy: z.number().min(1).max(10),
-              engagement: z.number().min(1).max(10),
-              actionability: z.number().min(1).max(10),
-              issues: z.array(z.string()).describe("Specific issues found"),
-              suggestions: z.array(z.string()).describe("Improvement suggestions"),
-            }),
+- Write 600-900 words in markdown format
+- Start directly with the content (NO title/heading at the top -- it's already displayed)
+- Use ## for section headings, ### for subsections
+- Include practical examples, code snippets where relevant
+- Add bullet points and numbered lists for clarity
+- Use bold and italic for emphasis
+- Write with a professional but approachable tone
+- Include a compelling introduction paragraph
+- End with actionable takeaways or a conclusion
+- Make it genuinely useful for developers and tech readers`,
           }),
-          prompt: `You are an editorial reviewer. Review this blog post draft and provide a structured quality assessment.
 
-Draft to review:
-${draft.text}
+          // Image with Gemini
+          generateText({
+            model: "google/gemini-3-pro-image",
+            messages: [
+              {
+                role: "user",
+                content: [
+                  {
+                    type: "text",
+                    text: meta.output?.imagePrompt ?? `Create a beautiful, modern hero image for a blog post about: ${topic}. Photorealistic, professional, cinematic lighting.`,
+                  },
+                ],
+              },
+            ],
+            providerOptions: {
+              google: { responseModalities: ["TEXT", "IMAGE"] },
+            },
+          }),
+        ])
 
-Evaluate on: clarity, accuracy, engagement, and actionability. Identify specific issues and provide improvement suggestions.`,
-        })
-        send({ step: "review", status: "done", data: review.output })
+        // Send draft result
+        if (draftResult.status === "fulfilled") {
+          send("draft", { content: draftResult.value.text })
+          send("status", { step: "draft", state: "done" })
+        } else {
+          send("draft", { content: `*Draft generation failed. Please try again.*` })
+          send("status", { step: "draft", state: "error" })
+        }
 
-        // Step 4: Polish
-        send({ step: "polish", status: "running" })
-        const polished = await generateText({
-          model,
-          prompt: `You are a senior editor. Polish and improve this blog post based on the review feedback.
+        // Send image result
+        if (imageResult.status === "fulfilled" && imageResult.value.files?.length) {
+          const file = imageResult.value.files[0]
+          if (file.mediaType?.startsWith("image/")) {
+            send("image", {
+              base64: file.base64,
+              mediaType: file.mediaType,
+            })
+            send("status", { step: "image", state: "done" })
+          } else {
+            send("status", { step: "image", state: "error" })
+          }
+        } else {
+          send("status", { step: "image", state: "error" })
+        }
 
-Original draft:
-${draft.text}
-
-Review feedback:
-${JSON.stringify(review.output, null, 2)}
-
-Apply the suggestions, fix the issues, and improve the overall quality. Return the final polished version in markdown format.
-Make sure the content is engaging, accurate, and actionable for developers learning about prompting and vibe coding.`,
-        })
-        send({ step: "polish", status: "done", data: { content: polished.text } })
-
-        send({ step: "complete", status: "done" })
+        send("complete", {})
       } catch (error) {
-        send({
-          step: "error",
-          status: "error",
-          data: { message: error instanceof Error ? error.message : "Pipeline failed" },
+        send("error", {
+          message: error instanceof Error ? error.message : "Pipeline failed",
         })
       } finally {
         controller.close()
       }
     },
   })
-
-  return stream
-}
-
-export async function POST(req: Request) {
-  const { topic, model = "openai/gpt-5.2" } = await req.json()
-
-  if (!topic || typeof topic !== "string") {
-    return Response.json({ error: "Topic is required" }, { status: 400 })
-  }
-
-  const stream = createSSEStream(topic, model)
 
   return new Response(stream, {
     headers: {
