@@ -54,12 +54,12 @@ export default function Page() {
 
       <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
 
-      {/* v0 & AI Editor Integration */}
+      {/* Setup & Integration */}
       <Section>
-        <Heading level={2}>{"Use with v0 & AI Editors"}</Heading>
+        <Heading level={2}>Setup</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          Set up v0 Rules, create a template, or configure MCP for AI code
-          editors -- everything you need to start using the design system.
+          Everything you need to use the design system in v0, AI editors,
+          or any Next.js project.
         </Text>
         <ShowcaseTemplateConfig />
       </Section>
