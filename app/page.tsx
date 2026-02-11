@@ -14,7 +14,7 @@ import { ShowcaseTemplateConfig } from "@/components/showcase/template-config"
 import { ShowcaseComposite } from "@/components/showcase/composite"
 import { ShowcaseAdvanced } from "@/components/showcase/advanced"
 import { Section, Heading, Text, Divider, StatusBadge, NavaxLogo } from "@/components/ds"
-import { OpenAllInV0Button } from "@/components/open-in-v0-button"
+import { OpenStarterInV0Button } from "@/components/open-in-v0-button"
 
 export default function Page() {
   return (
@@ -38,7 +38,7 @@ export default function Page() {
             directly in v0 via your Rules panel.
           </Text>
           <div className="mt-2">
-            <OpenAllInV0Button />
+            <OpenStarterInV0Button />
           </div>
         </div>
       </section>
@@ -58,12 +58,8 @@ export default function Page() {
       <Section>
         <Heading level={2}>Setup</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          Publish{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono font-semibold">
-            @navax/design-system
-          </code>{" "}
-          to npm, then create a v0 template so every project starts with
-          the full design system ready to import.
+          Open the starter template in v0, or set up a reusable template
+          so every new project starts with the design system.
         </Text>
         <ShowcaseTemplateConfig />
       </Section>

@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Check, Copy, Info, ExternalLink, Package, Terminal, FileCode2 } from "lucide-react"
+import { Check, Copy, Info, ExternalLink, Terminal, FileCode2 } from "lucide-react"
 import { Text } from "@/components/ds"
 import { Switch } from "@/components/ui/switch"
+import { OpenStarterInV0Button } from "@/components/open-in-v0-button"
 import {
   Tooltip,
   TooltipContent,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/tooltip"
 
 const REGISTRY_URL = "https://v0-navax-design-system-guide.vercel.app"
-const NPM_PACKAGE = "@navax/design-system"
 
 const COMPONENT_NAMES = [
   "heading", "text", "stack", "section", "divider", "icon-button",
@@ -26,15 +26,17 @@ const COMPONENT_NAMES = [
 
 const V0_RULES_TEXT = `Always use the NAVAX design system when building UI.
 
-The package "${NPM_PACKAGE}" is pre-installed. Import components from it directly:
-import { StatCard, Heading, Text, NavaxLogo } from "${NPM_PACKAGE}"
+Registry URL: ${REGISTRY_URL}/r
 
-For components not in the package, install from the registry:
+Install components with:
 npx shadcn@latest add ${REGISTRY_URL}/r/<component-name>.json
+
+Import from @/components/ds/<component-name>
 
 Available components: ${COMPONENT_NAMES.join(", ")}
 
-Use NAVAX design system components instead of custom implementations.`
+Use NAVAX design system components instead of custom implementations.
+Always use the NAVAX brand tokens defined in globals.css (primary = magenta, secondary = teal).`
 
 const MCP_CONFIG = `{
   "mcpServers": {
@@ -47,51 +49,6 @@ const MCP_CONFIG = `{
     }
   }
 }`
-
-const PACKAGE_JSON_EXAMPLE = `{
-  "name": "${NPM_PACKAGE}",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./globals.css": "./dist/globals.css"
-  },
-  "files": ["dist"],
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch"
-  },
-  "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18",
-    "tailwindcss": ">=3"
-  }
-}`
-
-const TSUP_CONFIG = `import { defineConfig } from "tsup"
-
-export default defineConfig({
-  entry: ["src/index.ts"],
-  format: ["esm"],
-  dts: true,
-  sourcemap: true,
-  clean: true,
-  external: ["react", "react-dom"],
-})`
-
-const INDEX_TS_EXAMPLE = `// src/index.ts
-// Re-export all design system components
-export { Heading } from "./components/heading"
-export { Text } from "./components/text"
-export { StatCard } from "./components/stat-card"
-export { NavaxLogo } from "./components/navax-logo"
-export { StatusBadge } from "./components/status-badge"
-// ... export all 34 components`
 
 function CopyButton({ text, label }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false)
@@ -179,193 +136,115 @@ export function ShowcaseTemplateConfig() {
   return (
     <div className="flex flex-col gap-8">
 
-      {/* ─────────────────────────────────────────────────────
-          SECTION A: Create the npm package
-         ───────────────────────────────────────────────────── */}
-      <div>
-        <div className="flex items-center gap-2.5 mb-1">
-          <Package className="h-5 w-5 text-primary" />
-          <p className="text-lg font-semibold text-foreground">
-            Publish the npm package
-          </p>
-        </div>
-        <Text variant="small" className="mb-6">
-          Create a separate repo for{" "}
-          <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono font-semibold">
-            {NPM_PACKAGE}
-          </code>{" "}
-          that bundles all 34 components into a single installable package.
-        </Text>
-
-        <div className="flex flex-col gap-4">
-          {/* Step 1 -- scaffold */}
-          <SectionCard>
-            <div className="flex items-center gap-3 mb-3">
-              <StepNumber n={1} />
-              <p className="text-sm font-semibold text-foreground">
-                Scaffold the package
-              </p>
-            </div>
-            <Text variant="small" className="mb-4 ml-9">
-              Create a new repo with the following structure. Use{" "}
-              <strong>tsup</strong> to bundle and generate type declarations.
-            </Text>
-            <div className="ml-9 flex flex-col gap-3">
-              <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1.5">
-                  package.json
-                </p>
-                <CodeBlock code={PACKAGE_JSON_EXAMPLE} label="Copy package.json" />
-              </div>
-              <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1.5">
-                  tsup.config.ts
-                </p>
-                <CodeBlock code={TSUP_CONFIG} label="Copy tsup config" />
-              </div>
-            </div>
-          </SectionCard>
-
-          {/* Step 2 -- add components */}
-          <SectionCard>
-            <div className="flex items-center gap-3 mb-3">
-              <StepNumber n={2} />
-              <p className="text-sm font-semibold text-foreground">
-                Add the components
-              </p>
-            </div>
-            <Text variant="small" className="mb-4 ml-9">
-              Copy all DS components into{" "}
-              <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
-                src/components/
-              </code>{" "}
-              and re-export them from a barrel file.
-            </Text>
-            <div className="ml-9">
-              <p className="text-xs font-medium text-muted-foreground mb-1.5">
-                src/index.ts
-              </p>
-              <CodeBlock code={INDEX_TS_EXAMPLE} label="Copy index.ts" />
-            </div>
-          </SectionCard>
-
-          {/* Step 3 -- publish */}
-          <SectionCard>
-            <div className="flex items-center gap-3 mb-3">
-              <StepNumber n={3} />
-              <p className="text-sm font-semibold text-foreground">
-                Build and publish
-              </p>
-            </div>
-            <div className="ml-9 flex flex-col gap-3">
-              <CodeBlock
-                code={`npm install tsup typescript --save-dev\nnpm run build\nnpm publish --access public`}
-                label="Copy publish commands"
-              />
-              <Text variant="caption">
-                Make sure you have an npm account with access to the{" "}
-                <strong>@navax</strong> scope. Run{" "}
-                <code className="rounded bg-muted px-1 py-0.5 text-[11px] font-mono">
-                  npm login
-                </code>{" "}
-                first if needed.
-              </Text>
-            </div>
-          </SectionCard>
-        </div>
-      </div>
-
-      {/* ─────────────────────────────────────────────────────
-          SECTION B: Use in v0
-         ───────────────────────────────────────────────────── */}
+      {/* Quick Start */}
       <div>
         <div className="flex items-center gap-2.5 mb-1">
           <Terminal className="h-5 w-5 text-primary" />
           <p className="text-lg font-semibold text-foreground">
-            Use in v0
+            Quick Start
           </p>
         </div>
         <Text variant="small" className="mb-6">
-          Once published, configure a v0 template so every new project
-          starts with the design system ready to import.
+          Open the starter template in v0 to get a project with the NAVAX
+          header, footer, brand tokens, and fonts already configured.
+          Then add more components from the registry as you build.
+        </Text>
+
+        <div className="rounded-lg border-2 border-primary/20 bg-primary/5 p-6 flex flex-col items-center gap-4 text-center">
+          <OpenStarterInV0Button />
+          <Text variant="caption" className="max-w-md">
+            Creates a new v0 project with the NAVAX app shell.
+            All {COMPONENT_NAMES.length} components are available to add on demand.
+          </Text>
+        </div>
+      </div>
+
+      {/* v0 Template Setup */}
+      <div>
+        <div className="flex items-center gap-2.5 mb-1">
+          <FileCode2 className="h-5 w-5 text-primary" />
+          <p className="text-lg font-semibold text-foreground">
+            v0 Template Setup
+          </p>
+        </div>
+        <Text variant="small" className="mb-6">
+          Create a reusable v0 template so every new project starts with
+          the design system. Go to{" "}
+          <strong>Settings &rarr; Templates &rarr; Create Template</strong>.
         </Text>
 
         <div className="flex flex-col gap-4">
-          {/* Create Template values */}
+          {/* NPM Packages */}
           <SectionCard>
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-3 mb-4">
               <StepNumber n={1} />
               <p className="text-sm font-semibold text-foreground">
-                Create Template values
+                NPM Packages
+              </p>
+              <InfoTooltip text="Leave empty. The design system uses a shadcn registry -- components are installed via CLI, not from npm." />
+            </div>
+            <div className="ml-9 rounded-md border border-border bg-muted/50 px-4 py-3">
+              <p className="text-sm text-muted-foreground italic">
+                Leave empty -- no npm package required
               </p>
             </div>
-            <Text variant="small" className="mb-6 ml-9">
-              In v0, go to <strong>Settings &rarr; Templates &rarr; Create Template</strong> and fill in these fields:
+            <Text variant="caption" className="mt-2 ml-9">
+              Components are distributed via the shadcn registry and
+              installed individually with{" "}
+              <code className="rounded bg-muted px-1 py-0.5 text-[11px] font-mono">
+                npx shadcn@latest add
+              </code>.
             </Text>
+          </SectionCard>
 
-            {/* NPM Packages */}
-            <div className="mb-5 ml-9">
-              <div className="flex items-center gap-2 mb-2">
-                <p className="text-sm font-medium text-foreground">
-                  NPM Packages
-                </p>
-                <InfoTooltip text="Comma-separated list of npm packages to pre-install in every project created from this template." />
+          {/* Environment Variables */}
+          <SectionCard>
+            <div className="flex items-center gap-3 mb-4">
+              <StepNumber n={2} />
+              <p className="text-sm font-semibold text-foreground">
+                Environment Variables
+              </p>
+              <InfoTooltip text="No secrets needed. The registry is publicly accessible." />
+            </div>
+            <div className="ml-9 rounded-md border border-border bg-muted/50 px-4 py-3">
+              <p className="text-sm text-muted-foreground italic">
+                None required
+              </p>
+            </div>
+          </SectionCard>
+
+          {/* Tech Stack */}
+          <SectionCard>
+            <div className="flex items-center gap-3 mb-4">
+              <StepNumber n={3} />
+              <p className="text-sm font-semibold text-foreground">
+                Tech Stack
+              </p>
+              <InfoTooltip text="Enable both toggles. The design system builds on Tailwind CSS and extends shadcn/ui." />
+            </div>
+            <div className="ml-9 flex flex-col rounded-md border border-border overflow-hidden">
+              <div className="flex items-center justify-between bg-muted/50 px-4 py-3 border-b border-border">
+                <span className="text-sm font-medium text-foreground">
+                  Tailwind CSS
+                </span>
+                <Switch checked disabled aria-label="Tailwind CSS enabled" />
               </div>
-              <div className="rounded-md border border-border bg-muted/50 px-4 py-3 flex items-center justify-between gap-3">
-                <code className="text-sm font-mono text-foreground">
-                  {NPM_PACKAGE}
-                </code>
-                <CopyButton text={NPM_PACKAGE} label="Copy package name" />
+              <div className="flex items-center justify-between bg-muted/50 px-4 py-3">
+                <span className="text-sm font-medium text-foreground">
+                  shadcn/ui
+                </span>
+                <Switch checked disabled aria-label="shadcn/ui enabled" />
               </div>
             </div>
-
-            {/* Environment Variables */}
-            <div className="mb-5 ml-9">
-              <div className="flex items-center gap-2 mb-2">
-                <p className="text-sm font-medium text-foreground">
-                  Environment Variables
-                </p>
-                <InfoTooltip text="Not needed for a public npm package. Only required if you publish to a private scope." />
-              </div>
-              <div className="rounded-md border border-border bg-muted/50 px-4 py-3">
-                <p className="text-sm text-muted-foreground italic">
-                  None required (public package)
-                </p>
-              </div>
-            </div>
-
-            {/* Tech Stack */}
-            <div className="ml-9">
-              <div className="flex items-center gap-2 mb-2">
-                <p className="text-sm font-medium text-foreground">
-                  Tech Stack
-                </p>
-                <InfoTooltip text="The design system uses Tailwind CSS for styling and extends shadcn/ui components." />
-              </div>
-              <div className="flex flex-col rounded-md border border-border overflow-hidden">
-                <div className="flex items-center justify-between bg-muted/50 px-4 py-3 border-b border-border">
-                  <span className="text-sm font-medium text-foreground">
-                    Tailwind CSS
-                  </span>
-                  <Switch checked disabled aria-label="Tailwind CSS enabled" />
-                </div>
-                <div className="flex items-center justify-between bg-muted/50 px-4 py-3">
-                  <span className="text-sm font-medium text-foreground">
-                    shadcn/ui
-                  </span>
-                  <Switch checked disabled aria-label="shadcn/ui enabled" />
-                </div>
-              </div>
-              <Text variant="caption" className="mt-2">
-                Enable both toggles.
-              </Text>
-            </div>
+            <Text variant="caption" className="mt-2 ml-9">
+              Enable both toggles, then click Create.
+            </Text>
           </SectionCard>
 
           {/* v0 Rules */}
           <SectionCard>
-            <div className="flex items-center gap-3 mb-3">
-              <StepNumber n={2} />
+            <div className="flex items-center gap-3 mb-4">
+              <StepNumber n={4} />
               <p className="text-sm font-semibold text-foreground">
                 Add v0 Rules
               </p>
@@ -381,37 +260,7 @@ export function ShowcaseTemplateConfig() {
         </div>
       </div>
 
-      {/* ─────────────────────────────────────────────────────
-          SECTION C: CLI / Registry fallback
-         ───────────────────────────────────────────────────── */}
-      <div>
-        <div className="flex items-center gap-2.5 mb-1">
-          <FileCode2 className="h-5 w-5 text-primary" />
-          <p className="text-lg font-semibold text-foreground">
-            Alternative: Registry CLI
-          </p>
-        </div>
-        <Text variant="small" className="mb-4">
-          You can also install individual components directly from the
-          registry without the npm package:
-        </Text>
-        <CodeBlock
-          code={`npx shadcn@latest add ${REGISTRY_URL}/r/stat-card.json`}
-          label="Copy install command"
-        />
-        <Text variant="caption" className="mt-3">
-          Replace{" "}
-          <code className="rounded bg-muted px-1 py-0.5 text-[11px] font-mono">
-            stat-card
-          </code>{" "}
-          with any component name. This copies the source into your project
-          (like shadcn/ui itself) rather than importing from a package.
-        </Text>
-      </div>
-
-      {/* ─────────────────────────────────────────────────────
-          SECTION D: MCP for AI editors
-         ───────────────────────────────────────────────────── */}
+      {/* MCP for AI editors */}
       <SectionCard>
         <div className="flex items-center gap-3 mb-1">
           <ExternalLink className="h-4 w-4 text-muted-foreground" />

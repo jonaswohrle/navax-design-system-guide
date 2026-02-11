@@ -23,13 +23,13 @@ function V0Logo({ className }: { className?: string }) {
 }
 
 /**
- * Opens the full registry bundle in v0 -- imports everything at once.
+ * Opens the NAVAX starter template in v0 -- header, footer, layout, and brand tokens.
  * Uses window.location.origin so the URL works on any deployment (preview or production).
  */
-export function OpenAllInV0Button({ className }: { className?: string }) {
+export function OpenStarterInV0Button({ className }: { className?: string }) {
   function handleClick() {
     const origin = window.location.origin
-    const url = `${origin}/r/navax-ds-all.json`
+    const url = `${origin}/r/navax-starter.json`
     window.open(
       `https://v0.dev/chat/api/open?url=${encodeURIComponent(url)}`,
       "_blank",
@@ -40,13 +40,13 @@ export function OpenAllInV0Button({ className }: { className?: string }) {
     <button
       type="button"
       onClick={handleClick}
-      aria-label="Open entire NAVAX design system in v0"
+      aria-label="Open NAVAX starter template in v0"
       className={cn(
         "inline-flex items-center gap-2 rounded-[8px] bg-white px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-white/90 cursor-pointer",
         className,
       )}
     >
-      Open in
+      Open Starter in
       <V0Logo />
     </button>
   )

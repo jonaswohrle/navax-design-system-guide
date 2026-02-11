@@ -1,5 +1,5 @@
 import { Text } from "@/components/ds"
-import { OpenAllInV0Button } from "@/components/open-in-v0-button"
+import { OpenStarterInV0Button } from "@/components/open-in-v0-button"
 
 const REGISTRY_URL = "https://v0-navax-design-system-guide.vercel.app"
 
@@ -92,16 +92,16 @@ export function ShowcaseRegistryInfo() {
         </div>
       </div>
 
-      {/* Import all CTA */}
+      {/* Starter template CTA */}
       <div className="rounded-lg border border-dashed border-primary/30 bg-primary/5 p-6 flex flex-col items-center gap-3 text-center">
         <p className="text-sm font-medium text-primary">
-          Import the entire design system into v0
+          Start a new project with the design system
         </p>
         <Text variant="small" className="max-w-md">
-          One click to open all {COMPONENTS.length} components in v0, ready to
-          use in your next project.
+          Opens a starter template in v0 with the header, footer, and brand
+          tokens pre-configured. Add more components as you build.
         </Text>
-        <OpenAllInV0Button className="mt-1 bg-primary text-primary-foreground hover:bg-primary/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90" />
+        <OpenStarterInV0Button className="mt-1 bg-primary text-primary-foreground hover:bg-primary/90 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90" />
       </div>
     </div>
   )
