@@ -5,10 +5,10 @@ export function ShowcaseTypography() {
     <div className="flex flex-col gap-8">
       {/* Headings */}
       <div className="flex flex-col gap-4">
-        <Heading level={1}>Heading Level 1 — DM Serif Display</Heading>
-        <Heading level={2}>Heading Level 2 — Inter Semibold</Heading>
-        <Heading level={3}>Heading Level 3 — Inter Semibold</Heading>
-        <Heading level={4}>Heading Level 4 — Inter Semibold</Heading>
+        <Heading level={1}>Heading Level 1 — DM Sans Semibold</Heading>
+        <Heading level={2}>Heading Level 2 — DM Sans Semibold</Heading>
+        <Heading level={3}>Heading Level 3 — DM Sans Semibold</Heading>
+        <Heading level={4}>Heading Level 4 — DM Sans Semibold</Heading>
       </div>
 
       {/* Body variants */}
@@ -49,9 +49,9 @@ export function ShowcaseTypography() {
         </div>
         <div className="rounded-lg border border-border p-6">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
-            Serif — DM Serif Display
+            Heading — DM Sans
           </p>
-          <p className="font-serif text-2xl text-foreground">
+          <p className="font-heading text-2xl font-semibold text-foreground">
             Aa Bb Cc 123
           </p>
         </div>

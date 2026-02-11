@@ -1,4 +1,4 @@
-# Design System Rules for v0
+# NAVAX Design System Rules for v0
 
 Copy everything below the line into your v0 Rules panel (sidebar > Rules) to enforce this design system across all projects.
 
@@ -6,33 +6,36 @@ Copy everything below the line into your v0 Rules panel (sidebar > Rules) to enf
 
 ## Brand Identity
 
-- Primary brand color: #79217a (magenta) — HSL 299 57% 30%
+- Company: NAVAX — Microsoft Dynamics Partner
+- Primary brand color: #79217A (magenta) — HSL 299 57% 30%
+- Secondary brand color: #006F6E (teal) — HSL 180 100% 22%
+- Accent color: #2769B2 (blue) — HSL 212 63% 43%
 - Visual style: Clean & Minimal — generous whitespace, subtle borders, restrained color use
-- Personality: Sophisticated, modern, approachable
+- Personality: Professional, modern, trustworthy
 
-## Color Palette (5 colors max)
+## Color Palette (5 colors)
 
-1. **Primary (Magenta):** #79217a — used for CTAs, active states, links, and brand accents
-2. **Foreground (Near-black):** #141318 — used for headings and body text
-3. **Background (White):** #FFFFFF — used for page backgrounds and cards
-4. **Muted (Warm gray):** #F4F4F5 — used for subtle backgrounds, disabled states
-5. **Border (Light gray):** #E4E4E7 — used for borders, dividers, input outlines
+1. **Primary (Magenta):** #79217A — CTAs, active states, brand accents, sidebar highlights
+2. **Secondary (Teal):** #006F6E — hero backgrounds, section accents, secondary buttons
+3. **Info (Blue):** #2769B2 — links, informational elements, chart accents
+4. **Foreground (Dark):** #1F2937 — headings and body text
+5. **Background (White):** #FFFFFF — page backgrounds and cards
 
 Semantic colors (use sparingly):
 - Destructive/Error: #E53935
 - Success: #1A9A5C
-- Warning: #E68A00
+- Warning: #E99200
 
 ## Typography
 
 - **Body/UI font:** Inter (font-sans) — use for all body text, labels, navigation
-- **Display/Heading font:** DM Serif Display (font-serif) — use ONLY for hero headings or large display text (h1)
+- **Heading font:** DM Sans (font-heading) — use for all headings (h1-h4), semibold weight
 - **Monospace font:** JetBrains Mono (font-mono) — use for code blocks, technical values
 
 ### Scale
-- Page headings (h1): text-3xl or text-4xl, font-serif, font-normal, tracking-tight
-- Section headings (h2): text-2xl, font-sans, font-semibold, tracking-tight
-- Sub-headings (h3): text-lg, font-sans, font-semibold
+- Page headings (h1): text-4xl, font-heading, font-semibold, tracking-tight
+- Section headings (h2): text-2xl, font-heading, font-semibold, tracking-tight
+- Sub-headings (h3): text-lg, font-heading, font-semibold
 - Body: text-base (16px), font-sans, leading-relaxed
 - Small/Caption: text-sm, text-muted-foreground
 - Code: text-sm, font-mono
@@ -54,8 +57,8 @@ Semantic colors (use sparingly):
 - Transitions: transition-colors for color changes, duration-150
 
 ### Buttons
-- Default (primary): bg-primary text-primary-foreground
-- Secondary: bg-secondary text-secondary-foreground
+- Default (primary): bg-primary text-primary-foreground (magenta)
+- Secondary: bg-secondary text-secondary-foreground (teal)
 - Ghost: transparent background, hover:bg-accent
 - Outline: border border-input, transparent background
 - Destructive: bg-destructive text-destructive-foreground
@@ -63,7 +66,7 @@ Semantic colors (use sparingly):
 
 ### Cards
 - bg-card border border-border rounded-lg shadow-sm
-- Header: p-6, Title: text-2xl font-semibold
+- Header: p-6, Title: text-2xl font-heading font-semibold
 - Content: p-6 pt-0
 
 ### Inputs & Forms
@@ -85,6 +88,19 @@ Semantic colors (use sparingly):
 - Match icon color to surrounding text color
 - Never use emojis as icons
 
+## Registry Components
+
+When building NAVAX apps, prefer these design system components:
+- `NavaxLogo` — SVG logo with dark/light/brand variants
+- `AppHeader` — Full responsive header with dropdowns, top bar, and mobile menu
+- `AppSidebar` — Collapsible sidebar with nested nav, badges, and user section
+- `AppFooter` — Dark footer with brand column and multi-column links
+- `Heading` / `Text` — Consistent typography with level/variant props
+- `StatCard` / `ProgressBar` / `Timeline` — Data display patterns
+- `AlertBanner` / `EmptyState` / `SkeletonCard` — Feedback patterns
+- `FormField` / `SearchInput` / `FileUpload` — Form patterns
+- `Stack` / `Section` / `Divider` — Layout utilities
+
 ## General Rules
 
 - Mobile-first responsive design: base styles for mobile, md: for tablet, lg: for desktop
@@ -95,4 +111,4 @@ Semantic colors (use sparingly):
 - Use CSS Grid only for complex 2D layouts (grid grid-cols-3 gap-4)
 - Always use text-balance or text-pretty on headings
 - No decorative blobs, abstract shapes, or gradient backgrounds unless explicitly asked
-- Charts should use the --chart-1 through --chart-5 CSS variables
+- Charts should use the --chart-1 through --chart-5 CSS variables (magenta, teal, blue, amber, green)

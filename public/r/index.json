@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "magenta-ds",
+  "name": "navax-ds",
   "homepage": "",
   "items": [
     {
@@ -13,6 +13,38 @@
         "lucide-react"
       ],
       "registryDependencies": []
+    },
+    {
+      "name": "app-footer",
+      "type": "registry:ui",
+      "title": "App Footer",
+      "description": "Dark footer with brand logo, multi-column links, and bottom bar with legal links.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "app-header",
+      "type": "registry:ui",
+      "title": "App Header",
+      "description": "Full responsive app header with dropdown navigation, top bar, search, CTA, and mobile menu.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
+    },
+    {
+      "name": "app-sidebar",
+      "type": "registry:ui",
+      "title": "App Sidebar",
+      "description": "Collapsible app sidebar with nested navigation, badges, user section, and sign-out.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ]
     },
     {
       "name": "avatar-group",
@@ -88,6 +120,14 @@
       "dependencies": [
         "class-variance-authority"
       ],
+      "registryDependencies": []
+    },
+    {
+      "name": "navax-logo",
+      "type": "registry:ui",
+      "title": "Navax Logo",
+      "description": "NAVAX SVG logo component with dark, light, and brand color variants.",
+      "dependencies": [],
       "registryDependencies": []
     },
     {

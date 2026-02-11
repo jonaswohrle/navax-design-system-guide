@@ -33,3 +33,11 @@ export { FormField } from "./form-field"
 export { SearchInput } from "./search-input"
 export { ToggleButtonGroup } from "./toggle-button-group"
 export { FileUpload } from "./file-upload"
+
+// Brand
+export { NavaxLogo } from "./navax-logo"
+
+// Complex / Composite
+export { AppHeader } from "./app-header"
+export { AppSidebar } from "./app-sidebar"
+export { AppFooter } from "./app-footer"

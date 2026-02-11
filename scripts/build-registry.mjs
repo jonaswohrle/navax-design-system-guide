@@ -124,6 +124,26 @@ const META = {
     dependencies: ["lucide-react"],
     registryDependencies: [],
   },
+  "navax-logo": {
+    description: "NAVAX SVG logo component with dark, light, and brand color variants.",
+    dependencies: [],
+    registryDependencies: [],
+  },
+  "app-header": {
+    description: "Full responsive app header with dropdown navigation, top bar, search, CTA, and mobile menu.",
+    dependencies: ["lucide-react"],
+    registryDependencies: ["button"],
+  },
+  "app-sidebar": {
+    description: "Collapsible app sidebar with nested navigation, badges, user section, and sign-out.",
+    dependencies: ["lucide-react"],
+    registryDependencies: ["button"],
+  },
+  "app-footer": {
+    description: "Dark footer with brand logo, multi-column links, and bottom bar with legal links.",
+    dependencies: [],
+    registryDependencies: [],
+  },
 }
 
 // Ensure output directory
@@ -188,7 +208,7 @@ for (const file of files) {
 // Write master registry index
 const registryIndex = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
-  name: "magenta-ds",
+  name: "navax-ds",
   homepage: "",
   items: registryItems,
 }

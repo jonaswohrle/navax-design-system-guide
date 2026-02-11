@@ -10,29 +10,32 @@ import { ShowcaseFeedback } from "@/components/showcase/feedback"
 import { ShowcaseNavigation } from "@/components/showcase/navigation"
 import { ShowcaseForms } from "@/components/showcase/forms"
 import { ShowcaseRegistryInfo } from "@/components/showcase/registry-info"
-import { Section, Heading, Text, Divider, StatusBadge } from "@/components/ds"
+import { ShowcaseComposite } from "@/components/showcase/composite"
+import { Section, Heading, Text, Divider, StatusBadge, NavaxLogo } from "@/components/ds"
 
 export default function Page() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <Section className="border-b border-border py-10 md:py-14">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <div className="flex items-center gap-3 mb-3">
-              <Heading level={1}>Design System</Heading>
-              <StatusBadge status="default" dot={false}>
-                22 components
-              </StatusBadge>
-            </div>
-            <Text variant="lead" className="max-w-2xl">
-              A complete shadcn registry with design tokens, rules, and
-              components built around your brand. Install any component with a
-              single CLI command.
-            </Text>
+      {/* Hero header */}
+      <section className="relative overflow-hidden bg-secondary py-14 md:py-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(299_57%_30%/0.25),transparent_60%)]" />
+        <div className="relative mx-auto flex max-w-6xl flex-col gap-5 px-4 md:px-6">
+          <NavaxLogo variant="light" width={140} />
+          <div className="flex items-center gap-3">
+            <Heading level={1} className="text-white">
+              Design System
+            </Heading>
+            <StatusBadge status="success" dot={false}>
+              26 components
+            </StatusBadge>
           </div>
+          <Text className="max-w-2xl text-white/80">
+            A complete shadcn registry built around the NAVAX brand.
+            Install any component with a single CLI command, or use it
+            directly in v0 via your Rules panel.
+          </Text>
         </div>
-      </Section>
+      </section>
 
       {/* Registry Info */}
       <Section>
@@ -45,11 +48,22 @@ export default function Page() {
 
       <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
 
+      {/* Composite Components */}
+      <Section>
+        <Heading level={2}>Composite Components</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Full-scale header, sidebar, and footer patterns for app layouts.
+        </Text>
+        <ShowcaseComposite />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
+
       {/* Colors */}
       <Section>
         <Heading level={2}>Colors</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          Your palette with semantic extensions for light and dark mode.
+          NAVAX brand palette: magenta, teal, and blue with semantic extensions.
         </Text>
         <ShowcaseColors />
       </Section>
@@ -60,8 +74,7 @@ export default function Page() {
       <Section>
         <Heading level={2}>Typography</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          Inter for body, DM Serif Display for display headings, JetBrains
-          Mono for code.
+          Inter for body, DM Sans for headings, JetBrains Mono for code.
         </Text>
         <ShowcaseTypography />
       </Section>
@@ -81,7 +94,7 @@ export default function Page() {
 
       {/* Badges */}
       <Section>
-        <Heading level={2}>Badges & Status</Heading>
+        <Heading level={2}>{"Badges & Status"}</Heading>
         <Text variant="small" className="mt-1 mb-6">
           Standard badges and semantic status indicators.
         </Text>
@@ -134,9 +147,9 @@ export default function Page() {
 
       <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
 
-      {/* Inputs (original) */}
+      {/* Inputs */}
       <Section>
-        <Heading level={2}>Inputs & Textarea</Heading>
+        <Heading level={2}>{"Inputs & Textarea"}</Heading>
         <Text variant="small" className="mt-1 mb-6">
           Base input and textarea controls from shadcn.
         </Text>
@@ -168,7 +181,7 @@ export default function Page() {
       {/* Footer */}
       <Section className="border-t border-border py-10 md:py-10">
         <Text variant="small">
-          Built with shadcn/ui, Tailwind CSS, and your custom design tokens.
+          Built with shadcn/ui, Tailwind CSS, and NAVAX brand tokens.
           Deploy this project and use the registry URL to install components
           anywhere.
         </Text>
