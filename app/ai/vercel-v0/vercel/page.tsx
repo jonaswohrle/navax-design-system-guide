@@ -151,6 +151,26 @@ export default function VercelPlatformPage() {
               frameworks to self-driving infrastructure and a purpose-built AI Cloud, Vercel handles
               the complexity so teams can focus on creating exceptional user experiences.
             </p>
+
+            {/* Tech pills */}
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { icon: Code2, label: "v0", desc: "AI-powered code generation with design system integration", accent: "bg-primary/10 text-primary" },
+                { icon: Zap, label: "Workflows", desc: "Durable, resumable multi-step agent orchestration", accent: "bg-secondary/10 text-secondary" },
+                { icon: Cloud, label: "AI Gateway", desc: "Unified routing to OpenAI, Anthropic, Google, Bedrock", accent: "bg-info/10 text-info" },
+                { icon: Globe, label: "Edge Network", desc: "Global CDN with 100+ points of presence", accent: "bg-primary/10 text-primary" },
+              ].map((t) => (
+                <div key={t.label} className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/30">
+                  <div className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-lg", t.accent)}>
+                    <t.icon className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground">{t.label}</p>
+                    <p className="truncate text-[11px] text-muted-foreground">{t.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* ── Open Source Foundation ── */}
