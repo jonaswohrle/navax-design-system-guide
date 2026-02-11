@@ -23,9 +23,9 @@ export default function AILayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex h-screen bg-background text-foreground">
       <AppSidebar items={aiSidebarItems} activePath={pathname} />
-      <main className="flex-1 overflow-hidden">{children}</main>
+      <main className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">{children}</main>
     </div>
   )
 }

@@ -86,7 +86,7 @@ function DemoCard({
 
 export default function AIShowcasesPage() {
   return (
-    <div className="flex h-screen flex-col overflow-y-auto">
+    <div className="flex h-full flex-col overflow-y-auto">
       <div className="flex flex-col gap-10 p-6 lg:p-10">
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

@@ -772,9 +772,9 @@ export default function PromptCoachPage() {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-0 flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border bg-card px-6 py-3">
+      <div className="flex shrink-0 items-center justify-between border-b border-border bg-card px-6 py-3">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
             <Lightbulb className="h-4.5 w-4.5 text-primary" />
@@ -799,7 +799,7 @@ export default function PromptCoachPage() {
       </div>
 
       {/* Messages area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto">
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-8 px-4 py-12">
             <div className="flex flex-col items-center gap-4 text-center">
@@ -887,7 +887,7 @@ export default function PromptCoachPage() {
       </div>
 
       {/* Input area */}
-      <div className="border-t border-border bg-card px-4 py-3 lg:px-8">
+      <div className="shrink-0 border-t border-border bg-card px-4 py-3 lg:px-8">
         <div className="mx-auto flex max-w-3xl items-end gap-2">
           <div className="flex flex-1 items-end rounded-xl border border-input bg-background px-3 py-2 transition-shadow focus-within:ring-2 focus-within:ring-ring/20 focus-within:border-primary/40">
             <textarea
