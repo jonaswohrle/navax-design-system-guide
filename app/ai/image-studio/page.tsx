@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { PageHeader } from "@/components/ds/page-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
@@ -132,11 +131,23 @@ export default function ImageStudioPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 overflow-y-auto p-6 lg:p-8">
-      <PageHeader
-        title="AI Image Studio"
-        description="Generate and transform images with Gemini 3 Pro. Upload a reference image or describe what you want."
-      />
+    <div className="flex h-full flex-col overflow-hidden">
+      {/* Header */}
+      <div className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-card px-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+            <ImagePlus className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-sm font-heading font-semibold text-foreground">AI Image Studio</h1>
+            <p className="text-[11px] text-muted-foreground">
+              Generate and transform images with Gemini 3 Pro
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col gap-6 overflow-y-auto p-6 lg:p-8">
 
       {/* Prompt + Upload area */}
       <Card className="overflow-hidden border-border">
@@ -362,6 +373,7 @@ export default function ImageStudioPage() {
           ))}
         </div>
       )}
+      </div>
     </div>
   )
 }
