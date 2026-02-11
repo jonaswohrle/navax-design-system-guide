@@ -1,5 +1,5 @@
 import { Text } from "@/components/ds"
-import { OpenInV0Button, OpenAllInV0Button } from "@/components/open-in-v0-button"
+import { OpenAllInV0Button } from "@/components/open-in-v0-button"
 
 const REGISTRY_URL = "https://v0-navax-design-system-guide.vercel.app"
 
@@ -79,16 +79,12 @@ export function ShowcaseRegistryInfo() {
               </p>
               <div className="flex flex-wrap gap-2">
                 {COMPONENTS.filter((c) => c.cat === cat).map((c) => (
-                  <div
+                  <span
                     key={c.name}
-                    className="group inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-mono text-foreground"
+                    className="inline-flex items-center rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-mono text-foreground"
                   >
-                    <span>{c.name}</span>
-                    <OpenInV0Button
-                      componentName={c.name}
-                      className="h-5 px-1 py-0 opacity-60 group-hover:opacity-100 transition-opacity"
-                    />
-                  </div>
+                    {c.name}
+                  </span>
                 ))}
               </div>
             </div>
