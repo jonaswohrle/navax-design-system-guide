@@ -1,0 +1,212 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "magenta-ds",
+  "homepage": "",
+  "items": [
+    {
+      "name": "alert-banner",
+      "type": "registry:ui",
+      "title": "Alert Banner",
+      "description": "Dismissible alert banner with icon, title, and semantic variants.",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "avatar-group",
+      "type": "registry:ui",
+      "title": "Avatar Group",
+      "description": "Stacked avatar group with overflow indicator.",
+      "dependencies": [],
+      "registryDependencies": [
+        "avatar"
+      ]
+    },
+    {
+      "name": "breadcrumbs",
+      "type": "registry:ui",
+      "title": "Breadcrumbs",
+      "description": "Accessible breadcrumb navigation with chevron separators.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "divider",
+      "type": "registry:ui",
+      "title": "Divider",
+      "description": "Horizontal, vertical, or labeled divider component.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "title": "Empty State",
+      "description": "Empty state placeholder with icon, title, description, and action.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "file-upload",
+      "type": "registry:ui",
+      "title": "File Upload",
+      "description": "Drag and drop file upload zone with click fallback.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "form-field",
+      "type": "registry:ui",
+      "title": "Form Field",
+      "description": "Form field wrapper with label, description, error, and required indicator.",
+      "dependencies": [],
+      "registryDependencies": [
+        "label"
+      ]
+    },
+    {
+      "name": "heading",
+      "type": "registry:ui",
+      "title": "Heading",
+      "description": "Semantic heading component with 4 levels and serif/sans variants.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "icon-button",
+      "type": "registry:ui",
+      "title": "Icon Button",
+      "description": "Accessible icon-only button with required aria label.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "navbar",
+      "type": "registry:ui",
+      "title": "Navbar",
+      "description": "Sticky top navigation bar with logo, links, and actions slots.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "page-header",
+      "type": "registry:ui",
+      "title": "Page Header",
+      "description": "Page header with title, description, actions, and breadcrumb slots.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "progress-bar",
+      "type": "registry:ui",
+      "title": "Progress Bar",
+      "description": "Accessible progress bar with color variants and optional label.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "search-input",
+      "type": "registry:ui",
+      "title": "Search Input",
+      "description": "Search input with icon prefix and clearable value.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "section",
+      "type": "registry:ui",
+      "title": "Section",
+      "description": "Page section wrapper with consistent padding and optional container.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "skeleton-card",
+      "type": "registry:ui",
+      "title": "Skeleton Card",
+      "description": "Loading skeleton card with configurable lines, avatar, and image slots.",
+      "dependencies": [],
+      "registryDependencies": [
+        "skeleton"
+      ]
+    },
+    {
+      "name": "stack",
+      "type": "registry:ui",
+      "title": "Stack",
+      "description": "Flexbox layout helper with direction, gap, align, and justify props.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "stat-card",
+      "type": "registry:ui",
+      "title": "Stat Card",
+      "description": "Metric display card with label, value, trend, and icon.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "status-badge",
+      "type": "registry:ui",
+      "title": "Status Badge",
+      "description": "Semantic status indicator with colored dot and variants.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "tab-nav",
+      "type": "registry:ui",
+      "title": "Tab Nav",
+      "description": "Underline-style tab navigation with counts and active state.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "text",
+      "type": "registry:ui",
+      "title": "Text",
+      "description": "Typography component with body, small, caption, code, and lead variants.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": []
+    },
+    {
+      "name": "timeline",
+      "type": "registry:ui",
+      "title": "Timeline",
+      "description": "Vertical timeline with status indicators and icons.",
+      "dependencies": [],
+      "registryDependencies": []
+    },
+    {
+      "name": "toggle-button-group",
+      "type": "registry:ui",
+      "title": "Toggle Button Group",
+      "description": "Segmented control / toggle group with radio-like behavior.",
+      "dependencies": [],
+      "registryDependencies": []
+    }
+  ]
+}

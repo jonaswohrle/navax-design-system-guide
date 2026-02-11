@@ -5,27 +5,51 @@ import { ShowcaseCards } from "@/components/showcase/cards"
 import { ShowcaseBadges } from "@/components/showcase/badges"
 import { ShowcaseInputs } from "@/components/showcase/inputs"
 import { ShowcaseLayout } from "@/components/showcase/layout"
-import { Section } from "@/components/ds"
-import { Heading, Text, Divider } from "@/components/ds"
+import { ShowcaseDataDisplay } from "@/components/showcase/data-display"
+import { ShowcaseFeedback } from "@/components/showcase/feedback"
+import { ShowcaseNavigation } from "@/components/showcase/navigation"
+import { ShowcaseForms } from "@/components/showcase/forms"
+import { ShowcaseRegistryInfo } from "@/components/showcase/registry-info"
+import { Section, Heading, Text, Divider, StatusBadge } from "@/components/ds"
 
 export default function Page() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <Section className="border-b border-border py-10 md:py-14">
-        <Heading level={1}>Design System</Heading>
-        <Text variant="lead" className="mt-3 max-w-2xl">
-          A reusable set of tokens, rules, and components built around your
-          brand. Copy the rules into v0 to enforce this system across every
-          project.
-        </Text>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <Heading level={1}>Design System</Heading>
+              <StatusBadge status="default" dot={false}>
+                22 components
+              </StatusBadge>
+            </div>
+            <Text variant="lead" className="max-w-2xl">
+              A complete shadcn registry with design tokens, rules, and
+              components built around your brand. Install any component with a
+              single CLI command.
+            </Text>
+          </div>
+        </div>
       </Section>
+
+      {/* Registry Info */}
+      <Section>
+        <Heading level={2}>Registry</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Install components via the shadcn CLI from your deployed URL.
+        </Text>
+        <ShowcaseRegistryInfo />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
 
       {/* Colors */}
       <Section>
         <Heading level={2}>Colors</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          Your 5-color palette with semantic extensions.
+          Your palette with semantic extensions for light and dark mode.
         </Text>
         <ShowcaseColors />
       </Section>
@@ -48,7 +72,7 @@ export default function Page() {
       <Section>
         <Heading level={2}>Buttons</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          All button variants and sizes.
+          All button variants, sizes, and icon configurations.
         </Text>
         <ShowcaseButtons />
       </Section>
@@ -66,11 +90,55 @@ export default function Page() {
 
       <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
 
-      {/* Inputs */}
+      {/* Data Display */}
       <Section>
-        <Heading level={2}>Inputs & Forms</Heading>
+        <Heading level={2}>Data Display</Heading>
         <Text variant="small" className="mt-1 mb-6">
-          Form controls following the design system conventions.
+          Stat cards, avatar groups, progress bars, and timelines.
+        </Text>
+        <ShowcaseDataDisplay />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
+
+      {/* Feedback */}
+      <Section>
+        <Heading level={2}>Feedback</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Alert banners, empty states, and loading skeletons.
+        </Text>
+        <ShowcaseFeedback />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
+
+      {/* Navigation */}
+      <Section>
+        <Heading level={2}>Navigation</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Navbar, breadcrumbs, tab navigation, and page headers.
+        </Text>
+        <ShowcaseNavigation />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
+
+      {/* Forms */}
+      <Section>
+        <Heading level={2}>Forms</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Form fields, search inputs, toggle groups, and file uploads.
+        </Text>
+        <ShowcaseForms />
+      </Section>
+
+      <Divider className="mx-auto max-w-6xl px-4 md:px-6" />
+
+      {/* Inputs (original) */}
+      <Section>
+        <Heading level={2}>Inputs & Textarea</Heading>
+        <Text variant="small" className="mt-1 mb-6">
+          Base input and textarea controls from shadcn.
         </Text>
         <ShowcaseInputs />
       </Section>
@@ -100,7 +168,9 @@ export default function Page() {
       {/* Footer */}
       <Section className="border-t border-border py-10 md:py-10">
         <Text variant="small">
-          Built with shadcn/ui, Tailwind CSS, and your custom tokens.
+          Built with shadcn/ui, Tailwind CSS, and your custom design tokens.
+          Deploy this project and use the registry URL to install components
+          anywhere.
         </Text>
       </Section>
     </main>
