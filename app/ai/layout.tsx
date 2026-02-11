@@ -3,7 +3,7 @@
 import * as React from "react"
 import { usePathname } from "next/navigation"
 import { AppSidebar } from "@/components/ds/app-sidebar"
-import { Sparkles, LayoutDashboard } from "lucide-react"
+import { Sparkles, LayoutDashboard, Triangle } from "lucide-react"
 
 const aiSidebarItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -15,6 +15,13 @@ const aiSidebarItems = [
       { label: "Prompt Coach", href: "/ai/prompt-coach" },
       { label: "Image Studio", href: "/ai/image-studio" },
       { label: "Content Pipeline", href: "/ai/content-pipeline" },
+    ],
+  },
+  {
+    label: "Vercel & v0",
+    icon: Triangle,
+    children: [
+      { label: "Overview", href: "/ai/vercel-v0" },
     ],
   },
 ]
