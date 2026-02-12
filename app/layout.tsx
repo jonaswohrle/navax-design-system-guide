@@ -1,6 +1,7 @@
 import React from "react"
 import type { Metadata } from 'next'
 import { Inter, DM_Sans, JetBrains_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 
 import './globals.css'
 
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${_inter.variable} ${_heading.variable} ${_mono.variable} font-sans antialiased`}>
         {children}
+        <Analytics />
       </body>
     </html>
   )
