@@ -9,6 +9,9 @@ const _pixel = GeistPixelSquare
 export const metadata: Metadata = {
   title: 'DEMO',
   description: 'The experience innovation company',
+  icons: {
+    icon: '/images/valtech-logo.png',
+  },
 }
 
 export default function RootLayout({
