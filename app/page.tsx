@@ -401,9 +401,9 @@ export default function Page() {
                       <span key={c} className="rounded-full border border-[hsl(0,0%,10%)]/15 px-3 py-1 text-xs text-[hsl(0,0%,40%)]">{c}</span>
                     ))}
                   </div>
-                  </div>
-              </div>
+                </div>
               </Link>
+            </div>
           </div>
         </section>
 
