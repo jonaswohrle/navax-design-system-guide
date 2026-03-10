@@ -38,7 +38,7 @@ function AgendaItem({
     <Link href={href} className="group block">
       <div
         className={cn(
-          "flex h-full flex-col gap-6 border-t border-foreground/20 pt-6 transition-all",
+          "flex h-full flex-col gap-6 border-t border-foreground/20 pt-6 transition-all group-hover:border-hover",
           isMain && "border-foreground"
         )}
       >
@@ -47,8 +47,8 @@ function AgendaItem({
             <span className="text-sm font-medium text-muted-foreground">
               {number}
             </span>
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20">
-              <Icon className="h-5 w-5 text-foreground" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+              <Icon className="h-5 w-5" />
             </div>
           </div>
           <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-hover" />
@@ -86,7 +86,7 @@ function DemoCard({
 }) {
   return (
     <Link href={href} className="group block">
-      <div className="flex h-full flex-col gap-5 border-t border-foreground/20 pt-6 transition-all">
+        <div className="flex h-full flex-col gap-5 border-t border-foreground/20 pt-6 transition-all group-hover:border-hover">
         <div className="flex items-start justify-between">
           <div className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
             <Icon className="h-5 w-5" />
@@ -207,40 +207,40 @@ export default function Page() {
               Inspirationen fuer eigene Projekte.
             </p>
             <div className="mt-12 grid gap-8 lg:grid-cols-3">
-              <div className="flex h-full flex-col gap-6 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all">
-                <Link href="/ai/vercel-v0/vercel" className="group flex h-full flex-col gap-6">
+              <Link href="/ai/vercel-v0/vercel" className="group block">
+                <div className="flex h-full flex-col gap-6 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
                       <span className="text-sm font-medium text-[hsl(0,0%,40%)]">01</span>
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20">
-                        <Layers className="h-5 w-5 text-[hsl(0,0%,10%)]" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                        <Layers className="h-5 w-5" />
                       </div>
                     </div>
-                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-[hsl(0,0%,10%)]" />
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)]">
+                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
                       Vercel Platform
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
                       Die Plattform hinter Next.js, Turborepo und dem AI SDK. Open Source Foundation, Framework-Defined Infrastructure, Developer Tools und AI Cloud.
                     </p>
                   </div>
-                </Link>
-              </div>
-              <div className="flex h-full flex-col gap-6 border-t-2 border-[hsl(0,0%,10%)] pt-6 transition-all">
-                <Link href="/ai/vercel-v0" className="group flex h-full flex-col gap-6">
+                </div>
+              </Link>
+              <Link href="/ai/vercel-v0" className="group block">
+                <div className="flex h-full flex-col gap-6 border-t-2 border-[hsl(0,0%,10%)] pt-6 transition-all group-hover:border-hover">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
                       <span className="text-sm font-medium text-[hsl(0,0%,40%)]">02</span>
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20">
-                        <Code2 className="h-5 w-5 text-[hsl(0,0%,10%)]" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                        <Code2 className="h-5 w-5" />
                       </div>
                     </div>
-                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-[hsl(0,0%,10%)]" />
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)]">
+                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
                       v0 -- AI-Powered Development
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
@@ -250,29 +250,29 @@ export default function Page() {
                   <span className="self-start rounded-full border border-[hsl(0,0%,10%)]/30 px-3 py-1 text-xs font-medium text-[hsl(0,0%,10%)]">
                     Hauptteil
                   </span>
-                </Link>
-              </div>
-              <div className="flex h-full flex-col gap-6 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all">
-                <Link href="/ai" className="group flex h-full flex-col gap-6">
+                </div>
+              </Link>
+              <Link href="/ai" className="group block">
+                <div className="flex h-full flex-col gap-6 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
                       <span className="text-sm font-medium text-[hsl(0,0%,40%)]">03</span>
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20">
-                        <Sparkles className="h-5 w-5 text-[hsl(0,0%,10%)]" />
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                        <Sparkles className="h-5 w-5" />
                       </div>
                     </div>
-                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-[hsl(0,0%,10%)]" />
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)]">
+                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
                       AI Showcases -- Projektideen
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
                       Interaktive Demos als Inspiration: Prompt Coach, Image Studio und Content Pipeline. Fertige Patterns fuer AI SDK, Streaming und Multi-Model Pipelines.
                     </p>
                   </div>
-                </Link>
-              </div>
+                </div>
+              </Link>
             </div>
           </div>
         </section>
@@ -335,15 +335,15 @@ export default function Page() {
             </div>
             <div className="mt-12 grid gap-8 lg:grid-cols-3">
               <Link href="/ai/prompt-coach" className="group block">
-                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all">
+                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
                   <div className="flex items-start justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-[hsl(0,0%,10%)] group-hover:text-[hsl(30,33%,94%)]">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
                       <MessageSquare className="h-5 w-5" />
                     </div>
-                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-[hsl(0,0%,10%)]" />
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)]">
+                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
                       Prompt Coach
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
@@ -358,15 +358,15 @@ export default function Page() {
                 </div>
               </Link>
               <Link href="/ai/image-studio" className="group block">
-                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all">
+                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
                   <div className="flex items-start justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-[hsl(0,0%,10%)] group-hover:text-[hsl(30,33%,94%)]">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
                       <ImagePlus className="h-5 w-5" />
                     </div>
-                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-[hsl(0,0%,10%)]" />
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)]">
+                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
                       AI Image Studio
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
@@ -381,15 +381,15 @@ export default function Page() {
                 </div>
               </Link>
               <Link href="/ai/content-pipeline" className="group block">
-                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all">
+                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
                   <div className="flex items-start justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-[hsl(0,0%,10%)] group-hover:text-[hsl(30,33%,94%)]">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
                       <GitBranch className="h-5 w-5" />
                     </div>
-                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-[hsl(0,0%,10%)]" />
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)]">
+                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
                       Content Pipeline
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
@@ -401,9 +401,9 @@ export default function Page() {
                       <span key={c} className="rounded-full border border-[hsl(0,0%,10%)]/15 px-3 py-1 text-xs text-[hsl(0,0%,40%)]">{c}</span>
                     ))}
                   </div>
-                </div>
+                  </div>
+              </div>
               </Link>
-            </div>
           </div>
         </section>
 
