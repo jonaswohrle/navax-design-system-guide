@@ -164,35 +164,11 @@ export default function Page() {
           {/* Gradient overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none" />
           <div className="relative z-10 mx-auto w-full max-w-7xl">
-            <div className="flex items-center gap-3 mb-8">
-              <span className="rounded-full border border-foreground/30 px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-foreground/70">
-                Workshop
-              </span>
-            </div>
             <h1 className="max-w-4xl text-5xl font-heading font-normal tracking-tight text-foreground text-balance lg:text-7xl">
               Willkommen zum
               {" "}Vercel & v0{" "}
               Workshop
             </h1>
-            <p className="mt-8 max-w-2xl text-lg text-muted-foreground leading-relaxed lg:text-xl">
-              In diesem Workshop erfahrt ihr, wie v0 die Art und Weise
-              veraendert, wie Software gebaut wird. Wir schauen uns die Vercel-Plattform an,
-              bauen gemeinsam mit v0 und erkunden anhand interaktiver AI Showcases,
-              was mit modernen AI Tools heute moeglich ist.
-            </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Link href="/ai/vercel-v0/vercel">
-                <Button size="lg" className="gap-2">
-                  Vercel & v0 kennenlernen
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="/ai">
-                <Button variant="outline" size="lg" className="gap-2">
-                  AI Showcases ansehen
-                </Button>
-              </Link>
-            </div>
           </div>
         </section>
 
