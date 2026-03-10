@@ -166,8 +166,8 @@ export default function Page() {
           <div className="relative z-10 mx-auto w-full max-w-7xl">
             <h1 className="max-w-4xl text-5xl font-heading font-normal tracking-tight text-foreground text-balance lg:text-7xl">
               Welcome to
-              {" "}Vercel & v0{" "}
-              Workshop
+              <br />
+              Vercel & v0 Workshop
             </h1>
           </div>
         </section>
