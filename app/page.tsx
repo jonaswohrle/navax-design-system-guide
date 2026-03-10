@@ -165,7 +165,7 @@ export default function Page() {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none" />
           <div className="relative z-10 mx-auto w-full max-w-7xl">
             <h1 className="max-w-4xl text-5xl font-heading font-normal tracking-tight text-foreground text-balance lg:text-7xl">
-              Willkommen zum
+              Welcome to
               {" "}Vercel & v0{" "}
               Workshop
             </h1>
@@ -176,11 +176,11 @@ export default function Page() {
         <section className="bg-[hsl(30,33%,94%)] text-[hsl(0,0%,10%)]">
           <div className="mx-auto max-w-7xl px-6 py-20 lg:py-28">
             <h2 className="text-3xl font-heading font-normal tracking-tight text-balance lg:text-5xl">
-              Was wir heute machen
+              What we'll cover today
             </h2>
             <p className="mt-4 max-w-lg text-base text-[hsl(0,0%,40%)] leading-relaxed">
-              Drei Bloecke -- von der Plattform ueber Hands-on mit v0 bis hin zu
-              Inspirationen fuer eigene Projekte.
+              Three blocks -- from the platform through hands-on with v0 to
+              inspiration for your own projects.
             </p>
             <div className="mt-12 grid gap-8 lg:grid-cols-3">
               <Link href="/ai/vercel-v0/vercel" className="group block">
@@ -199,7 +199,7 @@ export default function Page() {
                       Vercel Platform
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
-                      Die Plattform hinter Next.js, Turborepo und dem AI SDK. Open Source Foundation, Framework-Defined Infrastructure, Developer Tools und AI Cloud.
+                      The platform behind Next.js, Turborepo and the AI SDK. Open Source Foundation, Framework-Defined Infrastructure, Developer Tools and AI Cloud.
                     </p>
                   </div>
                 </div>
@@ -220,11 +220,11 @@ export default function Page() {
                       v0 -- AI-Powered Development
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
-                      Der Hauptteil: v0 veraendert, wer Frontend bauen kann. AI Code Generation, Git-native Workflows, Design System Integration und wie aus Prompts Produkte werden.
+                      The main event: v0 changes who can build frontends. AI Code Generation, Git-native Workflows, Design System Integration and how prompts become products.
                     </p>
                   </div>
                   <span className="self-start rounded-full border border-[hsl(0,0%,10%)]/30 px-3 py-1 text-xs font-medium text-[hsl(0,0%,10%)]">
-                    Hauptteil
+                    Main part
                   </span>
                 </div>
               </Link>
@@ -241,10 +241,10 @@ export default function Page() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
-                      AI Showcases -- Projektideen
+                      AI Showcases -- Project Ideas
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
-                      Interaktive Demos als Inspiration: Prompt Coach, Image Studio und Content Pipeline. Fertige Patterns fuer AI SDK, Streaming und Multi-Model Pipelines.
+                      Interactive demos for inspiration: Prompt Coach, Image Studio and Content Pipeline. Ready-made patterns for AI SDK, Streaming and Multi-Model Pipelines.
                     </p>
                   </div>
                 </div>
@@ -257,27 +257,27 @@ export default function Page() {
         <section>
           <div className="mx-auto max-w-7xl px-6 py-20 lg:py-28">
             <h2 className="text-3xl font-heading font-normal tracking-tight text-foreground text-balance lg:text-5xl">
-              Warum v0?
+              Why v0?
             </h2>
             <p className="mt-4 max-w-2xl text-base text-muted-foreground leading-relaxed">
-              v0 ist nicht nur ein Code-Generator -- es veraendert grundlegend, wie Teams von der Idee
-              zum fertigen Produkt kommen.
+              v0 is not just a code generator -- it fundamentally changes how teams go from idea
+              to finished product.
             </p>
             <div className="mt-16 grid gap-12 sm:grid-cols-3">
               {[
                 {
                   title: "Rapid Prototyping",
-                  desc: "Product Manager beschreiben eine Idee in natuerlicher Sprache. v0 generiert einen funktionierenden Prototyp in Minuten statt Wochen -- so wie es Okta, eBay und Procore bereits tun.",
+                  desc: "Product managers describe an idea in natural language. v0 generates a working prototype in minutes instead of weeks -- how Okta, eBay and Procore already do it.",
                   icon: Zap,
                 },
                 {
-                  title: "Vibe Coding fuer Teams",
-                  desc: "Engineering-Teams nutzen v0 als Coding-Accelerator. Boilerplate generieren, Components scaffolden, interne Tools bauen -- wie bei Microsoft (6.000+ Entwickler) und Amazon.",
+                  title: "Vibe Coding for Teams",
+                  desc: "Engineering teams use v0 as a coding accelerator. Generate boilerplate, scaffold components, build internal tools -- like Microsoft (6,000+ developers) and Amazon.",
                   icon: Code2,
                 },
                 {
                   title: "Design System Integration",
-                  desc: "v0 kennt eure Design Tokens, Components und Patterns. Jeder generierte Code folgt automatisch eurem Design System -- konsistent, accessible und on-brand.",
+                  desc: "v0 knows your design tokens, components and patterns. Every generated code automatically follows your design system -- consistent, accessible and on-brand.",
                   icon: Cpu,
                 },
               ].map((item) => (
@@ -302,11 +302,11 @@ export default function Page() {
           <div className="mx-auto max-w-7xl px-6 py-20 lg:py-28">
             <div className="flex flex-col gap-2">
               <h2 className="text-3xl font-heading font-normal tracking-tight text-balance lg:text-5xl">
-                AI Showcases -- zum Ausprobieren
+                AI Showcases -- Try them out
               </h2>
               <p className="max-w-lg text-base text-[hsl(0,0%,40%)] leading-relaxed">
-                Jede Demo ist eine funktionierende AI-Anwendung. Testet verschiedene
-                Modelle, schaut euch den Code an und lasst euch fuer eigene Projekte inspirieren.
+                Each demo is a working AI application. Test different
+                models, look at the code and get inspired for your own projects.
               </p>
             </div>
             <div className="mt-12 grid gap-8 lg:grid-cols-3">
@@ -323,7 +323,7 @@ export default function Page() {
                       Prompt Coach
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
-                      AI-gestuetztes Feedback zu euren Prompts. Qualitaets-Scores, Analyse und umgeschriebene Versionen im direkten Vergleich.
+                      AI-powered feedback on your prompts. Quality scores, analysis and rewritten versions side by side.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -346,7 +346,7 @@ export default function Page() {
                       AI Image Studio
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
-                      Bilder generieren und transformieren mit Gemini 3 Pro. Referenzbilder hochladen, Transformationen beschreiben, Ergebnisse sehen.
+                      Generate and transform images with Gemini 3 Pro. Upload reference images, describe transformations, see results.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -369,7 +369,7 @@ export default function Page() {
                       Content Pipeline
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
-                      Eine 4-Schritt AI Pipeline, die in Echtzeit recherchiert, schreibt, reviewt und Bilder generiert -- alles live gestreamt.
+                      A 4-step AI pipeline that researches, writes, reviews and generates images in real-time -- all streamed live.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -387,7 +387,7 @@ export default function Page() {
         <section>
           <div className="mx-auto max-w-7xl px-6 py-16">
             <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-              v0 wird bereits eingesetzt bei
+              v0 is already used by
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-12 lg:gap-20">
               {["OpenAI", "Microsoft", "Amazon", "BCG", "WPP"].map((name) => (
@@ -406,11 +406,11 @@ export default function Page() {
         <section className="bg-[hsl(30,33%,94%)] text-[hsl(0,0%,10%)]">
           <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-20 lg:py-28">
             <h2 className="max-w-3xl text-3xl font-heading font-normal tracking-tight text-balance lg:text-5xl">
-              Bereit loszulegen?
+              Ready to get started?
             </h2>
             <p className="max-w-md text-base text-[hsl(0,0%,40%)] leading-relaxed">
-              Startet mit der Vercel-Plattform oder springt direkt in die
-              interaktiven AI Showcases.
+              Start with the Vercel platform or jump directly into the
+              interactive AI showcases.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link href="/ai/vercel-v0/vercel">
@@ -455,10 +455,10 @@ export default function Page() {
             </p>
             <div className="flex items-center gap-6">
               <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
-                Datenschutz
+                Privacy Policy
               </Link>
               <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
-                Impressum
+                Imprint
               </Link>
             </div>
           </div>
