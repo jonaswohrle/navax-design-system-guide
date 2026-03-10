@@ -1,14 +1,13 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { GeistPixelSquare } from 'geist/font/pixel'
 
 import './globals.css'
 
-const _inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const _mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
+const _pixel = GeistPixelSquare
 
 export const metadata: Metadata = {
-  title: 'Valtech',
+  title: 'DEMO',
   description: 'The experience innovation company',
 }
 
@@ -18,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="de">
-      <body className={`${_inter.variable} ${_mono.variable} font-sans antialiased`}>
+    <html lang="de" className={_pixel.variable}>
+      <body className="font-sans antialiased">
         {children}
       </body>
     </html>
