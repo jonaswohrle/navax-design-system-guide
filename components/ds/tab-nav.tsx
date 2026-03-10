@@ -41,7 +41,7 @@ export function TabNav({
             "relative inline-flex items-center gap-2 px-3 pb-2.5 pt-1 text-sm font-medium transition-colors",
             value === item.value
               ? "text-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              : "text-muted-foreground hover:text-hover"
           )}
           onClick={() => onValueChange(item.value)}
         >

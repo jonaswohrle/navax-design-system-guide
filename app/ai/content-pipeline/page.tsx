@@ -227,7 +227,7 @@ function BlogPreview({ data, steps }: { data: BlogData; steps: PipelineState }) 
             />
             <button
               onClick={downloadImage}
-              className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-lg bg-foreground/80 text-background backdrop-blur-sm transition-colors hover:bg-foreground"
+              className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-lg bg-foreground/80 text-background backdrop-blur-sm transition-colors hover:bg-hover hover:text-hover-foreground"
             >
               <Download className="h-3.5 w-3.5" />
             </button>
@@ -293,7 +293,7 @@ function BlogPreview({ data, steps }: { data: BlogData; steps: PipelineState }) 
             <div className="absolute -right-2 -top-2 z-10">
               <button
                 onClick={copyArticle}
-                className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-muted hover:text-hover"
               >
                 {copied ? <Check className="h-3.5 w-3.5 text-success" /> : <Copy className="h-3.5 w-3.5" />}
               </button>
@@ -405,7 +405,7 @@ function EmptyState({ onSelect }: { onSelect: (topic: string) => void }) {
             <button
               key={t}
               onClick={() => onSelect(t)}
-              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
+              className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-hover/30 hover:text-hover"
             >
               {t}
             </button>

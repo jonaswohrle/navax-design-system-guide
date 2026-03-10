@@ -51,10 +51,10 @@ function AgendaItem({
               <Icon className="h-5 w-5 text-foreground" />
             </div>
           </div>
-          <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-foreground" />
+          <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-hover" />
         </div>
         <div className="flex-1">
-          <h3 className="text-xl font-heading font-normal tracking-tight text-foreground">
+          <h3 className="text-xl font-heading font-normal tracking-tight text-foreground transition-colors group-hover:text-hover">
             {title}
           </h3>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
@@ -88,13 +88,13 @@ function DemoCard({
     <Link href={href} className="group block">
       <div className="flex h-full flex-col gap-5 border-t border-foreground/20 pt-6 transition-all">
         <div className="flex items-start justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/20 transition-colors group-hover:bg-foreground group-hover:text-background">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
             <Icon className="h-5 w-5" />
           </div>
-          <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-foreground" />
+          <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-hover" />
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-heading font-normal tracking-tight text-foreground">
+          <h3 className="text-lg font-heading font-normal tracking-tight text-foreground transition-colors group-hover:text-hover">
             {title}
           </h3>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
@@ -128,13 +128,13 @@ export default function Page() {
           <nav className="hidden items-center gap-10 lg:flex">
             <Link
               href="/ai/vercel-v0/vercel"
-              className="text-sm text-foreground/70 transition-colors hover:text-foreground"
-            >
-              Vercel & v0
-            </Link>
-            <Link
-              href="/ai"
-              className="text-sm text-foreground/70 transition-colors hover:text-foreground"
+            className="text-sm text-foreground/70 transition-colors hover:text-hover"
+          >
+            Vercel & v0
+          </Link>
+          <Link
+            href="/ai"
+            className="text-sm text-foreground/70 transition-colors hover:text-hover"
             >
               AI Showcases
             </Link>
@@ -417,7 +417,7 @@ export default function Page() {
               {["OpenAI", "Microsoft", "Amazon", "BCG", "WPP"].map((name) => (
                 <span
                   key={name}
-                  className="text-lg font-heading font-normal tracking-tight text-foreground/40 transition-colors hover:text-foreground"
+                  className="text-lg font-heading font-normal tracking-tight text-foreground/40 transition-colors hover:text-hover"
                 >
                   {name}
                 </span>
@@ -440,7 +440,7 @@ export default function Page() {
               <Link href="/ai/vercel-v0/vercel">
                 <Button
                   size="lg"
-                  className="gap-2 border-[hsl(0,0%,10%)] text-[hsl(0,0%,10%)] hover:bg-[hsl(0,0%,10%)] hover:text-[hsl(30,33%,94%)]"
+                  className="gap-2 border-[hsl(0,0%,10%)] text-[hsl(0,0%,10%)] hover:bg-hover hover:text-hover-foreground hover:border-hover"
                 >
                   Vercel & v0
                   <ArrowRight className="h-4 w-4" />
@@ -450,7 +450,7 @@ export default function Page() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="gap-2 border-[hsl(0,0%,10%)]/30 text-[hsl(0,0%,10%)] hover:border-[hsl(0,0%,10%)] hover:bg-[hsl(0,0%,10%)] hover:text-[hsl(30,33%,94%)]"
+                  className="gap-2 border-[hsl(0,0%,10%)]/30 text-[hsl(0,0%,10%)] hover:border-hover hover:bg-hover hover:text-hover-foreground"
                 >
                   AI Showcases
                 </Button>
@@ -466,11 +466,11 @@ export default function Page() {
           <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
             <ValtechLogo variant="light" width={120} />
             <nav className="flex flex-wrap gap-8 text-sm text-foreground/60">
-              <Link href="/ai/vercel-v0/vercel" className="transition-colors hover:text-foreground">Vercel & v0</Link>
-              <Link href="/ai" className="transition-colors hover:text-foreground">AI Showcases</Link>
-              <Link href="/ai/prompt-coach" className="transition-colors hover:text-foreground">Prompt Coach</Link>
-              <Link href="/ai/image-studio" className="transition-colors hover:text-foreground">Image Studio</Link>
-              <Link href="/ai/content-pipeline" className="transition-colors hover:text-foreground">Content Pipeline</Link>
+              <Link href="/ai/vercel-v0/vercel" className="transition-colors hover:text-hover">Vercel & v0</Link>
+              <Link href="/ai" className="transition-colors hover:text-hover">AI Showcases</Link>
+              <Link href="/ai/prompt-coach" className="transition-colors hover:text-hover">Prompt Coach</Link>
+              <Link href="/ai/image-studio" className="transition-colors hover:text-hover">Image Studio</Link>
+              <Link href="/ai/content-pipeline" className="transition-colors hover:text-hover">Content Pipeline</Link>
             </nav>
           </div>
           <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-foreground/10 pt-8 md:flex-row md:items-center">
@@ -478,10 +478,10 @@ export default function Page() {
               Built with v0, AI SDK 6, and Vercel AI Gateway
             </p>
             <div className="flex items-center gap-6">
-              <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-foreground">
+              <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
                 Datenschutz
               </Link>
-              <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-foreground">
+              <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
                 Impressum
               </Link>
             </div>

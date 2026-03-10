@@ -42,7 +42,7 @@ export function Breadcrumbs({
               ) : (
                 <a
                   href={item.href}
-                  className="text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-muted-foreground transition-colors hover:text-hover"
                 >
                   {item.label}
                 </a>

@@ -42,6 +42,10 @@ const config: Config = {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
         },
+        hover: {
+          DEFAULT: 'hsl(var(--hover))',
+          foreground: 'hsl(var(--hover-foreground))',
+        },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',

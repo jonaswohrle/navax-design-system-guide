@@ -81,7 +81,7 @@ export function AppFooter({
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm text-foreground/40 transition-colors hover:text-foreground"
+                        className="text-sm text-foreground/40 transition-colors hover:text-hover"
                       >
                         {link.label}
                       </Link>
@@ -99,13 +99,13 @@ export function AppFooter({
             {`\u00A9 ${year} ${companyName}. All rights reserved.`}
           </p>
           <div className="flex items-center gap-6">
-            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-foreground">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Privacy Policy
             </Link>
-            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-foreground">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Terms of Service
             </Link>
-            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-foreground">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Imprint
             </Link>
           </div>

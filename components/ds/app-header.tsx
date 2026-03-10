@@ -70,7 +70,7 @@ export function AppHeader({
                 onMouseLeave={() => setOpenDropdown(null)}
               >
                 <button
-                  className="flex items-center gap-1.5 text-sm font-normal text-foreground/70 transition-colors hover:text-foreground"
+                  className="flex items-center gap-1.5 text-sm font-normal text-foreground/70 transition-colors hover:text-hover"
                   aria-expanded={openDropdown === item.label}
                   aria-haspopup="true"
                 >
@@ -83,7 +83,7 @@ export function AppHeader({
                       <Link
                         key={child.label}
                         href={child.href}
-                        className="block px-3 py-2.5 text-sm text-foreground/70 transition-colors hover:text-foreground"
+                        className="block px-3 py-2.5 text-sm text-foreground/70 transition-colors hover:text-hover"
                       >
                         <span className="font-medium">{child.label}</span>
                         {child.description && (
@@ -98,7 +98,7 @@ export function AppHeader({
               <Link
                 key={item.label}
                 href={item.href || "#"}
-                className="text-sm font-normal text-foreground/70 transition-colors hover:text-foreground"
+                className="text-sm font-normal text-foreground/70 transition-colors hover:text-hover"
               >
                 {item.label}
               </Link>
@@ -108,7 +108,7 @@ export function AppHeader({
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-3 lg:flex">
-          <button className="text-foreground/70 transition-colors hover:text-foreground" aria-label="Search">
+          <button className="text-foreground/70 transition-colors hover:text-hover" aria-label="Search">
             <Search className="h-4 w-4" />
           </button>
           <Button asChild size="sm">
@@ -146,7 +146,7 @@ export function AppHeader({
                         <Link
                           key={child.label}
                           href={child.href}
-                          className="py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                          className="py-2 text-sm text-muted-foreground transition-colors hover:text-hover"
                         >
                           {child.label}
                         </Link>

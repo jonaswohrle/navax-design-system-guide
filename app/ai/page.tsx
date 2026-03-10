@@ -34,14 +34,14 @@ function DemoCard({
     <Link href={href} className="group block">
       <div className="flex h-full flex-col gap-5 border-t border-foreground/20 pt-6 transition-all">
         <div className="flex items-start justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/20 transition-colors group-hover:bg-foreground group-hover:text-background">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
             <Icon className="h-5 w-5" />
           </div>
-          <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-foreground" />
+          <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-hover" />
         </div>
 
         <div className="flex-1">
-          <h3 className="text-lg font-heading font-normal tracking-tight text-foreground text-balance">
+          <h3 className="text-lg font-heading font-normal tracking-tight text-foreground text-balance transition-colors group-hover:text-hover">
             {title}
           </h3>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
