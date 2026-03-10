@@ -24,7 +24,7 @@ const COMPONENT_NAMES = [
   "feature-card", "command-menu", "user-menu", "stepper", "kbd",
 ]
 
-const V0_RULES_TEXT = `Always use the NAVAX design system when building UI.
+const V0_RULES_TEXT = `Always use the Valtech design system when building UI.
 
 Registry URL: ${REGISTRY_URL}/r
 
@@ -35,8 +35,8 @@ Import from @/components/ds/<component-name>
 
 Available components: ${COMPONENT_NAMES.join(", ")}
 
-Use NAVAX design system components instead of custom implementations.
-Always use the NAVAX brand tokens defined in globals.css (primary = magenta, secondary = teal).`
+Use the Valtech design system components instead of custom implementations.
+Always use the Valtech brand tokens defined in globals.css (primary = beige, background = black).`
 
 const MCP_CONFIG = `{
   "mcpServers": {

@@ -3,26 +3,22 @@
 import { AppHeader } from "@/components/ds/app-header"
 import { AppSidebar } from "@/components/ds/app-sidebar"
 import { AppFooter } from "@/components/ds/app-footer"
-import { NavaxLogo } from "@/components/ds/navax-logo"
+import { ValtechLogo } from "@/components/ds/valtech-logo"
 
 export function ShowcaseComposite() {
   return (
     <div className="flex flex-col gap-10">
       {/* Logo variants */}
       <div>
-        <p className="text-sm font-medium mb-4 text-foreground">NAVAX Logo</p>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-background p-6">
-            <NavaxLogo variant="dark" width={140} />
-            <span className="text-xs text-muted-foreground">Dark (default)</span>
+        <p className="text-sm font-medium mb-4 text-foreground">Valtech Logo</p>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="flex flex-col items-center gap-3 border border-foreground/10 bg-background p-6">
+            <ValtechLogo variant="light" width={140} />
+            <span className="text-xs text-muted-foreground">Light (on dark bg)</span>
           </div>
-          <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-foreground p-6">
-            <NavaxLogo variant="light" width={140} />
-            <span className="text-xs text-background/60">Light (on dark bg)</span>
-          </div>
-          <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-background p-6">
-            <NavaxLogo variant="brand" width={140} />
-            <span className="text-xs text-muted-foreground">Brand (magenta)</span>
+          <div className="flex flex-col items-center gap-3 border border-foreground/10 bg-[hsl(30,33%,94%)] p-6">
+            <ValtechLogo variant="dark" width={140} />
+            <span className="text-xs text-[hsl(0,0%,40%)]">Dark (on light bg)</span>
           </div>
         </div>
       </div>

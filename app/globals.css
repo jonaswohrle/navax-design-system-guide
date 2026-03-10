@@ -10,29 +10,29 @@
 
 @layer base {
   :root {
-    /* ── NAVAX Brand: Magenta #79217a + Teal #006F6E ── */
-    --background: 0 0% 100%;
-    --foreground: 210 11% 15%;
-    --card: 0 0% 100%;
-    --card-foreground: 210 11% 15%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 11% 15%;
+    /* ── Valtech Design: Black #000 + Off-White/Beige #F5F0EB ── */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
 
-    /* Primary: NAVAX magenta #79217a */
-    --primary: 299 57% 30%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary: Valtech off-white/beige #F5F0EB */
+    --primary: 30 33% 94%;
+    --primary-foreground: 0 0% 0%;
 
-    /* Secondary: NAVAX teal #006F6E */
-    --secondary: 180 100% 22%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary: warm beige for sections */
+    --secondary: 30 25% 92%;
+    --secondary-foreground: 0 0% 10%;
 
-    /* Muted: cool gray */
-    --muted: 210 14% 96%;
-    --muted-foreground: 210 8% 46%;
+    /* Muted: dark gray for subtle backgrounds */
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 65%;
 
-    /* Accent: light teal tint */
-    --accent: 180 30% 94%;
-    --accent-foreground: 180 100% 18%;
+    /* Accent: slightly lighter dark */
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
 
     /* Destructive */
     --destructive: 0 84% 60%;
@@ -46,54 +46,54 @@
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Info (NAVAX link blue #2769B2) */
-    --info: 212 63% 43%;
+    /* Info */
+    --info: 0 0% 65%;
     --info-foreground: 0 0% 100%;
 
     /* Borders & inputs */
-    --border: 210 14% 89%;
-    --input: 210 14% 89%;
-    --ring: 299 57% 30%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 100%;
 
     /* Charts */
-    --chart-1: 299 57% 30%;
-    --chart-2: 180 100% 22%;
-    --chart-3: 212 63% 43%;
-    --chart-4: 38 92% 50%;
-    --chart-5: 160 65% 38%;
+    --chart-1: 30 33% 94%;
+    --chart-2: 0 0% 65%;
+    --chart-3: 0 0% 45%;
+    --chart-4: 30 25% 85%;
+    --chart-5: 0 0% 80%;
 
-    --radius: 0.5rem;
+    --radius: 0rem;
 
-    /* Sidebar */
-    --sidebar-background: 210 20% 98%;
-    --sidebar-foreground: 210 11% 25%;
-    --sidebar-primary: 299 57% 30%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 180 30% 94%;
-    --sidebar-accent-foreground: 180 100% 18%;
-    --sidebar-border: 210 14% 89%;
-    --sidebar-ring: 299 57% 30%;
+    /* Sidebar -- dark Valtech style */
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 100%;
   }
 
   .dark {
-    --background: 210 15% 7%;
-    --foreground: 210 14% 95%;
-    --card: 210 15% 9%;
-    --card-foreground: 210 14% 95%;
-    --popover: 210 15% 9%;
-    --popover-foreground: 210 14% 95%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 299 50% 58%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 30 33% 94%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 180 70% 30%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 30 25% 92%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 210 12% 14%;
-    --muted-foreground: 210 8% 60%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 180 25% 16%;
-    --accent-foreground: 180 50% 70%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 100%;
@@ -104,27 +104,27 @@
     --warning: 38 80% 45%;
     --warning-foreground: 0 0% 100%;
 
-    --info: 212 55% 50%;
+    --info: 0 0% 65%;
     --info-foreground: 0 0% 100%;
 
-    --border: 210 12% 18%;
-    --input: 210 12% 18%;
-    --ring: 299 50% 58%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 100%;
 
-    --chart-1: 299 50% 58%;
-    --chart-2: 180 70% 35%;
-    --chart-3: 212 55% 55%;
-    --chart-4: 38 80% 55%;
-    --chart-5: 160 55% 45%;
+    --chart-1: 30 33% 94%;
+    --chart-2: 0 0% 65%;
+    --chart-3: 0 0% 45%;
+    --chart-4: 30 25% 85%;
+    --chart-5: 0 0% 80%;
 
-    --sidebar-background: 210 15% 7%;
-    --sidebar-foreground: 210 14% 95%;
-    --sidebar-primary: 299 50% 58%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 180 25% 16%;
-    --sidebar-accent-foreground: 180 50% 70%;
-    --sidebar-border: 210 12% 18%;
-    --sidebar-ring: 299 50% 58%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 100%;
   }
 }
 

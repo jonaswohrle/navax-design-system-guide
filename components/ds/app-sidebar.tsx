@@ -6,7 +6,7 @@ import { LayoutDashboard, Users, BarChart3, Settings, ChevronLeft, ChevronRight,
 import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { NavaxLogo } from "./navax-logo"
+import { ValtechLogo } from "./valtech-logo"
 
 interface SidebarItem {
   label: string
@@ -80,7 +80,7 @@ export function AppSidebar({
       <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-3">
         {!collapsed && (
           <Link href="/" className="shrink-0">
-            <NavaxLogo variant="brand" width={100} />
+            <ValtechLogo variant="light" width={100} />
           </Link>
         )}
         <Button
