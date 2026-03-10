@@ -86,7 +86,7 @@ export function AppSidebar({
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 shrink-0 text-sidebar-foreground hover:bg-sidebar-accent"
+          className="h-8 w-8 shrink-0 text-sidebar-foreground hover:bg-hover/10 hover:text-hover"
           onClick={() => setCollapsed(!collapsed)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
@@ -110,7 +110,7 @@ export function AppSidebar({
                     <button
                       onClick={() => toggleSection(item.label)}
                       className={cn(
-                        "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-accent",
+                        "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-hover/10 hover:text-hover",
                         collapsed && "justify-center px-0"
                       )}
                       title={collapsed ? item.label : undefined}
@@ -135,7 +135,7 @@ export function AppSidebar({
                             <Link
                               href={child.href}
                               className={cn(
-                                "block rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/70 transition-colors hover:text-sidebar-foreground",
+                                "block rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/70 transition-colors hover:text-hover",
                                 child.href === activePath && "bg-sidebar-accent font-medium text-sidebar-primary"
                               )}
                             >
@@ -150,7 +150,7 @@ export function AppSidebar({
                   <Link
                     href={item.href || "#"}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-accent",
+                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-hover/10 hover:text-hover",
                       isActive && "bg-sidebar-accent text-sidebar-primary",
                       collapsed && "justify-center px-0"
                     )}
@@ -188,7 +188,7 @@ export function AppSidebar({
             </div>
           )}
           {!collapsed && (
-            <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0 text-sidebar-foreground/60 hover:text-sidebar-foreground" aria-label="Sign out">
+            <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0 text-sidebar-foreground/60 hover:text-hover" aria-label="Sign out">
               <LogOut className="h-3.5 w-3.5" />
             </Button>
           )}
