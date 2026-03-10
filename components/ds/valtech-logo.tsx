@@ -8,23 +8,23 @@ interface ValtechLogoProps {
 }
 
 /**
- * Official Valtech logo using the real brand PNG.
- * Dark variant: original black logo (for light backgrounds)
- * Light variant: inverted white logo (for dark backgrounds)
+ * Logo component using the brand PNG.
+ * Dark variant: original logo (for light backgrounds)
+ * Light variant: logo for dark backgrounds (no invert needed — logo is white/gray)
  */
 export function ValtechLogo({ className, variant = "dark", width = 160 }: ValtechLogoProps) {
-  // The aspect ratio of the provided logo image is roughly 5.8:1
-  const height = Math.round(width / 5.8)
+  // The DEMO logo aspect ratio is roughly 2.5:1
+  const height = Math.round(width / 2.5)
 
   return (
     <Image
       src="/images/valtech-logo.png"
-      alt="Valtech"
+      alt="DEMO"
       width={width}
       height={height}
       className={cn(
         "object-contain",
-        variant === "light" && "invert",
+        variant === "dark" && "brightness-0",
         className
       )}
       priority
