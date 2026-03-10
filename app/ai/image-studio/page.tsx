@@ -228,7 +228,7 @@ export default function ImageStudioPage() {
                   size="sm"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isGenerating}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-hover"
                 >
                   <Upload className="mr-2 h-4 w-4" />
                   Upload Image

@@ -45,7 +45,7 @@ export function ToggleButtonGroup({
             size === "md" && "px-3 py-1.5 text-sm",
             value === item.value
               ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground"
+              : "text-muted-foreground hover:text-hover"
           )}
           onClick={() => onValueChange(item.value)}
         >

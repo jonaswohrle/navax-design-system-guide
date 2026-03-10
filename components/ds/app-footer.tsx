@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { NavaxLogo } from "./navax-logo"
+import { ValtechLogo } from "./valtech-logo"
 
 interface FooterColumn {
   title: string
@@ -55,19 +55,19 @@ const defaultColumns: FooterColumn[] = [
 export function AppFooter({
   columns = defaultColumns,
   className,
-  companyName = "NAVAX",
+  companyName = "Valtech",
 }: AppFooterProps) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className={cn("border-t border-border bg-foreground text-background", className)}>
-      <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
+    <footer className={cn("bg-background text-foreground", className)}>
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           {/* Brand column */}
           <div className="flex flex-col gap-4 lg:max-w-xs">
-            <NavaxLogo variant="light" width={120} />
-            <p className="text-sm leading-relaxed text-background/70">
-              With over 30 years of experience, we offer future-proof standard solutions based on Microsoft technology and customised programming.
+            <ValtechLogo variant="light" width={120} />
+            <p className="text-sm leading-relaxed text-foreground/50">
+              The experience innovation company. We transform bold ideas into transformative experiences.
             </p>
           </div>
 
@@ -75,13 +75,13 @@ export function AppFooter({
           <div className="grid flex-1 grid-cols-2 gap-8 md:grid-cols-4">
             {columns.map((column) => (
               <div key={column.title}>
-                <h4 className="mb-3 text-sm font-semibold text-background">{column.title}</h4>
-                <ul className="flex flex-col gap-2">
+                <h4 className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-foreground/70">{column.title}</h4>
+                <ul className="flex flex-col gap-2.5">
                   {column.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm text-background/60 transition-colors hover:text-background"
+                        className="text-sm text-foreground/40 transition-colors hover:text-hover"
                       >
                         {link.label}
                       </Link>
@@ -94,18 +94,18 @@ export function AppFooter({
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-background/10 pt-6 md:flex-row">
-          <p className="text-xs text-background/50">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-foreground/10 pt-8 md:flex-row">
+          <p className="text-xs text-foreground/40">
             {`\u00A9 ${year} ${companyName}. All rights reserved.`}
           </p>
-          <div className="flex items-center gap-4">
-            <Link href="#" className="text-xs text-background/50 transition-colors hover:text-background">
+          <div className="flex items-center gap-6">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Privacy Policy
             </Link>
-            <Link href="#" className="text-xs text-background/50 transition-colors hover:text-background">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Terms of Service
             </Link>
-            <Link href="#" className="text-xs text-background/50 transition-colors hover:text-background">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Imprint
             </Link>
           </div>

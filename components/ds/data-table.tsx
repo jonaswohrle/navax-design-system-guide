@@ -48,7 +48,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 className={cn(
                   "h-10 px-4 font-medium text-muted-foreground",
                   alignClass(col.align),
-                  col.sortable && "cursor-pointer select-none hover:text-foreground transition-colors"
+                  col.sortable && "cursor-pointer select-none hover:text-hover transition-colors"
                 )}
                 onClick={() => {
                   if (col.sortable && onSort) {
