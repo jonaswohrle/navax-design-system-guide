@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import {
   ArrowRight,
   Sparkles,
@@ -150,9 +151,19 @@ export default function Page() {
       </header>
 
       <main>
-        {/* Hero -- Full-screen Valtech-style hero */}
-        <section className="flex min-h-screen flex-col justify-end px-6 pb-16 pt-32">
-          <div className="mx-auto w-full max-w-7xl">
+        {/* Hero -- Full-screen Valtech-style hero with background image */}
+        <section className="relative flex min-h-screen flex-col justify-end px-6 pb-16 pt-32 overflow-hidden">
+          {/* Background image */}
+          <Image
+            src="/images/hero-bg.png"
+            alt=""
+            fill
+            className="object-cover object-center pointer-events-none"
+            priority
+          />
+          {/* Gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none" />
+          <div className="relative z-10 mx-auto w-full max-w-7xl">
             <div className="flex items-center gap-3 mb-8">
               <span className="rounded-full border border-foreground/30 px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-foreground/70">
                 Workshop
@@ -182,6 +193,7 @@ export default function Page() {
                 </Button>
               </Link>
             </div>
+          </div>
           </div>
         </section>
 
