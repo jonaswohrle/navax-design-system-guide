@@ -3,22 +3,22 @@
 import { AppHeader } from "@/components/ds/app-header"
 import { AppSidebar } from "@/components/ds/app-sidebar"
 import { AppFooter } from "@/components/ds/app-footer"
-import { ValtechLogo } from "@/components/ds/valtech-logo"
+import { BrightlyLogo } from "@/components/ds/brightly-logo"
 
 export function ShowcaseComposite() {
   return (
     <div className="flex flex-col gap-10">
       {/* Logo variants */}
       <div>
-        <p className="text-sm font-medium mb-4 text-foreground">Valtech Logo</p>
+        <p className="text-sm font-medium mb-4 text-foreground">Brightly Logo</p>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div className="flex flex-col items-center gap-3 border border-foreground/10 bg-background p-6">
-            <ValtechLogo variant="light" width={140} />
-            <span className="text-xs text-muted-foreground">Light (on dark bg)</span>
+          <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-foreground p-6">
+            <BrightlyLogo variant="light" width={140} />
+            <span className="text-xs text-background/60">Light (on dark bg)</span>
           </div>
-          <div className="flex flex-col items-center gap-3 border border-foreground/10 bg-[hsl(30,33%,94%)] p-6">
-            <ValtechLogo variant="dark" width={140} />
-            <span className="text-xs text-[hsl(0,0%,40%)]">Dark (on light bg)</span>
+          <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-secondary p-6">
+            <BrightlyLogo variant="dark" width={140} />
+            <span className="text-xs text-muted-foreground">Dark (on light bg)</span>
           </div>
         </div>
       </div>

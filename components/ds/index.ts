@@ -37,6 +37,7 @@ export { FileUpload } from "./file-upload"
 // Brand
 export { NavaxLogo } from "./navax-logo"
 export { ValtechLogo } from "./valtech-logo"
+export { BrightlyLogo } from "./brightly-logo"
 
 // Data (advanced)
 export { DataTable } from "./data-table"
