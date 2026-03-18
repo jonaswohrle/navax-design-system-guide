@@ -486,14 +486,14 @@ export function TravelChat() {
                     </div>
                   </div>
                 ) : (
-                  messages.map((msg) => {
+                  messages.map((msg, msgIndex) => {
                     const text = getMessageText(msg)
                     const hasToolParts = msg.parts?.some((p) => p.type.startsWith("tool-"))
 
                     if (msg.role === "assistant" && !text && !hasToolParts) return null
 
                     return (
-                      <div key={msg.id}>
+                      <div key={`${msg.id}-${msgIndex}`}>
                         {text && (
                           <div className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
                             <div

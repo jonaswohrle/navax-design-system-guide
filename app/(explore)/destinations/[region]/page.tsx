@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft, Compass, Footprints, Ship, Camera, Bike, Snowflake, Users, UtensilsCrossed, Train, Star } from "lucide-react"
+import { blobUrl } from "@/lib/blob-image-urls"
 import { TOURS } from "@/lib/tour-data"
 import { TripCard } from "@/components/explore/trip-card"
 import { TrustStrip } from "@/components/explore/trust-strip"
@@ -353,7 +354,7 @@ export default async function RegionPage({ params }: { params: Promise<{ region:
           </video>
         ) : (
           <Image
-            src={data.heroImage}
+            src={blobUrl(data.heroImage)}
             alt={data.name}
             fill
             className="object-cover"

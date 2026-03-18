@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { blobUrl } from "@/lib/blob-image-urls"
 import type { BlogPostFields } from "@/lib/contentful"
 
 interface ContentCardProps {
@@ -22,7 +23,7 @@ export function ContentCard({ post }: ContentCardProps) {
     >
       <div className="relative aspect-[16/9] overflow-hidden">
         <Image
-          src={post.imageUrl || "/images/explore/hero-mountains.jpg"}
+          src={blobUrl(post.imageUrl || "/images/explore/hero-mountains.jpg")}
           alt={post.title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"

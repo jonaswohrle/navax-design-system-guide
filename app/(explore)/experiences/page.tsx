@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { blobUrl } from "@/lib/blob-image-urls"
 import {
   getExperienceTypes,
   getTripListings,
@@ -62,7 +63,7 @@ export default async function ExperiencesPage() {
           muted
           playsInline
           className="absolute inset-0 h-full w-full object-cover"
-          poster="/images/explore/hero-santorini.png"
+          poster={blobUrl("/images/explore/hero-santorini.png")}
         >
           <source src={VIDEO_URL} type="video/mp4" />
         </video>
@@ -95,7 +96,7 @@ export default async function ExperiencesPage() {
               >
                 <div className="relative aspect-[16/9]">
                   <Image
-                    src={exp.imageUrl || "/images/explore/hero-mountains.jpg"}
+                    src={blobUrl(exp.imageUrl || "/images/explore/hero-mountains.jpg")}
                     alt={exp.name}
                     fill
                     className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"

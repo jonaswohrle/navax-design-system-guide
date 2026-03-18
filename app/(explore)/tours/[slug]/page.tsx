@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { Clock, Users, Mountain, MapPin, Check, X, ArrowRight, Star } from "lucide-react"
+import { blobUrl } from "@/lib/blob-image-urls"
 import { getTour, getAllTourSlugs, TOURS } from "@/lib/tour-data"
 import { TourItinerary } from "@/components/explore/tour-itinerary"
 import { BookingTable } from "@/components/explore/booking-table"
@@ -42,7 +43,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
       <section className="relative bg-primary">
         <div className="absolute inset-0">
           <Image
-            src={tour.imageUrl}
+            src={blobUrl(tour.imageUrl)}
             alt={tour.title}
             fill
             className="object-cover opacity-30"

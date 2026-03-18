@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
+import { blobUrl } from "@/lib/blob-image-urls"
 import { MapPin, Clock, Users, Mountain, Check, ChevronRight, Calendar, ExternalLink } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -119,7 +120,7 @@ export function ChatTripCard({ trip, onViewDetails }: ChatTripCardProps) {
     <Card className="flex h-full flex-col overflow-hidden border-border bg-card transition-shadow hover:shadow-md">
       <div className="relative h-28 w-full shrink-0">
         <Image
-          src={trip.imageUrl}
+          src={blobUrl(trip.imageUrl)}
           alt={trip.title}
           fill
           className="object-cover"
@@ -220,7 +221,7 @@ export function ChatTripDetail({ trip, onViewDepartures }: ChatTripDetailProps) 
       {/* Hero image */}
       <div className="relative h-40 w-full">
         <Image
-          src={trip.imageUrl}
+          src={blobUrl(trip.imageUrl)}
           alt={trip.title}
           fill
           className="object-cover"

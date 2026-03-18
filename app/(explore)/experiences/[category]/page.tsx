@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { ArrowRight } from "lucide-react"
+import { blobUrl } from "@/lib/blob-image-urls"
 import {
   IconUnforgettableExperiences,
   IconExpertTourLeaders,
@@ -348,7 +349,7 @@ export default async function ExperienceCategoryPage({
           </video>
         ) : (
           <Image
-            src={cat.heroImage}
+            src={blobUrl(cat.heroImage)}
             alt={cat.title}
             fill
             className="object-cover"
@@ -421,7 +422,7 @@ export default async function ExperienceCategoryPage({
                 >
                   <div className="relative aspect-[4/3]">
                     <Image
-                      src={d.image}
+                      src={blobUrl(d.image)}
                       alt={d.name}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

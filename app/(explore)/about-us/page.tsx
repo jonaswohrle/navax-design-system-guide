@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { blobUrl } from "@/lib/blob-image-urls"
 import { getAboutSections, getFlexPolicy } from "@/lib/contentful"
 import { FlexBanner } from "@/components/explore/flex-banner"
 
@@ -33,7 +34,7 @@ export default async function AboutPage() {
       {/* Page hero */}
       <section className="relative min-h-[50vh] overflow-hidden">
         <Image
-          src="/images/explore/about-hero.jpg"
+          src={blobUrl("/images/explore/about-hero.jpg")}
           alt="Group of travelers on an adventure"
           fill
           className="object-cover"

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { MapPin, Compass, Calendar, ChevronRight } from "lucide-react"
+import { blobUrl } from "@/lib/blob-image-urls"
 import { WaveDivider } from "./wave-divider"
 
 interface HeroSearchProps {
@@ -33,7 +34,7 @@ export function HeroSearch({
       <section className="relative flex min-h-[55vh] items-center overflow-hidden lg:min-h-[70vh]">
         {/* Background image */}
         <Image
-          src={backgroundImageUrl}
+          src={blobUrl(backgroundImageUrl)}
           alt="Scenic adventure travel destination"
           fill
           className="object-cover"

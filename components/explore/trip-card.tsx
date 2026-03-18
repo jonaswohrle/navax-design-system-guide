@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { WishlistButton } from "./wishlist-button"
+import { blobUrl } from "@/lib/blob-image-urls"
 import type { TripListingFields } from "@/lib/contentful"
 
 const BADGE_STYLES: Record<string, string> = {
@@ -22,7 +23,7 @@ export function TripCard({ trip }: TripCardProps) {
     <article className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-shadow hover:shadow-lg">
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
-          src={trip.imageUrl || "/images/explore/hero-mountains.jpg"}
+          src={blobUrl(trip.imageUrl || "/images/explore/hero-mountains.jpg")}
           alt={trip.title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"

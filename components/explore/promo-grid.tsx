@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { blobUrl } from "@/lib/blob-image-urls"
 import type { PromoCardFields } from "@/lib/contentful"
 
 const FALLBACK_PROMOS: PromoCardFields[] = [
@@ -28,7 +29,7 @@ export function PromoGrid({ promos }: PromoGridProps) {
             >
               <div className="relative aspect-[4/3]">
                 <Image
-                  src={promo.imageUrl || "/images/explore/hero-mountains.jpg"}
+                  src={blobUrl(promo.imageUrl || "/images/explore/hero-mountains.jpg")}
                   alt={promo.title}
                   fill
                   className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"

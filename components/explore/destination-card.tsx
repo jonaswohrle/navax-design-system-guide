@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { blobUrl } from "@/lib/blob-image-urls"
 import type { DestinationRegionFields } from "@/lib/contentful"
 
 interface DestinationCardProps {
@@ -14,7 +15,7 @@ export function DestinationCard({ region }: DestinationCardProps) {
     >
       <div className="relative aspect-[4/3]">
         <Image
-          src={region.imageUrl || "/images/explore/hero-mountains.jpg"}
+          src={blobUrl(region.imageUrl || "/images/explore/hero-mountains.jpg")}
           alt={region.name}
           fill
           className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
