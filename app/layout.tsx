@@ -2,6 +2,7 @@ import React from "react"
 import type { Metadata } from 'next'
 import { Inter, DM_Sans, Playfair_Display } from 'next/font/google'
 import { GeistMono } from 'geist/font/mono'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import './globals.css'
 import { ChatLoader } from '@/components/explore/chat-loader'
@@ -43,6 +44,7 @@ export default function RootLayout({
           {children}
           <ChatLoader />
         </NinetailedWrapper>
+        <SpeedInsights />
       </body>
     </html>
   )
