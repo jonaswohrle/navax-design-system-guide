@@ -39,6 +39,32 @@ type CanvasContent =
   | null
 
 /* ------------------------------------------------------------------ */
+/*  Skeleton loader for canvas                                         */
+/* ------------------------------------------------------------------ */
+function CanvasSkeleton({ label }: { label?: string }) {
+  return (
+    <div className="space-y-4 animate-pulse">
+      {label && (
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Sparkles className="h-3 w-3 animate-spin" />
+          <span>{label}</span>
+        </div>
+      )}
+      <div className="h-6 w-2/3 rounded bg-muted" />
+      <div className="grid grid-cols-2 gap-3">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="space-y-2">
+            <div className="aspect-[4/3] rounded-lg bg-muted" />
+            <div className="h-4 w-3/4 rounded bg-muted" />
+            <div className="h-3 w-1/2 rounded bg-muted" />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------ */
 /*  Markdown renderer                                                  */
 /* ------------------------------------------------------------------ */
 const markdownComponents = {
@@ -80,6 +106,8 @@ export function TravelChat() {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
   const [inputValue, setInputValue] = useState("")
+  const lastCanvasRef = useRef<CanvasContent>(null)
+  const [canvasLoading, setCanvasLoading] = useState(false)
 
   const { messages, sendMessage, status, addToolOutput, error, setMessages } = useChat({
     transport,
@@ -97,7 +125,6 @@ export function TravelChat() {
 
   /* --- Extract latest canvas content from messages --- */
   const canvasContent = useMemo<CanvasContent>(() => {
-    // Walk messages in reverse to find the latest renderable tool
     for (let m = messages.length - 1; m >= 0; m--) {
       const msg = messages[m]
       if (msg.role !== "assistant" || !msg.parts) continue
@@ -107,7 +134,6 @@ export function TravelChat() {
 
         const toolName = part.type.replace("tool-", "")
 
-        // Guided selling (client-side tool) — show when input-available
         if (toolName === "startGuidedSelling" && part.state === "input-available") {
           return {
             kind: "guided-selling",
@@ -142,7 +168,22 @@ export function TravelChat() {
     return null
   }, [messages])
 
-  const hasCanvas = canvasContent !== null
+  /* --- Track canvas state: keep last content, show skeleton during transitions --- */
+  useEffect(() => {
+    if (canvasContent !== null) {
+      lastCanvasRef.current = canvasContent
+      setCanvasLoading(false)
+    } else if (isStreaming && lastCanvasRef.current !== null) {
+      // Still streaming but no canvas content yet — show skeleton
+      setCanvasLoading(true)
+    } else if (!isStreaming) {
+      setCanvasLoading(false)
+    }
+  }, [canvasContent, isStreaming])
+
+  // The canvas should show if we have content OR if we're loading new content
+  const hasCanvas = canvasContent !== null || (canvasLoading && lastCanvasRef.current !== null)
+  const displayContent = canvasContent || lastCanvasRef.current
 
   /* --- Auto-scroll --- */
   const scrollToBottom = useCallback(() => {
@@ -174,6 +215,26 @@ export function TravelChat() {
 
   const handleSuggestion = useCallback((text: string) => { sendMessage({ text }) }, [sendMessage])
 
+  const handleReset = useCallback(() => {
+    setMessages([])
+    lastCanvasRef.current = null
+    setCanvasLoading(false)
+  }, [setMessages])
+
+  /* --- Guided selling complete handler --- */
+  const handleGuidedSellingComplete = useCallback(
+    (preferences: Record<string, unknown>, toolCallId: string) => {
+      addToolOutput({
+        tool: "startGuidedSelling",
+        toolCallId,
+        output: JSON.stringify(preferences),
+      })
+      // Show skeleton on canvas while the model processes the preferences
+      setCanvasLoading(true)
+    },
+    [addToolOutput]
+  )
+
   /* --- Render inline tool indicator for chat column --- */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function renderToolInline(part: any, index: number, isFullscreenMode: boolean) {
@@ -183,7 +244,7 @@ export function TravelChat() {
     const output = part.output as Record<string, unknown> | undefined
     const toolName = (part.type as string).replace("tool-", "")
 
-    // In fullscreen, tool outputs go to the canvas — show contextual inline references
+    // In fullscreen with canvas open: show brief inline references
     if (isFullscreenMode && canvasOpen) {
       if (toolName === "startGuidedSelling") {
         if (state === "input-streaming") {
@@ -241,7 +302,7 @@ export function TravelChat() {
       return null
     }
 
-    // Non-fullscreen (or canvas closed): render inline as before
+    // Non-fullscreen (or canvas closed): render inline
     if (toolName === "startGuidedSelling") {
       if (state === "input-streaming") {
         return (
@@ -256,23 +317,7 @@ export function TravelChat() {
           <div key={toolCallId || index} className="my-2">
             <GuidedSellingFlow
               greeting={(input?.greeting as string) || "Let's find your perfect trip!"}
-              onComplete={(preferences) => {
-                addToolOutput({
-                  tool: "startGuidedSelling",
-                  toolCallId,
-                  output: JSON.stringify(preferences),
-                })
-                const summary = [
-                  preferences.tripTypes?.length && `Trip type: ${preferences.tripTypes.join(", ")}`,
-                  preferences.destinations?.length && `Destination: ${preferences.destinations.join(", ")}`,
-                  preferences.durationRange && `Duration: ${preferences.durationRange}`,
-                  preferences.budgetRange && `Budget: ${preferences.budgetRange}`,
-                  preferences.physicalRating && `Activity level: ${preferences.physicalRating}`,
-                ].filter(Boolean).join(", ")
-                sendMessage({
-                  text: `Based on my preferences: ${summary}. Please search for matching trips and show me the results.`,
-                })
-              }}
+              onComplete={(preferences) => handleGuidedSellingComplete(preferences, toolCallId)}
             />
           </div>
         )
@@ -324,63 +369,69 @@ export function TravelChat() {
 
   /* --- Canvas panel content --- */
   function renderCanvas() {
-    if (!canvasContent) return null
+    if (canvasLoading && !canvasContent) {
+      return <CanvasSkeleton label="Loading results..." />
+    }
 
-    if (canvasContent.kind === "guided-selling") {
+    const content = canvasContent || displayContent
+    if (!content) return null
+
+    if (content.kind === "guided-selling") {
       return (
         <GuidedSellingFlow
-          greeting={canvasContent.greeting}
-          onComplete={(preferences) => {
-            addToolOutput({
-              tool: "startGuidedSelling",
-              toolCallId: canvasContent.toolCallId,
-              output: JSON.stringify(preferences),
-            })
-            const summary = [
-              preferences.tripTypes?.length && `Trip type: ${preferences.tripTypes.join(", ")}`,
-              preferences.destinations?.length && `Destination: ${preferences.destinations.join(", ")}`,
-              preferences.durationRange && `Duration: ${preferences.durationRange}`,
-              preferences.budgetRange && `Budget: ${preferences.budgetRange}`,
-              preferences.physicalRating && `Activity level: ${preferences.physicalRating}`,
-            ].filter(Boolean).join(", ")
-            sendMessage({
-              text: `Based on my preferences: ${summary}. Please search for matching trips and show me the results.`,
-            })
-          }}
+          greeting={content.greeting}
+          onComplete={(preferences) => handleGuidedSellingComplete(preferences, content.toolCallId)}
         />
       )
     }
 
-    if (canvasContent.kind === "trips") {
+    if (content.kind === "trips") {
       return (
-        <ChatTripGrid
-          trips={canvasContent.trips as never}
-          totalFound={canvasContent.totalFound}
-          onViewDetails={(slug: string) => sendMessage({ text: `Show me details for the trip "${slug}"` })}
-        />
+        <div className={cn(canvasLoading && "opacity-50 pointer-events-none")}>
+          <ChatTripGrid
+            trips={content.trips as never}
+            totalFound={content.totalFound}
+            onViewDetails={(slug: string) => sendMessage({ text: `Show me details for the trip "${slug}"` })}
+          />
+        </div>
       )
     }
 
-    if (canvasContent.kind === "detail") {
+    if (content.kind === "detail") {
       return (
-        <ChatTripDetail
-          trip={canvasContent.trip as never}
-          onViewDepartures={(slug: string) => sendMessage({ text: `Show departures for "${slug}"` })}
-        />
+        <div className={cn(canvasLoading && "opacity-50 pointer-events-none")}>
+          <ChatTripDetail
+            trip={content.trip as never}
+            onViewDepartures={(slug: string) => sendMessage({ text: `Show departures for "${slug}"` })}
+          />
+        </div>
       )
     }
 
-    if (canvasContent.kind === "departures") {
+    if (content.kind === "departures") {
       return (
-        <ChatDeparturesTable
-          departures={canvasContent.departures as never}
-          tourTitle={canvasContent.tourTitle}
-          tourSlug={canvasContent.tourSlug}
-        />
+        <div className={cn(canvasLoading && "opacity-50 pointer-events-none")}>
+          <ChatDeparturesTable
+            departures={content.departures as never}
+            tourTitle={content.tourTitle}
+            tourSlug={content.tourSlug}
+          />
+        </div>
       )
     }
 
     return null
+  }
+
+  /* --- Canvas label --- */
+  function getCanvasLabel() {
+    const content = canvasContent || displayContent
+    if (!content) return ""
+    if (content.kind === "trips") return "Trip Results"
+    if (content.kind === "detail") return "Trip Details"
+    if (content.kind === "departures") return "Departures"
+    if (content.kind === "guided-selling") return "Trip Finder"
+    return ""
   }
 
   /* --- Panel sizing --- */
@@ -420,7 +471,7 @@ export function TravelChat() {
             <div className="flex items-center gap-1">
               {messages.length > 0 && (
                 <button
-                  onClick={() => setMessages([])}
+                  onClick={handleReset}
                   className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
                   aria-label="New chat"
                   title="New chat"
@@ -591,17 +642,17 @@ export function TravelChat() {
               <div className="flex w-[50%] flex-col border-l border-border bg-muted/30">
                 {/* Canvas header */}
                 <div className="flex items-center gap-2 border-b border-border px-5 py-3 shrink-0">
-                  <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                  <div className={cn("h-2 w-2 rounded-full bg-primary", (isStreaming || canvasLoading) && "animate-pulse")} />
                   <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
-                    {canvasContent?.kind === "trips" && "Trip Results"}
-                    {canvasContent?.kind === "detail" && "Trip Details"}
-                    {canvasContent?.kind === "departures" && "Departures"}
-                    {canvasContent?.kind === "guided-selling" && "Trip Finder"}
+                    {getCanvasLabel()}
                   </span>
+                  {canvasLoading && (
+                    <span className="text-[10px] text-muted-foreground ml-auto">Updating...</span>
+                  )}
                 </div>
                 {/* Canvas body */}
                 <div className="flex-1 overflow-y-auto p-5">
-                  <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                  <div className="animate-in fade-in duration-200">
                     {renderCanvas()}
                   </div>
                 </div>
