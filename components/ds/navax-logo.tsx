@@ -23,6 +23,7 @@ export function NavaxLogo({ className, variant = "dark", width = 140 }: NavaxLog
       alt="DEMO"
       width={width}
       height={height}
+      style={{ width, height: "auto" }}
       className={cn(
         "object-contain",
         variant === "dark" && "invert",
