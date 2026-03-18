@@ -1,6 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic"
+import { usePathname } from "next/navigation"
 
 const TravelChat = dynamic(
   () =>
@@ -9,5 +10,9 @@ const TravelChat = dynamic(
 )
 
 export function ChatLoader() {
+  const pathname = usePathname()
+
+  if (pathname.startsWith("/ai")) return null
+
   return <TravelChat />
 }

@@ -4,6 +4,7 @@ import { Inter, DM_Sans, Playfair_Display } from 'next/font/google'
 import { GeistMono } from 'geist/font/mono'
 
 import './globals.css'
+import { ChatLoader } from '@/components/explore/chat-loader'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -38,6 +39,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${dmSans.variable} ${playfair.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
         {children}
+        <ChatLoader />
       </body>
     </html>
   )
