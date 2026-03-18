@@ -52,7 +52,6 @@ async function fetchContentful<T = Record<string, unknown>>(
   })
 
   if (!res.ok) {
-    console.error(`[v0] Contentful fetch failed: ${res.status} ${res.statusText}`)
     return { items: [] }
   }
 

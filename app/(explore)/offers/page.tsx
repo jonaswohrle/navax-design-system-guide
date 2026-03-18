@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Tag, Gift, Globe, Users, Percent, ArrowRight } from "lucide-react"
-import { getOfferCards } from "@/lib/contentful"
+import { getOfferCards, type OfferCardFields } from "@/lib/contentful"
 
 export const metadata: Metadata = {
   title: "Adventure Holiday Deals | Offers & Discounts - Explore",
@@ -17,17 +17,17 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   "Book back-to-back and save 5%": <ArrowRight className="h-8 w-8" />,
 }
 
-const FALLBACK_OFFERS = [
-  { title: "Loyalty discounts", description: "After your first trip, enjoy up to 10% off future adventures with our loyalty programme.", discountText: "Up to 10% off", order: 1 },
-  { title: "Recommend a friend", description: "Refer a friend and you'll both receive a discount on your next adventure.", discountText: "Save together", order: 2 },
-  { title: "SAVE on Polar trips", description: "Incredible savings on selected Polar voyages to the Arctic and Antarctic.", discountText: "Great savings", order: 3 },
-  { title: "Discounted trips", description: "Browse our selection of discounted trips with reduced prices on selected departures.", discountText: "Reduced prices", order: 4 },
-  { title: "Book back-to-back and save 5%", description: "Combine two or more trips and save 5% on each adventure when you book them together.", discountText: "Save 5%", order: 5 },
+const FALLBACK_OFFERS: OfferCardFields[] = [
+  { title: "Loyalty discounts", description: "After your first trip, enjoy up to 10% off future adventures with our loyalty programme.", discountText: "Up to 10% off", linkUrl: "/about-us", order: 1 },
+  { title: "Recommend a friend", description: "Refer a friend and you'll both receive a discount on your next adventure.", discountText: "Save together", linkUrl: "/about-us", order: 2 },
+  { title: "SAVE on Polar trips", description: "Incredible savings on selected Polar voyages to the Arctic and Antarctic.", discountText: "Great savings", linkUrl: "/destinations?region=polar", order: 3 },
+  { title: "Discounted trips", description: "Browse our selection of discounted trips with reduced prices on selected departures.", discountText: "Reduced prices", linkUrl: "/destinations", order: 4 },
+  { title: "Book back-to-back and save 5%", description: "Combine two or more trips and save 5% on each adventure when you book them together.", discountText: "Save 5%", linkUrl: "/destinations", order: 5 },
 ]
 
 export default async function OffersPage() {
   const offers = await getOfferCards()
-  const offerList = offers?.length ? offers : FALLBACK_OFFERS
+  const offerList: OfferCardFields[] = offers?.length ? offers : FALLBACK_OFFERS
 
   return (
     <div className="min-h-screen bg-background text-foreground">

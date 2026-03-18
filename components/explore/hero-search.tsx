@@ -1,3 +1,7 @@
+"use client"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { MapPin, Compass, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,6 +19,21 @@ export function HeroSearch({
   ctaText = "Let's go!",
   backgroundImageUrl = "/images/explore/hero-mountains.jpg",
 }: HeroSearchProps) {
+  const router = useRouter()
+  const [where, setWhere] = useState("")
+  const [tripType, setTripType] = useState("")
+  const [when, setWhen] = useState("")
+
+  function handleSearch() {
+    const params = new URLSearchParams()
+    if (where) params.set("region", where)
+    if (tripType) params.set("type", tripType)
+    if (when) params.set("date", when)
+
+    const qs = params.toString()
+    router.push(`/destinations${qs ? `?${qs}` : ""}`)
+  }
+
   return (
     <section className="relative flex min-h-[85vh] items-end pb-16 lg:pb-24">
       <Image
@@ -44,8 +63,12 @@ export function HeroSearch({
               </label>
               <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5">
                 <MapPin className="h-4 w-4 shrink-0 text-primary" />
-                <select className="w-full bg-transparent text-sm text-foreground outline-none" defaultValue="">
-                  <option value="" disabled>Where would you like to go?</option>
+                <select
+                  className="w-full bg-transparent text-sm text-foreground outline-none"
+                  value={where}
+                  onChange={(e) => setWhere(e.target.value)}
+                >
+                  <option value="">Where would you like to go?</option>
                   <option value="europe">Europe</option>
                   <option value="asia">Asia</option>
                   <option value="africa">Africa</option>
@@ -66,8 +89,12 @@ export function HeroSearch({
               </label>
               <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5">
                 <Compass className="h-4 w-4 shrink-0 text-primary" />
-                <select className="w-full bg-transparent text-sm text-foreground outline-none" defaultValue="">
-                  <option value="" disabled>What type of trip?</option>
+                <select
+                  className="w-full bg-transparent text-sm text-foreground outline-none"
+                  value={tripType}
+                  onChange={(e) => setTripType(e.target.value)}
+                >
+                  <option value="">What type of trip?</option>
                   <option value="discovery">Discovery</option>
                   <option value="walking">Walking & Trekking</option>
                   <option value="cycling">Cycling</option>
@@ -86,8 +113,12 @@ export function HeroSearch({
               </label>
               <div className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2.5">
                 <Calendar className="h-4 w-4 shrink-0 text-primary" />
-                <select className="w-full bg-transparent text-sm text-foreground outline-none" defaultValue="">
-                  <option value="" disabled>When would you like to go?</option>
+                <select
+                  className="w-full bg-transparent text-sm text-foreground outline-none"
+                  value={when}
+                  onChange={(e) => setWhen(e.target.value)}
+                >
+                  <option value="">When would you like to go?</option>
                   <option value="apr-2026">April 2026</option>
                   <option value="may-2026">May 2026</option>
                   <option value="jun-2026">June 2026</option>
@@ -104,6 +135,7 @@ export function HeroSearch({
 
             <Button
               size="lg"
+              onClick={handleSearch}
               className="shrink-0 bg-primary px-8 font-heading text-base font-semibold text-primary-foreground hover:bg-hover lg:px-10"
             >
               {ctaText}

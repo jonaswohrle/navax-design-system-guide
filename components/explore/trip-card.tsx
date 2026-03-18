@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { Heart, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { TripListingFields } from "@/lib/contentful"
@@ -97,11 +98,15 @@ export function TripCard({ trip }: TripCardProps) {
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1 text-xs">
-            More info
+          <Button asChild variant="outline" size="sm" className="flex-1 text-xs">
+            <Link href={`/destinations#${trip.slug || ""}`}>
+              More info
+            </Link>
           </Button>
-          <Button size="sm" className="flex-1 bg-primary text-xs text-primary-foreground hover:bg-hover">
-            Book now
+          <Button asChild size="sm" className="flex-1 bg-primary text-xs text-primary-foreground hover:bg-hover">
+            <Link href={`/destinations#${trip.slug || ""}`}>
+              Book now
+            </Link>
           </Button>
         </div>
       </div>

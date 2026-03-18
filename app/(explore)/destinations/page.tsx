@@ -11,6 +11,7 @@ import { DestinationCard } from "@/components/explore/destination-card"
 import { TripCard } from "@/components/explore/trip-card"
 import { TrustStrip } from "@/components/explore/trust-strip"
 import { ContentCard } from "@/components/explore/content-card"
+import { DestinationFilters } from "@/components/explore/destination-filters"
 
 export const metadata: Metadata = {
   title: "Adventure Holiday Destinations | Where To Go On Your Next Tour - Explore",
@@ -43,7 +44,17 @@ const FALLBACK_TRIPS = [
   { title: "South Africa & Eswatini", destination: "South Africa", tripType: "Wildlife", duration: "10 Days", price: 1395, originalPrice: 1695, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Discounted", "Best Seller"], tripCode: "ZK", slug: "south-africa-eswatini", order: 5 },
 ]
 
-export default async function DestinationsPage() {
+const FALLBACK_BLOG = [
+  { title: "Walking the Great Wall of China: Everything you need to know", excerpt: "Our guide to walking the Great Wall covers the best sections to visit.", imageUrl: "/images/explore/blog-great-wall.jpg", publishDate: "2026-03-10", category: "Adventure Travel", slug: "walking-great-wall-china", order: 1 },
+  { title: "Why cycling holidays are more popular than ever", excerpt: "Discover why cycling tours are the fastest growing holiday trend.", imageUrl: "/images/explore/blog-cycling.jpg", publishDate: "2026-03-05", category: "Cycling", slug: "cycling-holidays-popular", order: 2 },
+]
+
+interface DestinationsPageProps {
+  searchParams: Promise<{ region?: string; type?: string; date?: string }>
+}
+
+export default async function DestinationsPage({ searchParams }: DestinationsPageProps) {
+  const sp = await searchParams
   const [regions, trips, pillars, blog] = await Promise.all([
     getDestinationRegions(),
     getTripListings(),
@@ -52,8 +63,31 @@ export default async function DestinationsPage() {
   ])
 
   const regionList = regions?.length ? regions : FALLBACK_REGIONS
-  const tripList = trips?.length ? trips : FALLBACK_TRIPS
-  const blogList = blog?.length ? blog : []
+  const allTrips = trips?.length ? trips : FALLBACK_TRIPS
+  const blogList = blog?.length ? blog : FALLBACK_BLOG
+
+  // Apply filters from hero search
+  const activeRegion = sp.region || null
+  const activeType = sp.type || null
+  const activeDate = sp.date || null
+
+  const filteredTrips = allTrips.filter((trip) => {
+    if (activeRegion) {
+      const regionName = regionList.find((r) => r.slug === activeRegion)?.name?.toLowerCase()
+      if (regionName && trip.destination && !trip.destination.toLowerCase().includes(regionName)) {
+        return false
+      }
+    }
+    if (activeType && trip.tripType) {
+      if (!trip.tripType.toLowerCase().includes(activeType.toLowerCase())) {
+        return false
+      }
+    }
+    return true
+  })
+
+  const tripsToShow = filteredTrips.length > 0 ? filteredTrips : allTrips
+  const hasFilters = activeRegion || activeType || activeDate
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -68,6 +102,16 @@ export default async function DestinationsPage() {
           </p>
         </div>
       </section>
+
+      {/* Active filters */}
+      {hasFilters && (
+        <DestinationFilters
+          region={activeRegion}
+          type={activeType}
+          date={activeDate}
+          resultCount={filteredTrips.length}
+        />
+      )}
 
       {/* Region grid */}
       <section className="bg-background py-12 lg:py-16">
@@ -108,18 +152,20 @@ export default async function DestinationsPage() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-8 flex items-end justify-between">
             <h2 className="font-heading text-2xl font-bold text-foreground lg:text-3xl">
-              Popular adventure tours
+              {hasFilters ? "Matching adventure tours" : "Popular adventure tours"}
             </h2>
-            <Link
-              href="/destinations"
-              className="hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-hover md:flex"
-            >
-              View all tours
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            {!hasFilters && (
+              <Link
+                href="/destinations"
+                className="hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-hover md:flex"
+              >
+                View all tours
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            )}
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {tripList.slice(0, 4).map((trip) => (
+            {tripsToShow.slice(0, 4).map((trip) => (
               <TripCard key={trip.title} trip={trip} />
             ))}
           </div>

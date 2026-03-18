@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { getBlogPosts } from "@/lib/contentful"
 import { ContentCard } from "@/components/explore/content-card"
+import { BlogCategoryFilter } from "@/components/explore/blog-category-filter"
 
 export const metadata: Metadata = {
   title: "Blog | Travel tips, advice and inspiration - Explore",
@@ -29,9 +30,21 @@ const FALLBACK_POSTS = [
   { title: "The best places to stargaze around the world", excerpt: "From the Atacama Desert to the Scottish Highlands, discover the darkest skies and most spectacular stargazing spots.", imageUrl: "/images/explore/blog-stargazing.jpg", publishDate: "2026-02-07", category: "Wildlife", slug: "best-stargazing-spots", order: 6 },
 ]
 
-export default async function BlogPage() {
+interface BlogPageProps {
+  searchParams: Promise<{ category?: string }>
+}
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const sp = await searchParams
   const posts = await getBlogPosts()
-  const postList = posts?.length ? posts : FALLBACK_POSTS
+  const allPosts = posts?.length ? posts : FALLBACK_POSTS
+
+  const activeCategory = sp.category || "All"
+  const filteredPosts =
+    activeCategory === "All"
+      ? allPosts
+      : allPosts.filter((p) => p.category === activeCategory)
+  const postsToShow = filteredPosts.length > 0 ? filteredPosts : allPosts
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -48,30 +61,13 @@ export default async function BlogPage() {
       </section>
 
       {/* Category filters */}
-      <section className="border-b border-border bg-card">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
-            {CATEGORIES.map((cat, idx) => (
-              <button
-                key={cat}
-                className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                  idx === 0
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+      <BlogCategoryFilter categories={CATEGORIES} activeCategory={activeCategory} />
 
       {/* Blog post grid */}
       <section className="bg-background py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {postList.map((post) => (
+            {postsToShow.map((post) => (
               <ContentCard key={post.title} post={post} />
             ))}
           </div>
