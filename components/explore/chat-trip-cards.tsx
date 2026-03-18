@@ -116,8 +116,8 @@ interface ChatTripCardProps {
 
 export function ChatTripCard({ trip, onViewDetails }: ChatTripCardProps) {
   return (
-    <Card className="overflow-hidden border-border bg-card transition-shadow hover:shadow-md">
-      <div className="relative h-28 w-full">
+    <Card className="flex h-full flex-col overflow-hidden border-border bg-card transition-shadow hover:shadow-md">
+      <div className="relative h-28 w-full shrink-0">
         <Image
           src={trip.imageUrl}
           alt={trip.title}
@@ -129,8 +129,8 @@ export function ChatTripCard({ trip, onViewDetails }: ChatTripCardProps) {
           {trip.tripType}
         </Badge>
       </div>
-      <CardContent className="p-3">
-        <h4 className="mb-1.5 line-clamp-2 text-sm font-semibold leading-tight text-foreground">
+      <CardContent className="flex flex-1 flex-col p-3">
+        <h4 className="mb-1.5 min-h-[2.5rem] line-clamp-2 text-sm font-semibold leading-tight text-foreground">
           {trip.title}
         </h4>
         <div className="mb-2 flex items-center gap-1 text-xs text-muted-foreground">
@@ -140,29 +140,31 @@ export function ChatTripCard({ trip, onViewDetails }: ChatTripCardProps) {
           <Clock className="h-3 w-3 shrink-0" />
           <span>{trip.duration}</span>
         </div>
-        <div className="mb-3 flex items-center justify-between">
-          <div>
-            <span className="text-sm font-bold text-foreground">
-              {formatPrice(trip.price)}
-            </span>
-            {trip.originalPrice && trip.originalPrice > trip.price && (
-              <span className="ml-1 text-xs text-muted-foreground line-through">
-                {formatPrice(trip.originalPrice)}
+        <div className="mt-auto">
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <span className="text-sm font-bold text-foreground">
+                {formatPrice(trip.price)}
               </span>
-            )}
-            <span className="block text-[10px] text-muted-foreground">per person</span>
+              {trip.originalPrice && trip.originalPrice > trip.price && (
+                <span className="ml-1 text-xs text-muted-foreground line-through">
+                  {formatPrice(trip.originalPrice)}
+                </span>
+              )}
+              <span className="block text-[10px] text-muted-foreground">per person</span>
+            </div>
+            <PhysicalRatingDots rating={trip.physicalRating} />
           </div>
-          <PhysicalRatingDots rating={trip.physicalRating} />
+          <Button
+            size="sm"
+            variant="default"
+            className="w-full bg-primary text-primary-foreground text-xs hover:bg-hover"
+            onClick={() => onViewDetails?.(trip.slug)}
+          >
+            View Details
+            <ChevronRight className="ml-1 h-3 w-3" />
+          </Button>
         </div>
-        <Button
-          size="sm"
-          variant="default"
-          className="w-full bg-primary text-primary-foreground text-xs hover:bg-hover"
-          onClick={() => onViewDetails?.(trip.slug)}
-        >
-          View Details
-          <ChevronRight className="ml-1 h-3 w-3" />
-        </Button>
       </CardContent>
     </Card>
   )

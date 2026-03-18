@@ -5,6 +5,7 @@ import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai"
 import type { UIMessage } from "ai"
 import { MessageCircle, X, Sparkles, ArrowDown, Send, Maximize2, Minimize2 } from "lucide-react"
+import ReactMarkdown from "react-markdown"
 import { cn } from "@/lib/utils"
 import { ExploreLogo } from "./explore-logo"
 import { ChatTripGrid, ChatTripDetail, ChatDeparturesTable } from "./chat-trip-cards"
@@ -187,8 +188,8 @@ export function TravelChat() {
         <div key={toolCallId || index} className="my-2">
           <ChatDeparturesTable
             departures={departures as never}
-            tripTitle={(output.tripTitle || "") as string}
-            tripSlug={(output.tripSlug || "") as string}
+            tourTitle={(output.tripTitle || output.tourTitle || "") as string}
+            tourSlug={(output.tripSlug || output.tourSlug || "") as string}
           />
         </div>
       )
@@ -294,7 +295,24 @@ export function TravelChat() {
                               : "bg-secondary text-secondary-foreground rounded-bl-md"
                           )}
                         >
-                          <p className="whitespace-pre-wrap">{text}</p>
+                          <ReactMarkdown
+                            components={{
+                              p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+                              strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                              ul: ({ children }) => <ul className="mb-1 ml-3 list-disc space-y-0.5 last:mb-0">{children}</ul>,
+                              ol: ({ children }) => <ol className="mb-1 ml-3 list-decimal space-y-0.5 last:mb-0">{children}</ol>,
+                              li: ({ children }) => <li>{children}</li>,
+                              h2: ({ children }) => <p className="mb-1 font-semibold">{children}</p>,
+                              h3: ({ children }) => <p className="mb-1 font-semibold">{children}</p>,
+                              a: ({ href, children }) => (
+                                <a href={href} target="_blank" rel="noopener noreferrer" className="underline text-primary">
+                                  {children}
+                                </a>
+                              ),
+                            }}
+                          >
+                            {text}
+                          </ReactMarkdown>
                         </div>
                       </div>
                     )}
