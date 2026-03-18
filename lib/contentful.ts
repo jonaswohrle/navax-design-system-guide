@@ -190,3 +190,170 @@ export async function getFooterLinks() {
   const { items } = await fetchContentful<FooterLinkFields>("footerLink", { order: "fields.order" })
   return items.map((i) => i.fields)
 }
+
+// --------------- Explore Travel Content Types ---------------
+
+export interface ExploreHeroFields {
+  title: string
+  subtitle?: string
+  ctaText?: string
+  ctaLink?: string
+  backgroundImageUrl?: string
+}
+
+export interface PromoBannerFields {
+  text: string
+  linkText?: string
+  linkUrl?: string
+  isActive?: boolean
+}
+
+export interface TrustPillarFields {
+  title: string
+  description?: string
+  icon?: string
+  order?: number
+}
+
+export interface PromoCardFields {
+  title: string
+  subtitle?: string
+  imageUrl?: string
+  linkUrl?: string
+  order?: number
+}
+
+export interface TripListingFields {
+  title: string
+  destination?: string
+  tripType?: string
+  duration?: string
+  price?: number
+  originalPrice?: number
+  imageUrl?: string
+  badges?: string[]
+  tripCode?: string
+  slug?: string
+  order?: number
+}
+
+export interface DestinationRegionFields {
+  name: string
+  imageUrl?: string
+  slug?: string
+  description?: string
+  tripCount?: number
+  order?: number
+}
+
+export interface ExperienceTypeFields {
+  name: string
+  description?: string
+  imageUrl?: string
+  slug?: string
+  order?: number
+}
+
+export interface AboutSectionFields {
+  number?: string
+  title: string
+  content?: string
+  order?: number
+}
+
+export interface BlogPostFields {
+  title: string
+  excerpt?: string
+  imageUrl?: string
+  publishDate?: string
+  category?: string
+  slug?: string
+  content?: string
+  order?: number
+}
+
+export interface OfferCardFields {
+  title: string
+  description?: string
+  imageUrl?: string
+  linkUrl?: string
+  discountText?: string
+  order?: number
+}
+
+export interface ReviewItemFields {
+  rating?: number
+  text: string
+  customerName: string
+  tripName?: string
+  date?: string
+  order?: number
+}
+
+export interface FlexPolicyFields {
+  heading: string
+  description?: string
+  linkUrl?: string
+}
+
+// --------------- Explore Fetchers ---------------
+
+export async function getExploreHero() {
+  const { items } = await fetchContentful<ExploreHeroFields>("exploreHero", { limit: "1" })
+  return items[0]?.fields ?? null
+}
+
+export async function getPromoBanner() {
+  const { items } = await fetchContentful<PromoBannerFields>("promoBanner", { limit: "1" })
+  return items[0]?.fields ?? null
+}
+
+export async function getTrustPillars() {
+  const { items } = await fetchContentful<TrustPillarFields>("trustPillar", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getPromoCards() {
+  const { items } = await fetchContentful<PromoCardFields>("promoCard", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getTripListings() {
+  const { items } = await fetchContentful<TripListingFields>("tripListing", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getDestinationRegions() {
+  const { items } = await fetchContentful<DestinationRegionFields>("destinationRegion", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getExperienceTypes() {
+  const { items } = await fetchContentful<ExperienceTypeFields>("experienceType", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getAboutSections() {
+  const { items } = await fetchContentful<AboutSectionFields>("aboutSection", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getBlogPosts() {
+  const { items } = await fetchContentful<BlogPostFields>("blogPost", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getOfferCards() {
+  const { items } = await fetchContentful<OfferCardFields>("offerCard", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getReviewItems() {
+  const { items } = await fetchContentful<ReviewItemFields>("reviewItem", { order: "fields.order" })
+  return items.map((i) => i.fields)
+}
+
+export async function getFlexPolicy() {
+  const { items } = await fetchContentful<FlexPolicyFields>("flexPolicy", { limit: "1" })
+  return items[0]?.fields ?? null
+}

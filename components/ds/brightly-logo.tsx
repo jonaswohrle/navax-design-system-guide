@@ -21,6 +21,7 @@ export function BrightlyLogo({ className, variant = "dark", width = 140 }: Brigh
       alt="Brightly - A Siemens Company"
       width={width}
       height={height}
+      style={{ width: "auto", height: "auto" }}
       className={cn(
         "object-contain",
         variant === "light" && "brightness-0 invert",
