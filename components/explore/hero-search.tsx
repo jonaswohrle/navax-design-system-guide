@@ -3,24 +3,15 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { MapPin, Compass, Calendar, Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-
-const VIDEO_URL =
-  "https://s3.eu-west-1.amazonaws.com/assetbank-eu-west-1-repurposed/explore_e845492678176c101f40037775672ea9%2Fc78%2FDGUUNJpQ5gkCnLDG2JSQWjKrmUtPZ4oT.mp4"
+import { MapPin, Compass, Calendar, ChevronRight } from "lucide-react"
+import { WaveDivider } from "./wave-divider"
 
 interface HeroSearchProps {
-  title?: string
-  subtitle?: string
-  ctaText?: string
   backgroundImageUrl?: string
 }
 
 export function HeroSearch({
-  title = "Unforgettable adventures.",
-  subtitle = "From bold year-long experiences, to small and unscripted moments of joy, our small group adventures create stories to tell for a lifetime.",
-  ctaText = "Search",
-  backgroundImageUrl = "/images/explore/hero-mountains.jpg",
+  backgroundImageUrl = "/images/explore/hero-santorini.png",
 }: HeroSearchProps) {
   const router = useRouter()
   const [where, setWhere] = useState("")
@@ -33,124 +24,154 @@ export function HeroSearch({
     if (tripType) params.set("type", tripType)
     if (when) params.set("date", when)
     const qs = params.toString()
-    router.push(`/destinations${qs ? `?${qs}` : ""}`)
+    router.push(`/search${qs ? `?${qs}` : ""}`)
   }
 
   return (
-    <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden lg:min-h-[80vh]">
-      {/* Video background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover"
-        poster={backgroundImageUrl}
-      >
-        <source src={VIDEO_URL} type="video/mp4" />
-      </video>
-      {/* Fallback image for when video doesn't load */}
-      <Image
-        src={backgroundImageUrl}
-        alt=""
-        fill
-        className="object-cover"
-        priority
-        sizes="100vw"
-        aria-hidden="true"
-      />
-      <div className="absolute inset-0 bg-black/40" />
+    <>
+      {/* Hero image + overlay text */}
+      <section className="relative flex min-h-[55vh] items-center overflow-hidden lg:min-h-[70vh]">
+        {/* Background image */}
+        <Image
+          src={backgroundImageUrl}
+          alt="Scenic adventure travel destination"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
 
-      <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-16 text-center">
-        <div className="mb-8 inline-block rounded bg-explore-yellow/90 px-6 py-3 lg:px-8 lg:py-4">
-          <h1 className="font-heading text-3xl font-bold text-explore-yellow-foreground lg:text-5xl">
-            {title}
-          </h1>
-          <p className="mt-1 text-sm text-explore-yellow-foreground/80 lg:text-base">
-            {subtitle}
-          </p>
+        {/* Subtle dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/30" />
+
+        {/* Decorative white circle line art (matching real site) */}
+        <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 opacity-20 lg:opacity-30" aria-hidden="true">
+          <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="350" cy="250" r="180" stroke="white" strokeWidth="1.5" />
+            <circle cx="350" cy="250" r="130" stroke="white" strokeWidth="1" />
+            <path d="M200 100 Q350 50 450 200" stroke="white" strokeWidth="1" fill="none" />
+            <path d="M180 350 Q300 450 480 300" stroke="white" strokeWidth="1" fill="none" />
+          </svg>
         </div>
 
-        {/* Search bar - matching Explore's style */}
-        <div className="mx-auto max-w-3xl rounded-lg bg-white p-2 shadow-xl lg:p-3">
-          <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-0">
-            {/* Where */}
-            <div className="flex flex-1 items-center gap-2 border-b border-border px-3 py-2 lg:border-b-0 lg:border-r">
-              <MapPin className="h-4 w-4 shrink-0 text-primary" />
-              <select
-                className="w-full bg-transparent text-sm text-foreground outline-none"
-                value={where}
-                onChange={(e) => setWhere(e.target.value)}
-                aria-label="Where to?"
-              >
-                <option value="">Where would you like to go?</option>
-                <option value="europe">Europe</option>
-                <option value="asia">Asia</option>
-                <option value="africa">Africa</option>
-                <option value="south-america">South America</option>
-                <option value="central-america">Central America</option>
-                <option value="middle-east">Middle East</option>
-                <option value="polar">Polar Regions</option>
-                <option value="north-america">North America</option>
-                <option value="caribbean">Caribbean</option>
-                <option value="australasia">Australasia</option>
-              </select>
-            </div>
+        {/* Hero text -- matching real explore.co.uk style */}
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 lg:px-8">
+          <p className="mb-1 font-serif text-xl italic text-explore-yellow drop-shadow-lg lg:text-2xl">
+            {"Don't just travel,"}
+          </p>
+          <h1 className="mb-3 font-serif text-7xl font-bold text-explore-yellow drop-shadow-lg lg:text-[120px] lg:leading-[0.9]">
+            Explore!
+          </h1>
+          <p className="text-xl font-bold text-white drop-shadow-lg lg:text-3xl">
+            Small group adventures
+          </p>
+        </div>
+      </section>
 
-            {/* Trip type */}
-            <div className="flex flex-1 items-center gap-2 border-b border-border px-3 py-2 lg:border-b-0 lg:border-r">
-              <Compass className="h-4 w-4 shrink-0 text-primary" />
-              <select
-                className="w-full bg-transparent text-sm text-foreground outline-none"
-                value={tripType}
-                onChange={(e) => setTripType(e.target.value)}
-                aria-label="Trip type"
-              >
-                <option value="">What type of trip?</option>
-                <option value="discovery">Discovery</option>
-                <option value="walking">Walking & Trekking</option>
-                <option value="cycling">Cycling</option>
-                <option value="wildlife">Wildlife</option>
-                <option value="family">Family</option>
-                <option value="polar">Polar</option>
-                <option value="boat">Boat Journeys</option>
-                <option value="upgraded">Upgraded</option>
-              </select>
-            </div>
+      {/* Wave divider + search bar on the red curve */}
+      <div className="relative">
+        <WaveDivider color="hsl(var(--primary))" />
 
-            {/* When */}
-            <div className="flex flex-1 items-center gap-2 px-3 py-2">
-              <Calendar className="h-4 w-4 shrink-0 text-primary" />
-              <select
-                className="w-full bg-transparent text-sm text-foreground outline-none"
-                value={when}
-                onChange={(e) => setWhen(e.target.value)}
-                aria-label="When?"
-              >
-                <option value="">When?</option>
-                <option value="apr-2026">April 2026</option>
-                <option value="may-2026">May 2026</option>
-                <option value="jun-2026">June 2026</option>
-                <option value="jul-2026">July 2026</option>
-                <option value="aug-2026">August 2026</option>
-                <option value="sep-2026">September 2026</option>
-                <option value="oct-2026">October 2026</option>
-                <option value="nov-2026">November 2026</option>
-                <option value="dec-2026">December 2026</option>
-                <option value="jan-2027">January 2027</option>
-              </select>
-            </div>
+        {/* Search bar sits ON the red wave */}
+        <div className="bg-primary pb-10 pt-2">
+          <div className="mx-auto max-w-5xl px-4">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-4">
+              {/* Where */}
+              <div className="flex-1">
+                <label className="mb-1 block text-xs font-semibold text-primary-foreground">
+                  Where would you like to go?
+                </label>
+                <div className="flex items-center gap-2 rounded border border-white/20 bg-white px-3 py-2.5">
+                  <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <select
+                    className="w-full bg-transparent text-sm text-foreground outline-none"
+                    value={where}
+                    onChange={(e) => setWhere(e.target.value)}
+                    aria-label="Destination"
+                  >
+                    <option value="">Search for a destination...</option>
+                    <option value="europe">Europe</option>
+                    <option value="asia">Asia</option>
+                    <option value="africa">Africa</option>
+                    <option value="south-america">South America</option>
+                    <option value="central-america">Central America</option>
+                    <option value="middle-east">Middle East</option>
+                    <option value="polar">Polar</option>
+                    <option value="north-america">North America</option>
+                    <option value="caribbean">Caribbean</option>
+                    <option value="australasia">Australasia</option>
+                  </select>
+                </div>
+              </div>
 
-            <Button
-              onClick={handleSearch}
-              className="shrink-0 rounded-md bg-explore-yellow px-6 py-2.5 text-sm font-bold text-explore-yellow-foreground hover:bg-explore-yellow/90"
-            >
-              <Search className="mr-1.5 h-4 w-4" />
-              {ctaText}
-            </Button>
+              {/* Trip type */}
+              <div className="flex-1">
+                <label className="mb-1 block text-xs font-semibold text-primary-foreground">
+                  What type of trip?
+                </label>
+                <div className="flex items-center gap-2 rounded border border-white/20 bg-white px-3 py-2.5">
+                  <Compass className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <select
+                    className="w-full bg-transparent text-sm text-foreground outline-none"
+                    value={tripType}
+                    onChange={(e) => setTripType(e.target.value)}
+                    aria-label="Trip type"
+                  >
+                    <option value="">Any type</option>
+                    <option value="discovery">Classic Discovery</option>
+                    <option value="walking">Walking &amp; Trekking</option>
+                    <option value="cycling">Cycling</option>
+                    <option value="wildlife">Wildlife</option>
+                    <option value="family">Family</option>
+                    <option value="polar">Polar</option>
+                    <option value="boat">Boat Journeys</option>
+                    <option value="upgraded">Explore Upgraded</option>
+                    <option value="solo">Solo</option>
+                    <option value="food-drink">Food &amp; Drink</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* When */}
+              <div className="flex-1">
+                <label className="mb-1 block text-xs font-semibold text-primary-foreground">
+                  When would you like to go?
+                </label>
+                <div className="flex items-center gap-2 rounded border border-white/20 bg-white px-3 py-2.5">
+                  <Calendar className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <select
+                    className="w-full bg-transparent text-sm text-foreground outline-none"
+                    value={when}
+                    onChange={(e) => setWhen(e.target.value)}
+                    aria-label="When?"
+                  >
+                    <option value="">Anytime</option>
+                    <option value="apr-2026">April 2026</option>
+                    <option value="may-2026">May 2026</option>
+                    <option value="jun-2026">June 2026</option>
+                    <option value="jul-2026">July 2026</option>
+                    <option value="aug-2026">August 2026</option>
+                    <option value="sep-2026">September 2026</option>
+                    <option value="oct-2026">October 2026</option>
+                    <option value="nov-2026">November 2026</option>
+                    <option value="dec-2026">December 2026</option>
+                    <option value="jan-2027">January 2027</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={handleSearch}
+                className="flex items-center justify-center gap-2 rounded bg-[#8B1A1A] px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#6B1515] lg:self-end"
+              >
+                {"Let's go!"}
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </>
   )
 }

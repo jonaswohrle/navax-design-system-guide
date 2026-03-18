@@ -31,7 +31,7 @@ const FALLBACK_HERO = {
   subtitle: "Small group adventures to inspire the soul",
   ctaText: "Let's go!",
   ctaLink: "/destinations",
-  backgroundImageUrl: "/images/explore/hero-mountains.jpg",
+  backgroundImageUrl: "/images/explore/hero-santorini.png",
 }
 
 const FALLBACK_TRIPS = [
@@ -75,12 +75,7 @@ export default async function Page() {
       <SiteHeader promoBanner={promoBanner} />
 
       {/* Hero with search */}
-      <HeroSearch
-        title={h.title}
-        subtitle={h.subtitle}
-        ctaText={h.ctaText}
-        backgroundImageUrl={h.backgroundImageUrl}
-      />
+      <HeroSearch backgroundImageUrl={h.backgroundImageUrl || "/images/explore/hero-santorini.png"} />
 
       {/* Trust strip */}
       <TrustStrip pillars={pillars?.length ? pillars : undefined} />
@@ -88,18 +83,20 @@ export default async function Page() {
       {/* Promo grid */}
       <PromoGrid promos={promos?.length ? promos : undefined} />
 
-      {/* Brand story */}
-      <section className="bg-background py-12 lg:py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <h2 className="mb-4 font-heading text-2xl font-bold text-foreground lg:text-3xl text-balance">
-            The adventure travel experts
-          </h2>
-          <p className="mb-3 text-sm font-medium uppercase tracking-wider text-primary">
-            Over 40 years of adventure
-          </p>
-          <p className="text-base leading-relaxed text-muted-foreground lg:text-lg">
-            {"We've been taking small groups on adventure holidays for over 40 years. With more than 500 tours across over 100 countries, we offer an incredible range of trips -- from classic discovery tours to walking, cycling, wildlife, polar expeditions and family adventures. Our average group size of just 11 means you'll travel with like-minded adventurers, guided by expert leaders who bring every destination to life. Whether you're a solo traveller, couple, or group of friends, there's an Explore trip waiting for you."}
-          </p>
+      {/* Brand story -- matching real site layout */}
+      <section className="bg-secondary py-12 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="max-w-2xl">
+            <h2 className="mb-4 font-heading text-3xl font-bold text-foreground lg:text-4xl text-balance">
+              The adventure travel experts
+            </h2>
+            <p className="mb-3 text-sm font-medium uppercase tracking-wider text-primary">
+              Over 40 years of adventure
+            </p>
+            <p className="text-base leading-relaxed text-muted-foreground lg:text-lg">
+              {"Since launching in 1981 with only six tours in a four-page brochure, Explore has grown to offer over 500 trips from classic 'discovery' group tours, solo traveller holidays and active family adventures, to walking holidays and cycling trips. Choose from around 100 countries and explore cultures, landscapes, wildlife and communities from Asia to Africa, the Arctic to the Americas."}
+            </p>
+          </div>
         </div>
       </section>
 

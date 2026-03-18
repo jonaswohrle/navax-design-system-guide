@@ -1,4 +1,5 @@
 import { Sparkles, Users, UserCheck, Heart } from "lucide-react"
+import { WaveUnderline } from "./wave-underline"
 import type { TrustPillarFields } from "@/lib/contentful"
 
 const ICON_MAP: Record<string, React.ReactNode> = {
@@ -43,22 +44,23 @@ export function TrustStrip({ pillars }: TrustStripProps) {
   const items = pillars && pillars.length > 0 ? pillars : FALLBACK_PILLARS
 
   return (
-    <section className="bg-secondary py-12 lg:py-16">
+    <section className="bg-card py-14 lg:py-20">
       <div className="mx-auto max-w-7xl px-4">
-        <h2 className="mb-2 text-center font-heading text-2xl font-bold text-foreground lg:text-3xl text-balance">
-          An adventure travel company you can trust
-        </h2>
-        <p className="mb-10 text-center text-sm text-muted-foreground lg:text-base">
-          {"There's a reason why 98% of customers say they'd book an adventure with us again."}
-        </p>
+        {/* Heading with wavy red underline */}
+        <div className="mb-12 lg:mb-14">
+          <h2 className="font-heading text-3xl font-bold text-foreground lg:text-4xl text-balance">
+            An adventure travel company you can trust
+          </h2>
+          <WaveUnderline className="mt-3 w-40 lg:w-48" />
+        </div>
 
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((pillar) => (
-            <div key={pillar.title} className="text-center">
-              <div className="mb-3 flex justify-center text-primary">
+            <div key={pillar.title}>
+              <div className="mb-3 text-primary">
                 {ICON_MAP[pillar.icon || "Sparkles"] ?? <Sparkles className="h-8 w-8" />}
               </div>
-              <h3 className="mb-2 font-heading text-lg font-semibold text-foreground">
+              <h3 className="mb-2 font-heading text-base font-bold text-primary">
                 {pillar.title}
               </h3>
               {pillar.description && (

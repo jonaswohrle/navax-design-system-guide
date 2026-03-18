@@ -5,15 +5,16 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, Phone, Search, Heart, User, ChevronDown } from "lucide-react"
 import { ExploreLogo } from "./explore-logo"
+import { MegaMenu } from "./mega-menu"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { useAuth } from "@/lib/auth-context"
 
 const NAV_LINKS = [
-  { label: "Destinations", href: "/destinations" },
-  { label: "Experiences", href: "/experiences" },
-  { label: "About", href: "/about-us" },
-  { label: "Offers", href: "/offers" },
+  { label: "Destinations", href: "/destinations", hasMega: true as const, megaType: "destinations" as const },
+  { label: "Experiences", href: "/experiences", hasMega: true as const, megaType: "experiences" as const },
+  { label: "About", href: "/about-us", hasMega: false as const },
+  { label: "Offers", href: "/offers", hasMega: false as const },
 ]
 
 interface SiteHeaderProps {
@@ -28,6 +29,7 @@ interface SiteHeaderProps {
 export function SiteHeader({ promoBanner }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [activeMega, setActiveMega] = useState<"destinations" | "experiences" | null>(null)
   const pathname = usePathname()
   const { user, wishlist } = useAuth()
 
@@ -57,33 +59,44 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
         </div>
       </div>
 
-      {/* Main nav bar -- EXPLORE RED with white text/logo */}
-      <nav className={`bg-primary transition-shadow duration-200 ${scrolled ? "shadow-md" : ""}`}>
+      {/* Main nav bar -- EXPLORE RED */}
+      <nav
+        className={`relative bg-primary transition-shadow duration-200 ${scrolled ? "shadow-md" : ""}`}
+        onMouseLeave={() => setActiveMega(null)}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 lg:py-2.5">
-          {/* Logo -- white variant on red background */}
-          <Link href="/" className="shrink-0" aria-label="Explore home">
-            <ExploreLogo variant="white" width={120} />
+          {/* Logo */}
+          <Link href="/" className="shrink-0" aria-label="Explore home" onMouseEnter={() => setActiveMega(null)}>
+            <ExploreLogo variant="white" width={130} />
           </Link>
 
-          {/* Desktop nav links -- white text on red */}
+          {/* Desktop nav links */}
           <ul className="hidden items-center gap-0.5 lg:flex">
             {NAV_LINKS.map((link) => (
-              <li key={link.href}>
+              <li
+                key={link.href}
+                onMouseEnter={() => {
+                  if (link.hasMega) setActiveMega(link.megaType)
+                  else setActiveMega(null)
+                }}
+              >
                 <Link
                   href={link.href}
                   className={`flex items-center gap-0.5 rounded px-3 py-2 text-sm font-medium transition-colors hover:bg-white/10 ${
-                    pathname === link.href ? "text-white" : "text-white/90"
+                    pathname?.startsWith(link.href) || activeMega === (link.hasMega ? link.megaType : null)
+                      ? "text-white underline underline-offset-4"
+                      : "text-white/90"
                   }`}
                 >
                   {link.label}
-                  <ChevronDown className="h-3 w-3 text-white/60" />
+                  {link.hasMega && <ChevronDown className="h-3 w-3 text-white/60" />}
                 </Link>
               </li>
             ))}
           </ul>
 
-          {/* Right icons -- white on red, matching real site */}
-          <div className="flex items-center gap-1">
+          {/* Right icons */}
+          <div className="flex items-center gap-1" onMouseEnter={() => setActiveMega(null)}>
             <Link
               href="/my-explore"
               className="flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
@@ -158,9 +171,14 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
             </Sheet>
           </div>
         </div>
+
+        {/* Mega menu dropdown */}
+        {activeMega && (
+          <MegaMenu type={activeMega} onClose={() => setActiveMega(null)} />
+        )}
       </nav>
 
-      {/* Promo banner strip -- yellow with dark text */}
+      {/* Promo banner strip -- yellow */}
       {promoBanner?.text && promoBanner.isActive !== false && (
         <div className="bg-explore-yellow text-center">
           <div className="mx-auto max-w-7xl px-4 py-2 text-xs font-medium text-explore-yellow-foreground">
