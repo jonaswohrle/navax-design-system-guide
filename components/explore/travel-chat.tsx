@@ -123,20 +123,23 @@ export function TravelChat() {
                   toolCallId,
                   output: JSON.stringify(preferences),
                 })
+                /* Explicitly send the preferences as a user message so the model can call searchTrips */
+                const summary = [
+                  preferences.tripType && `Trip type: ${preferences.tripType}`,
+                  preferences.destination && `Destination: ${preferences.destination}`,
+                  preferences.duration && `Duration: ${preferences.duration}`,
+                  preferences.budget && `Budget: ${preferences.budget}`,
+                  preferences.physicalRating && `Activity level: ${preferences.physicalRating}`,
+                ].filter(Boolean).join(", ")
+                sendMessage({
+                  text: `Based on my preferences: ${summary}. Please search for matching trips and show me the results.`,
+                })
               }}
             />
           </div>
         )
       }
-      /* output-available: guided selling is done, model will process */
-      if (state === "output-available") {
-        return (
-          <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
-            <Sparkles className="h-3 w-3 animate-spin" />
-            <span>Finding trips based on your preferences...</span>
-          </div>
-        )
-      }
+      /* output-available: guided selling done, preferences sent as follow-up */
       return null
     }
 
