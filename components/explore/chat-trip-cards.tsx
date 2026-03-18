@@ -191,7 +191,7 @@ export function ChatTripGrid({ trips, totalFound, onViewDetails }: ChatTripGridP
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-3 @container">
         {trips.map((trip) => (
           <ChatTripCard key={trip.slug} trip={trip} onViewDetails={onViewDetails} />
         ))}
