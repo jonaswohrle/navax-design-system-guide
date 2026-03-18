@@ -1,7 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Heart, Clock } from "lucide-react"
+import { Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { WishlistButton } from "./wishlist-button"
 import type { TripListingFields } from "@/lib/contentful"
 
 const BADGE_STYLES: Record<string, string> = {
@@ -41,12 +42,7 @@ export function TripCard({ trip }: TripCardProps) {
           </div>
         )}
 
-        <button
-          className="absolute right-3 top-3 rounded-full bg-card/80 p-2 text-foreground/60 backdrop-blur-sm transition-colors hover:bg-card hover:text-primary"
-          aria-label={`Save ${trip.title} to wishlist`}
-        >
-          <Heart className="h-4 w-4" />
-        </button>
+        <WishlistButton tourSlug={trip.slug || "tour"} className="absolute right-3 top-3" />
       </div>
 
       <div className="flex flex-col gap-3 p-4">

@@ -7,6 +7,7 @@ import { TourItinerary } from "@/components/explore/tour-itinerary"
 import { BookingTable } from "@/components/explore/booking-table"
 import { TripCard } from "@/components/explore/trip-card"
 import { TrustStrip } from "@/components/explore/trust-strip"
+import { WishlistButton } from "@/components/explore/wishlist-button"
 import { Button } from "@/components/ui/button"
 
 export function generateStaticParams() {
@@ -53,9 +54,12 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
           <p className="mb-1 text-sm font-medium text-primary-foreground/80">
             {tour.destination} {tour.tripType}
           </p>
-          <h1 className="mb-4 max-w-3xl font-heading text-3xl font-bold text-primary-foreground lg:text-5xl text-balance">
-            {tour.title}
-          </h1>
+          <div className="mb-4 flex items-start gap-3">
+            <h1 className="max-w-3xl font-heading text-3xl font-bold text-primary-foreground lg:text-5xl text-balance">
+              {tour.title}
+            </h1>
+            <WishlistButton tourSlug={tour.slug} size="md" className="mt-1 bg-white/20 text-white hover:bg-white/30" />
+          </div>
 
           <div className="flex flex-wrap items-center gap-4 text-sm text-primary-foreground/90">
             <span className="flex items-center gap-1.5">
@@ -243,6 +247,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
           <BookingTable
             departures={tour.departures}
             tripTitle={tour.title}
+            tripSlug={tour.slug}
             duration={tour.duration}
           />
         </div>
@@ -279,6 +284,34 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
               <p className="text-xs font-medium text-foreground">{review.name}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="border-t border-border bg-secondary">
+        <div className="mx-auto max-w-7xl px-4 py-10 lg:py-14">
+          <h2 className="mb-6 font-heading text-2xl font-bold text-foreground">
+            Frequently asked questions
+          </h2>
+          <div className="flex flex-col gap-3">
+            {[
+              { q: "Are flights included?", a: "Flights are not included in the tour price. This gives you flexibility to arrange your own flights, use air miles, or extend your stay." },
+              { q: "What is the group size?", a: `This trip has a group size of ${tour.groupSize} people. Our small groups ensure a more personal, authentic experience.` },
+              { q: "Can I book as a solo traveller?", a: "Absolutely! Over half our travellers come on their own. It's one of the best ways to travel, and you'll quickly make friends in the group." },
+              { q: "What fitness level do I need?", a: `This trip has a physical rating of ${tour.physicalRating}/5. Check the tour overview for specific activity details.` },
+              { q: "What about travel insurance?", a: "We strongly recommend comprehensive travel insurance for all our trips. This should cover cancellation, medical expenses, and repatriation." },
+              { q: "Can I change my booking?", a: "Yes, with Explore Flex you can change your booking up to 60 days before departure with no amendment fees." },
+            ].map((faq) => (
+              <details key={faq.q} className="group rounded-lg border border-border bg-card">
+                <summary className="cursor-pointer px-5 py-4 text-sm font-semibold text-foreground marker:text-primary">
+                  {faq.q}
+                </summary>
+                <p className="px-5 pb-4 text-sm leading-relaxed text-muted-foreground">
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

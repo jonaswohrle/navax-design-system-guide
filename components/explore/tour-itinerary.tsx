@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState } from "react" 
 import { ChevronDown, UtensilsCrossed, Hotel } from "lucide-react"
 import type { TourItineraryDay } from "@/lib/tour-data"
 

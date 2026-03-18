@@ -1,3 +1,4 @@
+// Tour data for Explore travel site
 export interface TourDeparture {
   id: string
   startDate: string

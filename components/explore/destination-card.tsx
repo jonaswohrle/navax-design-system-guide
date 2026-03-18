@@ -9,7 +9,7 @@ interface DestinationCardProps {
 export function DestinationCard({ region }: DestinationCardProps) {
   return (
     <Link
-      href={`/destinations#${region.slug || ""}`}
+      href={`/destinations/${region.slug || ""}`}
       className="group relative block overflow-hidden rounded-xl"
     >
       <div className="relative aspect-[4/3]">

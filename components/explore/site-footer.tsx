@@ -1,81 +1,81 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 import { ExploreLogo } from "./explore-logo"
+import { Facebook, Instagram, Youtube } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
-const FOOTER_COLUMNS = [
+const FOOTER_COLS = [
   {
-    title: "About",
-    links: [
-      { label: "About Explore", href: "/about-us" },
-      { label: "Why Book With Us", href: "/about-us" },
-      { label: "Meet The Team", href: "/about-us" },
-      { label: "Careers", href: "/about-us" },
-      { label: "Press & Media", href: "/about-us" },
-    ],
-  },
-  {
-    title: "Top Destinations",
-    links: [
-      { label: "Japan", href: "/destinations" },
-      { label: "Italy", href: "/destinations" },
-      { label: "Morocco", href: "/destinations" },
-      { label: "India", href: "/destinations" },
-      { label: "Vietnam", href: "/destinations" },
-      { label: "Sri Lanka", href: "/destinations" },
-      { label: "Turkey", href: "/destinations" },
-      { label: "Costa Rica", href: "/destinations" },
-    ],
-  },
-  {
-    title: "Experiences",
-    links: [
-      { label: "Discovery", href: "/experiences" },
-      { label: "Walking & Trekking", href: "/experiences" },
-      { label: "Cycling", href: "/experiences" },
-      { label: "Family", href: "/experiences" },
-      { label: "Wildlife", href: "/experiences" },
-      { label: "Polar", href: "/experiences" },
-      { label: "Explore Upgraded", href: "/experiences" },
-    ],
-  },
-  {
-    title: "Customer Service",
+    title: "Popular links",
     links: [
       { label: "Contact Us", href: "/about-us" },
-      { label: "FAQs", href: "/about-us" },
-      { label: "Manage My Booking", href: "/about-us" },
-      { label: "Travel Insurance", href: "/about-us" },
-      { label: "Explore Flex", href: "/essential-information/explore-flex" },
+      { label: "Support Site", href: "/about-us" },
+      { label: "Explore Loyalty Club", href: "/about-us" },
+      { label: "The Blog", href: "/blog" },
+      { label: "Careers", href: "/about-us" },
+      { label: "Privacy Centre", href: "/about-us" },
+    ],
+  },
+  {
+    title: "Purpose",
+    links: [
+      { label: "B Corp", href: "/about-us" },
+      { label: "Purpose Paper", href: "/about-us" },
+      { label: "Carbon Measurement", href: "/about-us" },
+      { label: "Climate Change", href: "/about-us" },
+      { label: "Animal Protection Policy", href: "/about-us" },
+      { label: "The Explore Foundation", href: "/about-us" },
+    ],
+  },
+  {
+    title: "Booking",
+    links: [
+      { label: "Essential Information", href: "/essential-information" },
+      { label: "Travel Updates", href: "/blog" },
+      { label: "Financial Protection", href: "/about-us" },
+      { label: "Booking Conditions", href: "/about-us" },
+      { label: "Travel Agents", href: "/about-us" },
+      { label: "My Explore", href: "/my-explore" },
     ],
   },
 ]
 
-const TRUST_BADGES = ["ABTA Protected", "ATOL Protected", "B Corp Certified", "Feefo Platinum"]
+const TRUST_BADGES = ["IATA", "ABTA No. 5307", "ATOL Protected", "Travel Aware", "B Corp"]
 
 export function SiteFooter() {
-  return (
-    <footer className="bg-foreground text-background">
-      <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16">
-        <div className="mb-10 flex flex-col gap-8 lg:flex-row lg:justify-between">
-          <div className="shrink-0">
-            <ExploreLogo variant="white" width={120} />
-            <p className="mt-4 max-w-xs text-sm text-background/70">
-              Small group adventure holidays to over 100 countries worldwide. Award-winning tours with expert leaders since 1981.
-            </p>
-          </div>
+  const [email, setEmail] = useState("")
+  const [subscribed, setSubscribed] = useState(false)
 
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-            {FOOTER_COLUMNS.map((col) => (
+  return (
+    <footer>
+      {/* Trust badges row */}
+      <div className="border-t border-border bg-card">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-6 px-4 py-6">
+          {TRUST_BADGES.map((badge) => (
+            <span
+              key={badge}
+              className="rounded border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground"
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Main footer */}
+      <div className="bg-foreground text-background">
+        <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16">
+          <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
+            {FOOTER_COLS.map((col) => (
               <div key={col.title}>
-                <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-background/50">
-                  {col.title}
-                </h3>
+                <h3 className="mb-3 text-sm font-bold text-background">{col.title}</h3>
                 <ul className="flex flex-col gap-2">
                   {col.links.map((link) => (
                     <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="text-sm text-background/70 transition-colors hover:text-primary"
-                      >
+                      <Link href={link.href} className="text-xs text-background/60 transition-colors hover:text-primary">
                         {link.label}
                       </Link>
                     </li>
@@ -83,35 +83,63 @@ export function SiteFooter() {
                 </ul>
               </div>
             ))}
+
+            {/* Newsletter signup */}
+            <div className="col-span-2 md:col-span-4 lg:col-span-2">
+              <h3 className="mb-3 text-sm font-bold text-background">Keep up to date</h3>
+              <p className="mb-3 text-xs text-background/60">
+                Sign up to our newsletter for latest news, deals and travel information
+              </p>
+              {subscribed ? (
+                <p className="text-sm font-semibold text-primary">Thanks for subscribing!</p>
+              ) : (
+                <form
+                  className="flex gap-2"
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    if (email) setSubscribed(true)
+                  }}
+                >
+                  <Input
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-9 border-background/20 bg-background/10 text-xs text-background placeholder:text-background/40"
+                    required
+                  />
+                  <Button type="submit" size="sm" className="h-9 bg-primary text-xs text-primary-foreground hover:bg-hover">
+                    Subscribe
+                  </Button>
+                </form>
+              )}
+
+              {/* Social icons */}
+              <div className="mt-4 flex items-center gap-3">
+                <a href="#" className="text-background/60 transition-colors hover:text-background" aria-label="Facebook">
+                  <Facebook className="h-5 w-5" />
+                </a>
+                <a href="#" className="text-background/60 transition-colors hover:text-background" aria-label="Instagram">
+                  <Instagram className="h-5 w-5" />
+                </a>
+                <a href="#" className="text-background/60 transition-colors hover:text-background" aria-label="YouTube">
+                  <Youtube className="h-5 w-5" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-background/10 pt-8">
-          <div className="mb-8 flex flex-wrap items-center justify-center gap-6">
-            {TRUST_BADGES.map((badge) => (
-              <span
-                key={badge}
-                className="rounded-md border border-background/20 px-3 py-1.5 text-xs font-medium text-background/60"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
-            <p className="text-xs text-background/50">
-              {"2026 Explore Worldwide Ltd. All rights reserved."}
+        {/* Bottom bar */}
+        <div className="border-t border-background/10">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-[10px] text-background/40 md:flex-row">
+            <p>
+              Explore Worldwide Ltd. Reg No: 358755213. VAT No: GB 358755213. Reg office: Nelson House, 55 Victoria Rd, Farnborough, Hants, GU14 7PA.
             </p>
             <div className="flex items-center gap-4">
-              <Link href="/about-us" className="text-xs text-background/50 transition-colors hover:text-background/80">
-                Privacy Policy
-              </Link>
-              <Link href="/about-us" className="text-xs text-background/50 transition-colors hover:text-background/80">
-                Terms & Conditions
-              </Link>
-              <Link href="/about-us" className="text-xs text-background/50 transition-colors hover:text-background/80">
-                Cookie Policy
-              </Link>
+              <Link href="/about-us" className="hover:text-background/60">Privacy Policy</Link>
+              <Link href="/about-us" className="hover:text-background/60">Cookie Policy</Link>
+              <Link href="/about-us" className="hover:text-background/60">Booking Conditions</Link>
             </div>
           </div>
         </div>

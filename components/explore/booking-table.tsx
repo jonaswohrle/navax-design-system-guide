@@ -3,11 +3,13 @@
 import { useState } from "react"
 import { Check, X, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { BookingDialog } from "./booking-dialog"
 import type { TourDeparture } from "@/lib/tour-data"
 
 interface BookingTableProps {
   departures: TourDeparture[]
   tripTitle: string
+  tripSlug: string
   duration: string
 }
 
@@ -27,20 +29,8 @@ const STATUS_STYLES: Record<string, { bg: string; text: string }> = {
   "Sold Out": { bg: "bg-muted text-muted-foreground", text: "Sold out" },
 }
 
-export function BookingTable({ departures, tripTitle, duration }: BookingTableProps) {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [showConfirm, setShowConfirm] = useState(false)
-
-  const handleBook = (id: string) => {
-    setSelectedId(id)
-    setShowConfirm(true)
-  }
-
-  const confirmBooking = () => {
-    setShowConfirm(false)
-    alert(`Booking confirmed for ${tripTitle}! A confirmation email will be sent shortly. (Demo)`)
-    setSelectedId(null)
-  }
+export function BookingTable({ departures, tripTitle, tripSlug, duration }: BookingTableProps) {
+  const [bookingDep, setBookingDep] = useState<TourDeparture | null>(null)
 
   return (
     <div>
@@ -51,44 +41,17 @@ export function BookingTable({ departures, tripTitle, duration }: BookingTablePr
         Prices are per person. Click Book to reserve your place.
       </p>
 
-      {/* Booking confirmation modal */}
-      {showConfirm && selectedId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-md rounded-lg bg-card p-6 shadow-xl">
-            <h3 className="mb-2 font-heading text-lg font-bold text-foreground">Confirm your booking</h3>
-            <p className="mb-1 text-sm text-foreground">{tripTitle}</p>
-            <p className="mb-1 text-sm text-muted-foreground">{duration}</p>
-            {(() => {
-              const dep = departures.find((d) => d.id === selectedId)
-              if (!dep) return null
-              return (
-                <>
-                  <p className="mb-1 text-sm text-muted-foreground">
-                    {formatDate(dep.startDate)} - {formatDate(dep.endDate)}
-                  </p>
-                  <p className="mb-4 text-lg font-bold text-primary">
-                    {"\u00A3"}{dep.price.toLocaleString()} per person
-                  </p>
-                </>
-              )
-            })()}
-            <div className="flex gap-3">
-              <Button
-                onClick={() => { setShowConfirm(false); setSelectedId(null) }}
-                variant="outline"
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={confirmBooking}
-                className="flex-1 bg-primary text-primary-foreground hover:bg-hover"
-              >
-                Confirm booking
-              </Button>
-            </div>
-          </div>
-        </div>
+      {/* Booking dialog */}
+      {bookingDep && (
+        <BookingDialog
+          open={!!bookingDep}
+          onOpenChange={(open) => { if (!open) setBookingDep(null) }}
+          tourSlug={tripSlug}
+          tourTitle={tripTitle}
+          departureId={bookingDep.id}
+          departureDate={`${formatDate(bookingDep.startDate)} - ${formatDate(bookingDep.endDate)} (${duration})`}
+          price={bookingDep.price}
+        />
       )}
 
       {/* Desktop table */}
@@ -111,18 +74,14 @@ export function BookingTable({ departures, tripTitle, duration }: BookingTablePr
               return (
                 <tr
                   key={dep.id}
-                  className={`border-b border-border last:border-b-0 ${
-                    i % 2 === 0 ? "bg-card" : "bg-muted/20"
-                  } ${selectedId === dep.id ? "ring-2 ring-primary ring-inset" : ""}`}
+                  className={`border-b border-border last:border-b-0 ${i % 2 === 0 ? "bg-card" : "bg-muted/20"}`}
                 >
                   <td className="px-4 py-3 text-foreground">{formatDate(dep.startDate)}</td>
                   <td className="px-4 py-3 text-foreground">{formatDate(dep.endDate)}</td>
                   <td className="px-4 py-3">
                     <div className="flex flex-col">
                       {dep.originalPrice && dep.originalPrice > dep.price && (
-                        <span className="text-xs text-muted-foreground line-through">
-                          {"\u00A3"}{dep.originalPrice.toLocaleString()}
-                        </span>
+                        <span className="text-xs text-muted-foreground line-through">{"\u00A3"}{dep.originalPrice.toLocaleString()}</span>
                       )}
                       <span className={`font-semibold ${dep.originalPrice && dep.originalPrice > dep.price ? "text-primary" : "text-foreground"}`}>
                         {"\u00A3"}{dep.price.toLocaleString()}
@@ -142,7 +101,7 @@ export function BookingTable({ departures, tripTitle, duration }: BookingTablePr
                     <Button
                       size="sm"
                       disabled={isSoldOut}
-                      onClick={() => handleBook(dep.id)}
+                      onClick={() => setBookingDep(dep)}
                       className={`text-xs ${isSoldOut ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground hover:bg-hover"}`}
                     >
                       {isSoldOut ? "Sold out" : "Book"}
@@ -173,18 +132,14 @@ export function BookingTable({ departures, tripTitle, duration }: BookingTablePr
               <div className="flex items-end justify-between">
                 <div>
                   {dep.originalPrice && dep.originalPrice > dep.price && (
-                    <span className="mr-2 text-xs text-muted-foreground line-through">
-                      {"\u00A3"}{dep.originalPrice.toLocaleString()}
-                    </span>
+                    <span className="mr-2 text-xs text-muted-foreground line-through">{"\u00A3"}{dep.originalPrice.toLocaleString()}</span>
                   )}
-                  <span className="text-lg font-bold text-foreground">
-                    {"\u00A3"}{dep.price.toLocaleString()}
-                  </span>
+                  <span className="text-lg font-bold text-foreground">{"\u00A3"}{dep.price.toLocaleString()}</span>
                 </div>
                 <Button
                   size="sm"
                   disabled={isSoldOut}
-                  onClick={() => handleBook(dep.id)}
+                  onClick={() => setBookingDep(dep)}
                   className={`text-xs ${isSoldOut ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground hover:bg-hover"}`}
                 >
                   {isSoldOut ? "Sold out" : "Book now"}

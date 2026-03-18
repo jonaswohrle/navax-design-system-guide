@@ -11,6 +11,7 @@ import {
 } from "@/lib/contentful"
 import { SiteHeader } from "@/components/explore/site-header"
 import { SiteFooter } from "@/components/explore/site-footer"
+import { AuthProvider } from "@/lib/auth-context"
 import { HeroSearch } from "@/components/explore/hero-search"
 import { TrustStrip } from "@/components/explore/trust-strip"
 import { PromoGrid } from "@/components/explore/promo-grid"
@@ -68,6 +69,7 @@ export default async function Page() {
   const blogList = blog?.length ? blog : FALLBACK_BLOG
 
   return (
+    <AuthProvider>
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <SiteHeader promoBanner={promoBanner} />
@@ -170,5 +172,6 @@ export default async function Page() {
       {/* Footer */}
       <SiteFooter />
     </div>
+    </AuthProvider>
   )
 }
