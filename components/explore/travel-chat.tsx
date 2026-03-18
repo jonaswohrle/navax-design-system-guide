@@ -4,21 +4,13 @@ import { useCallback, useState, useRef, useEffect } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
 import type { UIMessage } from "ai"
-import { MessageCircle, X, Sparkles, ArrowDown, Send, Loader2 } from "lucide-react"
+import { MessageCircle, X, Sparkles, ArrowDown, Send } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ExploreLogo } from "./explore-logo"
 import { ChatTripGrid, ChatTripDetail, ChatDeparturesTable } from "./chat-trip-cards"
 import { GuidedSellingFlow } from "./guided-selling"
 
-/* -------------------------------------------------------------------------- */
-/*  Transport                                                                 */
-/* -------------------------------------------------------------------------- */
-
 const transport = new DefaultChatTransport({ api: "/api/explore-chat" })
-
-/* -------------------------------------------------------------------------- */
-/*  Suggestions                                                               */
-/* -------------------------------------------------------------------------- */
 
 const SUGGESTIONS = [
   "Help me find a trip",
@@ -27,10 +19,6 @@ const SUGGESTIONS = [
   "Family-friendly adventures",
 ]
 
-/* -------------------------------------------------------------------------- */
-/*  Helper: extract text from UIMessage parts                                 */
-/* -------------------------------------------------------------------------- */
-
 function getMessageText(message: UIMessage): string {
   if (!message.parts || !Array.isArray(message.parts)) return ""
   return message.parts
@@ -38,10 +26,6 @@ function getMessageText(message: UIMessage): string {
     .map((p) => p.text)
     .join("")
 }
-
-/* -------------------------------------------------------------------------- */
-/*  Component                                                                 */
-/* -------------------------------------------------------------------------- */
 
 export function TravelChat() {
   const [open, setOpen] = useState(false)
@@ -55,17 +39,7 @@ export function TravelChat() {
     onError: (err) => {
       console.error("[v0] useChat error:", err)
     },
-    onFinish: (msg) => {
-      console.log("[v0] useChat onFinish, message:", msg.id, msg.role)
-    },
   })
-
-  console.log("[v0] TravelChat render - status:", status, "messages:", messages.length, "error:", error?.message)
-  if (messages.length > 0) {
-    messages.forEach((m, i) => {
-      console.log(`[v0] msg[${i}] role=${m.role} parts=${JSON.stringify(m.parts?.map(p => ({ type: p.type, text: p.type === "text" ? (p as { text: string }).text?.slice(0, 50) : undefined })))}`)
-    })
-  }
 
   const isStreaming = status === "streaming" || status === "submitted"
 
@@ -90,10 +64,9 @@ export function TravelChat() {
   const handleSend = useCallback(() => {
     const text = inputValue.trim()
     if (!text) return
-    console.log("[v0] Sending message:", text, "status:", status)
     sendMessage({ text })
     setInputValue("")
-  }, [inputValue, sendMessage, status])
+  }, [inputValue, sendMessage])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -112,15 +85,23 @@ export function TravelChat() {
     [sendMessage]
   )
 
-  /* ------ Render tool invocations ------ */
-  function renderToolPart(part: { type: "tool-invocation"; toolInvocation: { toolName: string; toolCallId: string; state: string; args?: Record<string, unknown>; output?: unknown } }) {
-    const { toolName, toolCallId, state, args, output } = part.toolInvocation
+  /* ------ Render a single tool part (AI SDK 6 format) ------ */
+  /* In AI SDK 6, tool parts have type "tool-{toolName}" with        */
+  /* properties: toolCallId, state, input, output directly on part   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function renderToolPart(part: any, index: number) {
+    const toolCallId = part.toolCallId as string
+    const state = part.state as string
+    const input = part.input as Record<string, unknown> | undefined
+    const output = part.output as Record<string, unknown> | undefined
+    const partType = part.type as string
+    const toolName = partType.replace("tool-", "")
 
-    /* --- Client-side tool: startGuidedSelling (no execute, stays at input-available) --- */
+    /* --- Client-side tool: startGuidedSelling --- */
     if (toolName === "startGuidedSelling") {
       if (state === "input-streaming") {
         return (
-          <div key={toolCallId} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
+          <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
             <Sparkles className="h-3 w-3 animate-spin" />
             <span>Preparing trip finder...</span>
           </div>
@@ -128,9 +109,9 @@ export function TravelChat() {
       }
       if (state === "input-available") {
         return (
-          <div key={toolCallId} className="my-2">
+          <div key={toolCallId || index} className="my-2">
             <GuidedSellingFlow
-              greeting={(args?.greeting as string) || "Let's find your perfect trip!"}
+              greeting={(input?.greeting as string) || "Let's find your perfect trip!"}
               onComplete={(preferences) => {
                 addToolOutput({
                   tool: "startGuidedSelling",
@@ -148,7 +129,7 @@ export function TravelChat() {
     /* --- Server-side tools: show loading while executing --- */
     if (state === "input-streaming" || state === "input-available") {
       return (
-        <div key={toolCallId} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
+        <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
           <Sparkles className="h-3 w-3 animate-spin" />
           <span>Searching...</span>
         </div>
@@ -157,14 +138,12 @@ export function TravelChat() {
 
     if (state !== "output-available" || !output) return null
 
-    const data = output as Record<string, unknown>
-
     if (toolName === "searchTrips") {
-      const trips = (data.trips || []) as Array<Record<string, unknown>>
-      const totalFound = (data.totalFound || 0) as number
+      const trips = (output.trips || []) as Array<Record<string, unknown>>
+      const totalFound = (output.totalFound || 0) as number
       if (trips.length === 0) return null
       return (
-        <div key={toolCallId} className="my-2">
+        <div key={toolCallId || index} className="my-2">
           <ChatTripGrid
             trips={trips as never}
             totalFound={totalFound}
@@ -178,9 +157,9 @@ export function TravelChat() {
 
     if (toolName === "getTripDetails") {
       return (
-        <div key={toolCallId} className="my-2">
+        <div key={toolCallId || index} className="my-2">
           <ChatTripDetail
-            trip={data as never}
+            trip={output as never}
             onViewDepartures={(slug: string) => {
               sendMessage({ text: `Show departures for "${slug}"` })
             }}
@@ -190,19 +169,24 @@ export function TravelChat() {
     }
 
     if (toolName === "getAvailableDepartures") {
-      const departures = (data.departures || []) as Array<Record<string, unknown>>
+      const departures = (output.departures || []) as Array<Record<string, unknown>>
       return (
-        <div key={toolCallId} className="my-2">
+        <div key={toolCallId || index} className="my-2">
           <ChatDeparturesTable
             departures={departures as never}
-            tripTitle={(data.tripTitle || "") as string}
-            tripSlug={(data.tripSlug || "") as string}
+            tripTitle={(output.tripTitle || "") as string}
+            tripSlug={(output.tripSlug || "") as string}
           />
         </div>
       )
     }
 
     return null
+  }
+
+  /* ------ Check if a part is a tool part ------ */
+  function isToolPart(part: { type: string }): boolean {
+    return part.type.startsWith("tool-")
   }
 
   /* ------ UI ------ */
@@ -265,40 +249,41 @@ export function TravelChat() {
                 </div>
               </div>
             ) : (
-              messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={cn(
-                    "flex",
-                    msg.role === "user" ? "justify-end" : "justify-start"
-                  )}
-                >
-                  <div
-                    className={cn(
-                      "max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-                      msg.role === "user"
-                        ? "bg-primary text-primary-foreground rounded-br-md"
-                        : "bg-secondary text-secondary-foreground rounded-bl-md"
+              messages.map((msg) => {
+                const text = getMessageText(msg)
+                const hasToolParts = msg.parts?.some((p) => isToolPart(p))
+
+                /* Skip rendering assistant bubbles that have no text and no tools */
+                if (msg.role === "assistant" && !text && !hasToolParts) return null
+
+                return (
+                  <div key={msg.id}>
+                    {/* Text bubble */}
+                    {text && (
+                      <div className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
+                        <div
+                          className={cn(
+                            "max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+                            msg.role === "user"
+                              ? "bg-primary text-primary-foreground rounded-br-md"
+                              : "bg-secondary text-secondary-foreground rounded-bl-md"
+                          )}
+                        >
+                          <p className="whitespace-pre-wrap">{text}</p>
+                        </div>
+                      </div>
                     )}
-                  >
+
+                    {/* Tool parts */}
                     {msg.parts?.map((part, i) => {
-                      if (part.type === "text") {
-                        const text = (part as { type: "text"; text: string }).text
-                        if (!text) return null
-                        return (
-                          <p key={i} className="whitespace-pre-wrap">
-                            {text}
-                          </p>
-                        )
-                      }
-                      if (part.type === "tool-invocation") {
-                        return renderToolPart(part as Parameters<typeof renderToolPart>[0])
+                      if (isToolPart(part)) {
+                        return renderToolPart(part, i)
                       }
                       return null
                     })}
                   </div>
-                </div>
-              ))
+                )
+              })
             )}
 
             {/* Error display */}
@@ -311,10 +296,10 @@ export function TravelChat() {
             {/* Streaming indicator */}
             {isStreaming && messages.length > 0 && (() => {
               const lastMsg = messages[messages.length - 1]
-              const hasContent = lastMsg?.role === "assistant" && lastMsg.parts?.some(
-                (p) => (p.type === "text" && (p as { text?: string }).text) || p.type === "tool-invocation"
+              const hasVisibleContent = lastMsg?.role === "assistant" && (
+                getMessageText(lastMsg) || lastMsg.parts?.some((p) => isToolPart(p) && (p as { state?: string }).state !== "input-streaming")
               )
-              if (hasContent) return null
+              if (hasVisibleContent) return null
               return (
                 <div className="flex justify-start">
                   <div className="rounded-2xl rounded-bl-md bg-secondary px-4 py-3">
