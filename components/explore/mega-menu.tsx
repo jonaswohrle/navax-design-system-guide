@@ -143,6 +143,7 @@ const EXPERIENCE_CATEGORIES = [
   { label: "Solo", slug: "solo" },
   { label: "Polar", slug: "polar" },
   { label: "Food & Drink", slug: "food-and-drink" },
+  { label: "Boat Journeys", slug: "boat-journeys" },
   { label: "Trip Types", slug: "trip-types" },
 ]
 

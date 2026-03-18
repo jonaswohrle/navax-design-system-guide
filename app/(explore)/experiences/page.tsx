@@ -32,6 +32,7 @@ const FALLBACK_EXPERIENCES = [
   { name: "Solo", description: "Over half our travellers come on their own. Join like-minded adventurers on our small group tours.", imageUrl: "/images/explore/exp-solo.jpg", slug: "solo", order: 7 },
   { name: "Polar", description: "Journey to the ends of the earth with expedition voyages to the Arctic and Antarctic.", imageUrl: "/images/explore/exp-polar.jpg", slug: "polar", order: 8 },
   { name: "Food & Drink", description: "Taste your way around the world with food and drink focused tours.", imageUrl: "/images/explore/exp-food.jpg", slug: "food-and-drink", order: 9 },
+  { name: "Boat Journeys", description: "Explore coastlines, rivers and waterways aboard traditional boats and expedition vessels.", imageUrl: "/images/explore/exp-polar.jpg", slug: "boat-journeys", order: 10 },
 ]
 
 const FALLBACK_TRIPS = [
