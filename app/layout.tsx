@@ -1,6 +1,6 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, DM_Sans } from 'next/font/google'
 import { GeistMono } from 'geist/font/mono'
 
 import './globals.css'
@@ -10,14 +10,17 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+  weight: ['400', '500', '600', '700'],
+})
+
 const geistMono = GeistMono
 
 export const metadata: Metadata = {
-  title: 'Brightly Design System Guide',
-  description: 'A Siemens Company - Empowering operations through smart asset management',
-  icons: {
-    icon: '/images/brightly-logo.png',
-  },
+  title: 'Book Adventure Travel & Small Group Tours | Explore',
+  description: 'Explore offers small group adventure holidays to over 100 countries worldwide. Award-winning tours with expert leaders. Book your next adventure today.',
 }
 
 export default function RootLayout({
@@ -26,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${dmSans.variable} ${geistMono.variable}`}>
       <body className="font-sans antialiased">
         {children}
       </body>

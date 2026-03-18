@@ -10,32 +10,32 @@
 
 @layer base {
   :root {
-    /* ── Brightly Design: White bg + Navy #0C2340 text + Green #00C9A7 accent ── */
-    --background: 0 0% 100%;
-    --foreground: 213 65% 15%;
-    --card: 210 33% 98%;
-    --card-foreground: 213 65% 15%;
+    /* ── Explore Design: Warm white bg + Charcoal text + Orange #E85D26 accent ── */
+    --background: 36 33% 99%;
+    --foreground: 240 17% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 17% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 213 65% 15%;
+    --popover-foreground: 240 17% 12%;
 
-    /* Primary: Brightly green #00C9A7 */
-    --primary: 167 100% 39%;
-    --primary-foreground: 213 65% 15%;
+    /* Primary: Explore orange #E85D26 */
+    --primary: 16 80% 53%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Light gray background #F5F7FA */
-    --secondary: 216 33% 97%;
-    --secondary-foreground: 213 65% 15%;
+    /* Secondary: Warm sand for section backgrounds */
+    --secondary: 30 30% 96%;
+    --secondary-foreground: 240 17% 12%;
 
-    /* Muted: Soft gray */
-    --muted: 216 20% 95%;
-    --muted-foreground: 215 16% 47%;
+    /* Muted: Warm grays */
+    --muted: 30 10% 93%;
+    --muted-foreground: 220 9% 46%;
 
-    /* Accent: Brightly teal tint */
-    --accent: 167 40% 95%;
-    --accent-foreground: 213 65% 15%;
+    /* Accent: Teal #0B8A8A for secondary CTAs */
+    --accent: 180 85% 29%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Hover: Brightly green */
-    --hover: 167 100% 39%;
+    /* Hover: Darker orange */
+    --hover: 16 80% 45%;
     --hover-foreground: 0 0% 100%;
 
     /* Destructive */
@@ -55,18 +55,18 @@
     --info-foreground: 0 0% 100%;
 
     /* Borders & inputs */
-    --border: 214 20% 88%;
-    --input: 214 20% 88%;
-    --ring: 167 100% 39%;
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 16 80% 53%;
 
     /* Charts */
-    --chart-1: 167 100% 39%;
-    --chart-2: 213 65% 30%;
-    --chart-3: 215 16% 47%;
-    --chart-4: 167 40% 75%;
-    --chart-5: 216 33% 85%;
+    --chart-1: 16 80% 53%;
+    --chart-2: 180 85% 29%;
+    --chart-3: 220 9% 46%;
+    --chart-4: 30 50% 75%;
+    --chart-5: 16 40% 85%;
 
-    --radius: 0.5rem;
+    --radius: 0.625rem;
 
     /* Sidebar -- Brightly navy */
     --sidebar-background: 213 65% 15%;
