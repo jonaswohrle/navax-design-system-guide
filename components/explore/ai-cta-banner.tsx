@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Sparkles, Cpu, Zap } from "lucide-react"
+import { IconExploreGlobe } from "./brand-icons"
 import { Button } from "@/components/ui/button"
 
 export function AiCtaBanner() {
@@ -8,8 +9,8 @@ export function AiCtaBanner() {
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex flex-col items-center gap-8 lg:flex-row lg:gap-16">
           <div className="flex-1">
-            <div className="mb-4 flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" />
+            <div className="mb-4 flex items-center gap-3">
+              <IconExploreGlobe className="h-10 w-10 text-primary" />
               <span className="text-sm font-semibold uppercase tracking-wider text-primary">
                 Technology
               </span>

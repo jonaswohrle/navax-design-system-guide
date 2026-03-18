@@ -2,7 +2,13 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowRight, MapPin, Clock, Users } from "lucide-react"
+import { ArrowRight } from "lucide-react"
+import {
+  IconUnforgettableExperiences,
+  IconExpertTourLeaders,
+  IconSmallGroupTours,
+  IconResponsibleAtHeart,
+} from "@/components/explore/brand-icons"
 import { TrustStrip } from "@/components/explore/trust-strip"
 import { WaveDivider } from "@/components/explore/wave-divider"
 
@@ -310,17 +316,13 @@ export default async function ExperienceCategoryPage({
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 sm:grid-cols-2 lg:grid-cols-4">
           {cat.features.map((f) => (
             <div key={f.title} className="rounded-lg bg-white/10 p-5">
-              <div className="mb-2 flex items-center gap-2">
-                {f.icon === "map" && <MapPin className="h-5 w-5 text-explore-yellow" />}
-                {f.icon === "users" && <Users className="h-5 w-5 text-explore-yellow" />}
-                {f.icon === "shield" && <Clock className="h-5 w-5 text-explore-yellow" />}
-                {f.icon === "heart" && (
-                  <svg className="h-5 w-5 text-explore-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                )}
-                <h3 className="text-sm font-bold text-white">{f.title}</h3>
+              <div className="mb-3 text-explore-yellow">
+                {f.icon === "map" && <IconUnforgettableExperiences className="h-10 w-10" />}
+                {f.icon === "users" && <IconExpertTourLeaders className="h-10 w-10" />}
+                {f.icon === "shield" && <IconSmallGroupTours className="h-10 w-10" />}
+                {f.icon === "heart" && <IconResponsibleAtHeart className="h-10 w-10" />}
               </div>
+              <h3 className="mb-1 text-sm font-bold text-white">{f.title}</h3>
               <p className="text-xs leading-relaxed text-white/75">{f.text}</p>
             </div>
           ))}

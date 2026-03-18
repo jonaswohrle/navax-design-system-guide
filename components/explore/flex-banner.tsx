@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ShieldCheck } from "lucide-react"
+import { IconGuaranteed } from "./brand-icons"
 import type { FlexPolicyFields } from "@/lib/contentful"
 
 const FALLBACK: FlexPolicyFields = {
@@ -22,7 +22,7 @@ export function FlexBanner({ policy }: FlexBannerProps) {
         <div className="flex flex-col items-center gap-8 lg:flex-row lg:gap-12">
           <div className="flex flex-1 items-start gap-4">
             <div className="shrink-0 rounded-xl bg-accent/10 p-3">
-              <ShieldCheck className="h-8 w-8 text-accent" />
+              <IconGuaranteed className="h-10 w-10 text-accent" />
             </div>
             <div>
               <h2 className="mb-2 font-heading text-xl font-bold text-foreground lg:text-2xl">
