@@ -112,15 +112,24 @@ export function TravelChat() {
   const [canvasLoading, setCanvasLoading] = useState(false)
   const personalization = useUnifiedPersonalization()
 
+  // Memoize body with serialized deps to prevent infinite re-render loop.
+  // The personalization provider returns new object refs each render, so we
+  // serialize to JSON for a stable comparison key.
+  const audience = personalization?.audience ?? "default"
+  const traitsJson = JSON.stringify(personalization?.profile?.traits ?? {})
+  const eventsJson = JSON.stringify(personalization?.profile?.events ?? {})
+  const chatBody = useMemo(() => ({
+    visitorAudience: audience,
+    visitorTraits: JSON.parse(traitsJson),
+    visitorEvents: JSON.parse(eventsJson),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [audience, traitsJson, eventsJson])
+
   const { messages, sendMessage, status, addToolOutput, error, setMessages } = useChat({
     transport,
     id: "explore-travel-chat",
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-    body: {
-      visitorAudience: personalization?.audience ?? "default",
-      visitorTraits: personalization?.profile?.traits ?? {},
-      visitorEvents: personalization?.profile?.events ?? {},
-    },
+    body: chatBody,
     onToolCall({ toolCall }) {
       if (toolCall.dynamic) return
     },
