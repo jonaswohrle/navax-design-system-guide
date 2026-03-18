@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X, Phone, Search, Heart } from "lucide-react"
+import { Menu, X, Phone, Search, Heart, ChevronDown } from "lucide-react"
 import { ExploreLogo } from "./explore-logo"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { label: "Destinations", href: "/destinations" },
   { label: "Experiences", href: "/experiences" },
   { label: "Offers", href: "/offers" },
-  { label: "About Us", href: "/about-us" },
+  { label: "About", href: "/about-us" },
   { label: "Blog", href: "/blog" },
 ]
 
@@ -26,7 +26,6 @@ interface SiteHeaderProps {
 
 export function SiteHeader({ promoBanner }: SiteHeaderProps) {
   const [scrolled, setScrolled] = useState(false)
-  const [bannerDismissed, setBannerDismissed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
@@ -35,75 +34,77 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
     return () => window.removeEventListener("scroll", handler)
   }, [])
 
-  const showBanner = promoBanner?.isActive && !bannerDismissed
-
   return (
     <header className="sticky top-0 z-50">
-      {showBanner && (
-        <div className="bg-primary text-primary-foreground">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-sm">
-            <div className="flex-1" />
-            <p className="text-center">
-              {promoBanner.text}
-              {promoBanner.linkText && promoBanner.linkUrl && (
-                <>
-                  {" "}
-                  <Link href={promoBanner.linkUrl} className="font-semibold underline underline-offset-2">
-                    {promoBanner.linkText}
-                  </Link>
-                </>
-              )}
-            </p>
-            <div className="flex flex-1 justify-end">
-              <button
-                onClick={() => setBannerDismissed(true)}
-                className="rounded p-1 transition-colors hover:bg-primary-foreground/10"
-                aria-label="Dismiss banner"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+      {/* Top utility bar - crimson red like the real site */}
+      <div className="bg-primary text-primary-foreground">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs">
+          <div className="hidden items-center gap-4 md:flex">
+            <span>{"Can't find what you're looking for?"}</span>
+            {promoBanner?.text && (
+              <span className="font-semibold">
+                {promoBanner.text}
+                {promoBanner.linkText && promoBanner.linkUrl && (
+                  <>
+                    {" "}
+                    <Link href={promoBanner.linkUrl} className="underline underline-offset-2">
+                      {promoBanner.linkText}
+                    </Link>
+                  </>
+                )}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-4 text-xs">
+            <Link href="/essential-information/explore-flex" className="hidden transition-colors hover:text-primary-foreground/80 lg:inline">
+              Explore Flex
+            </Link>
+            <a href="tel:01011111111" className="flex items-center gap-1 font-semibold transition-colors hover:text-primary-foreground/80">
+              <Phone className="h-3 w-3" />
+              0101 111 1111
+            </a>
           </div>
         </div>
-      )}
+      </div>
 
+      {/* Main nav bar - white */}
       <nav
-        className={`transition-all duration-200 ${
-          scrolled ? "border-b border-border bg-card shadow-sm" : "bg-card"
+        className={`border-b transition-shadow duration-200 ${
+          scrolled ? "bg-card shadow-md" : "bg-card"
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:py-4">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 lg:py-3">
           <Link href="/" className="shrink-0" aria-label="Explore home">
-            <ExploreLogo variant="color" width={120} />
+            <ExploreLogo variant="color" width={110} />
           </Link>
 
-          <ul className="hidden items-center gap-1 lg:flex">
+          <ul className="hidden items-center gap-0.5 lg:flex">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="relative px-4 py-2 text-sm font-medium text-foreground transition-colors hover:text-primary after:absolute after:bottom-0 after:left-4 after:right-4 after:h-0.5 after:scale-x-0 after:bg-primary after:transition-transform hover:after:scale-x-100"
+                  className="flex items-center gap-0.5 rounded px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
                 >
                   {link.label}
+                  <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
                 </Link>
               </li>
             ))}
           </ul>
 
-          <div className="flex items-center gap-2">
-            <a
-              href="tel:01011111111"
-              className="hidden items-center gap-1.5 text-sm font-medium text-foreground transition-colors hover:text-primary md:flex"
-            >
-              <Phone className="h-4 w-4" />
-              <span className="sr-only lg:not-sr-only">Call us</span>
-            </a>
+          <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" className="text-foreground hover:text-primary" aria-label="Search">
               <Search className="h-5 w-5" />
             </Button>
             <Button variant="ghost" size="icon" className="text-foreground hover:text-primary" aria-label="Wishlist">
               <Heart className="h-5 w-5" />
             </Button>
+            <Link
+              href="/ai"
+              className="ml-1 hidden rounded-md bg-foreground px-3 py-1.5 text-xs font-semibold text-card transition-colors hover:bg-foreground/80 lg:inline-flex"
+            >
+              AI Showcases
+            </Link>
 
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
@@ -113,27 +114,29 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
               </SheetTrigger>
               <SheetContent side="left" className="w-80 bg-card p-0">
                 <SheetTitle className="sr-only">Navigation menu</SheetTitle>
-                <div className="flex items-center justify-between border-b border-border p-4">
+                <div className="flex items-center justify-between border-b border-border px-4 py-3">
                   <ExploreLogo variant="color" width={100} />
                 </div>
-                <nav className="flex flex-col p-4">
+                <nav className="flex flex-col">
                   {NAV_LINKS.map((link) => (
                     <Link
                       key={link.href}
                       href={link.href}
                       onClick={() => setMobileOpen(false)}
-                      className="border-b border-border py-3 text-base font-medium text-foreground transition-colors hover:text-primary"
+                      className="border-b border-border px-4 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
                     >
                       {link.label}
                     </Link>
                   ))}
-                  <Link
-                    href="/ai"
-                    onClick={() => setMobileOpen(false)}
-                    className="mt-4 rounded-lg bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground transition-colors hover:bg-hover"
-                  >
-                    AI Showcases
-                  </Link>
+                  <div className="p-4">
+                    <Link
+                      href="/ai"
+                      onClick={() => setMobileOpen(false)}
+                      className="block rounded-md bg-primary px-4 py-2.5 text-center text-sm font-semibold text-primary-foreground transition-colors hover:bg-hover"
+                    >
+                      AI Showcases
+                    </Link>
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>

@@ -99,12 +99,12 @@ export function TripCard({ trip }: TripCardProps) {
 
         <div className="flex gap-2">
           <Button asChild variant="outline" size="sm" className="flex-1 text-xs">
-            <Link href={`/destinations#${trip.slug || ""}`}>
+            <Link href={`/tours/${trip.slug || "tour"}`}>
               More info
             </Link>
           </Button>
           <Button asChild size="sm" className="flex-1 bg-primary text-xs text-primary-foreground hover:bg-hover">
-            <Link href={`/destinations#${trip.slug || ""}`}>
+            <Link href={`/tours/${trip.slug || "tour"}#dates`}>
               Book now
             </Link>
           </Button>

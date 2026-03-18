@@ -57,7 +57,7 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16">
         <div className="mb-10 flex flex-col gap-8 lg:flex-row lg:justify-between">
           <div className="shrink-0">
-            <ExploreLogo variant="light" width={120} />
+            <ExploreLogo variant="white" width={120} />
             <p className="mt-4 max-w-xs text-sm text-background/70">
               Small group adventure holidays to over 100 countries worldwide. Award-winning tours with expert leaders since 1981.
             </p>

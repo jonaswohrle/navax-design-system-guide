@@ -45,7 +45,10 @@ export function TrustStrip({ pillars }: TrustStripProps) {
   return (
     <section className="bg-secondary py-12 lg:py-16">
       <div className="mx-auto max-w-7xl px-4">
-        <p className="mb-10 text-center text-base text-muted-foreground lg:text-lg">
+        <h2 className="mb-2 text-center font-heading text-2xl font-bold text-foreground lg:text-3xl text-balance">
+          An adventure travel company you can trust
+        </h2>
+        <p className="mb-10 text-center text-sm text-muted-foreground lg:text-base">
           {"There's a reason why 98% of customers say they'd book an adventure with us again."}
         </p>
 

@@ -10,32 +10,32 @@
 
 @layer base {
   :root {
-    /* ── Explore Design: Warm white bg + Charcoal text + Orange #E85D26 accent ── */
-    --background: 36 33% 99%;
-    --foreground: 240 17% 12%;
+    /* ── Explore Brand: Crimson Red #C8102E + Warm White + Dark Navy ── */
+    --background: 0 0% 100%;
+    --foreground: 210 11% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 240 17% 12%;
+    --card-foreground: 210 11% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 17% 12%;
+    --popover-foreground: 210 11% 15%;
 
-    /* Primary: Explore orange #E85D26 */
-    --primary: 16 80% 53%;
+    /* Primary: Explore crimson red #C8102E */
+    --primary: 350 85% 42%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Warm sand for section backgrounds */
-    --secondary: 30 30% 96%;
-    --secondary-foreground: 240 17% 12%;
+    /* Secondary: Light warm gray for section backgrounds */
+    --secondary: 30 14% 96%;
+    --secondary-foreground: 210 11% 15%;
 
-    /* Muted: Warm grays */
-    --muted: 30 10% 93%;
+    /* Muted: Neutral grays */
+    --muted: 220 9% 94%;
     --muted-foreground: 220 9% 46%;
 
-    /* Accent: Teal #0B8A8A for secondary CTAs */
-    --accent: 180 85% 29%;
+    /* Accent: Teal/green for secondary CTAs -- Explore uses a teal  */
+    --accent: 173 58% 39%;
     --accent-foreground: 0 0% 100%;
 
-    /* Hover: Darker orange */
-    --hover: 16 80% 45%;
+    /* Hover: Darker crimson */
+    --hover: 350 85% 35%;
     --hover-foreground: 0 0% 100%;
 
     /* Destructive */
@@ -55,20 +55,20 @@
     --info-foreground: 0 0% 100%;
 
     /* Borders & inputs */
-    --border: 30 15% 88%;
-    --input: 30 15% 88%;
-    --ring: 16 80% 53%;
+    --border: 220 13% 87%;
+    --input: 220 13% 87%;
+    --ring: 350 85% 42%;
 
     /* Charts */
-    --chart-1: 16 80% 53%;
-    --chart-2: 180 85% 29%;
+    --chart-1: 350 85% 42%;
+    --chart-2: 173 58% 39%;
     --chart-3: 220 9% 46%;
     --chart-4: 30 50% 75%;
-    --chart-5: 16 40% 85%;
+    --chart-5: 350 40% 85%;
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
 
-    /* Sidebar -- Brightly navy */
+    /* Sidebar -- Dark navy for AI section */
     --sidebar-background: 213 65% 15%;
     --sidebar-foreground: 0 0% 95%;
     --sidebar-primary: 167 100% 39%;
@@ -80,7 +80,7 @@
   }
 
   .dark {
-    /* ── Brightly Dark: Navy bg + Green accent ── */
+    /* ── Dark theme for AI section ── */
     --background: 213 65% 10%;
     --foreground: 0 0% 95%;
     --card: 213 55% 13%;

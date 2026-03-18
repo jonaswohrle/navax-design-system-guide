@@ -91,13 +91,13 @@ export default async function DestinationsPage({ searchParams }: DestinationsPag
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Page hero */}
-      <section className="bg-secondary py-12 lg:py-20">
+      {/* Page hero -- crimson red like the real Explore site */}
+      <section className="bg-primary py-12 lg:py-20">
         <div className="mx-auto max-w-7xl px-4">
-          <h1 className="mb-4 font-heading text-4xl font-bold text-foreground lg:text-5xl">
+          <h1 className="mb-4 font-heading text-4xl font-bold text-primary-foreground lg:text-5xl">
             Destinations
           </h1>
-          <p className="max-w-2xl text-base leading-relaxed text-muted-foreground lg:text-lg">
+          <p className="max-w-2xl text-base leading-relaxed text-primary-foreground/80 lg:text-lg">
             {"We offer small group adventure holidays to over 100 countries worldwide. Whether you're looking for cultural discovery in Asia, wildlife encounters in Africa, or trekking in South America, we've got the perfect trip for you."}
           </p>
         </div>
