@@ -42,12 +42,36 @@ const BLOB_URLS: Record<string, string> = {
   "/images/explore/trip-south-africa.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/trip-south-africa.jpg"
 };
 
+/** Allowed external hostnames for next/image */
+const ALLOWED_HOSTS = [
+  "nqlmkxqox66ff90a.public.blob.vercel-storage.com",
+  "images.ctfassets.net",
+  "explore-live.s3.eu-west-1.amazonaws.com",
+  "explore-qa.s3.eu-west-1.amazonaws.com",
+  "s3.eu-west-1.amazonaws.com",
+];
+
 /**
  * Resolves an image path to its Vercel Blob URL.
- * Falls back to the original path if no Blob URL exists.
+ * Falls back to a safe default if the URL points to an unconfigured host,
+ * preventing next/image hostname errors.
  */
 export function blobUrl(localPath: string): string {
-  return BLOB_URLS[localPath] || localPath;
+  if (BLOB_URLS[localPath]) return BLOB_URLS[localPath];
+
+  // If it's an external URL, only allow known hosts -- otherwise use a fallback
+  if (localPath.startsWith("http")) {
+    try {
+      const { hostname } = new URL(localPath);
+      if (ALLOWED_HOSTS.some((h) => hostname === h || hostname.endsWith(`.${h}`))) {
+        return localPath;
+      }
+    } catch { /* invalid URL */ }
+    // Unknown external host -- return a safe blob fallback
+    return BLOB_URLS["/images/explore/hero-mountains.jpg"] || localPath;
+  }
+
+  return localPath;
 }
 
 export default BLOB_URLS;
