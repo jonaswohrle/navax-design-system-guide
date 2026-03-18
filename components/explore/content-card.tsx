@@ -19,7 +19,6 @@ export function ContentCard({ post }: ContentCardProps) {
     : null
 
   const imgSrc = blobUrl(post.imageUrl || "/images/explore/hero-mountains.jpg")
-  const isExternal = imgSrc.startsWith("http")
 
   return (
     <Link
@@ -27,22 +26,14 @@ export function ContentCard({ post }: ContentCardProps) {
       className="group block overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="relative aspect-[16/9] overflow-hidden">
-        {isExternal ? (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={imgSrc}
-            alt={post.title}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <Image
-            src={imgSrc}
-            alt={post.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-        )}
+        <Image
+          src={imgSrc}
+          alt={post.title}
+          fill
+          unoptimized
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        />
         {post.category && (
           <span className="absolute left-3 top-3 rounded-md bg-primary/90 px-2 py-0.5 text-xs font-semibold text-primary-foreground">
             {post.category}

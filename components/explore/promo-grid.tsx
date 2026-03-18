@@ -28,26 +28,14 @@ export function PromoGrid({ promos }: PromoGridProps) {
               className="group relative block overflow-hidden rounded-xl"
             >
               <div className="relative aspect-[4/3]">
-                {(() => {
-                  const promoSrc = blobUrl(promo.imageUrl || "/images/explore/hero-mountains.jpg")
-                  const promoIsExternal = promoSrc.startsWith("http") && !promoSrc.includes("blob.vercel-storage.com")
-                  return promoIsExternal ? (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={promoSrc}
-                      alt={promo.title}
-                      className="absolute inset-0 h-full w-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
-                    />
-                  ) : (
-                    <Image
-                      src={promoSrc}
-                      alt={promo.title}
-                      fill
-                      className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                  )
-                })()}
+                <Image
+                  src={blobUrl(promo.imageUrl || "/images/explore/hero-mountains.jpg")}
+                  alt={promo.title}
+                  fill
+                  unoptimized
+                  className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
               </div>
               <div className="absolute bottom-0 left-0 p-4">

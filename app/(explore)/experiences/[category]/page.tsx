@@ -425,6 +425,7 @@ export default async function ExperienceCategoryPage({
                       src={blobUrl(d.image)}
                       alt={d.name}
                       fill
+                      unoptimized
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
                     />

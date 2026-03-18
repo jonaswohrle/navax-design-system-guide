@@ -127,6 +127,7 @@ export function ChatTripCard({ trip, onViewDetails }: ChatTripCardProps) {
           src={blobUrl(trip.imageUrl)}
           alt={trip.title}
           fill
+          unoptimized
           className="object-cover"
           sizes="200px"
         />
@@ -228,6 +229,7 @@ export function ChatTripDetail({ trip, onViewDepartures }: ChatTripDetailProps) 
           src={blobUrl(trip.imageUrl)}
           alt={trip.title}
           fill
+          unoptimized
           className="object-cover"
           sizes="400px"
         />

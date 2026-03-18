@@ -46,6 +46,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ slu
             src={blobUrl(tour.imageUrl)}
             alt={tour.title}
             fill
+            unoptimized
             className="object-cover opacity-30"
             priority
             sizes="100vw"

@@ -37,6 +37,7 @@ export default async function AboutPage() {
           src={blobUrl("/images/explore/about-hero.jpg")}
           alt="Group of travelers on an adventure"
           fill
+          unoptimized
           className="object-cover"
           priority
           sizes="100vw"

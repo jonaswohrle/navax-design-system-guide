@@ -99,6 +99,7 @@ export default async function ExperiencesPage() {
                     src={blobUrl(exp.imageUrl || "/images/explore/hero-mountains.jpg")}
                     alt={exp.name}
                     fill
+                    unoptimized
                     className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />

@@ -41,27 +41,15 @@ export function HeroSearch({
       {/* Hero image + overlay text */}
       <section className="relative flex min-h-[55vh] items-center overflow-hidden lg:min-h-[70vh]">
         {/* Background image */}
-        {(() => {
-          const heroSrc = blobUrl(backgroundImageUrl)
-          const heroIsExternal = heroSrc.startsWith("http") && !heroSrc.includes("blob.vercel-storage.com")
-          return heroIsExternal ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={heroSrc}
-              alt="Scenic adventure travel destination"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          ) : (
-            <Image
-              src={heroSrc}
-              alt="Scenic adventure travel destination"
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-            />
-          )
-        })()}
+        <Image
+          src={blobUrl(backgroundImageUrl)}
+          alt="Scenic adventure travel destination"
+          fill
+          unoptimized
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
 
         {/* Subtle dark overlay for text legibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/30" />

@@ -141,7 +141,6 @@ export function TravelChat() {
         if (!part.type.startsWith("tool-")) continue
 
         const toolName = part.type.replace("tool-", "")
-        console.log("[v0] Canvas scan:", toolName, "state:", part.state, "hasOutput:", !!part.output)
 
         if (toolName === "startGuidedSelling" && part.state === "input-available") {
           return {
@@ -157,7 +156,6 @@ export function TravelChat() {
         if (toolName === "searchTrips") {
           const trips = (part.output.trips || []) as Array<Record<string, unknown>>
           const totalFound = (part.output.totalFound || 0) as number
-          console.log("[v0] searchTrips result:", trips.length, "trips, totalFound:", totalFound)
           if (trips.length > 0) return { kind: "trips", trips, totalFound }
           // Return a no-results canvas so the user sees feedback
           return { kind: "no-results", filtersApplied: (part.output.filtersApplied || {}) as Record<string, unknown> }
@@ -196,7 +194,6 @@ export function TravelChat() {
   // The canvas should show if we have content OR if we're loading new content
   const hasCanvas = canvasContent !== null || (canvasLoading && lastCanvasRef.current !== null)
   const displayContent = canvasContent || lastCanvasRef.current
-  console.log("[v0] Canvas state:", { fullscreen, canvasOpen, hasCanvas, canvasContent: canvasContent?.kind ?? null, lastCanvas: lastCanvasRef.current?.kind ?? null, canvasLoading })
 
   /* --- Auto-scroll --- */
   const scrollToBottom = useCallback(() => {
