@@ -10,6 +10,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ninetailed/experience.js-next": "^7.21.0",
+    "@ninetailed/experience.js-react": "^7.21.0",
     "@ai-sdk/google": "^3.0.24",
     "@ai-sdk/react": "^3.0.81",
     "@hookform/resolvers": "^3.9.1",

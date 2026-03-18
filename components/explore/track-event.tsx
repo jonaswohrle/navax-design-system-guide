@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
-import { usePersonalizationSafe } from "@/components/providers/personalization-provider"
+import { useUnifiedPersonalization } from "@/components/providers/ninetailed-wrapper"
 
 interface TrackEventProps {
   /** The event name to track */
@@ -20,7 +20,7 @@ interface TrackEventProps {
  *   <TrackEvent event="view_walking" category="walking" />
  */
 export function TrackEvent({ event, properties, category }: TrackEventProps) {
-  const personalization = usePersonalizationSafe()
+  const personalization = useUnifiedPersonalization()
 
   useEffect(() => {
     if (!personalization) return

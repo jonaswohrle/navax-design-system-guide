@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { usePersonalizationSafe } from "@/components/providers/personalization-provider"
+import { useUnifiedPersonalization } from "@/components/providers/ninetailed-wrapper"
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -357,7 +357,7 @@ export function ChatDeparturesTable({
 }: ChatDeparturesTableProps) {
   const [bookingDeparture, setBookingDeparture] = useState<Departure | null>(null)
   const [bookingStep, setBookingStep] = useState<"form" | "confirmed">("form")
-  const personalization = usePersonalizationSafe()
+  const personalization = useUnifiedPersonalization()
 
   if (!departures || departures.length === 0) {
     return (

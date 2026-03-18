@@ -1,6 +1,6 @@
 "use client"
 
-import { usePersonalizationSafe } from "@/components/providers/personalization-provider"
+import { useUnifiedPersonalization } from "@/components/providers/ninetailed-wrapper"
 import { HeroSearch } from "./hero-search"
 import type { PersonalizedHeroFields } from "@/lib/contentful"
 
@@ -12,7 +12,7 @@ interface PersonalizedHeroProps {
 }
 
 export function PersonalizedHero({ variants, fallbackImageUrl = "/images/explore/hero-santorini.png" }: PersonalizedHeroProps) {
-  const personalization = usePersonalizationSafe()
+  const personalization = useUnifiedPersonalization()
   const audience = personalization?.audience ?? "default"
 
   // Find the variant matching the current audience, falling back to "default"

@@ -1,6 +1,6 @@
 "use client"
 
-import { usePersonalizationSafe } from "@/components/providers/personalization-provider"
+import { useUnifiedPersonalization } from "@/components/providers/ninetailed-wrapper"
 import { resolveAudience, type AudienceSegment } from "@/lib/personalization"
 import {
   Users,
@@ -54,7 +54,7 @@ const AUDIENCE_META: Record<
 }
 
 export default function PersonalizationPage() {
-  const personalization = usePersonalizationSafe()
+  const personalization = useUnifiedPersonalization()
 
   if (!personalization) {
     return (
@@ -64,7 +64,17 @@ export default function PersonalizationPage() {
     )
   }
 
-  const { profile, audience } = personalization
+  const { audience } = personalization
+  // Use the custom profile if available (fallback mode), or synthesize empty for Ninetailed mode
+  const profile = personalization.profile ?? {
+    id: "ninetailed-managed",
+    pageViews: {} as Record<string, number>,
+    events: {} as Record<string, number>,
+    traits: {} as Record<string, string>,
+    sessions: 0,
+    firstSeen: new Date().toISOString(),
+    lastSeen: new Date().toISOString(),
+  }
   const meta = AUDIENCE_META[audience]
 
   const pageViewEntries = Object.entries(profile.pageViews).sort((a, b) => b[1] - a[1])
@@ -262,12 +272,12 @@ export default function PersonalizationPage() {
             How Personalization Works
           </h3>
           <ol className="space-y-1.5 text-sm text-muted-foreground">
-            <li><span className="font-medium text-foreground">1.</span> The PersonalizationProvider tracks every page view and event in a cookie-based visitor profile.</li>
+            <li><span className="font-medium text-foreground">1.</span> {personalization.ninetailedActive ? "The Ninetailed Experience SDK" : "The PersonalizationProvider"} tracks every page view and event{personalization.ninetailedActive ? " via the Ninetailed platform" : " in a cookie-based visitor profile"}.</li>
             <li><span className="font-medium text-foreground">2.</span> Audience scores are computed by matching page categories against segment keywords (walking/cycling = Adventure, discovery/food = Culture, etc.).</li>
             <li><span className="font-medium text-foreground">3.</span> When a score reaches the threshold (2+), the visitor is assigned to that audience segment.</li>
-            <li><span className="font-medium text-foreground">4.</span> Contentful delivers audience-tagged hero variants. The PersonalizedHero component selects the right variant client-side.</li>
+            <li><span className="font-medium text-foreground">4.</span> Contentful delivers audience-tagged hero variants. The PersonalizedHero component selects the right variant{personalization.ninetailedActive ? " via Ninetailed experiences" : " client-side"}.</li>
             <li><span className="font-medium text-foreground">5.</span> The AI chat assistant receives the audience segment and adjusts recommendations accordingly.</li>
-            <li><span className="font-medium text-foreground">6.</span> Completing a booking form calls identify() -- setting traits that promote the visitor to "Returning Booker".</li>
+            <li><span className="font-medium text-foreground">6.</span> Completing a booking form calls identify() -- setting traits that promote the visitor to &quot;Returning Booker&quot;.</li>
           </ol>
         </div>
       </div>
