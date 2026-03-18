@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { ExploreLogo } from "./explore-logo"
 import { ChatTripGrid, ChatTripDetail, ChatDeparturesTable } from "./chat-trip-cards"
 import { GuidedSellingFlow } from "./guided-selling"
+import { usePersonalizationSafe } from "@/components/providers/personalization-provider"
 
 const transport = new DefaultChatTransport({ api: "/api/explore-chat" })
 
@@ -108,11 +109,17 @@ export function TravelChat() {
   const [inputValue, setInputValue] = useState("")
   const lastCanvasRef = useRef<CanvasContent>(null)
   const [canvasLoading, setCanvasLoading] = useState(false)
+  const personalization = usePersonalizationSafe()
 
   const { messages, sendMessage, status, addToolOutput, error, setMessages } = useChat({
     transport,
     id: "explore-travel-chat",
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    body: {
+      visitorAudience: personalization?.audience ?? "default",
+      visitorTraits: personalization?.profile.traits ?? {},
+      visitorEvents: personalization?.profile.events ?? {},
+    },
     onToolCall({ toolCall }) {
       if (toolCall.dynamic) return
     },

@@ -5,6 +5,7 @@ import { GeistMono } from 'geist/font/mono'
 
 import './globals.css'
 import { ChatLoader } from '@/components/explore/chat-loader'
+import { PersonalizationProvider } from '@/components/providers/personalization-provider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -38,8 +39,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${dmSans.variable} ${playfair.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
-        {children}
-        <ChatLoader />
+        <PersonalizationProvider>
+          {children}
+          <ChatLoader />
+        </PersonalizationProvider>
       </body>
     </html>
   )

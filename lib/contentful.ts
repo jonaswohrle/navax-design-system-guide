@@ -364,3 +364,23 @@ export async function getFlexPolicy() {
   const { items } = await fetchContentful<FlexPolicyFields>("flexPolicy", { limit: "1" })
   return items[0]?.fields ?? null
 }
+
+// --------------- Personalization ---------------
+
+export interface PersonalizedHeroFields {
+  internalName: string
+  headline: string
+  subheadline?: string
+  backgroundImageUrl?: string
+  ctaLabel?: string
+  ctaUrl?: string
+  audienceTag: string
+  order?: number
+}
+
+export async function getPersonalizedHeroes() {
+  const { items } = await fetchContentful<PersonalizedHeroFields>("personalizedHero", {
+    order: "fields.order",
+  })
+  return items.map((i) => ({ id: i.sys.id, ...i.fields }))
+}

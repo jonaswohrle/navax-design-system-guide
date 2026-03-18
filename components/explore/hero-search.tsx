@@ -9,10 +9,18 @@ import { WaveDivider } from "./wave-divider"
 
 interface HeroSearchProps {
   backgroundImageUrl?: string
+  headline?: string
+  subheadline?: string
+  ctaLabel?: string
+  ctaUrl?: string
 }
 
 export function HeroSearch({
   backgroundImageUrl = "/images/explore/hero-santorini.png",
+  headline,
+  subheadline,
+  ctaLabel,
+  ctaUrl,
 }: HeroSearchProps) {
   const router = useRouter()
   const [where, setWhere] = useState("")
@@ -57,15 +65,30 @@ export function HeroSearch({
 
         {/* Hero text -- matching real explore.co.uk style */}
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 lg:px-8">
-          <p className="mb-1 font-serif text-xl italic text-explore-yellow drop-shadow-lg lg:text-2xl">
-            {"Don't just travel,"}
-          </p>
-          <h1 className="mb-3 font-serif text-7xl font-bold text-explore-yellow drop-shadow-lg lg:text-[120px] lg:leading-[0.9]">
-            Explore!
-          </h1>
-          <p className="text-xl font-bold text-white drop-shadow-lg lg:text-3xl">
-            Small group adventures
-          </p>
+          {headline ? (
+            <>
+              <h1 className="mb-3 font-serif text-5xl font-bold text-explore-yellow drop-shadow-lg lg:text-7xl lg:leading-tight text-balance">
+                {headline}
+              </h1>
+              {subheadline && (
+                <p className="max-w-xl text-lg font-medium text-white/90 drop-shadow-lg lg:text-xl">
+                  {subheadline}
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="mb-1 font-serif text-xl italic text-explore-yellow drop-shadow-lg lg:text-2xl">
+                {"Don't just travel,"}
+              </p>
+              <h1 className="mb-3 font-serif text-7xl font-bold text-explore-yellow drop-shadow-lg lg:text-[120px] lg:leading-[0.9]">
+                Explore!
+              </h1>
+              <p className="text-xl font-bold text-white drop-shadow-lg lg:text-3xl">
+                Small group adventures
+              </p>
+            </>
+          )}
         </div>
       </section>
 

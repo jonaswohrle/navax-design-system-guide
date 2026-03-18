@@ -8,11 +8,13 @@ import {
   getReviewItems,
   getFlexPolicy,
   getBlogPosts,
+  getPersonalizedHeroes,
 } from "@/lib/contentful"
 import { SiteHeader } from "@/components/explore/site-header"
 import { SiteFooter } from "@/components/explore/site-footer"
 import { AuthProvider } from "@/lib/auth-context"
 import { HeroSearch } from "@/components/explore/hero-search"
+import { PersonalizedHero } from "@/components/explore/personalized-hero"
 import { TrustStrip } from "@/components/explore/trust-strip"
 import { PromoGrid } from "@/components/explore/promo-grid"
 import { ReviewCarousel } from "@/components/explore/review-carousel"
@@ -55,7 +57,7 @@ const FALLBACK_BLOG = [
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 export default async function Page() {
-  const [hero, promoBanner, pillars, promos, trips, reviews, flex, blog] =
+  const [hero, promoBanner, pillars, promos, trips, reviews, flex, blog, heroVariants] =
     await Promise.all([
       getExploreHero(),
       getPromoBanner(),
@@ -65,6 +67,7 @@ export default async function Page() {
       getReviewItems(),
       getFlexPolicy(),
       getBlogPosts(),
+      getPersonalizedHeroes(),
     ])
 
   const h = hero ?? FALLBACK_HERO
@@ -77,8 +80,15 @@ export default async function Page() {
       {/* Header */}
       <SiteHeader promoBanner={promoBanner} />
 
-      {/* Hero with search */}
-      <HeroSearch backgroundImageUrl={h.backgroundImageUrl || "/images/explore/hero-santorini.png"} />
+      {/* Personalized hero -- selects variant based on visitor audience */}
+      {heroVariants && heroVariants.length > 0 ? (
+        <PersonalizedHero
+          variants={heroVariants}
+          fallbackImageUrl={h.backgroundImageUrl || "/images/explore/hero-santorini.png"}
+        />
+      ) : (
+        <HeroSearch backgroundImageUrl={h.backgroundImageUrl || "/images/explore/hero-santorini.png"} />
+      )}
 
       {/* Trust strip */}
       <TrustStrip pillars={pillars?.length ? pillars : undefined} />

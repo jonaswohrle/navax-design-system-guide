@@ -14,13 +14,13 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      new URL("https://images.ctfassets.net/**"),
-      new URL("https://explore-live.s3.eu-west-1.amazonaws.com/**"),
-      new URL("https://explore-qa.s3.eu-west-1.amazonaws.com/**"),
-      new URL("https://s3.eu-west-1.amazonaws.com/**"),
-      new URL("https://images.unsplash.com/**"),
-      new URL("https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/**"),
-      new URL("https://*.public.blob.vercel-storage.com/**"),
+      "https://images.ctfassets.net/**",
+      "https://explore-live.s3.eu-west-1.amazonaws.com/**",
+      "https://explore-qa.s3.eu-west-1.amazonaws.com/**",
+      "https://s3.eu-west-1.amazonaws.com/**",
+      "https://images.unsplash.com/**",
+      "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/**",
+      "https://*.public.blob.vercel-storage.com/**",
     ],
   },
 }

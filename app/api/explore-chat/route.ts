@@ -190,11 +190,32 @@ const tools = {
 }
 
 export async function POST(req: Request) {
-  const { messages } = await req.json()
+  const { messages, visitorAudience, visitorTraits, visitorEvents } = await req.json()
+
+  // Build personalization context for the system prompt
+  let personalizationContext = ""
+  if (visitorAudience && visitorAudience !== "default") {
+    const audienceLabels: Record<string, string> = {
+      adventure: "walking, cycling, and active adventures",
+      culture: "cultural discovery, food, and heritage trips",
+      family: "family-friendly adventures",
+      returning: "returning customer with previous booking history",
+    }
+    personalizationContext += `\n\nVisitor Personalization Context:
+- This visitor has been identified as a "${visitorAudience}" audience segment, meaning they are interested in ${audienceLabels[visitorAudience] || visitorAudience}.
+- Prioritize recommendations matching their interests when they ask for suggestions.
+- Tailor your language and examples to their preferences.`
+  }
+  if (visitorTraits?.name) {
+    personalizationContext += `\n- The visitor's name is ${visitorTraits.name}. Use it occasionally to make the conversation feel personal.`
+  }
+  if (visitorEvents?.book_trip) {
+    personalizationContext += `\n- This visitor has previously booked a trip. They are a returning customer — acknowledge this and suggest complementary destinations.`
+  }
 
   const result = streamText({
     model: "openai/gpt-5.2",
-    system: systemPrompt,
+    system: systemPrompt + personalizationContext,
     messages: await convertToModelMessages(messages),
     tools,
     stopWhen: stepCountIs(5),

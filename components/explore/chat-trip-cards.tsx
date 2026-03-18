@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { usePersonalizationSafe } from "@/components/providers/personalization-provider"
 
 /* -------------------------------------------------------------------------- */
 /*  Types                                                                     */
@@ -354,6 +355,7 @@ export function ChatDeparturesTable({
 }: ChatDeparturesTableProps) {
   const [bookingDeparture, setBookingDeparture] = useState<Departure | null>(null)
   const [bookingStep, setBookingStep] = useState<"form" | "confirmed">("form")
+  const personalization = usePersonalizationSafe()
 
   if (!departures || departures.length === 0) {
     return (
@@ -471,6 +473,19 @@ export function ChatDeparturesTable({
           className="space-y-4 px-4 py-4"
           onSubmit={(e) => {
             e.preventDefault()
+            // Track booking event for personalization
+            const formData = new FormData(e.currentTarget)
+            const email = formData.get("book-email") as string
+            const firstName = formData.get("book-first") as string
+            if (personalization) {
+              personalization.track("book_trip", { trip: tourTitle })
+              if (email || firstName) {
+                personalization.identify({
+                  ...(email ? { email } : {}),
+                  ...(firstName ? { name: firstName } : {}),
+                })
+              }
+            }
             setBookingStep("confirmed")
           }}
         >
@@ -479,7 +494,7 @@ export function ChatDeparturesTable({
               <Label htmlFor="book-first" className="text-xs">First name</Label>
               <div className="relative">
                 <User className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
-                <Input id="book-first" required placeholder="Jane" className="h-9 pl-8 text-sm" />
+                <Input id="book-first" name="book-first" required placeholder="Jane" className="h-9 pl-8 text-sm" />
               </div>
             </div>
             <div className="space-y-1.5">
@@ -495,7 +510,7 @@ export function ChatDeparturesTable({
             <Label htmlFor="book-email" className="text-xs">Email address</Label>
             <div className="relative">
               <Mail className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
-              <Input id="book-email" type="email" required placeholder="jane@example.com" className="h-9 pl-8 text-sm" />
+              <Input id="book-email" name="book-email" type="email" required placeholder="jane@example.com" className="h-9 pl-8 text-sm" />
             </div>
           </div>
 
