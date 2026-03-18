@@ -4,7 +4,7 @@ import { useCallback, useState, useRef, useEffect } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai"
 import type { UIMessage } from "ai"
-import { MessageCircle, X, Sparkles, ArrowDown, Send, Maximize2, Minimize2 } from "lucide-react"
+import { MessageCircle, X, Sparkles, ArrowDown, Send, Maximize2, Minimize2, RotateCcw } from "lucide-react"
 import ReactMarkdown from "react-markdown"
 import { cn } from "@/lib/utils"
 import { ExploreLogo } from "./explore-logo"
@@ -35,7 +35,7 @@ export function TravelChat() {
   const [showScrollBtn, setShowScrollBtn] = useState(false)
   const [inputValue, setInputValue] = useState("")
 
-  const { messages, sendMessage, status, addToolOutput, error } = useChat({
+  const { messages, sendMessage, status, addToolOutput, error, setMessages } = useChat({
     transport,
     id: "explore-travel-chat",
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
@@ -236,6 +236,16 @@ export function TravelChat() {
               </div>
             </div>
             <div className="flex items-center gap-1">
+              {messages.length > 0 && (
+                <button
+                  onClick={() => setMessages([])}
+                  className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+                  aria-label="New chat"
+                  title="New chat"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </button>
+              )}
               <button
                 onClick={() => setFullscreen((f) => !f)}
                 className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
