@@ -27,7 +27,7 @@ export function AiCtaBanner() {
               size="lg"
               className="bg-primary px-8 font-heading text-base font-semibold text-primary-foreground hover:bg-hover"
             >
-              <Link href="/ai">View AI Showcases</Link>
+              <Link href="/vercel">View AI Showcases</Link>
             </Button>
           </div>
 

@@ -12,7 +12,7 @@ const TravelChat = dynamic(
 export function ChatLoader() {
   const pathname = usePathname()
 
-  if (pathname.startsWith("/ai")) return null
+  if (pathname.startsWith("/ai") || pathname.startsWith("/vercel")) return null
 
   return <TravelChat />
 }
