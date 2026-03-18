@@ -1,345 +1,339 @@
 "use client"
 
-import { useCallback, useState, useRef, useEffect, type FormEvent } from "react"
+import { useCallback, useState, useRef, useEffect } from "react"
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai"
+import { DefaultChatTransport } from "ai"
 import type { UIMessage } from "ai"
-import { MessageCircle, X, Sparkles, ArrowDown, ArrowUp } from "lucide-react"
+import { MessageCircle, X, Sparkles, ArrowDown, Send } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { ExploreLogo } from "./explore-logo"
 import { ChatTripGrid, ChatTripDetail, ChatDeparturesTable } from "./chat-trip-cards"
 import { GuidedSellingFlow } from "./guided-selling"
-import { cn } from "@/lib/utils"
+
+/* -------------------------------------------------------------------------- */
+/*  Transport                                                                 */
+/* -------------------------------------------------------------------------- */
 
 const transport = new DefaultChatTransport({ api: "/api/explore-chat" })
 
+/* -------------------------------------------------------------------------- */
+/*  Suggestions                                                               */
+/* -------------------------------------------------------------------------- */
+
 const SUGGESTIONS = [
   "Help me find a trip",
-  "Walking holidays in Europe",
-  "What\u2019s available in Japan?",
-  "Trips under \u00A32,000",
+  "Best destinations for solo travel",
+  "What trips are under $2000?",
+  "Family-friendly adventures",
 ]
+
+/* -------------------------------------------------------------------------- */
+/*  Helper: extract text from UIMessage parts                                 */
+/* -------------------------------------------------------------------------- */
+
+function getMessageText(message: UIMessage): string {
+  if (!message.parts || !Array.isArray(message.parts)) return ""
+  return message.parts
+    .filter((p): p is { type: "text"; text: string } => p.type === "text")
+    .map((p) => p.text)
+    .join("")
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Component                                                                 */
+/* -------------------------------------------------------------------------- */
 
 export function TravelChat() {
   const [open, setOpen] = useState(false)
-  const [input, setInput] = useState("")
-  const pendingToolOutputs = useRef<Map<string, boolean>>(new Map())
   const scrollRef = useRef<HTMLDivElement>(null)
-  const bottomRef = useRef<HTMLDivElement>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
+  const [inputValue, setInputValue] = useState("")
 
-  const { messages, sendMessage, addToolOutput, status } = useChat({
+  const { messages, sendMessage, status, addToolOutput } = useChat({
     transport,
-    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-    onToolCall({ toolCall }) {
-      if (toolCall.dynamic) return
-    },
+    id: "explore-travel-chat",
   })
 
   const isStreaming = status === "streaming" || status === "submitted"
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages, status])
-
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return
-    const onScroll = () => {
-      const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80
-      setShowScrollBtn(!atBottom)
-    }
-    el.addEventListener("scroll", onScroll)
-    return () => el.removeEventListener("scroll", onScroll)
-  }, [])
-
+  /* ------ Auto-scroll ------ */
   const scrollToBottom = useCallback(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
   }, [])
 
-  const handleSend = useCallback(
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, scrollToBottom])
+
+  const handleScroll = useCallback(() => {
+    if (!scrollRef.current) return
+    const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
+    setShowScrollBtn(scrollHeight - scrollTop - clientHeight > 100)
+  }, [])
+
+  /* ------ Handlers ------ */
+  const handleSend = useCallback(() => {
+    const text = inputValue.trim()
+    if (!text) return
+    sendMessage({ text })
+    setInputValue("")
+  }, [inputValue, sendMessage])
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault()
+        handleSend()
+      }
+    },
+    [handleSend]
+  )
+
+  const handleSuggestion = useCallback(
     (text: string) => {
-      if (!text.trim()) return
-      sendMessage({ text: text.trim() })
-      setInput("")
+      sendMessage({ text })
     },
-    [sendMessage],
+    [sendMessage]
   )
 
-  const handleSubmit = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault()
-      handleSend(input)
-    },
-    [handleSend, input],
-  )
+  /* ------ Render tool invocations ------ */
+  function renderToolPart(part: { type: "tool-invocation"; toolInvocation: { toolName: string; toolCallId: string; state: string; args?: Record<string, unknown>; output?: unknown } }) {
+    const { toolName, toolCallId, state, args, output } = part.toolInvocation
 
-  const handleViewDetails = useCallback(
-    (slug: string) => {
-      sendMessage({ text: `Show me the details for the ${slug} trip` })
-    },
-    [sendMessage],
-  )
+    if (state === "input-streaming" || state === "input-available") {
+      return (
+        <div key={toolCallId} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
+          <Sparkles className="h-3 w-3 animate-spin" />
+          <span>Searching...</span>
+        </div>
+      )
+    }
 
-  const handleViewDepartures = useCallback(
-    (slug: string) => {
-      sendMessage({ text: `What dates are available for the ${slug} trip?` })
-    },
-    [sendMessage],
-  )
+    if (state !== "output-available" || !output) return null
 
-  const handleGuidedSellingComplete = useCallback(
-    (toolCallId: string, result: Record<string, unknown>) => {
-      if (pendingToolOutputs.current.has(toolCallId)) return
-      pendingToolOutputs.current.set(toolCallId, true)
-      addToolOutput({
-        tool: "startGuidedSelling",
-        toolCallId,
-        output: result,
-      })
-    },
-    [addToolOutput],
-  )
-
-  function renderToolPart(part: UIMessage["parts"][number]) {
-    if (part.type !== "tool-invocation") return null
-    const { toolName, toolCallId, state } = part
+    const data = output as Record<string, unknown>
 
     if (toolName === "searchTrips") {
-      if (state === "output-available") {
-        const out = part.output as { trips: Array<Record<string, unknown>>; totalFound: number }
-        return <ChatTripGrid key={toolCallId} trips={out.trips as never} totalFound={out.totalFound} onViewDetails={handleViewDetails} />
-      }
-      return <LoadingPill key={toolCallId} text="Searching trips\u2026" />
+      const trips = (data.trips || []) as Array<Record<string, unknown>>
+      const totalFound = (data.totalFound || 0) as number
+      if (trips.length === 0) return null
+      return (
+        <div key={toolCallId} className="my-2">
+          <ChatTripGrid
+            trips={trips as never}
+            totalFound={totalFound}
+            onViewDetails={(slug: string) => {
+              sendMessage({ text: `Show me details for the trip "${slug}"` })
+            }}
+          />
+        </div>
+      )
     }
 
     if (toolName === "getTripDetails") {
-      if (state === "output-available") {
-        const out = part.output as Record<string, unknown>
-        if (out.error) return <ErrorPill key={toolCallId} text="Trip not found." />
-        return <ChatTripDetail key={toolCallId} trip={out as never} onViewDepartures={handleViewDepartures} />
-      }
-      return <LoadingPill key={toolCallId} text="Loading trip details\u2026" />
+      return (
+        <div key={toolCallId} className="my-2">
+          <ChatTripDetail
+            trip={data as never}
+            onViewDepartures={(slug: string) => {
+              sendMessage({ text: `Show departures for "${slug}"` })
+            }}
+          />
+        </div>
+      )
     }
 
     if (toolName === "getAvailableDepartures") {
-      if (state === "output-available") {
-        const out = part.output as { tourTitle: string; tourSlug: string; departures: Array<Record<string, unknown>> }
-        if ((out as Record<string, unknown>).error) return <ErrorPill key={toolCallId} text="Trip not found." />
-        return <ChatDeparturesTable key={toolCallId} tourTitle={out.tourTitle} tourSlug={out.tourSlug} departures={out.departures as never} />
-      }
-      return <LoadingPill key={toolCallId} text="Checking availability\u2026" />
+      const departures = (data.departures || []) as Array<Record<string, unknown>>
+      return (
+        <div key={toolCallId} className="my-2">
+          <ChatDeparturesTable
+            departures={departures as never}
+            tripTitle={(data.tripTitle || "") as string}
+            tripSlug={(data.tripSlug || "") as string}
+          />
+        </div>
+      )
     }
 
-    if (toolName === "startGuidedSelling") {
-      const toolInput = part.input as { greeting: string }
-      if (state === "output-available") {
-        return (
-          <div key={toolCallId} className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-center text-xs font-medium text-primary">
-            Preferences submitted &mdash; finding your perfect trips&hellip;
-          </div>
-        )
-      }
+    if (toolName === "startGuidedSelling" && state === "input-available") {
       return (
-        <GuidedSellingFlow
-          key={toolCallId}
-          greeting={toolInput.greeting}
-          onComplete={(result) => handleGuidedSellingComplete(toolCallId, result as unknown as Record<string, unknown>)}
-        />
+        <div key={toolCallId} className="my-2">
+          <GuidedSellingFlow
+            greeting={(args?.greeting as string) || "Let's find your perfect trip!"}
+            onComplete={(preferences) => {
+              addToolOutput({
+                tool: "startGuidedSelling",
+                toolCallId,
+                output: JSON.stringify(preferences),
+              })
+            }}
+          />
+        </div>
       )
     }
 
     return null
   }
 
+  /* ------ UI ------ */
   return (
     <>
       {/* FAB button */}
-      <button
-        onClick={() => setOpen(true)}
-        className={cn(
-          "fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all hover:scale-105 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          open && "pointer-events-none scale-0 opacity-0",
-        )}
-        aria-label="Open travel assistant chat"
-      >
-        <MessageCircle className="h-6 w-6" />
-      </button>
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-95"
+          aria-label="Open travel assistant"
+        >
+          <MessageCircle className="h-6 w-6" />
+        </button>
+      )}
 
-      {/* Floating chat card */}
+      {/* Chat panel */}
       {open && (
-        <>
-          {/* Mobile backdrop */}
-          <div
-            className="fixed inset-0 z-50 bg-foreground/20 backdrop-blur-sm sm:hidden"
-            onClick={() => setOpen(false)}
-            aria-hidden="true"
-          />
+        <div className="fixed bottom-6 right-6 z-50 flex h-[520px] w-[380px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl max-sm:bottom-0 max-sm:right-0 max-sm:h-full max-sm:w-full max-sm:rounded-none">
+          {/* Header */}
+          <div className="flex items-center justify-between bg-primary px-4 py-3">
+            <div className="flex items-center gap-2">
+              <ExploreLogo variant="white" width={90} />
+              <span className="text-xs text-primary-foreground/70">|</span>
+              <div className="flex items-center gap-1">
+                <Sparkles className="h-3 w-3 text-explore-yellow" />
+                <span className="text-xs font-medium text-primary-foreground">Travel Assistant</span>
+              </div>
+            </div>
+            <button
+              onClick={() => setOpen(false)}
+              className="rounded-full p-1 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+              aria-label="Close chat"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
 
+          {/* Messages */}
           <div
-            className={cn(
-              "fixed z-50 flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl",
-              "inset-3 sm:inset-auto",
-              "sm:bottom-6 sm:right-6 sm:h-[600px] sm:w-[400px]",
-            )}
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
           >
-            {/* Header */}
-            <div className="flex shrink-0 items-center justify-between bg-primary px-4 py-3">
-              <div className="flex items-center gap-2.5">
-                <ExploreLogo variant="white" width={72} />
-                <div className="h-4 w-px bg-primary-foreground/30" />
-                <div className="flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5 text-primary-foreground/80" />
-                  <span className="text-xs font-medium text-primary-foreground/90">Travel Assistant</span>
+            {messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full gap-4 py-8">
+                <p className="text-sm text-muted-foreground text-center">
+                  Ask me anything about our trips and destinations.
+                </p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {SUGGESTIONS.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => handleSuggestion(s)}
+                      className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+                    >
+                      {s}
+                    </button>
+                  ))}
                 </div>
               </div>
-              <button
-                onClick={() => setOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-full text-primary-foreground/80 transition-colors hover:bg-primary-foreground/10 hover:text-primary-foreground"
-                aria-label="Close chat"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+            ) : (
+              messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={cn(
+                    "flex",
+                    msg.role === "user" ? "justify-end" : "justify-start"
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+                      msg.role === "user"
+                        ? "bg-primary text-primary-foreground rounded-br-md"
+                        : "bg-secondary text-secondary-foreground rounded-bl-md"
+                    )}
+                  >
+                    {msg.parts?.map((part, i) => {
+                      if (part.type === "text" && part.text) {
+                        return (
+                          <p key={i} className="whitespace-pre-wrap">
+                            {part.text}
+                          </p>
+                        )
+                      }
+                      if (part.type === "tool-invocation") {
+                        return renderToolPart(part as Parameters<typeof renderToolPart>[0])
+                      }
+                      return null
+                    })}
+                    {/* Fallback for messages without parts */}
+                    {(!msg.parts || msg.parts.length === 0) && getMessageText(msg) && (
+                      <p className="whitespace-pre-wrap">{getMessageText(msg)}</p>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
 
-            {/* Messages area */}
-            <div ref={scrollRef} className="relative flex-1 overflow-y-auto">
-              <div className="flex flex-col gap-4 p-4">
-                {messages.length === 0 ? (
-                  <div className="flex flex-col items-center gap-4 py-8 text-center">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                      <Sparkles className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="text-sm font-semibold text-foreground">Your Travel Assistant</h3>
-                      <p className="mx-auto max-w-[240px] text-xs text-muted-foreground">
-                        I can help you find the perfect trip, answer questions about destinations, and check availability.
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {SUGGESTIONS.map((s) => (
-                        <button
-                          key={s}
-                          onClick={() => handleSend(s)}
-                          className="rounded-full border border-primary/20 px-3 py-1.5 text-xs text-foreground transition-colors hover:border-primary hover:bg-primary/5"
-                        >
-                          {s}
-                        </button>
-                      ))}
+            {/* Streaming indicator */}
+            {isStreaming && messages.length > 0 && (() => {
+              const lastMsg = messages[messages.length - 1]
+              const hasContent = lastMsg?.role === "assistant" && lastMsg.parts?.some(
+                (p) => (p.type === "text" && (p as { text?: string }).text) || p.type === "tool-invocation"
+              )
+              if (hasContent) return null
+              return (
+                <div className="flex justify-start">
+                  <div className="rounded-2xl rounded-bl-md bg-secondary px-4 py-3">
+                    <div className="flex gap-1">
+                      <span className="h-2 w-2 rounded-full bg-muted-foreground/40 animate-bounce [animation-delay:0ms]" />
+                      <span className="h-2 w-2 rounded-full bg-muted-foreground/40 animate-bounce [animation-delay:150ms]" />
+                      <span className="h-2 w-2 rounded-full bg-muted-foreground/40 animate-bounce [animation-delay:300ms]" />
                     </div>
                   </div>
-                ) : (
-                  messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={cn(
-                        "flex flex-col gap-2",
-                        message.role === "user" ? "items-end" : "items-start",
-                      )}
-                    >
-                      {message.parts.map((part, j) => {
-                        if (part.type === "text" && part.text.trim()) {
-                          return (
-                            <div
-                              key={`text-${j}`}
-                              className={cn(
-                                "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
-                                message.role === "user"
-                                  ? "rounded-br-md bg-primary text-primary-foreground"
-                                  : "rounded-bl-md bg-muted text-foreground",
-                              )}
-                            >
-                              {part.text}
-                            </div>
-                          )
-                        }
-                        if (part.type === "tool-invocation") {
-                          return (
-                            <div key={`tool-${j}`} className="w-full max-w-[95%]">
-                              {renderToolPart(part)}
-                            </div>
-                          )
-                        }
-                        return null
-                      })}
-                    </div>
-                  ))
-                )}
-
-                {isStreaming &&
-                  messages.length > 0 &&
-                  messages[messages.length - 1]?.role === "user" && (
-                    <div className="flex items-start">
-                      <div className="flex items-center gap-1 rounded-2xl rounded-bl-md bg-muted px-4 py-3">
-                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:0ms]" />
-                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:150ms]" />
-                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:300ms]" />
-                      </div>
-                    </div>
-                  )}
-
-                <div ref={bottomRef} />
-              </div>
-
-              {showScrollBtn && (
-                <button
-                  onClick={scrollToBottom}
-                  className="absolute bottom-3 left-1/2 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-card shadow-md transition-colors hover:bg-muted"
-                  aria-label="Scroll to bottom"
-                >
-                  <ArrowDown className="h-4 w-4 text-muted-foreground" />
-                </button>
-              )}
-            </div>
-
-            {/* Input area */}
-            <div className="shrink-0 border-t border-border bg-card p-3">
-              <form onSubmit={handleSubmit} className="flex items-end gap-2">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSend(input)
-                    }
-                  }}
-                  placeholder="Ask about trips, destinations..."
-                  rows={1}
-                  className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-                <button
-                  type="submit"
-                  disabled={!input.trim() || isStreaming}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
-                  aria-label="Send message"
-                >
-                  <ArrowUp className="h-4 w-4" />
-                </button>
-              </form>
-              <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
-                AI-powered assistant. Results may vary.
-              </p>
-            </div>
+                </div>
+              )
+            })()}
           </div>
-        </>
+
+          {/* Scroll-to-bottom */}
+          {showScrollBtn && (
+            <button
+              onClick={scrollToBottom}
+              className="absolute bottom-20 left-1/2 -translate-x-1/2 rounded-full bg-card border border-border p-1.5 shadow-md"
+              aria-label="Scroll to bottom"
+            >
+              <ArrowDown className="h-3.5 w-3.5 text-muted-foreground" />
+            </button>
+          )}
+
+          {/* Input */}
+          <div className="border-t border-border bg-card p-3">
+            <div className="flex items-end gap-2">
+              <textarea
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask about trips, destinations..."
+                rows={1}
+                className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-primary/30"
+              />
+              <button
+                onClick={handleSend}
+                disabled={!inputValue.trim() || isStreaming}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+                aria-label="Send message"
+              >
+                <Send className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
+              AI-powered assistant. Results may vary.
+            </p>
+          </div>
+        </div>
       )}
     </>
-  )
-}
-
-function LoadingPill({ text }: { text: string }) {
-  return (
-    <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/50 p-3 text-xs text-muted-foreground">
-      <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-      {text}
-    </div>
-  )
-}
-
-function ErrorPill({ text }: { text: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-muted/50 p-3 text-xs text-muted-foreground">
-      {text}
-    </div>
   )
 }
