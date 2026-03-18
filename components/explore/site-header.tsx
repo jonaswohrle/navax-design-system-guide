@@ -39,7 +39,7 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Top utility bar -- matches real explore.co.uk */}
+      {/* Top utility bar -- dark red */}
       <div className="bg-[#8B1A1A] text-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs">
           <Link href="/about-us" className="font-semibold underline underline-offset-2 hover:text-white/80">
@@ -57,36 +57,36 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
         </div>
       </div>
 
-      {/* Main nav bar */}
-      <nav className={`border-b border-border bg-card transition-shadow duration-200 ${scrolled ? "shadow-md" : ""}`}>
+      {/* Main nav bar -- EXPLORE RED with white text/logo */}
+      <nav className={`bg-primary transition-shadow duration-200 ${scrolled ? "shadow-md" : ""}`}>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 lg:py-2.5">
-          {/* Logo */}
+          {/* Logo -- white variant on red background */}
           <Link href="/" className="shrink-0" aria-label="Explore home">
-            <ExploreLogo variant="color" width={120} />
+            <ExploreLogo variant="white" width={120} />
           </Link>
 
-          {/* Desktop nav links */}
+          {/* Desktop nav links -- white text on red */}
           <ul className="hidden items-center gap-0.5 lg:flex">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={`flex items-center gap-0.5 rounded px-3 py-2 text-sm font-medium transition-colors hover:text-primary ${
-                    pathname === link.href ? "text-primary" : "text-foreground"
+                  className={`flex items-center gap-0.5 rounded px-3 py-2 text-sm font-medium transition-colors hover:bg-white/10 ${
+                    pathname === link.href ? "text-white" : "text-white/90"
                   }`}
                 >
                   {link.label}
-                  <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                  <ChevronDown className="h-3 w-3 text-white/60" />
                 </Link>
               </li>
             ))}
           </ul>
 
-          {/* Right icons -- matching real site: My Explore, Wishlist, Trip Search */}
+          {/* Right icons -- white on red, matching real site */}
           <div className="flex items-center gap-1">
             <Link
               href="/my-explore"
-              className="flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-foreground transition-colors hover:text-primary"
+              className="flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
               aria-label="My Explore"
             >
               <User className="h-5 w-5" />
@@ -95,12 +95,12 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
 
             <Link
               href="/my-explore?tab=wishlist"
-              className="relative flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-foreground transition-colors hover:text-primary"
+              className="relative flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
               aria-label="Wishlist"
             >
-              <Heart className={`h-5 w-5 ${wishlist.length > 0 ? "fill-primary text-primary" : ""}`} />
+              <Heart className={`h-5 w-5 ${wishlist.length > 0 ? "fill-explore-yellow text-explore-yellow" : ""}`} />
               {wishlist.length > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-explore-yellow text-[10px] font-bold text-explore-yellow-foreground">
                   {wishlist.length}
                 </span>
               )}
@@ -109,7 +109,7 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
 
             <Link
               href="/search"
-              className="flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-foreground transition-colors hover:text-primary"
+              className="flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
               aria-label="Trip Search"
             >
               <Search className="h-5 w-5" />
@@ -119,14 +119,14 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
             {/* Mobile menu */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="ml-1 lg:hidden" aria-label="Open menu">
+                <Button variant="ghost" size="icon" className="ml-1 text-white hover:bg-white/10 hover:text-white lg:hidden" aria-label="Open menu">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-80 bg-card p-0">
                 <SheetTitle className="sr-only">Navigation menu</SheetTitle>
-                <div className="flex items-center border-b border-border px-4 py-3">
-                  <ExploreLogo variant="color" width={100} />
+                <div className="flex items-center bg-primary px-4 py-3">
+                  <ExploreLogo variant="white" width={100} />
                 </div>
                 <nav className="flex flex-col">
                   {NAV_LINKS.map((link) => (
@@ -139,13 +139,6 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
                       {link.label}
                     </Link>
                   ))}
-                  <Link
-                    href="/blog"
-                    onClick={() => setMobileOpen(false)}
-                    className="border-b border-border px-4 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
-                  >
-                    Blog
-                  </Link>
                   <Link
                     href="/search"
                     onClick={() => setMobileOpen(false)}
@@ -167,10 +160,10 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
         </div>
       </nav>
 
-      {/* Promo banner strip */}
+      {/* Promo banner strip -- yellow with dark text */}
       {promoBanner?.text && promoBanner.isActive !== false && (
-        <div className="bg-[#FFF3CD] text-center">
-          <div className="mx-auto max-w-7xl px-4 py-2 text-xs font-medium text-foreground">
+        <div className="bg-explore-yellow text-center">
+          <div className="mx-auto max-w-7xl px-4 py-2 text-xs font-medium text-explore-yellow-foreground">
             {promoBanner.text}
             {promoBanner.linkText && promoBanner.linkUrl && (
               <>

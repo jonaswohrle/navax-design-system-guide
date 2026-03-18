@@ -17,8 +17,8 @@ interface HeroSearchProps {
 }
 
 export function HeroSearch({
-  title = "Explore!",
-  subtitle = "Small group adventures to inspire the soul",
+  title = "Unforgettable adventures.",
+  subtitle = "From bold year-long experiences, to small and unscripted moments of joy, our small group adventures create stories to tell for a lifetime.",
   ctaText = "Search",
   backgroundImageUrl = "/images/explore/hero-mountains.jpg",
 }: HeroSearchProps) {
@@ -62,13 +62,14 @@ export function HeroSearch({
       <div className="absolute inset-0 bg-black/40" />
 
       <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-16 text-center">
-        <p className="mb-2 text-base font-medium tracking-wide text-white/90 lg:text-lg">
-          {"Don't just travel,"}
-        </p>
-        <h1 className="mb-4 font-heading text-5xl font-bold text-white lg:text-7xl">
-          {title}
-        </h1>
-        <p className="mb-10 text-lg text-white/80 lg:text-xl">{subtitle}</p>
+        <div className="mb-8 inline-block rounded bg-explore-yellow/90 px-6 py-3 lg:px-8 lg:py-4">
+          <h1 className="font-heading text-3xl font-bold text-explore-yellow-foreground lg:text-5xl">
+            {title}
+          </h1>
+          <p className="mt-1 text-sm text-explore-yellow-foreground/80 lg:text-base">
+            {subtitle}
+          </p>
+        </div>
 
         {/* Search bar - matching Explore's style */}
         <div className="mx-auto max-w-3xl rounded-lg bg-white p-2 shadow-xl lg:p-3">
@@ -142,7 +143,7 @@ export function HeroSearch({
 
             <Button
               onClick={handleSearch}
-              className="shrink-0 rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-hover"
+              className="shrink-0 rounded-md bg-explore-yellow px-6 py-2.5 text-sm font-bold text-explore-yellow-foreground hover:bg-explore-yellow/90"
             >
               <Search className="mr-1.5 h-4 w-4" />
               {ctaText}

@@ -7,7 +7,7 @@ import type { TripListingFields } from "@/lib/contentful"
 
 const BADGE_STYLES: Record<string, string> = {
   "Best Seller": "bg-primary text-primary-foreground",
-  "Discounted": "bg-emerald-600 text-white",
+  "Discounted": "bg-explore-yellow text-explore-yellow-foreground",
   "Centre-based": "bg-sky-600 text-white",
 }
 

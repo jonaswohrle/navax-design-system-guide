@@ -108,7 +108,7 @@ export function SiteFooter() {
                     className="h-9 border-background/20 bg-background/10 text-xs text-background placeholder:text-background/40"
                     required
                   />
-                  <Button type="submit" size="sm" className="h-9 bg-primary text-xs text-primary-foreground hover:bg-hover">
+                  <Button type="submit" size="sm" className="h-9 bg-explore-yellow text-xs font-bold text-explore-yellow-foreground hover:bg-explore-yellow/90">
                     Subscribe
                   </Button>
                 </form>

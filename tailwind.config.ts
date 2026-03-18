@@ -42,6 +42,10 @@ const config: Config = {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
         },
+        'explore-yellow': {
+          DEFAULT: 'hsl(var(--explore-yellow))',
+          foreground: 'hsl(var(--explore-yellow-foreground))',
+        },
         hover: {
           DEFAULT: 'hsl(var(--hover))',
           foreground: 'hsl(var(--hover-foreground))',

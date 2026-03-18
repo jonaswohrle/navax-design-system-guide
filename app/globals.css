@@ -30,9 +30,13 @@
     --muted: 220 9% 94%;
     --muted-foreground: 220 9% 46%;
 
-    /* Accent: Teal/green for secondary CTAs -- Explore uses a teal  */
+    /* Accent: Teal/green for secondary CTAs */
     --accent: 173 58% 39%;
     --accent-foreground: 0 0% 100%;
+
+    /* Explore Yellow -- used for CTAs, highlights, promo banners */
+    --explore-yellow: 45 100% 51%;
+    --explore-yellow-foreground: 210 11% 15%;
 
     /* Hover: Darker crimson */
     --hover: 350 85% 35%;
