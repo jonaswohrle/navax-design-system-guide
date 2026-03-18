@@ -49,10 +49,18 @@ export function TravelChat() {
   const [showScrollBtn, setShowScrollBtn] = useState(false)
   const [inputValue, setInputValue] = useState("")
 
-  const { messages, sendMessage, status, addToolOutput } = useChat({
+  const { messages, sendMessage, status, addToolOutput, error } = useChat({
     transport,
     id: "explore-travel-chat",
+    onError: (err) => {
+      console.error("[v0] useChat error:", err)
+    },
+    onFinish: (msg) => {
+      console.log("[v0] useChat onFinish, message:", msg.id, msg.role)
+    },
   })
+
+  console.log("[v0] TravelChat render - status:", status, "messages:", messages.length, "error:", error?.message)
 
   const isStreaming = status === "streaming" || status === "submitted"
 
@@ -77,9 +85,10 @@ export function TravelChat() {
   const handleSend = useCallback(() => {
     const text = inputValue.trim()
     if (!text) return
+    console.log("[v0] Sending message:", text, "status:", status)
     sendMessage({ text })
     setInputValue("")
-  }, [inputValue, sendMessage])
+  }, [inputValue, sendMessage, status])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -274,6 +283,13 @@ export function TravelChat() {
                   </div>
                 </div>
               ))
+            )}
+
+            {/* Error display */}
+            {error && (
+              <div className="mx-auto max-w-[90%] rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-700">
+                <strong>Error:</strong> {error.message}
+              </div>
             )}
 
             {/* Streaming indicator */}
