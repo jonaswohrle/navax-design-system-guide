@@ -55,7 +55,7 @@ const defaultColumns: FooterColumn[] = [
 export function AppFooter({
   columns = defaultColumns,
   className,
-  companyName = "NAVAX",
+  companyName = "DEMO",
 }: AppFooterProps) {
   const year = new Date().getFullYear()
 

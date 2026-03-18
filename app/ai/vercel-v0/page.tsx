@@ -304,7 +304,7 @@ className="bg-primary text-primary-foreground"`}
                   <pre className="overflow-x-auto font-mono text-[11px] text-muted-foreground leading-relaxed">
 {`/* v0 imports YOUR components */
 import { Button } from "@/components/ui/button"
-import { BrightlyLogo } from "@/components/ds/brightly-logo"
+import { NavaxLogo } from "@/components/ds/navax-logo"
 
 /* Not generic HTML */
 <button class="bg-blue-500">  // Never this`}
