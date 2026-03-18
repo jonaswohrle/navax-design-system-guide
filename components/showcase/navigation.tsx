@@ -2,7 +2,7 @@
 
 import React from "react"
 import { Navbar, NavbarLink, Breadcrumbs, TabNav, PageHeader } from "@/components/ds"
-import { BrightlyLogo } from "@/components/ds/brightly-logo"
+import { NavaxLogo } from "@/components/ds/navax-logo"
 import { Button } from "@/components/ui/button"
 import { Bell, Plus } from "lucide-react"
 
@@ -16,7 +16,7 @@ export function ShowcaseNavigation() {
         <p className="text-sm font-medium mb-3 text-foreground">Navbar</p>
         <div className="rounded-lg border border-border overflow-hidden">
           <Navbar
-            logo={<BrightlyLogo width={100} variant="dark" />}
+            logo={<NavaxLogo width={100} variant="dark" />}
             actions={
               <>
                 <Button variant="ghost" size="icon" aria-label="Notifications">

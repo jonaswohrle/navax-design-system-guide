@@ -6,7 +6,7 @@ import { LayoutDashboard, Users, BarChart3, Settings, ChevronLeft, ChevronRight,
 import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { BrightlyLogo } from "./brightly-logo"
+import { NavaxLogo } from "./navax-logo"
 
 interface SidebarItem {
   label: string
@@ -52,7 +52,7 @@ export function AppSidebar({
   activePath = "#",
   className,
   defaultCollapsed = false,
-  user = { name: "Jonas W.", email: "j.woehrle@brightly.com" },
+  user = { name: "Jonas W.", email: "j.woehrle@navax.com" },
 }: AppSidebarProps) {
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed)
   const [openSections, setOpenSections] = React.useState<string[]>(() => {
@@ -79,7 +79,7 @@ export function AppSidebar({
       <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-3">
         {!collapsed && (
           <Link href="/" className="shrink-0">
-            <BrightlyLogo variant="light" width={100} />
+            <NavaxLogo variant="light" width={100} />
           </Link>
         )}
         <Button

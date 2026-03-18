@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { BrightlyLogo } from "./brightly-logo"
+import { NavaxLogo } from "./navax-logo"
 
 interface FooterColumn {
   title: string
@@ -55,7 +55,7 @@ const defaultColumns: FooterColumn[] = [
 export function AppFooter({
   columns = defaultColumns,
   className,
-  companyName = "Brightly, A Siemens Company",
+  companyName = "NAVAX",
 }: AppFooterProps) {
   const year = new Date().getFullYear()
 
@@ -65,7 +65,7 @@ export function AppFooter({
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           {/* Brand column */}
           <div className="flex flex-col gap-4 lg:max-w-xs">
-            <BrightlyLogo variant="light" width={120} />
+            <NavaxLogo variant="light" width={120} />
             <p className="text-sm leading-relaxed text-background/60">
               Empowering you through partnership and innovation. Smart asset management solutions for every industry.
             </p>

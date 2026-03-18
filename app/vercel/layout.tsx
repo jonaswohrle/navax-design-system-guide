@@ -38,7 +38,7 @@ export default function VercelLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname()
 
   return (
-    <div className="flex h-screen bg-background text-foreground">
+    <div className="theme-valtech flex h-screen bg-background text-foreground">
       <AppSidebar items={vercelSidebarItems} activePath={pathname} />
       <main className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">{children}</main>
     </div>

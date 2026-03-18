@@ -1,5 +1,5 @@
 /**
- * Legacy re-export: ValtechLogo now renders BrightlyLogo.
+ * Legacy re-export: ValtechLogo now renders NavaxLogo.
  * This keeps all existing imports working without breaking changes.
  */
-export { BrightlyLogo as ValtechLogo } from "./brightly-logo"
+export { NavaxLogo as ValtechLogo } from "./navax-logo"

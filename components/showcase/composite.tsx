@@ -3,7 +3,7 @@
 import { AppHeader } from "@/components/ds/app-header"
 import { AppSidebar } from "@/components/ds/app-sidebar"
 import { AppFooter } from "@/components/ds/app-footer"
-import { BrightlyLogo } from "@/components/ds/brightly-logo"
+import { NavaxLogo } from "@/components/ds/navax-logo"
 
 export function ShowcaseComposite() {
   return (
