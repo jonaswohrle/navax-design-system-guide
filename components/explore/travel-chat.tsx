@@ -44,7 +44,7 @@ export function TravelChat() {
       /* startGuidedSelling is handled via UI, not here */
     },
     onError: (err) => {
-      console.error("[v0] useChat error:", err)
+      console.error("Chat error:", err)
     },
   })
 
@@ -305,24 +305,51 @@ export function TravelChat() {
                               : "bg-secondary text-secondary-foreground rounded-bl-md"
                           )}
                         >
-                          <ReactMarkdown
-                            components={{
-                              p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
-                              strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
-                              ul: ({ children }) => <ul className="mb-1 ml-3 list-disc space-y-0.5 last:mb-0">{children}</ul>,
-                              ol: ({ children }) => <ol className="mb-1 ml-3 list-decimal space-y-0.5 last:mb-0">{children}</ol>,
-                              li: ({ children }) => <li>{children}</li>,
-                              h2: ({ children }) => <p className="mb-1 font-semibold">{children}</p>,
-                              h3: ({ children }) => <p className="mb-1 font-semibold">{children}</p>,
-                              a: ({ href, children }) => (
-                                <a href={href} target="_blank" rel="noopener noreferrer" className="underline text-primary">
-                                  {children}
-                                </a>
-                              ),
-                            }}
-                          >
-                            {text}
-                          </ReactMarkdown>
+                          <div className="prose-chat">
+                            <ReactMarkdown
+                              components={{
+                                p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
+                                strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                                em: ({ children }) => <em className="italic">{children}</em>,
+                                ul: ({ children }) => (
+                                  <ul className="mb-2 space-y-1 last:mb-0">{children}</ul>
+                                ),
+                                ol: ({ children }) => (
+                                  <ol className="mb-2 list-decimal space-y-1 pl-4 last:mb-0">{children}</ol>
+                                ),
+                                li: ({ children }) => (
+                                  <li className="flex items-start gap-1.5">
+                                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary/60" />
+                                    <span>{children}</span>
+                                  </li>
+                                ),
+                                h1: ({ children }) => <p className="mb-2 text-base font-bold">{children}</p>,
+                                h2: ({ children }) => <p className="mb-1.5 text-sm font-bold">{children}</p>,
+                                h3: ({ children }) => <p className="mb-1 text-sm font-semibold">{children}</p>,
+                                a: ({ href, children }) => (
+                                  <a
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-medium text-primary underline underline-offset-2 hover:text-primary/80"
+                                  >
+                                    {children}
+                                  </a>
+                                ),
+                                hr: () => <hr className="my-2 border-border" />,
+                                blockquote: ({ children }) => (
+                                  <blockquote className="my-2 border-l-2 border-primary/30 pl-3 italic text-muted-foreground">
+                                    {children}
+                                  </blockquote>
+                                ),
+                                code: ({ children }) => (
+                                  <code className="rounded bg-muted px-1 py-0.5 text-xs font-mono">{children}</code>
+                                ),
+                              }}
+                            >
+                              {text}
+                            </ReactMarkdown>
+                          </div>
                         </div>
                       </div>
                     )}
