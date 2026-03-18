@@ -163,7 +163,7 @@ export function HeroSearch({
               {/* CTA */}
               <button
                 onClick={handleSearch}
-                className="flex items-center justify-center gap-2 rounded bg-[#8B1A1A] px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-[#6B1515] lg:self-end"
+                className="flex items-center justify-center gap-2 rounded bg-explore-yellow px-8 py-3 text-sm font-bold text-foreground transition-colors hover:bg-explore-yellow/90 lg:self-end"
               >
                 {"Let's go!"}
                 <ChevronRight className="h-4 w-4" />

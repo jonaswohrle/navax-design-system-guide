@@ -15,7 +15,7 @@ interface WaveDividerProps {
 export function WaveDivider({ color = "hsl(var(--primary))", flip = false, className }: WaveDividerProps) {
   return (
     <div
-      className={cn("relative -mt-1 w-full overflow-hidden leading-[0]", flip && "rotate-180", className)}
+      className={cn("relative z-10 -mt-16 w-full overflow-hidden leading-[0] md:-mt-20 lg:-mt-24", flip && "rotate-180", className)}
       aria-hidden="true"
     >
       <svg

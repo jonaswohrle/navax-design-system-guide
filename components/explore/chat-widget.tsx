@@ -4,9 +4,9 @@ import { useCallback, useState, useRef, useEffect, type FormEvent } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai"
 import type { UIMessage } from "ai"
-import { MessageCircle, X, Sparkles, ArrowDown, ArrowUp } from "lucide-react"
+import { MessageCircle, X, Sparkles, ArrowDown, ArrowUp, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import { ExploreLogo } from "./explore-logo"
 import { ChatTripGrid, ChatTripDetail, ChatDeparturesTable } from "./chat-trip-cards"
 import { GuidedSellingFlow } from "./guided-selling"
@@ -248,6 +248,7 @@ export function ChatWidget() {
           className="flex w-full flex-col gap-0 p-0 sm:max-w-[420px] [&>button]:hidden"
         >
           <SheetTitle className="sr-only">Explore Travel Assistant</SheetTitle>
+          <SheetDescription className="sr-only">Chat with our AI travel assistant to find your perfect trip</SheetDescription>
 
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border bg-primary px-4 py-3">
