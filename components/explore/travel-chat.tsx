@@ -61,6 +61,11 @@ export function TravelChat() {
   })
 
   console.log("[v0] TravelChat render - status:", status, "messages:", messages.length, "error:", error?.message)
+  if (messages.length > 0) {
+    messages.forEach((m, i) => {
+      console.log(`[v0] msg[${i}] role=${m.role} parts=${JSON.stringify(m.parts?.map(p => ({ type: p.type, text: p.type === "text" ? (p as { text: string }).text?.slice(0, 50) : undefined })))}`)
+    })
+  }
 
   const isStreaming = status === "streaming" || status === "submitted"
 
@@ -111,6 +116,36 @@ export function TravelChat() {
   function renderToolPart(part: { type: "tool-invocation"; toolInvocation: { toolName: string; toolCallId: string; state: string; args?: Record<string, unknown>; output?: unknown } }) {
     const { toolName, toolCallId, state, args, output } = part.toolInvocation
 
+    /* --- Client-side tool: startGuidedSelling (no execute, stays at input-available) --- */
+    if (toolName === "startGuidedSelling") {
+      if (state === "input-streaming") {
+        return (
+          <div key={toolCallId} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
+            <Sparkles className="h-3 w-3 animate-spin" />
+            <span>Preparing trip finder...</span>
+          </div>
+        )
+      }
+      if (state === "input-available") {
+        return (
+          <div key={toolCallId} className="my-2">
+            <GuidedSellingFlow
+              greeting={(args?.greeting as string) || "Let's find your perfect trip!"}
+              onComplete={(preferences) => {
+                addToolOutput({
+                  tool: "startGuidedSelling",
+                  toolCallId,
+                  output: JSON.stringify(preferences),
+                })
+              }}
+            />
+          </div>
+        )
+      }
+      return null
+    }
+
+    /* --- Server-side tools: show loading while executing --- */
     if (state === "input-streaming" || state === "input-available") {
       return (
         <div key={toolCallId} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
@@ -162,23 +197,6 @@ export function TravelChat() {
             departures={departures as never}
             tripTitle={(data.tripTitle || "") as string}
             tripSlug={(data.tripSlug || "") as string}
-          />
-        </div>
-      )
-    }
-
-    if (toolName === "startGuidedSelling" && state === "input-available") {
-      return (
-        <div key={toolCallId} className="my-2">
-          <GuidedSellingFlow
-            greeting={(args?.greeting as string) || "Let's find your perfect trip!"}
-            onComplete={(preferences) => {
-              addToolOutput({
-                tool: "startGuidedSelling",
-                toolCallId,
-                output: JSON.stringify(preferences),
-              })
-            }}
           />
         </div>
       )
@@ -264,10 +282,12 @@ export function TravelChat() {
                     )}
                   >
                     {msg.parts?.map((part, i) => {
-                      if (part.type === "text" && part.text) {
+                      if (part.type === "text") {
+                        const text = (part as { type: "text"; text: string }).text
+                        if (!text) return null
                         return (
                           <p key={i} className="whitespace-pre-wrap">
-                            {part.text}
+                            {text}
                           </p>
                         )
                       }
@@ -276,10 +296,6 @@ export function TravelChat() {
                       }
                       return null
                     })}
-                    {/* Fallback for messages without parts */}
-                    {(!msg.parts || msg.parts.length === 0) && getMessageText(msg) && (
-                      <p className="whitespace-pre-wrap">{getMessageText(msg)}</p>
-                    )}
                   </div>
                 </div>
               ))
