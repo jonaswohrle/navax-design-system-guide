@@ -39,24 +39,32 @@ async function fetchContentful<T = Record<string, unknown>>(
   contentType: string,
   query: Record<string, string> = {},
 ): Promise<{ items: ContentfulEntry<T>[]; includes?: { Asset?: ContentfulAsset[] } }> {
+  if (!ACCESS_TOKEN) {
+    return { items: [] }
+  }
+
   const params = new URLSearchParams({
     content_type: contentType,
     ...query,
   })
 
-  const res = await fetch(`${BASE_URL}/entries?${params.toString()}`, {
-    headers: {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-    },
-    next: { revalidate: 60 },
-  })
+  try {
+    const res = await fetch(`${BASE_URL}/entries?${params.toString()}`, {
+      headers: {
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+      next: { revalidate: 60 },
+    })
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return { items: [] }
+    }
+
+    const data: ContentfulResponse<T> = await res.json()
+    return { items: data.items, includes: data.includes }
+  } catch {
     return { items: [] }
   }
-
-  const data: ContentfulResponse<T> = await res.json()
-  return { items: data.items, includes: data.includes }
 }
 
 // --------------- Content type interfaces ---------------
