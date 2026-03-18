@@ -66,15 +66,6 @@ export default async function ExperiencesPage() {
         >
           <source src={VIDEO_URL} type="video/mp4" />
         </video>
-        <Image
-          src="/images/explore/hero-santorini.png"
-          alt=""
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-          aria-hidden="true"
-        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-24 lg:px-8 lg:pb-32">

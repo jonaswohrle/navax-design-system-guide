@@ -183,7 +183,7 @@ export function TravelChat() {
     const output = part.output as Record<string, unknown> | undefined
     const toolName = (part.type as string).replace("tool-", "")
 
-    // In fullscreen, tool outputs go to the canvas — show a brief inline reference
+    // In fullscreen, tool outputs go to the canvas — show contextual inline references
     if (isFullscreenMode && canvasOpen) {
       if (toolName === "startGuidedSelling") {
         if (state === "input-streaming") {
@@ -195,10 +195,20 @@ export function TravelChat() {
           )
         }
         if (state === "input-available") {
+          const greeting = (input?.greeting as string) || ""
           return (
-            <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-primary py-1.5">
-              <Sparkles className="h-3 w-3" />
-              <span className="font-medium">Trip finder is open on the right</span>
+            <div key={toolCallId || index} className="space-y-2">
+              {greeting && (
+                <div className="flex justify-start">
+                  <div className="max-w-[85%] rounded-2xl rounded-bl-md bg-secondary text-secondary-foreground px-3.5 py-2.5 text-sm leading-relaxed">
+                    <p>{greeting}</p>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center gap-2 text-xs text-primary py-1">
+                <Sparkles className="h-3 w-3" />
+                <span className="font-medium">{"Answer the questions on the right to find your perfect trip \u2192"}</span>
+              </div>
             </div>
           )
         }
@@ -216,14 +226,14 @@ export function TravelChat() {
 
       if (state === "output-available") {
         const labels: Record<string, string> = {
-          searchTrips: "Trip results shown on the right",
-          getTripDetails: "Trip details shown on the right",
-          getAvailableDepartures: "Departures shown on the right",
+          searchTrips: "I found some trips for you \u2192",
+          getTripDetails: "Here are the trip details \u2192",
+          getAvailableDepartures: "Available departures are shown \u2192",
         }
         return (
           <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-primary/70 py-1.5">
             <Sparkles className="h-3 w-3" />
-            <span>{labels[toolName] || "Results shown on the right"}</span>
+            <span>{labels[toolName] || "Results shown on the right \u2192"}</span>
           </div>
         )
       }
