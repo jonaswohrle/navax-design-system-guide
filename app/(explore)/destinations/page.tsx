@@ -12,6 +12,7 @@ import { TripCard } from "@/components/explore/trip-card"
 import { TrustStrip } from "@/components/explore/trust-strip"
 import { ContentCard } from "@/components/explore/content-card"
 import { DestinationFilters } from "@/components/explore/destination-filters"
+import { getTourCountByRegion, getAllTours } from "@/lib/tour-data"
 
 export const metadata: Metadata = {
   title: "Adventure Holiday Destinations | Where To Go On Your Next Tour - Explore",
@@ -20,16 +21,16 @@ export const metadata: Metadata = {
 }
 
 const FALLBACK_REGIONS = [
-  { name: "Europe", imageUrl: "/images/explore/dest-europe.jpg", slug: "europe", tripCount: 95, order: 1 },
-  { name: "Asia", imageUrl: "/images/explore/dest-asia.jpg", slug: "asia", tripCount: 78, order: 2 },
-  { name: "Africa", imageUrl: "/images/explore/dest-africa.jpg", slug: "africa", tripCount: 42, order: 3 },
-  { name: "South America", imageUrl: "/images/explore/dest-south-america.jpg", slug: "south-america", tripCount: 35, order: 4 },
-  { name: "Central America", imageUrl: "/images/explore/dest-central-america.jpg", slug: "central-america", tripCount: 18, order: 5 },
-  { name: "Middle East", imageUrl: "/images/explore/dest-middle-east.jpg", slug: "middle-east", tripCount: 15, order: 6 },
-  { name: "Polar Regions", imageUrl: "/images/explore/dest-polar.jpg", slug: "polar", tripCount: 12, order: 7 },
-  { name: "North America", imageUrl: "/images/explore/dest-north-america.jpg", slug: "north-america", tripCount: 10, order: 8 },
-  { name: "Caribbean", imageUrl: "/images/explore/dest-caribbean.jpg", slug: "caribbean", tripCount: 8, order: 9 },
-  { name: "Australasia", imageUrl: "/images/explore/dest-australasia.jpg", slug: "australasia", tripCount: 14, order: 10 },
+  { name: "Europe", imageUrl: "/images/explore/dest-europe.jpg", slug: "europe", tripCount: getTourCountByRegion("europe"), order: 1 },
+  { name: "Asia", imageUrl: "/images/explore/dest-asia.jpg", slug: "asia", tripCount: getTourCountByRegion("asia"), order: 2 },
+  { name: "Africa", imageUrl: "/images/explore/dest-africa.jpg", slug: "africa", tripCount: getTourCountByRegion("africa"), order: 3 },
+  { name: "South America", imageUrl: "/images/explore/dest-south-america.jpg", slug: "south-america", tripCount: getTourCountByRegion("south-america"), order: 4 },
+  { name: "Central America", imageUrl: "/images/explore/dest-central-america.jpg", slug: "central-america", tripCount: getTourCountByRegion("central-america"), order: 5 },
+  { name: "Middle East", imageUrl: "/images/explore/dest-middle-east.jpg", slug: "middle-east", tripCount: getTourCountByRegion("middle-east"), order: 6 },
+  { name: "Polar Regions", imageUrl: "/images/explore/dest-polar.jpg", slug: "polar", tripCount: getTourCountByRegion("polar"), order: 7 },
+  { name: "North America", imageUrl: "/images/explore/dest-north-america.jpg", slug: "north-america", tripCount: getTourCountByRegion("north-america"), order: 8 },
+  { name: "Caribbean", imageUrl: "/images/explore/dest-caribbean.jpg", slug: "caribbean", tripCount: getTourCountByRegion("caribbean"), order: 9 },
+  { name: "Australasia", imageUrl: "/images/explore/dest-australasia.jpg", slug: "australasia", tripCount: getTourCountByRegion("australasia"), order: 10 },
 ]
 
 const TOP_DESTINATIONS = [
@@ -37,12 +38,22 @@ const TOP_DESTINATIONS = [
   "Spain", "Morocco", "Sri Lanka", "Turkey", "Costa Rica",
 ]
 
-const FALLBACK_TRIPS = [
-  { title: "Japan In Depth - Footsteps of the Shogun", destination: "Japan", tripType: "Discovery", duration: "12 Days", price: 4245, originalPrice: 4545, imageUrl: "/images/explore/trip-japan.jpg", badges: ["Discounted", "Best Seller"], tripCode: "JS", slug: "japan-in-depth", order: 1 },
-  { title: "Amalfi Coast Walking - Agriturismo", destination: "Italy", tripType: "Walking", duration: "8 Days", price: 1495, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Centre-based", "Best Seller"], tripCode: "NAW", slug: "amalfi-coast-walking", order: 2 },
-  { title: "Adventures in Patagonia", destination: "Argentina & Chile", tripType: "Discovery", duration: "14 Days", price: 5065, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Best Seller"], tripCode: "PA", slug: "adventures-in-patagonia", order: 3 },
-  { title: "South Africa & Eswatini", destination: "South Africa", tripType: "Wildlife", duration: "10 Days", price: 1395, originalPrice: 1695, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Discounted", "Best Seller"], tripCode: "ZK", slug: "south-africa-eswatini", order: 5 },
-]
+const FALLBACK_TRIPS = getAllTours().map((tour, i) => ({
+  title: tour.title,
+  destination: tour.destination,
+  tripType: tour.tripType,
+  duration: tour.duration,
+  price: tour.price,
+  originalPrice: tour.originalPrice,
+  imageUrl: tour.imageUrl,
+  badges: [
+    ...(tour.originalPrice ? ["Discounted"] : []),
+    ...(i < 6 ? ["Best Seller"] : []),
+  ] as string[],
+  tripCode: tour.tripCode,
+  slug: tour.slug,
+  order: i + 1,
+}))
 
 const FALLBACK_BLOG = [
   { title: "Walking the Great Wall of China: Everything you need to know", excerpt: "Our guide to walking the Great Wall covers the best sections to visit.", imageUrl: "/images/explore/blog-great-wall.jpg", publishDate: "2026-03-10", category: "Adventure Travel", slug: "walking-great-wall-china", order: 1 },
@@ -165,7 +176,7 @@ export default async function DestinationsPage({ searchParams }: DestinationsPag
             )}
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {tripsToShow.slice(0, 4).map((trip) => (
+            {tripsToShow.slice(0, 8).map((trip) => (
               <TripCard key={trip.title} trip={trip} />
             ))}
           </div>

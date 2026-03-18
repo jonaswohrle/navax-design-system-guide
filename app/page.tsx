@@ -35,11 +35,14 @@ const FALLBACK_HERO = {
 }
 
 const FALLBACK_TRIPS = [
-  { title: "Japan In Depth - Footsteps of the Shogun", destination: "Japan", tripType: "Discovery", duration: "12 Days", price: 4245, originalPrice: 4545, imageUrl: "/images/explore/trip-japan.jpg", badges: ["Discounted", "Best Seller"], tripCode: "JS", slug: "japan-in-depth", order: 1 },
-  { title: "Amalfi Coast Walking - Agriturismo", destination: "Italy", tripType: "Walking", duration: "8 Days", price: 1495, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Centre-based", "Best Seller"], tripCode: "NAW", slug: "amalfi-coast-walking", order: 2 },
-  { title: "Adventures in Patagonia", destination: "Argentina & Chile", tripType: "Discovery", duration: "14 Days", price: 5065, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Best Seller"], tripCode: "PA", slug: "adventures-in-patagonia", order: 3 },
-  { title: "Cycle Cuba!", destination: "Cuba", tripType: "Cycling", duration: "15 Days", price: 2895, imageUrl: "/images/explore/trip-cuba.jpg", badges: ["Best Seller"], tripCode: "CCC", slug: "cycle-cuba", order: 4 },
-  { title: "South Africa & Eswatini", destination: "South Africa", tripType: "Wildlife", duration: "10 Days", price: 1395, originalPrice: 1695, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Discounted", "Best Seller"], tripCode: "ZK", slug: "south-africa-eswatini", order: 5 },
+  { title: "Greek Island Hopping", destination: "Greece", tripType: "Discovery", duration: "10 Days", price: 1895, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Best Seller"], tripCode: "GIH", slug: "greek-island-hopping", order: 1 },
+  { title: "Japan In Depth - Footsteps of the Shogun", destination: "Japan", tripType: "Discovery", duration: "12 Days", price: 4245, originalPrice: 4545, imageUrl: "/images/explore/trip-japan.jpg", badges: ["Discounted", "Best Seller"], tripCode: "JS", slug: "japan-in-depth", order: 2 },
+  { title: "Amalfi Coast Walking - Agriturismo", destination: "Italy", tripType: "Walking", duration: "8 Days", price: 1495, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Centre-based", "Best Seller"], tripCode: "NAW", slug: "amalfi-coast-walking", order: 3 },
+  { title: "Discover Morocco", destination: "Morocco", tripType: "Discovery", duration: "10 Days", price: 1295, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Best Seller"], tripCode: "MD", slug: "morocco-discovery", order: 4 },
+  { title: "Adventures in Patagonia", destination: "Argentina & Chile", tripType: "Discovery", duration: "14 Days", price: 5065, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Best Seller"], tripCode: "PA", slug: "adventures-in-patagonia", order: 5 },
+  { title: "Iceland's Ring Road", destination: "Iceland", tripType: "Discovery", duration: "10 Days", price: 3495, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Best Seller"], tripCode: "IRR", slug: "iceland-ring-road", order: 6 },
+  { title: "Portugal Highlights", destination: "Portugal", tripType: "Discovery", duration: "9 Days", price: 1595, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Best Seller"], tripCode: "PH", slug: "portugal-highlights", order: 7 },
+  { title: "South Africa & Eswatini", destination: "South Africa", tripType: "Wildlife", duration: "10 Days", price: 1395, originalPrice: 1695, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Discounted", "Best Seller"], tripCode: "ZK", slug: "south-africa-eswatini", order: 8 },
 ]
 
 const FALLBACK_BLOG = [
