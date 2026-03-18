@@ -186,25 +186,15 @@ const tools = {
 }
 
 export async function POST(req: Request) {
-  try {
-    const body = await req.json()
-    console.log("[v0] API route hit, messages count:", body.messages?.length)
+  const { messages } = await req.json()
 
-    const result = streamText({
-      model: "openai/gpt-5.2",
-      system: systemPrompt,
-      messages: await convertToModelMessages(body.messages),
-      tools,
-      stopWhen: stepCountIs(5),
-    })
+  const result = streamText({
+    model: "openai/gpt-5.2",
+    system: systemPrompt,
+    messages: await convertToModelMessages(messages),
+    tools,
+    stopWhen: stepCountIs(5),
+  })
 
-    console.log("[v0] streamText called successfully, returning response")
-    return result.toUIMessageStreamResponse()
-  } catch (error) {
-    console.error("[v0] API route error:", error)
-    return new Response(JSON.stringify({ error: String(error) }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    })
-  }
+  return result.toUIMessageStreamResponse()
 }

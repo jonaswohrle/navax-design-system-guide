@@ -2,9 +2,9 @@
 
 import { useCallback, useState, useRef, useEffect } from "react"
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
+import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai"
 import type { UIMessage } from "ai"
-import { MessageCircle, X, Sparkles, ArrowDown, Send } from "lucide-react"
+import { MessageCircle, X, Sparkles, ArrowDown, Send, Maximize2, Minimize2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ExploreLogo } from "./explore-logo"
 import { ChatTripGrid, ChatTripDetail, ChatDeparturesTable } from "./chat-trip-cards"
@@ -15,7 +15,7 @@ const transport = new DefaultChatTransport({ api: "/api/explore-chat" })
 const SUGGESTIONS = [
   "Help me find a trip",
   "Best destinations for solo travel",
-  "What trips are under $2000?",
+  "What trips are under £2000?",
   "Family-friendly adventures",
 ]
 
@@ -29,6 +29,7 @@ function getMessageText(message: UIMessage): string {
 
 export function TravelChat() {
   const [open, setOpen] = useState(false)
+  const [fullscreen, setFullscreen] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
   const [inputValue, setInputValue] = useState("")
@@ -36,6 +37,11 @@ export function TravelChat() {
   const { messages, sendMessage, status, addToolOutput, error } = useChat({
     transport,
     id: "explore-travel-chat",
+    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+    onToolCall({ toolCall }) {
+      if (toolCall.dynamic) return
+      /* startGuidedSelling is handled via UI, not here */
+    },
     onError: (err) => {
       console.error("[v0] useChat error:", err)
     },
@@ -86,8 +92,6 @@ export function TravelChat() {
   )
 
   /* ------ Render a single tool part (AI SDK 6 format) ------ */
-  /* In AI SDK 6, tool parts have type "tool-{toolName}" with        */
-  /* properties: toolCallId, state, input, output directly on part   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function renderToolPart(part: any, index: number) {
     const toolCallId = part.toolCallId as string
@@ -123,6 +127,15 @@ export function TravelChat() {
           </div>
         )
       }
+      /* output-available: guided selling is done, model will process */
+      if (state === "output-available") {
+        return (
+          <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
+            <Sparkles className="h-3 w-3 animate-spin" />
+            <span>Finding trips based on your preferences...</span>
+          </div>
+        )
+      }
       return null
     }
 
@@ -131,7 +144,7 @@ export function TravelChat() {
       return (
         <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
           <Sparkles className="h-3 w-3 animate-spin" />
-          <span>Searching...</span>
+          <span>Searching trips...</span>
         </div>
       )
     }
@@ -189,6 +202,11 @@ export function TravelChat() {
     return part.type.startsWith("tool-")
   }
 
+  /* ------ Panel sizing ------ */
+  const panelClasses = fullscreen
+    ? "fixed inset-0 z-50 flex flex-col bg-card"
+    : "fixed bottom-6 right-6 z-50 flex h-[600px] w-[440px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl max-sm:bottom-0 max-sm:right-0 max-sm:h-full max-sm:w-full max-sm:rounded-none"
+
   /* ------ UI ------ */
   return (
     <>
@@ -205,31 +223,40 @@ export function TravelChat() {
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-6 right-6 z-50 flex h-[520px] w-[380px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl max-sm:bottom-0 max-sm:right-0 max-sm:h-full max-sm:w-full max-sm:rounded-none">
+        <div className={panelClasses}>
           {/* Header */}
-          <div className="flex items-center justify-between bg-primary px-4 py-3">
+          <div className={cn("flex items-center justify-between bg-primary px-4 py-3", fullscreen && "px-6 py-4")}>
             <div className="flex items-center gap-2">
-              <ExploreLogo variant="white" width={90} />
+              <ExploreLogo variant="white" width={fullscreen ? 110 : 90} />
               <span className="text-xs text-primary-foreground/70">|</span>
               <div className="flex items-center gap-1">
                 <Sparkles className="h-3 w-3 text-explore-yellow" />
                 <span className="text-xs font-medium text-primary-foreground">Travel Assistant</span>
               </div>
             </div>
-            <button
-              onClick={() => setOpen(false)}
-              className="rounded-full p-1 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
-              aria-label="Close chat"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setFullscreen((f) => !f)}
+                className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+                aria-label={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+              >
+                {fullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+              </button>
+              <button
+                onClick={() => { setOpen(false); setFullscreen(false) }}
+                className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+                aria-label="Close chat"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
           </div>
 
           {/* Messages */}
           <div
             ref={scrollRef}
             onScroll={handleScroll}
-            className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
+            className={cn("flex-1 overflow-y-auto px-4 py-3 space-y-3", fullscreen && "px-6 py-4 mx-auto w-full max-w-2xl")}
           >
             {messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full gap-4 py-8">
@@ -253,12 +280,10 @@ export function TravelChat() {
                 const text = getMessageText(msg)
                 const hasToolParts = msg.parts?.some((p) => isToolPart(p))
 
-                /* Skip rendering assistant bubbles that have no text and no tools */
                 if (msg.role === "assistant" && !text && !hasToolParts) return null
 
                 return (
                   <div key={msg.id}>
-                    {/* Text bubble */}
                     {text && (
                       <div className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
                         <div
@@ -274,7 +299,6 @@ export function TravelChat() {
                       </div>
                     )}
 
-                    {/* Tool parts */}
                     {msg.parts?.map((part, i) => {
                       if (isToolPart(part)) {
                         return renderToolPart(part, i)
@@ -286,14 +310,12 @@ export function TravelChat() {
               })
             )}
 
-            {/* Error display */}
             {error && (
               <div className="mx-auto max-w-[90%] rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-700">
                 <strong>Error:</strong> {error.message}
               </div>
             )}
 
-            {/* Streaming indicator */}
             {isStreaming && messages.length > 0 && (() => {
               const lastMsg = messages[messages.length - 1]
               const hasVisibleContent = lastMsg?.role === "assistant" && (
@@ -326,8 +348,8 @@ export function TravelChat() {
           )}
 
           {/* Input */}
-          <div className="border-t border-border bg-card p-3">
-            <div className="flex items-end gap-2">
+          <div className={cn("border-t border-border bg-card p-3", fullscreen && "px-6 py-4")}>
+            <div className={cn("flex items-end gap-2", fullscreen && "mx-auto max-w-2xl")}>
               <textarea
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
@@ -345,7 +367,7 @@ export function TravelChat() {
                 <Send className="h-4 w-4" />
               </button>
             </div>
-            <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
+            <p className={cn("mt-1.5 text-center text-[10px] text-muted-foreground", fullscreen && "mx-auto max-w-2xl")}>
               AI-powered assistant. Results may vary.
             </p>
           </div>
