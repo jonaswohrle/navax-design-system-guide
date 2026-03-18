@@ -112,25 +112,27 @@ export function TravelChat() {
   const [canvasLoading, setCanvasLoading] = useState(false)
   const personalization = useUnifiedPersonalization()
 
-  // Use a ref for the body to avoid triggering useChat re-initialisation
-  // on every personalization change (which causes infinite update loops).
-  const chatBodyRef = useRef({
+  // Keep personalization data in a ref so the useChat body never changes
+  // identity, which prevents infinite re-render loops.
+  const personalizationRef = useRef({
     visitorAudience: personalization?.audience ?? "default",
     visitorTraits: personalization?.profile?.traits ?? {},
     visitorEvents: personalization?.profile?.events ?? {},
   })
-  // Keep the ref up-to-date without causing re-renders
-  chatBodyRef.current = {
-    visitorAudience: personalization?.audience ?? "default",
-    visitorTraits: personalization?.profile?.traits ?? {},
-    visitorEvents: personalization?.profile?.events ?? {},
-  }
+  useEffect(() => {
+    personalizationRef.current.visitorAudience = personalization?.audience ?? "default"
+    personalizationRef.current.visitorTraits = personalization?.profile?.traits ?? {}
+    personalizationRef.current.visitorEvents = personalization?.profile?.events ?? {}
+  }, [personalization?.audience, personalization?.profile?.traits, personalization?.profile?.events])
+
+  // Stable body object -- same reference across renders
+  const [chatBody] = useState(() => personalizationRef.current)
 
   const { messages, sendMessage, status, addToolOutput, error, setMessages } = useChat({
     transport,
     id: "explore-travel-chat",
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-    body: chatBodyRef.current,
+    body: chatBody,
     onToolCall({ toolCall }) {
       if (toolCall.dynamic) return
     },
