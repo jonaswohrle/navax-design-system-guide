@@ -76,7 +76,7 @@ export default async function ExperiencesPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-10 lg:px-8">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-24 lg:px-8 lg:pb-32">
           <h1 className="mb-3 font-heading text-4xl font-bold text-white lg:text-5xl">
             Experiences
           </h1>
