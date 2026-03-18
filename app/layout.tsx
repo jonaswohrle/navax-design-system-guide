@@ -1,17 +1,32 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { GeistPixelSquare } from 'geist/font/pixel'
+import { Inter, DM_Sans, Playfair_Display } from 'next/font/google'
+import { GeistMono } from 'geist/font/mono'
 
 import './globals.css'
 
-const _pixel = GeistPixelSquare
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+  weight: ['400', '500', '600', '700'],
+})
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  weight: ['400', '700', '900'],
+})
+
+const geistMono = GeistMono
 
 export const metadata: Metadata = {
-  title: 'DEMO',
-  description: 'The experience innovation company',
-  icons: {
-    icon: '/images/valtech-logo.png',
-  },
+  title: 'Book Adventure Travel & Small Group Tours | Explore',
+  description: 'Explore offers small group adventure holidays to over 100 countries worldwide. Award-winning tours with expert leaders. Book your next adventure today.',
 }
 
 export default function RootLayout({
@@ -20,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="de" className={_pixel.variable}>
+    <html lang="en" className={`${inter.variable} ${dmSans.variable} ${playfair.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
         {children}
       </body>

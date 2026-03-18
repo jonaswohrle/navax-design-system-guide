@@ -29,10 +29,10 @@ function SectionHeading({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <span className="flex w-fit items-center gap-1.5 rounded-full border border-foreground/30 px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-foreground/70">
+      <span className="flex w-fit items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold tracking-wide uppercase text-primary">
         {badge}
       </span>
-      <h2 className="text-2xl font-heading font-normal tracking-tight text-foreground text-balance lg:text-3xl">
+      <h2 className="text-2xl font-semibold tracking-tight text-foreground text-balance lg:text-3xl">
         {title}
       </h2>
       <p className="max-w-2xl text-sm text-muted-foreground leading-relaxed">{description}</p>
@@ -52,9 +52,9 @@ function FeatureCard({
   accentClass?: string
 }) {
   return (
-    <div className="flex flex-col gap-4 border-t border-foreground/20 pt-6">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20">
-        <Icon className="h-5 w-5 text-foreground" />
+    <div className="flex flex-col gap-4 rounded-lg border border-border p-5">
+      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+        <Icon className="h-5 w-5 text-primary" />
       </div>
       <div>
         <p className="text-sm font-medium text-foreground">{title}</p>
@@ -150,10 +150,10 @@ export default function VercelV0Page() {
 
           {/* ── Hero ── */}
           <section className="flex flex-col gap-4 pb-12">
-            <span className="flex w-fit items-center gap-1.5 rounded-full border border-foreground/30 px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-foreground/70">
+            <span className="flex w-fit items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold tracking-wide uppercase text-primary">
               Vercel & v0
             </span>
-            <h1 className="max-w-2xl text-3xl font-heading font-normal tracking-tight text-foreground text-balance lg:text-4xl">
+            <h1 className="max-w-2xl text-3xl font-bold tracking-tight text-foreground text-balance lg:text-4xl">
               How v0 Is Changing Who Can Build Frontend
             </h1>
             <p className="max-w-xl text-base text-muted-foreground leading-relaxed">
@@ -279,9 +279,9 @@ export default function VercelV0Page() {
                 <div className="border border-foreground/10 bg-background px-4 py-3">
                   <pre className="overflow-x-auto font-mono text-[11px] text-muted-foreground leading-relaxed">
 {`/* Your design tokens */
---primary: 30 33% 94%;     /* Valtech beige */
---background: 0 0% 0%;     /* Valtech black */
---radius: 0rem;
+--primary: 167 100% 39%;   /* Brightly green */
+--foreground: 213 65% 15%; /* Brightly navy */
+--radius: 0.5rem;
 
 /* v0 automatically uses these */
 className="bg-primary text-primary-foreground"`}
@@ -304,7 +304,7 @@ className="bg-primary text-primary-foreground"`}
                   <pre className="overflow-x-auto font-mono text-[11px] text-muted-foreground leading-relaxed">
 {`/* v0 imports YOUR components */
 import { Button } from "@/components/ui/button"
-import { ValtechLogo } from "@/components/ds/valtech-logo"
+import { BrightlyLogo } from "@/components/ds/brightly-logo"
 
 /* Not generic HTML */
 <button class="bg-blue-500">  // Never this`}
