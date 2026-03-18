@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { ArrowRight } from "lucide-react"
+import { blobUrl } from "@/lib/blob-image-urls"
 import {
   IconUnforgettableExperiences,
   IconExpertTourLeaders,
@@ -216,6 +217,46 @@ const CATEGORIES: Record<string, ExperienceCategory> = {
       { q: "Are dietary requirements catered for?", a: "We do our best to accommodate dietary requirements. Please let us know when booking and we'll work with our local partners to ensure you're well fed." },
     ],
   },
+  "boat-journeys": {
+    title: "Boat Journeys",
+    slug: "boat-journeys",
+    heroImage: "/images/explore/hero-mountains.jpg",
+    description: "Explore coastlines, rivers and waterways aboard traditional boats and expedition vessels. From Nile feluccas to Greek island hopping.",
+    longDescription: "There's no better way to explore a destination than by water. Our boat journeys take you along the world's most iconic waterways, from the Nile to the Mekong, the Adriatic to the Amazon. Travel aboard traditional boats, comfortable small ships, and expedition vessels, stopping to explore ports, villages, and hidden coves along the way.",
+    features: [
+      { icon: "map", title: "Unique perspectives", text: "See destinations from the water for a completely different viewpoint and experience." },
+      { icon: "users", title: "Small vessels", text: "Travel on intimate boats and ships that can reach places larger vessels cannot." },
+      { icon: "shield", title: "Expert crews", text: "Experienced crews and guides who know every bend in the river and every hidden cove." },
+      { icon: "heart", title: "Relaxed pace", text: "Let the current carry you between destinations at a gentle, unhurried pace." },
+    ],
+    popularDestinations: [
+      { name: "Egypt", image: "/images/explore/hero-mountains.jpg", tripCount: 4 },
+      { name: "Croatia", image: "/images/explore/hero-mountains.jpg", tripCount: 3 },
+      { name: "Greece", image: "/images/explore/hero-mountains.jpg", tripCount: 5 },
+      { name: "Vietnam", image: "/images/explore/hero-mountains.jpg", tripCount: 3 },
+    ],
+    faqs: [
+      { q: "What size are the boats?", a: "We use a range of vessels, from traditional feluccas and gulets carrying 10-16 passengers to small expedition ships with around 50-100 guests." },
+      { q: "Will I get seasick?", a: "Most of our boat journeys are on calm rivers, sheltered coastlines, or gentle seas. If you're concerned, speak to your GP about remedies before you travel." },
+    ],
+  },
+  "trip-types": {
+    title: "All Trip Types",
+    slug: "trip-types",
+    heroImage: "/images/explore/hero-mountains.jpg",
+    description: "Explore all the different ways to travel with us. From classic discovery tours to specialist adventures, find the style that suits you best.",
+    longDescription: "At Explore, we believe there's a perfect trip for everyone. Whether you want an action-packed trekking adventure, a gentle cycling tour through vineyards, a family holiday with activities for all ages, or a premium upgraded experience, our range of trip types means you can travel your way. Browse all our trip types below and find your ideal adventure style.",
+    features: [
+      { icon: "map", title: "10+ trip styles", text: "From classic discovery to cycling, walking, wildlife, polar expeditions, and more." },
+      { icon: "users", title: "All fitness levels", text: "Trips graded from easy to challenging so you can find your perfect match." },
+      { icon: "shield", title: "Small groups", text: "Average group size of 11, big enough to make friends but small enough to feel personal." },
+      { icon: "heart", title: "Expert leaders", text: "Every trip led by an experienced, knowledgeable local tour leader." },
+    ],
+    popularDestinations: [],
+    faqs: [
+      { q: "How do I choose the right trip type?", a: "Think about what excites you most -- is it cultural immersion, physical challenge, wildlife encounters, or culinary experiences? Our trip types help you narrow down the perfect adventure for your interests and fitness level." },
+    ],
+  },
   polar: {
     title: "Polar Expeditions",
     slug: "polar",
@@ -236,11 +277,33 @@ const CATEGORIES: Record<string, ExperienceCategory> = {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Slug aliases -- redirect common alternate URLs to correct slugs    */
+/* ------------------------------------------------------------------ */
+const SLUG_ALIASES: Record<string, string> = {
+  discovery: "classic-discovery",
+  "classic": "classic-discovery",
+  walking: "walking-and-trekking",
+  trekking: "walking-and-trekking",
+  cycling: "cycling-holidays",
+  bikes: "cycling-holidays",
+  family: "family-adventures",
+  families: "family-adventures",
+  upgraded: "explore-upgraded",
+  premium: "explore-upgraded",
+  "food-drink": "food-and-drink",
+  food: "food-and-drink",
+  boats: "boat-journeys",
+  "boat": "boat-journeys",
+  "trip-type": "trip-types",
+}
+
+/* ------------------------------------------------------------------ */
 /*  Metadata                                                           */
 /* ------------------------------------------------------------------ */
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category } = await params
-  const cat = CATEGORIES[category]
+  const resolved = SLUG_ALIASES[category] || category
+  const cat = CATEGORIES[resolved]
   if (!cat) return { title: "Experience Not Found - Explore" }
   return {
     title: `${cat.title} Tours | Adventure Holidays - Explore`,
@@ -261,6 +324,11 @@ export default async function ExperienceCategoryPage({
   params: Promise<{ category: string }>
 }) {
   const { category } = await params
+
+  /* Redirect alias slugs to canonical URLs */
+  const alias = SLUG_ALIASES[category]
+  if (alias) redirect(`/experiences/${alias}`)
+
   const cat = CATEGORIES[category]
   if (!cat) notFound()
 
@@ -281,7 +349,7 @@ export default async function ExperienceCategoryPage({
           </video>
         ) : (
           <Image
-            src={cat.heroImage}
+            src={blobUrl(cat.heroImage)}
             alt={cat.title}
             fill
             className="object-cover"
@@ -354,9 +422,10 @@ export default async function ExperienceCategoryPage({
                 >
                   <div className="relative aspect-[4/3]">
                     <Image
-                      src={d.image}
+                      src={blobUrl(d.image)}
                       alt={d.name}
                       fill
+                      unoptimized
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
                     />

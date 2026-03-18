@@ -1,5 +1,8 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { blobUrl } from "@/lib/blob-image-urls"
 import type { BlogPostFields } from "@/lib/contentful"
 
 interface ContentCardProps {
@@ -15,6 +18,8 @@ export function ContentCard({ post }: ContentCardProps) {
       })
     : null
 
+  const imgSrc = blobUrl(post.imageUrl || "/images/explore/hero-mountains.jpg")
+
   return (
     <Link
       href={`/blog#${post.slug || ""}`}
@@ -22,9 +27,10 @@ export function ContentCard({ post }: ContentCardProps) {
     >
       <div className="relative aspect-[16/9] overflow-hidden">
         <Image
-          src={post.imageUrl || "/images/explore/hero-mountains.jpg"}
+          src={imgSrc}
           alt={post.title}
           fill
+          unoptimized
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />

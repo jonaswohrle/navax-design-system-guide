@@ -12,10 +12,14 @@ Key behaviors:
 - When a user wants details about a specific trip, use getTripDetails
 - When a user asks about dates or availability, use getAvailableDepartures
 - When a user seems unsure or says "help me choose" / "find me a trip" / "I don't know where to go", use startGuidedSelling to launch the interactive trip finder
+- NEVER call startGuidedSelling more than once per conversation. Once the trip finder has been completed, use searchTrips with the user's stated preferences instead
+- After startGuidedSelling completes and returns preferences, immediately call searchTrips with those preferences to show matching trips
 - Always provide helpful context alongside tool results — a sentence or two framing the results
 - Mention the Explore Flex policy when relevant (free changes and cancellation up to 60 days before departure)
 - Prices are in GBP (British Pounds)
 - Be concise — keep text responses short and let the rich components do the heavy lifting
+- ALWAYS use the searchTrips tool to show trip results. NEVER list trips as plain text bullet points — always call searchTrips so the user sees the rich card components
+- When describing trips or destinations in text, use short paragraphs with bold highlights for key details
 - You are an expert on ALL Explore trips. Our current catalogue covers: Japan, Italy, Argentina/Chile, Cuba, Greece, Morocco, Tanzania, South Africa, Vietnam and Iceland.
 - Never make up trips that don't exist in our catalogue.`
 
@@ -186,11 +190,32 @@ const tools = {
 }
 
 export async function POST(req: Request) {
-  const { messages } = await req.json()
+  const { messages, visitorAudience, visitorTraits, visitorEvents } = await req.json()
+
+  // Build personalization context for the system prompt
+  let personalizationContext = ""
+  if (visitorAudience && visitorAudience !== "default") {
+    const audienceLabels: Record<string, string> = {
+      adventure: "walking, cycling, and active adventures",
+      culture: "cultural discovery, food, and heritage trips",
+      family: "family-friendly adventures",
+      returning: "returning customer with previous booking history",
+    }
+    personalizationContext += `\n\nVisitor Personalization Context:
+- This visitor has been identified as a "${visitorAudience}" audience segment, meaning they are interested in ${audienceLabels[visitorAudience] || visitorAudience}.
+- Prioritize recommendations matching their interests when they ask for suggestions.
+- Tailor your language and examples to their preferences.`
+  }
+  if (visitorTraits?.name) {
+    personalizationContext += `\n- The visitor's name is ${visitorTraits.name}. Use it occasionally to make the conversation feel personal.`
+  }
+  if (visitorEvents?.book_trip) {
+    personalizationContext += `\n- This visitor has previously booked a trip. They are a returning customer — acknowledge this and suggest complementary destinations.`
+  }
 
   const result = streamText({
     model: "openai/gpt-5.2",
-    system: systemPrompt,
+    system: systemPrompt + personalizationContext,
     messages: await convertToModelMessages(messages),
     tools,
     stopWhen: stepCountIs(5),

@@ -11,18 +11,18 @@ const aiSidebarItems = [
     label: "Vercel & v0",
     icon: Triangle,
     children: [
-      { label: "Vercel Platform", href: "/ai/vercel-v0/vercel" },
-      { label: "v0 & Workflows", href: "/ai/vercel-v0" },
+      { label: "Vercel Platform", href: "/vercel/vercel-v0/vercel" },
+      { label: "v0 & Workflows", href: "/vercel/vercel-v0" },
     ],
   },
   {
     label: "AI Showcases",
     icon: Sparkles,
     children: [
-      { label: "Overview", href: "/ai" },
-      { label: "Prompt Coach", href: "/ai/prompt-coach" },
-      { label: "Image Studio", href: "/ai/image-studio" },
-      { label: "Content Pipeline", href: "/ai/content-pipeline" },
+      { label: "Overview", href: "/vercel" },
+      { label: "Prompt Coach", href: "/vercel/prompt-coach" },
+      { label: "Image Studio", href: "/vercel/image-studio" },
+      { label: "Content Pipeline", href: "/vercel/content-pipeline" },
     ],
   },
 ]

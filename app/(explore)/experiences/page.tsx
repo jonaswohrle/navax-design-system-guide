@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { blobUrl } from "@/lib/blob-image-urls"
 import {
   getExperienceTypes,
   getTripListings,
@@ -32,6 +33,7 @@ const FALLBACK_EXPERIENCES = [
   { name: "Solo", description: "Over half our travellers come on their own. Join like-minded adventurers on our small group tours.", imageUrl: "/images/explore/exp-solo.jpg", slug: "solo", order: 7 },
   { name: "Polar", description: "Journey to the ends of the earth with expedition voyages to the Arctic and Antarctic.", imageUrl: "/images/explore/exp-polar.jpg", slug: "polar", order: 8 },
   { name: "Food & Drink", description: "Taste your way around the world with food and drink focused tours.", imageUrl: "/images/explore/exp-food.jpg", slug: "food-and-drink", order: 9 },
+  { name: "Boat Journeys", description: "Explore coastlines, rivers and waterways aboard traditional boats and expedition vessels.", imageUrl: "/images/explore/exp-polar.jpg", slug: "boat-journeys", order: 10 },
 ]
 
 const FALLBACK_TRIPS = [
@@ -61,22 +63,13 @@ export default async function ExperiencesPage() {
           muted
           playsInline
           className="absolute inset-0 h-full w-full object-cover"
-          poster="/images/explore/hero-santorini.png"
+          poster={blobUrl("/images/explore/hero-santorini.png")}
         >
           <source src={VIDEO_URL} type="video/mp4" />
         </video>
-        <Image
-          src="/images/explore/hero-santorini.png"
-          alt=""
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-          aria-hidden="true"
-        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-10 lg:px-8">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-24 lg:px-8 lg:pb-32">
           <h1 className="mb-3 font-heading text-4xl font-bold text-white lg:text-5xl">
             Experiences
           </h1>
@@ -103,9 +96,10 @@ export default async function ExperiencesPage() {
               >
                 <div className="relative aspect-[16/9]">
                   <Image
-                    src={exp.imageUrl || "/images/explore/hero-mountains.jpg"}
+                    src={blobUrl(exp.imageUrl || "/images/explore/hero-mountains.jpg")}
                     alt={exp.name}
                     fill
+                    unoptimized
                     className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />

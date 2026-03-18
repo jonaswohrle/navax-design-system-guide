@@ -13,24 +13,16 @@ const nextConfig = {
   },
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.ctfassets.net",
-      },
-      {
-        protocol: "https",
-        hostname: "explore-live.s3.eu-west-1.amazonaws.com",
-      },
-      {
-        protocol: "https",
-        hostname: "explore-qa.s3.eu-west-1.amazonaws.com",
-      },
-      {
-        protocol: "https",
-        hostname: "s3.eu-west-1.amazonaws.com",
-      },
+      { protocol: "https", hostname: "images.ctfassets.net" },
+      { protocol: "https", hostname: "explore-live.s3.eu-west-1.amazonaws.com" },
+      { protocol: "https", hostname: "explore-qa.s3.eu-west-1.amazonaws.com" },
+      { protocol: "https", hostname: "s3.eu-west-1.amazonaws.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "nqlmkxqox66ff90a.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
     ],
   },
 }
 
 export default nextConfig
+

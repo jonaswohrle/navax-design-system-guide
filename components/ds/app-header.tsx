@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Menu, X, Search, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { BrightlyLogo } from "./brightly-logo"
+import { NavaxLogo } from "./navax-logo"
 
 interface NavItem {
   label: string
@@ -56,7 +56,7 @@ export function AppHeader({
       {/* Main nav */}
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
         <Link href="/" className="shrink-0" aria-label="Home">
-          <BrightlyLogo variant="dark" width={130} />
+          <NavaxLogo variant="dark" width={130} />
         </Link>
 
         {/* Desktop nav */}
