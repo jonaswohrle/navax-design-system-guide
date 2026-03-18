@@ -1,35 +1,19 @@
 "use client"
 
-import { useCallback, useState, useRef } from "react"
+import { useCallback, useState, useRef, useEffect, type FormEvent } from "react"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport, lastAssistantMessageIsCompleteWithToolCalls } from "ai"
 import type { UIMessage } from "ai"
-import { MessageCircle, X, Sparkles } from "lucide-react"
+import { MessageCircle, X, Sparkles, ArrowDown, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
-import {
-  Conversation,
-  ConversationContent,
-  ConversationScrollButton,
-} from "@/components/ai-elements/conversation"
-import {
-  Message,
-  MessageContent,
-  MessageResponse,
-} from "@/components/ai-elements/message"
-import {
-  PromptInput,
-  PromptInputTextarea,
-  PromptInputSubmit,
-} from "@/components/ai-elements/prompt-input"
-import { Suggestions, Suggestion } from "@/components/ai-elements/suggestion"
 import { ExploreLogo } from "./explore-logo"
 import { ChatTripGrid, ChatTripDetail, ChatDeparturesTable } from "./chat-trip-cards"
 import { GuidedSellingFlow } from "./guided-selling"
 import { cn } from "@/lib/utils"
 
 /* -------------------------------------------------------------------------- */
-/*  Transport                                                                 */
+/*  Chat Transport                                                            */
 /* -------------------------------------------------------------------------- */
 
 const transport = new DefaultChatTransport({ api: "/api/explore-chat" })
@@ -51,28 +35,66 @@ const SUGGESTIONS = [
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false)
+  const [input, setInput] = useState("")
   const pendingToolOutputs = useRef<Map<string, boolean>>(new Map())
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
+  const [showScrollBtn, setShowScrollBtn] = useState(false)
 
   const { messages, sendMessage, addToolOutput, status } = useChat({
     transport,
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     onToolCall({ toolCall }) {
       if (toolCall.dynamic) return
-      // startGuidedSelling is handled by the GuidedSellingFlow component,
-      // so we don't auto-respond here. The component will call addToolOutput.
     },
   })
 
   const isStreaming = status === "streaming" || status === "submitted"
 
+  /* ------ Auto-scroll ------ */
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages, status])
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const onScroll = () => {
+      const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80
+      setShowScrollBtn(!atBottom)
+    }
+    el.addEventListener("scroll", onScroll)
+    return () => el.removeEventListener("scroll", onScroll)
+  }, [])
+
+  const scrollToBottom = useCallback(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [])
+
   /* ------ Handlers ------ */
+
+  const handleSend = useCallback(
+    (text: string) => {
+      if (!text.trim()) return
+      sendMessage({ text: text.trim() })
+      setInput("")
+    },
+    [sendMessage]
+  )
+
+  const handleSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault()
+      handleSend(input)
+    },
+    [handleSend, input]
+  )
 
   const handleSuggestionClick = useCallback(
     (suggestion: string) => {
-      if (!suggestion.trim()) return
-      sendMessage({ text: suggestion.trim() })
+      handleSend(suggestion)
     },
-    [sendMessage]
+    [handleSend]
   )
 
   const handleViewDetails = useCallback(
@@ -104,7 +126,7 @@ export function ChatWidget() {
 
   /* ------ Render tool results ------ */
 
-  function renderToolPart(part: UIMessage["parts"][number], messageIndex: number) {
+  function renderToolPart(part: UIMessage["parts"][number]) {
     if (part.type !== "tool-invocation") return null
 
     const { toolName, toolCallId, state } = part
@@ -183,18 +205,18 @@ export function ChatWidget() {
     }
 
     if (toolName === "startGuidedSelling") {
-      const input = part.input as { greeting: string }
+      const toolInput = part.input as { greeting: string }
       if (state === "output-available") {
         return (
           <div key={toolCallId} className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-center text-xs text-primary font-medium">
-            Preferences submitted — finding your perfect trips...
+            Preferences submitted -- finding your perfect trips...
           </div>
         )
       }
       return (
         <GuidedSellingFlow
           key={toolCallId}
-          greeting={input.greeting}
+          greeting={toolInput.greeting}
           onComplete={(result) => handleGuidedSellingComplete(toolCallId, result as unknown as Record<string, unknown>)}
         />
       )
@@ -250,9 +272,9 @@ export function ChatWidget() {
             </Button>
           </div>
 
-          {/* Messages */}
-          <Conversation className="flex-1 bg-background">
-            <ConversationContent className="gap-4 p-4">
+          {/* Messages area */}
+          <div ref={scrollRef} className="relative flex-1 overflow-y-auto bg-background">
+            <div className="flex flex-col gap-4 p-4">
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center gap-4 py-8 text-center">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -266,62 +288,107 @@ export function ChatWidget() {
                       I can help you find the perfect trip, answer questions about destinations, and check availability.
                     </p>
                   </div>
-                  <Suggestions className="justify-center">
+                  <div className="flex flex-wrap justify-center gap-2">
                     {SUGGESTIONS.map((s) => (
-                      <Suggestion
+                      <button
                         key={s}
-                        suggestion={s}
-                        onClick={handleSuggestionClick}
-                        className="border-primary/20 text-xs text-foreground hover:border-primary hover:bg-primary/5"
-                      />
+                        onClick={() => handleSuggestionClick(s)}
+                        className="rounded-full border border-primary/20 px-3 py-1.5 text-xs text-foreground transition-colors hover:border-primary hover:bg-primary/5"
+                      >
+                        {s}
+                      </button>
                     ))}
-                  </Suggestions>
+                  </div>
                 </div>
               ) : (
-                messages.map((message, i) => (
-                  <Message key={message.id} from={message.role}>
-                    <MessageContent>
-                      {message.parts.map((part, j) => {
-                        if (part.type === "text" && part.text.trim()) {
-                          return (
-                            <MessageResponse key={`text-${j}`}>
-                              {part.text}
-                            </MessageResponse>
-                          )
-                        }
-                        if (part.type === "tool-invocation") {
-                          return renderToolPart(part, i)
-                        }
-                        return null
-                      })}
-                    </MessageContent>
-                  </Message>
+                messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={cn(
+                      "flex flex-col gap-2",
+                      message.role === "user" ? "items-end" : "items-start"
+                    )}
+                  >
+                    {message.parts.map((part, j) => {
+                      if (part.type === "text" && part.text.trim()) {
+                        return (
+                          <div
+                            key={`text-${j}`}
+                            className={cn(
+                              "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
+                              message.role === "user"
+                                ? "bg-primary text-primary-foreground rounded-br-md"
+                                : "bg-muted text-foreground rounded-bl-md"
+                            )}
+                          >
+                            {part.text}
+                          </div>
+                        )
+                      }
+                      if (part.type === "tool-invocation") {
+                        return (
+                          <div key={`tool-${j}`} className="w-full max-w-[95%]">
+                            {renderToolPart(part)}
+                          </div>
+                        )
+                      }
+                      return null
+                    })}
+                  </div>
                 ))
               )}
-            </ConversationContent>
-            <ConversationScrollButton />
-          </Conversation>
+
+              {/* Streaming indicator */}
+              {isStreaming && messages.length > 0 && messages[messages.length - 1]?.role === "user" && (
+                <div className="flex items-start gap-2">
+                  <div className="flex items-center gap-1 rounded-2xl rounded-bl-md bg-muted px-4 py-3">
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:0ms]" />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:150ms]" />
+                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:300ms]" />
+                  </div>
+                </div>
+              )}
+
+              <div ref={bottomRef} />
+            </div>
+
+            {/* Scroll to bottom button */}
+            {showScrollBtn && (
+              <button
+                onClick={scrollToBottom}
+                className="absolute bottom-3 left-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card shadow-md transition-colors hover:bg-muted"
+                aria-label="Scroll to bottom"
+              >
+                <ArrowDown className="h-4 w-4 text-muted-foreground" />
+              </button>
+            )}
+          </div>
 
           {/* Input */}
           <div className="border-t border-border bg-card p-3">
-            <PromptInput
-              onSubmit={({ text }) => {
-                if (text.trim()) {
-                  sendMessage({ text: text.trim() })
-                }
-              }}
-              className="rounded-lg border-border bg-background"
-            >
-              <PromptInputTextarea
+            <form onSubmit={handleSubmit} className="flex items-end gap-2">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault()
+                    handleSend(input)
+                  }
+                }}
                 placeholder="Ask about trips, destinations..."
-                className="min-h-[40px] max-h-[120px] text-sm"
+                rows={1}
+                className="flex-1 resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               />
-              <PromptInputSubmit
-                status={status}
-                disabled={isStreaming}
-                className="bg-primary text-primary-foreground hover:bg-hover"
-              />
-            </PromptInput>
+              <button
+                type="submit"
+                disabled={!input.trim() || isStreaming}
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-hover disabled:opacity-40 disabled:cursor-not-allowed"
+                aria-label="Send message"
+              >
+                <ArrowUp className="h-4 w-4" />
+              </button>
+            </form>
             <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
               AI-powered assistant. Results may vary.
             </p>
