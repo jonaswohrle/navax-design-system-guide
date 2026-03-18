@@ -10,15 +10,7 @@ import { ChatTripGrid, ChatTripDetail, ChatDeparturesTable } from "./chat-trip-c
 import { GuidedSellingFlow } from "./guided-selling"
 import { cn } from "@/lib/utils"
 
-/* -------------------------------------------------------------------------- */
-/*  Transport setup                                                           */
-/* -------------------------------------------------------------------------- */
-
 const transport = new DefaultChatTransport({ api: "/api/explore-chat" })
-
-/* -------------------------------------------------------------------------- */
-/*  Suggestion chips                                                          */
-/* -------------------------------------------------------------------------- */
 
 const SUGGESTIONS = [
   "Help me find a trip",
@@ -27,11 +19,7 @@ const SUGGESTIONS = [
   "Trips under \u00A32,000",
 ]
 
-/* -------------------------------------------------------------------------- */
-/*  ChatWidget                                                                */
-/* -------------------------------------------------------------------------- */
-
-export function ChatWidget() {
+export function TravelChat() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState("")
   const pendingToolOutputs = useRef<Map<string, boolean>>(new Map())
@@ -49,7 +37,6 @@ export function ChatWidget() {
 
   const isStreaming = status === "streaming" || status === "submitted"
 
-  /* Auto-scroll */
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, status])
@@ -69,7 +56,6 @@ export function ChatWidget() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [])
 
-  /* Handlers */
   const handleSend = useCallback(
     (text: string) => {
       if (!text.trim()) return
@@ -114,7 +100,6 @@ export function ChatWidget() {
     [addToolOutput],
   )
 
-  /* Render a single tool part */
   function renderToolPart(part: UIMessage["parts"][number]) {
     if (part.type !== "tool-invocation") return null
     const { toolName, toolCallId, state } = part
@@ -150,7 +135,7 @@ export function ChatWidget() {
       if (state === "output-available") {
         return (
           <div key={toolCallId} className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-center text-xs font-medium text-primary">
-            Preferences submitted \u2014 finding your perfect trips\u2026
+            Preferences submitted &mdash; finding your perfect trips&hellip;
           </div>
         )
       }
@@ -166,13 +151,9 @@ export function ChatWidget() {
     return null
   }
 
-  /* ------------------------------------------------------------------ */
-  /*  Render                                                             */
-  /* ------------------------------------------------------------------ */
-
   return (
     <>
-      {/* FAB */}
+      {/* FAB button */}
       <button
         onClick={() => setOpen(true)}
         className={cn(
@@ -187,15 +168,17 @@ export function ChatWidget() {
       {/* Floating chat card */}
       {open && (
         <>
-          {/* Backdrop for mobile */}
-          <div className="fixed inset-0 z-50 bg-foreground/20 backdrop-blur-sm sm:hidden" onClick={() => setOpen(false)} aria-hidden="true" />
+          {/* Mobile backdrop */}
+          <div
+            className="fixed inset-0 z-50 bg-foreground/20 backdrop-blur-sm sm:hidden"
+            onClick={() => setOpen(false)}
+            aria-hidden="true"
+          />
 
           <div
             className={cn(
               "fixed z-50 flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl",
-              /* Mobile: near-full screen */
               "inset-3 sm:inset-auto",
-              /* Desktop: fixed bottom-right */
               "sm:bottom-6 sm:right-6 sm:h-[600px] sm:w-[400px]",
             )}
           >
@@ -218,7 +201,7 @@ export function ChatWidget() {
               </button>
             </div>
 
-            {/* Messages */}
+            {/* Messages area */}
             <div ref={scrollRef} className="relative flex-1 overflow-y-auto">
               <div className="flex flex-col gap-4 p-4">
                 {messages.length === 0 ? (
@@ -246,7 +229,13 @@ export function ChatWidget() {
                   </div>
                 ) : (
                   messages.map((message) => (
-                    <div key={message.id} className={cn("flex flex-col gap-2", message.role === "user" ? "items-end" : "items-start")}>
+                    <div
+                      key={message.id}
+                      className={cn(
+                        "flex flex-col gap-2",
+                        message.role === "user" ? "items-end" : "items-start",
+                      )}
+                    >
                       {message.parts.map((part, j) => {
                         if (part.type === "text" && part.text.trim()) {
                           return (
@@ -254,7 +243,9 @@ export function ChatWidget() {
                               key={`text-${j}`}
                               className={cn(
                                 "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
-                                message.role === "user" ? "rounded-br-md bg-primary text-primary-foreground" : "rounded-bl-md bg-muted text-foreground",
+                                message.role === "user"
+                                  ? "rounded-br-md bg-primary text-primary-foreground"
+                                  : "rounded-bl-md bg-muted text-foreground",
                               )}
                             >
                               {part.text}
@@ -274,21 +265,21 @@ export function ChatWidget() {
                   ))
                 )}
 
-                {/* Streaming dots */}
-                {isStreaming && messages.length > 0 && messages[messages.length - 1]?.role === "user" && (
-                  <div className="flex items-start">
-                    <div className="flex items-center gap-1 rounded-2xl rounded-bl-md bg-muted px-4 py-3">
-                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:0ms]" />
-                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:150ms]" />
-                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:300ms]" />
+                {isStreaming &&
+                  messages.length > 0 &&
+                  messages[messages.length - 1]?.role === "user" && (
+                    <div className="flex items-start">
+                      <div className="flex items-center gap-1 rounded-2xl rounded-bl-md bg-muted px-4 py-3">
+                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:0ms]" />
+                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:150ms]" />
+                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:300ms]" />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 <div ref={bottomRef} />
               </div>
 
-              {/* Scroll-to-bottom */}
               {showScrollBtn && (
                 <button
                   onClick={scrollToBottom}
@@ -300,7 +291,7 @@ export function ChatWidget() {
               )}
             </div>
 
-            {/* Input */}
+            {/* Input area */}
             <div className="shrink-0 border-t border-border bg-card p-3">
               <form onSubmit={handleSubmit} className="flex items-end gap-2">
                 <textarea
@@ -312,7 +303,7 @@ export function ChatWidget() {
                       handleSend(input)
                     }
                   }}
-                  placeholder="Ask about trips, destinations\u2026"
+                  placeholder="Ask about trips, destinations..."
                   rows={1}
                   className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                 />
@@ -325,7 +316,9 @@ export function ChatWidget() {
                   <ArrowUp className="h-4 w-4" />
                 </button>
               </form>
-              <p className="mt-1.5 text-center text-[10px] text-muted-foreground">AI-powered assistant. Results may vary.</p>
+              <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
+                AI-powered assistant. Results may vary.
+              </p>
             </div>
           </div>
         </>
@@ -333,10 +326,6 @@ export function ChatWidget() {
     </>
   )
 }
-
-/* -------------------------------------------------------------------------- */
-/*  Tiny helpers                                                              */
-/* -------------------------------------------------------------------------- */
 
 function LoadingPill({ text }: { text: string }) {
   return (
@@ -348,5 +337,9 @@ function LoadingPill({ text }: { text: string }) {
 }
 
 function ErrorPill({ text }: { text: string }) {
-  return <div className="rounded-lg border border-border bg-muted/50 p-3 text-xs text-muted-foreground">{text}</div>
+  return (
+    <div className="rounded-lg border border-border bg-muted/50 p-3 text-xs text-muted-foreground">
+      {text}
+    </div>
+  )
 }
