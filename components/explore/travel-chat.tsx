@@ -34,6 +34,7 @@ function getMessageText(message: UIMessage): string {
 /* ------------------------------------------------------------------ */
 type CanvasContent =
   | { kind: "trips"; trips: Array<Record<string, unknown>>; totalFound: number }
+  | { kind: "no-results"; filtersApplied: Record<string, unknown> }
   | { kind: "detail"; trip: Record<string, unknown> }
   | { kind: "departures"; departures: Array<Record<string, unknown>>; tourTitle: string; tourSlug: string }
   | { kind: "guided-selling"; greeting: string; toolCallId: string; input: Record<string, unknown> | undefined }
@@ -140,6 +141,7 @@ export function TravelChat() {
         if (!part.type.startsWith("tool-")) continue
 
         const toolName = part.type.replace("tool-", "")
+        console.log("[v0] Canvas scan:", toolName, "state:", part.state, "hasOutput:", !!part.output)
 
         if (toolName === "startGuidedSelling" && part.state === "input-available") {
           return {
@@ -155,7 +157,10 @@ export function TravelChat() {
         if (toolName === "searchTrips") {
           const trips = (part.output.trips || []) as Array<Record<string, unknown>>
           const totalFound = (part.output.totalFound || 0) as number
+          console.log("[v0] searchTrips result:", trips.length, "trips, totalFound:", totalFound)
           if (trips.length > 0) return { kind: "trips", trips, totalFound }
+          // Return a no-results canvas so the user sees feedback
+          return { kind: "no-results", filtersApplied: (part.output.filtersApplied || {}) as Record<string, unknown> }
         }
 
         if (toolName === "getTripDetails") {
@@ -191,6 +196,7 @@ export function TravelChat() {
   // The canvas should show if we have content OR if we're loading new content
   const hasCanvas = canvasContent !== null || (canvasLoading && lastCanvasRef.current !== null)
   const displayContent = canvasContent || lastCanvasRef.current
+  console.log("[v0] Canvas state:", { fullscreen, canvasOpen, hasCanvas, canvasContent: canvasContent?.kind ?? null, lastCanvas: lastCanvasRef.current?.kind ?? null, canvasLoading })
 
   /* --- Auto-scroll --- */
   const scrollToBottom = useCallback(() => {
@@ -293,6 +299,11 @@ export function TravelChat() {
       }
 
       if (state === "output-available") {
+        // Don't show "I found trips" if search returned empty
+        if (toolName === "searchTrips") {
+          const trips = (output?.trips || []) as Array<unknown>
+          if (trips.length === 0) return null
+        }
         const labels: Record<string, string> = {
           searchTrips: "I found some trips for you \u2192",
           getTripDetails: "Here are the trip details \u2192",
@@ -392,6 +403,37 @@ export function TravelChat() {
       )
     }
 
+    if (content.kind === "no-results") {
+      const filters = content.filtersApplied
+      const filterLabels = Object.entries(filters)
+        .filter(([, v]) => v != null)
+        .map(([k, v]) => `${k}: ${v}`)
+      return (
+        <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
+          <div className="rounded-full bg-muted p-4">
+            <svg className="h-8 w-8 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-foreground">No trips found</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Try adjusting your filters for more results.
+            </p>
+          </div>
+          {filterLabels.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-1.5">
+              {filterLabels.map((label) => (
+                <span key={label} className="rounded-full bg-muted px-2.5 py-1 text-[11px] text-muted-foreground">
+                  {label}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )
+    }
+
     if (content.kind === "trips") {
       return (
         <div className={cn(canvasLoading && "opacity-50 pointer-events-none")}>
@@ -435,6 +477,7 @@ export function TravelChat() {
     const content = canvasContent || displayContent
     if (!content) return ""
     if (content.kind === "trips") return "Trip Results"
+    if (content.kind === "no-results") return "Search Results"
     if (content.kind === "detail") return "Trip Details"
     if (content.kind === "departures") return "Departures"
     if (content.kind === "guided-selling") return "Trip Finder"
