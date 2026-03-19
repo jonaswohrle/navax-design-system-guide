@@ -15,7 +15,7 @@ export function DestinationCard({ region }: DestinationCardProps) {
     >
       <div className="relative aspect-[4/3]">
         <Image
-          src={blobUrl(region.imageUrl || "/images/explore/hero-mountains.jpg")}
+          src={blobUrl(region.imageUrl || "/images/explore/eon-strom.jpg")}
           alt={region.name}
           fill
           unoptimized

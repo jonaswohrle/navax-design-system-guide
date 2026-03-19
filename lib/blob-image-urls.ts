@@ -39,7 +39,15 @@ const BLOB_URLS: Record<string, string> = {
   "/images/explore/trip-cuba.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/trip-cuba.jpg",
   "/images/explore/trip-japan.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/trip-japan.jpg",
   "/images/explore/trip-patagonia.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/trip-patagonia.jpg",
-  "/images/explore/trip-south-africa.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/trip-south-africa.jpg"
+  "/images/explore/trip-south-africa.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/trip-south-africa.jpg",
+  "/images/explore/hero-energy.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/hero-energy.jpg",
+  "/images/explore/eon-strom.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/eon-strom.jpg",
+  "/images/explore/eon-solar.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/eon-solar.jpg",
+  "/images/explore/eon-emobility.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/eon-emobility.jpg",
+  "/images/explore/eon-waermepumpe.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/eon-waermepumpe.jpg",
+  "/images/explore/eon-smarthome.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/eon-smarthome.jpg",
+  "/images/explore/eon-gas.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/eon-gas.jpg",
+  "/images/explore/blog-energy-tips.jpg": "https://nqlmkxqox66ff90a.public.blob.vercel-storage.com/explore/blog-energy-tips.jpg"
 };
 
 /** Allowed external hostnames for next/image */
@@ -68,7 +76,7 @@ export function blobUrl(localPath: string): string {
       }
     } catch { /* invalid URL */ }
     // Unknown external host -- return a safe blob fallback
-    return BLOB_URLS["/images/explore/hero-mountains.jpg"] || localPath;
+    return BLOB_URLS["/images/explore/hero-energy.jpg"] || localPath;
   }
 
   return localPath;

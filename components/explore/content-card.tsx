@@ -18,7 +18,7 @@ export function ContentCard({ post }: ContentCardProps) {
       })
     : null
 
-  const imgSrc = blobUrl(post.imageUrl || "/images/explore/hero-mountains.jpg")
+  const imgSrc = blobUrl(post.imageUrl || "/images/explore/blog-energy-tips.jpg")
 
   return (
     <Link

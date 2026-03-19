@@ -23,7 +23,7 @@ export function TripCard({ trip }: TripCardProps) {
     <article className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-shadow hover:shadow-lg">
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
-          src={blobUrl(trip.imageUrl || "/images/explore/hero-mountains.jpg")}
+          src={blobUrl(trip.imageUrl || "/images/explore/eon-strom.jpg")}
           alt={trip.title}
           fill
           unoptimized

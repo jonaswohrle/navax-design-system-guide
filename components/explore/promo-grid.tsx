@@ -4,10 +4,10 @@ import { blobUrl } from "@/lib/blob-image-urls"
 import type { PromoCardFields } from "@/lib/contentful"
 
 const FALLBACK_PROMOS: PromoCardFields[] = [
-  { title: "Ökostrom-Tarife", subtitle: "100% erneuerbare Energie für Ihr Zuhause", imageUrl: "/images/explore/promo-new-trips.jpg", linkUrl: "/destinations", order: 1 },
-  { title: "Solaranlagen", subtitle: "Eigenen Strom erzeugen & sparen", imageUrl: "/images/explore/promo-south-america.jpg", linkUrl: "/destinations", order: 2 },
-  { title: "E-Mobilität", subtitle: "Wallbox & Autostrom-Tarife", imageUrl: "/images/explore/promo-micro-retirement.jpg", linkUrl: "/experiences", order: 3 },
-  { title: "Wärmepumpen", subtitle: "Nachhaltig heizen mit E.ON", imageUrl: "/images/explore/promo-polar.jpg", linkUrl: "/offers", order: 4 },
+  { title: "Ökostrom-Tarife", subtitle: "100% erneuerbare Energie für Ihr Zuhause", imageUrl: "/images/explore/eon-strom.jpg", linkUrl: "/destinations", order: 1 },
+  { title: "Solaranlagen", subtitle: "Eigenen Strom erzeugen & sparen", imageUrl: "/images/explore/eon-solar.jpg", linkUrl: "/destinations", order: 2 },
+  { title: "E-Mobilität", subtitle: "Wallbox & Autostrom-Tarife", imageUrl: "/images/explore/eon-emobility.jpg", linkUrl: "/experiences", order: 3 },
+  { title: "Wärmepumpen", subtitle: "Nachhaltig heizen mit E.ON", imageUrl: "/images/explore/eon-waermepumpe.jpg", linkUrl: "/offers", order: 4 },
 ]
 
 interface PromoGridProps {
@@ -29,7 +29,7 @@ export function PromoGrid({ promos }: PromoGridProps) {
             >
               <div className="relative aspect-[4/3]">
                 <Image
-                  src={blobUrl(promo.imageUrl || "/images/explore/hero-mountains.jpg")}
+                  src={blobUrl(promo.imageUrl || "/images/explore/eon-strom.jpg")}
                   alt={promo.title}
                   fill
                   unoptimized

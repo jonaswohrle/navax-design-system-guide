@@ -37,17 +37,17 @@ const FALLBACK_HERO = {
 }
 
 const FALLBACK_TRIPS = [
-  { title: "E.ON ÖkoStrom", destination: "Strom", tripType: "Ökostrom", duration: "12 Monate", price: 29, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Bestseller"], tripCode: "OKO", slug: "oekostrom", order: 1 },
-  { title: "E.ON ÖkoStrom Home & Drive", destination: "Strom & E-Auto", tripType: "Ökostrom", duration: "24 Monate", price: 34, originalPrice: 39, imageUrl: "/images/explore/trip-japan.jpg", badges: ["Rabatt", "Bestseller"], tripCode: "OHD", slug: "oekostrom-home-drive", order: 2 },
-  { title: "E.ON Erdgas", destination: "Erdgas", tripType: "Gas", duration: "12 Monate", price: 8, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Preisgarantie"], tripCode: "GAS", slug: "erdgas", order: 3 },
-  { title: "E.ON Solar", destination: "Solaranlage", tripType: "Solar", duration: "Einmalig", price: 9990, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["0% MwSt."], tripCode: "SOL", slug: "solar", order: 4 },
-  { title: "E.ON Home Comfort", destination: "Smart Home", tripType: "Energiemanagement", duration: "Monatlich", price: 12, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Neu"], tripCode: "HC", slug: "home-comfort", order: 5 },
+  { title: "E.ON ÖkoStrom", destination: "Strom", tripType: "Ökostrom", duration: "12 Monate", price: 29, imageUrl: "/images/explore/eon-strom.jpg", badges: ["Bestseller"], tripCode: "OKO", slug: "oekostrom", order: 1 },
+  { title: "E.ON ÖkoStrom Home & Drive", destination: "Strom & E-Auto", tripType: "Ökostrom", duration: "24 Monate", price: 34, originalPrice: 39, imageUrl: "/images/explore/eon-emobility.jpg", badges: ["Rabatt", "Bestseller"], tripCode: "OHD", slug: "oekostrom-home-drive", order: 2 },
+  { title: "E.ON Erdgas", destination: "Erdgas", tripType: "Gas", duration: "12 Monate", price: 8, imageUrl: "/images/explore/eon-gas.jpg", badges: ["Preisgarantie"], tripCode: "GAS", slug: "erdgas", order: 3 },
+  { title: "E.ON Solar", destination: "Solaranlage", tripType: "Solar", duration: "Einmalig", price: 9990, imageUrl: "/images/explore/eon-solar.jpg", badges: ["0% MwSt."], tripCode: "SOL", slug: "solar", order: 4 },
+  { title: "E.ON Home Comfort", destination: "Smart Home", tripType: "Energiemanagement", duration: "Monatlich", price: 12, imageUrl: "/images/explore/eon-smarthome.jpg", badges: ["Neu"], tripCode: "HC", slug: "home-comfort", order: 5 },
 ]
 
 const FALLBACK_BLOG = [
-  { title: "Stromverbrauch senken: 10 einfache Tipps", excerpt: "Mit diesen praktischen Tipps können Sie Ihren Stromverbrauch nachhaltig reduzieren und bares Geld sparen.", imageUrl: "/images/explore/blog-great-wall.jpg", publishDate: "2026-03-10", category: "Energieratgeber", slug: "stromverbrauch-senken-tipps", order: 1 },
-  { title: "So funktioniert eine Wärmepumpe", excerpt: "Wärmepumpen sind die Zukunft des Heizens. Erfahren Sie, wie die Technologie funktioniert und ob sie für Ihr Zuhause geeignet ist.", imageUrl: "/images/explore/blog-cycling.jpg", publishDate: "2026-03-05", category: "Heizen", slug: "waermepumpe-erklaert", order: 2 },
-  { title: "E-Auto laden: Was Sie wissen müssen", excerpt: "Alles rund um das Laden Ihres Elektroautos -- von der eigenen Wallbox bis zur öffentlichen Ladeinfrastruktur.", imageUrl: "/images/explore/blog-china-first.jpg", publishDate: "2026-02-28", category: "E-Mobilität", slug: "e-auto-laden-guide", order: 3 },
+  { title: "Stromverbrauch senken: 10 einfache Tipps", excerpt: "Mit diesen praktischen Tipps können Sie Ihren Stromverbrauch nachhaltig reduzieren und bares Geld sparen.", imageUrl: "/images/explore/blog-energy-tips.jpg", publishDate: "2026-03-10", category: "Energieratgeber", slug: "stromverbrauch-senken-tipps", order: 1 },
+  { title: "So funktioniert eine Wärmepumpe", excerpt: "Wärmepumpen sind die Zukunft des Heizens. Erfahren Sie, wie die Technologie funktioniert und ob sie für Ihr Zuhause geeignet ist.", imageUrl: "/images/explore/eon-waermepumpe.jpg", publishDate: "2026-03-05", category: "Heizen", slug: "waermepumpe-erklaert", order: 2 },
+  { title: "E-Auto laden: Was Sie wissen müssen", excerpt: "Alles rund um das Laden Ihres Elektroautos -- von der eigenen Wallbox bis zur öffentlichen Ladeinfrastruktur.", imageUrl: "/images/explore/eon-emobility.jpg", publishDate: "2026-02-28", category: "E-Mobilität", slug: "e-auto-laden-guide", order: 3 },
 ]
 
 /* ------------------------------------------------------------------ */

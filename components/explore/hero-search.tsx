@@ -16,7 +16,7 @@ interface HeroSearchProps {
 }
 
 export function HeroSearch({
-  backgroundImageUrl = "/images/explore/hero-santorini.png",
+  backgroundImageUrl = "/images/explore/hero-energy.jpg",
   headline,
   subheadline,
   ctaLabel,
