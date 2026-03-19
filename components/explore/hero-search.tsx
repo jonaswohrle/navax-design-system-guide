@@ -68,7 +68,7 @@ export function HeroSearch({
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 lg:px-8">
           {headline ? (
             <>
-              <h1 className="mb-3 font-serif text-5xl font-bold text-explore-yellow drop-shadow-lg lg:text-7xl lg:leading-tight text-balance">
+              <h1 className="mb-3 font-serif text-5xl font-bold text-white drop-shadow-lg lg:text-7xl lg:leading-tight text-balance">
                 {headline}
               </h1>
               {subheadline && (
@@ -79,14 +79,14 @@ export function HeroSearch({
             </>
           ) : (
             <>
-              <p className="mb-1 font-serif text-xl italic text-explore-yellow drop-shadow-lg lg:text-2xl">
-                {"Don't just travel,"}
+              <p className="mb-1 font-serif text-xl italic text-white/90 drop-shadow-lg lg:text-2xl">
+                Ihr Energiepartner
               </p>
-              <h1 className="mb-3 font-serif text-7xl font-bold text-explore-yellow drop-shadow-lg lg:text-[120px] lg:leading-[0.9]">
-                Explore!
+              <h1 className="mb-3 font-serif text-6xl font-bold text-white drop-shadow-lg lg:text-[100px] lg:leading-[0.9]">
+                Energie neu denken
               </h1>
-              <p className="text-xl font-bold text-white drop-shadow-lg lg:text-3xl">
-                Small group adventures
+              <p className="text-xl font-bold text-white/90 drop-shadow-lg lg:text-3xl">
+                Strom, Gas & Solarlösungen für Ihr Zuhause
               </p>
             </>
           )}
@@ -101,66 +101,53 @@ export function HeroSearch({
         <div className="bg-primary pb-10 pt-2">
           <div className="mx-auto max-w-5xl px-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-4">
-              {/* Where */}
+              {/* Product */}
               <div className="flex-1">
                 <label className="mb-1 block text-xs font-semibold text-primary-foreground">
-                  Where would you like to go?
-                </label>
-                <div className="flex items-center gap-2 rounded border border-white/20 bg-white px-3 py-2.5">
-                  <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
-                  <select
-                    className="w-full bg-transparent text-sm text-foreground outline-none"
-                    value={where}
-                    onChange={(e) => setWhere(e.target.value)}
-                    aria-label="Destination"
-                  >
-                    <option value="">Search for a destination...</option>
-                    <option value="europe">Europe</option>
-                    <option value="asia">Asia</option>
-                    <option value="africa">Africa</option>
-                    <option value="south-america">South America</option>
-                    <option value="central-america">Central America</option>
-                    <option value="middle-east">Middle East</option>
-                    <option value="polar">Polar</option>
-                    <option value="north-america">North America</option>
-                    <option value="caribbean">Caribbean</option>
-                    <option value="australasia">Australasia</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Trip type */}
-              <div className="flex-1">
-                <label className="mb-1 block text-xs font-semibold text-primary-foreground">
-                  What type of trip?
+                  Was suchen Sie?
                 </label>
                 <div className="flex items-center gap-2 rounded border border-white/20 bg-white px-3 py-2.5">
                   <Compass className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <select
                     className="w-full bg-transparent text-sm text-foreground outline-none"
-                    value={tripType}
-                    onChange={(e) => setTripType(e.target.value)}
-                    aria-label="Trip type"
+                    value={where}
+                    onChange={(e) => setWhere(e.target.value)}
+                    aria-label="Produkt"
                   >
-                    <option value="">Any type</option>
-                    <option value="discovery">Classic Discovery</option>
-                    <option value="walking">Walking &amp; Trekking</option>
-                    <option value="cycling">Cycling</option>
-                    <option value="wildlife">Wildlife</option>
-                    <option value="family">Family</option>
-                    <option value="polar">Polar</option>
-                    <option value="boat">Boat Journeys</option>
-                    <option value="upgraded">Explore Upgraded</option>
-                    <option value="solo">Solo</option>
-                    <option value="food-drink">Food &amp; Drink</option>
+                    <option value="">Produkt wählen...</option>
+                    <option value="strom">Strom</option>
+                    <option value="gas">Erdgas</option>
+                    <option value="solar">Solaranlage</option>
+                    <option value="waermepumpe">Wärmepumpe</option>
+                    <option value="wallbox">Wallbox & E-Mobilität</option>
+                    <option value="smart-home">Smart Home</option>
                   </select>
                 </div>
               </div>
 
-              {/* When */}
+              {/* Postleitzahl */}
               <div className="flex-1">
                 <label className="mb-1 block text-xs font-semibold text-primary-foreground">
-                  When would you like to go?
+                  Ihre Postleitzahl
+                </label>
+                <div className="flex items-center gap-2 rounded border border-white/20 bg-white px-3 py-2.5">
+                  <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <input
+                    type="text"
+                    className="w-full bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+                    value={tripType}
+                    onChange={(e) => setTripType(e.target.value)}
+                    placeholder="z.B. 45131"
+                    aria-label="Postleitzahl"
+                    maxLength={5}
+                  />
+                </div>
+              </div>
+
+              {/* Verbrauch */}
+              <div className="flex-1">
+                <label className="mb-1 block text-xs font-semibold text-primary-foreground">
+                  Ihr Verbrauch (kWh/Jahr)
                 </label>
                 <div className="flex items-center gap-2 rounded border border-white/20 bg-white px-3 py-2.5">
                   <Calendar className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -168,19 +155,15 @@ export function HeroSearch({
                     className="w-full bg-transparent text-sm text-foreground outline-none"
                     value={when}
                     onChange={(e) => setWhen(e.target.value)}
-                    aria-label="When?"
+                    aria-label="Verbrauch"
                   >
-                    <option value="">Anytime</option>
-                    <option value="apr-2026">April 2026</option>
-                    <option value="may-2026">May 2026</option>
-                    <option value="jun-2026">June 2026</option>
-                    <option value="jul-2026">July 2026</option>
-                    <option value="aug-2026">August 2026</option>
-                    <option value="sep-2026">September 2026</option>
-                    <option value="oct-2026">October 2026</option>
-                    <option value="nov-2026">November 2026</option>
-                    <option value="dec-2026">December 2026</option>
-                    <option value="jan-2027">January 2027</option>
+                    <option value="">Bitte wählen...</option>
+                    <option value="1500">1.500 kWh (1 Person)</option>
+                    <option value="2500">2.500 kWh (2 Personen)</option>
+                    <option value="3500">3.500 kWh (3 Personen)</option>
+                    <option value="4500">4.500 kWh (4 Personen)</option>
+                    <option value="6000">6.000 kWh (5+ Personen)</option>
+                    <option value="8000">8.000+ kWh (Großhaushalt)</option>
                   </select>
                 </div>
               </div>
@@ -188,9 +171,9 @@ export function HeroSearch({
               {/* CTA */}
               <button
                 onClick={handleSearch}
-                className="flex items-center justify-center gap-2 rounded bg-explore-yellow px-8 py-3 text-sm font-bold text-foreground transition-colors hover:bg-explore-yellow/90 lg:self-end"
+                className="flex items-center justify-center gap-2 rounded bg-explore-yellow px-8 py-3 text-sm font-bold text-explore-yellow-foreground transition-colors hover:bg-explore-yellow/90 lg:self-end"
               >
-                {"Let's go!"}
+                Tarif berechnen
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>

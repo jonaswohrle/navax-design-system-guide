@@ -16,18 +16,18 @@ export function AiCtaBanner() {
               </span>
             </div>
             <h2 className="mb-4 font-heading text-2xl font-bold text-background lg:text-3xl text-balance">
-              Built with Vercel, v0 & Contentful Personalization
+              E.ON Design System -- mit Vercel, v0 & Contentful
             </h2>
             <p className="mb-6 text-base leading-relaxed text-background/70 lg:text-lg">
-              This site is built and deployed on Vercel, designed with v0, and powered by Contentful.
-              Explore how AI personalisation, content pipelines, and real-time audience segmentation create tailored travel experiences.
+              Diese Seite wurde mit Vercel gebaut, mit v0 designt und durch Contentful personalisiert.
+              Entdecken Sie, wie KI-Personalisierung, Content-Pipelines und Echtzeit-Segmentierung personalisierte Energieerlebnisse schaffen.
             </p>
             <Button
               asChild
               size="lg"
               className="bg-primary px-8 font-heading text-base font-semibold text-primary-foreground hover:bg-hover"
             >
-              <Link href="/vercel">Explore the tech</Link>
+              <Link href="/vercel">Technologie entdecken</Link>
             </Button>
           </div>
 

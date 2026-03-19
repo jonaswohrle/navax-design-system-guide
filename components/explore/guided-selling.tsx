@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { Compass, Footprints, Bike, Ship, Camera, MapPin, ArrowLeft, Check, Sparkles } from "lucide-react"
+import { Zap, Flame, Sun, Car, Home, ArrowLeft, Check, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
@@ -23,50 +23,50 @@ interface GuidedSellingProps {
   onComplete: (result: GuidedSellingResult) => void
 }
 
-const TRIP_TYPES = [
-  { id: "Discovery", label: "Discovery", icon: Compass, description: "Culture, sightseeing & local experiences" },
-  { id: "Walking", label: "Walking", icon: Footprints, description: "Trails, treks & coastal paths" },
-  { id: "Cycling", label: "Cycling", icon: Bike, description: "Ride through stunning landscapes" },
-  { id: "Boat", label: "Boat", icon: Ship, description: "Rivers, coasts & island hopping" },
-  { id: "Wildlife", label: "Wildlife", icon: Camera, description: "Safari, nature & animal encounters" },
+const ENERGY_TYPES = [
+  { id: "Strom", label: "Strom", icon: Zap, description: "Ökostrom für Ihren Haushalt" },
+  { id: "Gas", label: "Erdgas", icon: Flame, description: "Heizen & Kochen mit Gas" },
+  { id: "Solar", label: "Solaranlage", icon: Sun, description: "Eigenen Strom erzeugen" },
+  { id: "E-Auto", label: "E-Auto laden", icon: Car, description: "Wallbox & Autostrom-Tarife" },
+  { id: "Waermepumpe", label: "Wärmepumpe", icon: Home, description: "Nachhaltig heizen" },
 ]
 
-const DESTINATIONS = [
-  { id: "Europe", label: "Europe", emoji: "EU" },
-  { id: "Asia", label: "Asia", emoji: "AS" },
-  { id: "Africa", label: "Africa", emoji: "AF" },
-  { id: "Americas", label: "Americas", emoji: "AM" },
-  { id: "Middle East", label: "Middle East", emoji: "ME" },
-  { id: "Polar", label: "Polar", emoji: "PO" },
+const HOUSEHOLD_SIZES = [
+  { id: "1", label: "1 Person", emoji: "1P" },
+  { id: "2", label: "2 Personen", emoji: "2P" },
+  { id: "3", label: "3 Personen", emoji: "3P" },
+  { id: "4", label: "4 Personen", emoji: "4P" },
+  { id: "5", label: "5+ Personen", emoji: "5P" },
+  { id: "gewerbe", label: "Gewerbe", emoji: "GW" },
 ]
 
-const DURATIONS = [
-  { id: "short", label: "Up to 8 days", description: "A quick getaway", range: "1-8" },
-  { id: "medium", label: "9-14 days", description: "The perfect length", range: "9-14" },
-  { id: "long", label: "15+ days", description: "A deep dive", range: "15-30" },
+const CONTRACT_DURATIONS = [
+  { id: "flex", label: "Flexibel", description: "Monatlich kündbar", range: "flex" },
+  { id: "12", label: "12 Monate", description: "Stabile Preise für 1 Jahr", range: "12" },
+  { id: "24", label: "24 Monate", description: "Beste Konditionen", range: "24" },
 ]
 
-const BUDGETS = [
-  { id: "under-2000", label: "Under \u00A32,000", description: "Great value trips" },
-  { id: "2000-3500", label: "\u00A32,000 - \u00A33,500", description: "Mid-range adventures" },
-  { id: "3500-5000", label: "\u00A33,500 - \u00A35,000", description: "Premium experiences" },
-  { id: "5000-plus", label: "\u00A35,000+", description: "Ultimate journeys" },
+const PRIORITIES = [
+  { id: "guenstig", label: "Günstigster Preis", description: "Den niedrigsten Preis pro kWh" },
+  { id: "oeko", label: "100% Ökostrom", description: "Erneuerbare Energie aus Wind & Solar" },
+  { id: "preisgarantie", label: "Preisgarantie", description: "Feste Preise über die Laufzeit" },
+  { id: "regional", label: "Regionaler Strom", description: "Energie aus Ihrer Region" },
 ]
 
-const ACTIVITY_LEVELS = [
-  { id: 1, label: "Relaxed", description: "Easy-going, minimal walking" },
-  { id: 2, label: "Moderate", description: "Some walking, comfortable pace" },
-  { id: 3, label: "Active", description: "Regular activity, good fitness" },
-  { id: 4, label: "Challenging", description: "Demanding, strong fitness needed" },
-  { id: 5, label: "Extreme", description: "Very demanding, high fitness required" },
+const IMPORTANCE_LEVELS = [
+  { id: 1, label: "Preis", description: "Der Preis ist am wichtigsten" },
+  { id: 2, label: "Preis & Nachhaltigkeit", description: "Gute Balance aus Preis und Ökostrom" },
+  { id: 3, label: "Nachhaltigkeit", description: "Nachhaltige Energie ist entscheidend" },
+  { id: 4, label: "Service & Komfort", description: "Beste Betreuung und digitale Tools" },
+  { id: 5, label: "Alles inklusive", description: "Rundum-sorglos-Paket mit allen Extras" },
 ]
 
 const STEPS = [
-  { title: "Trip type", question: "What kind of experience interests you?" },
-  { title: "Destination", question: "Where in the world would you like to go?" },
-  { title: "Duration", question: "How long do you want to travel?" },
-  { title: "Budget", question: "What is your budget per person?" },
-  { title: "Activity", question: "How active do you want to be?" },
+  { title: "Energieart", question: "Welche Energie suchen Sie?" },
+  { title: "Haushalt", question: "Wie groß ist Ihr Haushalt?" },
+  { title: "Laufzeit", question: "Welche Vertragslaufzeit bevorzugen Sie?" },
+  { title: "Priorität", question: "Was ist Ihnen besonders wichtig?" },
+  { title: "Gewichtung", question: "Wie stark gewichten Sie Nachhaltigkeit?" },
 ]
 
 /* -------------------------------------------------------------------------- */
@@ -119,10 +119,10 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
             <Sparkles className="h-5 w-5 text-primary" />
           </div>
           <h4 className="text-sm font-semibold text-foreground">
-            Searching for your perfect trip...
+            Ihren passenden Tarif suchen...
           </h4>
           <p className="text-xs text-muted-foreground">
-            Finding the best matches based on your preferences
+            Wir finden die besten Angebote basierend auf Ihren Angaben
           </p>
         </CardContent>
       </Card>
@@ -151,7 +151,7 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
           ))}
         </div>
         <p className="mt-2 text-[10px] text-muted-foreground">
-          Step {step + 1} of {STEPS.length}
+          Schritt {step + 1} von {STEPS.length}
         </p>
       </div>
 
@@ -160,10 +160,10 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
           {STEPS[step].question}
         </h4>
 
-        {/* Step 0: Trip types */}
+        {/* Step 0: Energy types */}
         {step === 0 && (
           <div className="grid grid-cols-1 gap-2">
-            {TRIP_TYPES.map((type) => {
+            {ENERGY_TYPES.map((type) => {
               const Icon = type.icon
               const selected = tripTypes.includes(type.id)
               return (
@@ -196,10 +196,10 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
           </div>
         )}
 
-        {/* Step 1: Destinations */}
+        {/* Step 1: Household size */}
         {step === 1 && (
           <div className="grid grid-cols-2 gap-2">
-            {DESTINATIONS.map((dest) => {
+            {HOUSEHOLD_SIZES.map((dest) => {
               const selected = destinations.includes(dest.id)
               return (
                 <button
@@ -212,7 +212,7 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
                       : "border-border bg-card hover:border-muted-foreground/30"
                   )}
                 >
-                  <MapPin
+                  <Home
                     className={cn(
                       "h-4 w-4 shrink-0",
                       selected ? "text-primary" : "text-muted-foreground"
@@ -226,10 +226,10 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
           </div>
         )}
 
-        {/* Step 2: Duration */}
+        {/* Step 2: Contract duration */}
         {step === 2 && (
           <div className="grid grid-cols-1 gap-2">
-            {DURATIONS.map((dur) => {
+            {CONTRACT_DURATIONS.map((dur) => {
               const selected = durationRange === dur.range
               return (
                 <button
@@ -253,10 +253,10 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
           </div>
         )}
 
-        {/* Step 3: Budget */}
+        {/* Step 3: Priority */}
         {step === 3 && (
           <div className="grid grid-cols-1 gap-2">
-            {BUDGETS.map((bud) => {
+            {PRIORITIES.map((bud) => {
               const selected = budgetRange === bud.id
               return (
                 <button
@@ -280,10 +280,10 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
           </div>
         )}
 
-        {/* Step 4: Activity level */}
+        {/* Step 4: Sustainability weighting */}
         {step === 4 && (
           <div className="grid grid-cols-1 gap-2">
-            {ACTIVITY_LEVELS.map((level) => {
+            {IMPORTANCE_LEVELS.map((level) => {
               const selected = physicalRating === level.id
               return (
                 <button
@@ -330,7 +330,7 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
               className="text-xs"
             >
               <ArrowLeft className="mr-1 h-3 w-3" />
-              Back
+              Zurück
             </Button>
           )}
           <Button
@@ -339,7 +339,7 @@ export function GuidedSellingFlow({ greeting, onComplete }: GuidedSellingProps) 
             disabled={!canAdvance}
             onClick={handleNext}
           >
-            {step === 4 ? "Find my trips" : "Next"}
+            {step === 4 ? "Tarife finden" : "Weiter"}
           </Button>
         </div>
       </CardContent>

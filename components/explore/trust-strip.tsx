@@ -16,30 +16,30 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 
 const FALLBACK_PILLARS: TrustPillarFields[] = [
   {
-    title: "Unforgettable experiences",
+    title: "100% Ökostrom",
     description:
-      "From big wows to hidden gems, our tours leave you feeling that you've really explored.",
+      "Unser Strom stammt zu 100% aus erneuerbaren Energiequellen. So leisten Sie einen aktiven Beitrag zur Energiewende.",
     icon: "Sparkles",
     order: 1,
   },
   {
-    title: "Expert tour leaders",
+    title: "Persönlicher Service",
     description:
-      "Chosen for their great knowledge of your destination and a passion to make your trip extraordinary.",
+      "Unser Kundenservice wurde mehrfach ausgezeichnet. Wir sind für Sie da -- telefonisch, online und in Ihrem E.ON Shop.",
     icon: "Users",
     order: 2,
   },
   {
-    title: "Small group tours",
+    title: "Faire Preise",
     description:
-      "Average groups of 11; solos, couples and friends, united by a desire for authentic experiences.",
+      "Transparente Tarife mit Preisgarantie. Keine versteckten Kosten -- Sie wissen immer, was Sie bezahlen.",
     icon: "UserCheck",
     order: 3,
   },
   {
-    title: "Responsible at heart",
+    title: "Nachhaltig handeln",
     description:
-      "How we operate sets us apart; our flexible booking policy, our loyalty scheme & sustainable approach.",
+      "Bis 2040 streben wir CO2-Neutralität an. Als Unternehmen treiben wir die Energiewende aktiv voran.",
     icon: "Heart",
     order: 4,
   },
@@ -60,11 +60,11 @@ export function TrustStrip({ pillars }: TrustStripProps) {
           {/* Left heading */}
           <div className="lg:col-span-1">
             <h2 className="font-heading text-3xl font-bold text-foreground lg:text-4xl text-balance">
-              An adventure travel company you can trust
+              Ihr zuverlässiger Energiepartner
             </h2>
             <WaveUnderline className="mt-4 w-40 lg:w-52" />
             <p className="mt-6 text-sm leading-relaxed text-muted-foreground lg:text-base">
-              {"There's a reason why 98% of customers say they'd book an adventure with us again."}
+              Über 14 Millionen Kunden vertrauen E.ON. Erfahren Sie, warum wir die erste Wahl für Energie in Deutschland sind.
             </p>
           </div>
 

@@ -82,14 +82,14 @@ export default function AIShowcasesPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-3">
             <span className="flex w-fit items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold tracking-wide uppercase text-primary">
-              AI Use Cases
+              KI-Anwendungen
             </span>
             <h1 className="text-3xl font-bold tracking-tight text-foreground text-balance lg:text-4xl">
-              Interactive AI Showcases
+              Interaktive KI-Showcases
             </h1>
             <p className="max-w-md text-sm text-muted-foreground leading-relaxed">
-              Each demo teaches a different AI SDK pattern. Pick one to explore
-              streaming, tool calling, image generation, or multi-step pipelines.
+              Jede Demo zeigt ein anderes AI SDK-Pattern. Entdecken Sie Streaming,
+              Tool Calling, Bildgenerierung oder mehrstufige Pipelines.
             </p>
           </div>
         </div>
@@ -100,17 +100,17 @@ export default function AIShowcasesPage() {
             {
               icon: Code2,
               label: "AI SDK 6",
-              desc: "useChat, streamText, tool calling, Output.object()",
+              desc: "useChat, streamText, Tool Calling, Output.object()",
             },
             {
               icon: Cpu,
               label: "AI Gateway",
-              desc: "Unified model routing: GPT-5.2, Claude, Gemini, Grok",
+              desc: "Einheitliches Modell-Routing: GPT-5.2, Claude, Gemini, Grok",
             },
             {
               icon: Layers,
-              label: "Pipeline Patterns",
-              desc: "Chained AI calls with SSE streaming at each step",
+              label: "Pipeline-Patterns",
+              desc: "Verkettete KI-Aufrufe mit SSE-Streaming je Schritt",
             },
           ].map((t) => (
             <div
@@ -132,52 +132,52 @@ export default function AIShowcasesPage() {
         <div className="grid gap-8 lg:grid-cols-3">
           <DemoCard
             title="Prompt Coach"
-            description="Get AI feedback on your prompts. See quality scores, detailed analysis, and rewritten versions in real-time."
+            description="Erhalten Sie KI-Feedback zu Ihren Prompts. Sehen Sie Qualitätsbewertungen, detaillierte Analysen und umgeschriebene Versionen in Echtzeit."
             href="/vercel/prompt-coach"
             icon={MessageSquare}
             concepts={["useChat", "Tool Calling", "Structured Output", "Streaming"]}
             sdkPattern={`streamText({\n  model: "openai/gpt-5.2",\n  tools: { analyzePrompt, rewritePrompt }\n})`}
           />
           <DemoCard
-            title="AI Image Studio"
-            description="Generate and transform images with Gemini 3 Pro. Upload reference images and describe transformations."
+            title="KI-Bildstudio"
+            description="Generieren und transformieren Sie Bilder mit Gemini 3 Pro. Laden Sie Referenzbilder hoch und beschreiben Sie Transformationen."
             href="/vercel/image-studio"
             icon={ImagePlus}
-            concepts={["Multimodal Input", "Image Generation", "File Upload", "Base64"]}
+            concepts={["Multimodal Input", "Bildgenerierung", "Datei-Upload", "Base64"]}
             sdkPattern={`generateText({\n  model: "google/gemini-3-pro-image",\n  providerOptions: { google: {\n    responseModalities: ["TEXT","IMAGE"]\n  }}\n})`}
           />
           <DemoCard
             title="Content Pipeline"
-            description="Multi-model agent: Gemini researches the web, GPT-5.2 drafts, Gemini generates a hero image -- all streaming into a live blog."
+            description="Multi-Model-Agent: Gemini recherchiert, GPT-5.2 textet, Gemini generiert ein Hero-Bild -- alles per Streaming in einen Live-Blog."
             href="/vercel/content-pipeline"
             icon={GitBranch}
             concepts={["Multi-Model", "Parallel AI", "SSE Streaming", "Pipeline"]}
-            sdkPattern={`// 3 models in parallel\nawait Promise.allSettled([\n  generateText({ model: "openai/..." }),\n  generateText({ model: "google/..." })\n])`}
+            sdkPattern={`// 3 Modelle parallel\nawait Promise.allSettled([\n  generateText({ model: "openai/..." }),\n  generateText({ model: "google/..." })\n])`}
           />
         </div>
 
         {/* What you'll learn */}
         <div className="rounded-lg border border-border bg-secondary p-8">
           <h2 className="text-xl font-semibold tracking-tight text-foreground">
-            What these demos teach
+            Was diese Demos vermitteln
           </h2>
           <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
-                title: "Effective Prompting",
-                desc: "System prompts, few-shot patterns, structured output schemas, and chain-of-thought reasoning.",
+                title: "Effektives Prompting",
+                desc: "System-Prompts, Few-Shot-Patterns, strukturierte Output-Schemas und Chain-of-Thought-Reasoning.",
               },
               {
                 title: "AI SDK Patterns",
-                desc: "useChat, streamText, generateText, tool definitions, Output.object(), and agent stop conditions.",
+                desc: "useChat, streamText, generateText, Tool-Definitionen, Output.object() und Agent-Stop-Bedingungen.",
               },
               {
-                title: "Multimodal AI",
-                desc: "Image generation with Gemini, file uploads, base64 handling, and mixed text+image responses.",
+                title: "Multimodale KI",
+                desc: "Bildgenerierung mit Gemini, Datei-Uploads, Base64-Handling und gemischte Text+Bild-Antworten.",
               },
               {
-                title: "Multi-Model Orchestration",
-                desc: "Running Gemini Search, GPT-5.2, and Gemini Image in parallel with SSE streaming into a live preview.",
+                title: "Multi-Model-Orchestrierung",
+                desc: "Gemini Search, GPT-5.2 und Gemini Image parallel mit SSE-Streaming in eine Live-Vorschau.",
               },
             ].map((item) => (
               <div key={item.title} className="flex flex-col gap-2">

@@ -29,28 +29,25 @@ import { Button } from "@/components/ui/button"
 /*  Fallback data                                                      */
 /* ------------------------------------------------------------------ */
 const FALLBACK_HERO = {
-  title: "Explore!",
-  subtitle: "Small group adventures to inspire the soul",
-  ctaText: "Let's go!",
+  title: "Energie neu denken",
+  subtitle: "Strom, Gas & Solarlösungen für Ihr Zuhause",
+  ctaText: "Tarif berechnen",
   ctaLink: "/destinations",
-  backgroundImageUrl: "/images/explore/hero-santorini.png",
+  backgroundImageUrl: "/images/explore/hero-energy.jpg",
 }
 
 const FALLBACK_TRIPS = [
-  { title: "Greek Island Hopping", destination: "Greece", tripType: "Discovery", duration: "10 Days", price: 1895, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Best Seller"], tripCode: "GIH", slug: "greek-island-hopping", order: 1 },
-  { title: "Japan In Depth - Footsteps of the Shogun", destination: "Japan", tripType: "Discovery", duration: "12 Days", price: 4245, originalPrice: 4545, imageUrl: "/images/explore/trip-japan.jpg", badges: ["Discounted", "Best Seller"], tripCode: "JS", slug: "japan-in-depth", order: 2 },
-  { title: "Amalfi Coast Walking - Agriturismo", destination: "Italy", tripType: "Walking", duration: "8 Days", price: 1495, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Centre-based", "Best Seller"], tripCode: "NAW", slug: "amalfi-coast-walking", order: 3 },
-  { title: "Discover Morocco", destination: "Morocco", tripType: "Discovery", duration: "10 Days", price: 1295, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Best Seller"], tripCode: "MD", slug: "morocco-discovery", order: 4 },
-  { title: "Adventures in Patagonia", destination: "Argentina & Chile", tripType: "Discovery", duration: "14 Days", price: 5065, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Best Seller"], tripCode: "PA", slug: "adventures-in-patagonia", order: 5 },
-  { title: "Iceland's Ring Road", destination: "Iceland", tripType: "Discovery", duration: "10 Days", price: 3495, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Best Seller"], tripCode: "IRR", slug: "iceland-ring-road", order: 6 },
-  { title: "Portugal Highlights", destination: "Portugal", tripType: "Discovery", duration: "9 Days", price: 1595, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Best Seller"], tripCode: "PH", slug: "portugal-highlights", order: 7 },
-  { title: "South Africa & Eswatini", destination: "South Africa", tripType: "Wildlife", duration: "10 Days", price: 1395, originalPrice: 1695, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Discounted", "Best Seller"], tripCode: "ZK", slug: "south-africa-eswatini", order: 8 },
+  { title: "E.ON ÖkoStrom", destination: "Strom", tripType: "Ökostrom", duration: "12 Monate", price: 29, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Bestseller"], tripCode: "OKO", slug: "oekostrom", order: 1 },
+  { title: "E.ON ÖkoStrom Home & Drive", destination: "Strom & E-Auto", tripType: "Ökostrom", duration: "24 Monate", price: 34, originalPrice: 39, imageUrl: "/images/explore/trip-japan.jpg", badges: ["Rabatt", "Bestseller"], tripCode: "OHD", slug: "oekostrom-home-drive", order: 2 },
+  { title: "E.ON Erdgas", destination: "Erdgas", tripType: "Gas", duration: "12 Monate", price: 8, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Preisgarantie"], tripCode: "GAS", slug: "erdgas", order: 3 },
+  { title: "E.ON Solar", destination: "Solaranlage", tripType: "Solar", duration: "Einmalig", price: 9990, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["0% MwSt."], tripCode: "SOL", slug: "solar", order: 4 },
+  { title: "E.ON Home Comfort", destination: "Smart Home", tripType: "Energiemanagement", duration: "Monatlich", price: 12, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Neu"], tripCode: "HC", slug: "home-comfort", order: 5 },
 ]
 
 const FALLBACK_BLOG = [
-  { title: "Walking the Great Wall of China: Everything you need to know", excerpt: "Our guide to walking the Great Wall covers the best sections to visit and how to make the most of this incredible experience.", imageUrl: "/images/explore/blog-great-wall.jpg", publishDate: "2026-03-10", category: "Adventure Travel", slug: "walking-great-wall-china", order: 1 },
-  { title: "Why cycling holidays are more popular than ever", excerpt: "From the vineyards of France to the rice paddies of Vietnam, discover why cycling tours are the fastest growing holiday trend.", imageUrl: "/images/explore/blog-cycling.jpg", publishDate: "2026-03-05", category: "Cycling", slug: "cycling-holidays-popular", order: 2 },
-  { title: "Your first trip to China: A complete guide", excerpt: "Planning your first trip to China? Everything you need to know about visas, culture, food and the best places to visit.", imageUrl: "/images/explore/blog-china-first.jpg", publishDate: "2026-02-28", category: "Adventure Travel", slug: "first-trip-china-guide", order: 3 },
+  { title: "Stromverbrauch senken: 10 einfache Tipps", excerpt: "Mit diesen praktischen Tipps können Sie Ihren Stromverbrauch nachhaltig reduzieren und bares Geld sparen.", imageUrl: "/images/explore/blog-great-wall.jpg", publishDate: "2026-03-10", category: "Energieratgeber", slug: "stromverbrauch-senken-tipps", order: 1 },
+  { title: "So funktioniert eine Wärmepumpe", excerpt: "Wärmepumpen sind die Zukunft des Heizens. Erfahren Sie, wie die Technologie funktioniert und ob sie für Ihr Zuhause geeignet ist.", imageUrl: "/images/explore/blog-cycling.jpg", publishDate: "2026-03-05", category: "Heizen", slug: "waermepumpe-erklaert", order: 2 },
+  { title: "E-Auto laden: Was Sie wissen müssen", excerpt: "Alles rund um das Laden Ihres Elektroautos -- von der eigenen Wallbox bis zur öffentlichen Ladeinfrastruktur.", imageUrl: "/images/explore/blog-china-first.jpg", publishDate: "2026-02-28", category: "E-Mobilität", slug: "e-auto-laden-guide", order: 3 },
 ]
 
 /* ------------------------------------------------------------------ */
@@ -84,10 +81,10 @@ export default async function Page() {
       {heroVariants && heroVariants.length > 0 ? (
         <PersonalizedHero
           variants={heroVariants}
-          fallbackImageUrl={h.backgroundImageUrl || "/images/explore/hero-santorini.png"}
+          fallbackImageUrl={h.backgroundImageUrl || "/images/explore/hero-energy.jpg"}
         />
       ) : (
-        <HeroSearch backgroundImageUrl={h.backgroundImageUrl || "/images/explore/hero-santorini.png"} />
+        <HeroSearch backgroundImageUrl={h.backgroundImageUrl || "/images/explore/hero-energy.jpg"} />
       )}
 
       {/* Trust strip */}
@@ -96,18 +93,18 @@ export default async function Page() {
       {/* Promo grid */}
       <PromoGrid promos={promos?.length ? promos : undefined} />
 
-      {/* Brand story -- matching real site layout */}
+      {/* Brand story -- matching E.ON layout */}
       <section className="bg-secondary py-12 lg:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="max-w-2xl">
             <h2 className="mb-4 font-heading text-3xl font-bold text-foreground lg:text-4xl text-balance">
-              The adventure travel experts
+              Gemeinsam die Energiewende gestalten
             </h2>
             <p className="mb-3 text-sm font-medium uppercase tracking-wider text-primary">
-              Over 40 years of adventure
+              Europas größtes Energienetzwerk
             </p>
             <p className="text-base leading-relaxed text-muted-foreground lg:text-lg">
-              {"Since launching in 1981 with only six tours in a four-page brochure, Explore has grown to offer over 500 trips from classic 'discovery' group tours, solo traveller holidays and active family adventures, to walking holidays and cycling trips. Choose from around 100 countries and explore cultures, landscapes, wildlife and communities from Asia to Africa, the Arctic to the Americas."}
+              E.ON ist einer der größten Energieversorger Europas und versorgt über 50 Millionen Kunden mit Strom und Gas. Von Ökostrom über Solaranlagen bis hin zu E-Mobilitätslösungen -- wir bieten alles aus einer Hand. Unsere Mission: eine nachhaltige, digitale und dezentrale Energiezukunft für alle.
             </p>
           </div>
         </div>
@@ -121,13 +118,13 @@ export default async function Page() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-8 flex items-end justify-between">
             <h2 className="font-heading text-2xl font-bold text-foreground lg:text-3xl">
-              Recommended trips for you
+              Unsere beliebtesten Tarife
             </h2>
             <Link
               href="/destinations"
               className="hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-hover md:flex"
             >
-              Search our tours
+              Alle Tarife ansehen
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -141,7 +138,7 @@ export default async function Page() {
           <div className="mt-6 text-center md:hidden">
             <Button asChild variant="outline">
               <Link href="/destinations">
-                Search our tours
+                Alle Tarife ansehen
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
@@ -157,13 +154,13 @@ export default async function Page() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-8 flex items-end justify-between">
             <h2 className="font-heading text-2xl font-bold text-foreground lg:text-3xl">
-              Travel inspiration
+              Energieratgeber
             </h2>
             <Link
               href="/blog"
               className="hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-hover md:flex"
             >
-              View all articles
+              Alle Artikel ansehen
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

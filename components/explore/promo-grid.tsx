@@ -4,10 +4,10 @@ import { blobUrl } from "@/lib/blob-image-urls"
 import type { PromoCardFields } from "@/lib/contentful"
 
 const FALLBACK_PROMOS: PromoCardFields[] = [
-  { title: "NEW trips for 2026", subtitle: "Discover new small group tours", imageUrl: "/images/explore/promo-new-trips.jpg", linkUrl: "/destinations", order: 1 },
-  { title: "Spotlight on South America", subtitle: "Join our experts and discover more", imageUrl: "/images/explore/promo-south-america.jpg", linkUrl: "/destinations", order: 2 },
-  { title: "Find your perfect Micro-retirement", subtitle: "Take our quiz", imageUrl: "/images/explore/promo-micro-retirement.jpg", linkUrl: "/experiences", order: 3 },
-  { title: "Polar offers", subtitle: "Incredible savings on Polar voyages", imageUrl: "/images/explore/promo-polar.jpg", linkUrl: "/offers", order: 4 },
+  { title: "Ökostrom-Tarife", subtitle: "100% erneuerbare Energie für Ihr Zuhause", imageUrl: "/images/explore/promo-new-trips.jpg", linkUrl: "/destinations", order: 1 },
+  { title: "Solaranlagen", subtitle: "Eigenen Strom erzeugen & sparen", imageUrl: "/images/explore/promo-south-america.jpg", linkUrl: "/destinations", order: 2 },
+  { title: "E-Mobilität", subtitle: "Wallbox & Autostrom-Tarife", imageUrl: "/images/explore/promo-micro-retirement.jpg", linkUrl: "/experiences", order: 3 },
+  { title: "Wärmepumpen", subtitle: "Nachhaltig heizen mit E.ON", imageUrl: "/images/explore/promo-polar.jpg", linkUrl: "/offers", order: 4 },
 ]
 
 interface PromoGridProps {

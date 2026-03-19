@@ -27,8 +27,8 @@ const playfair = Playfair_Display({
 const geistMono = GeistMono
 
 export const metadata: Metadata = {
-  title: 'Book Adventure Travel & Small Group Tours | Explore',
-  description: 'Explore offers small group adventure holidays to over 100 countries worldwide. Award-winning tours with expert leaders. Book your next adventure today.',
+  title: 'E.ON – Ihr zuverlässiger Energiepartner | Design System',
+  description: 'E.ON bietet Strom, Gas, Solaranlagen und E-Mobilitätslösungen für Privatkunden. Entdecken Sie das E.ON Design System mit KI-Showcases.',
 }
 
 export default function RootLayout({

@@ -3,9 +3,9 @@ import { IconGuaranteed } from "./brand-icons"
 import type { FlexPolicyFields } from "@/lib/contentful"
 
 const FALLBACK: FlexPolicyFields = {
-  heading: "Explore Flex",
+  heading: "E.ON Plus",
   description:
-    "Your wellbeing comes first. We understand that plans change, so we offer a flexible booking policy. With Explore Flex, you can book with confidence knowing that you can change your trip dates or switch to a different adventure.",
+    "Mit E.ON Plus kombinieren Sie verschiedene Energieverträge und sichern sich jährlich bis zu 200 Euro Rabatt sowie weitere exklusive Vorteile. Je mehr Verträge Sie bündeln, desto mehr sparen Sie.",
   linkUrl: "/essential-information/explore-flex",
 }
 
@@ -26,7 +26,7 @@ export function FlexBanner({ policy }: FlexBannerProps) {
             </div>
             <div>
               <h2 className="mb-2 font-heading text-xl font-bold text-foreground lg:text-2xl">
-                Your wellbeing comes first
+                Verträge bündeln & sparen
               </h2>
               <p className="text-sm leading-relaxed text-muted-foreground lg:text-base">
                 {data.description}
@@ -37,14 +37,14 @@ export function FlexBanner({ policy }: FlexBannerProps) {
           <div className="w-full shrink-0 rounded-xl border border-border bg-card p-6 lg:w-80">
             <h3 className="mb-2 font-heading text-lg font-bold text-primary">{data.heading}</h3>
             <p className="mb-4 text-sm text-muted-foreground">
-              Book with confidence. Change your dates or trip for free.
+              Kombinieren Sie Ihre Energieverträge und sichern Sie sich exklusive Rabatte.
             </p>
             {data.linkUrl && (
               <Link
                 href={data.linkUrl}
                 className="text-sm font-semibold text-primary transition-colors hover:text-hover"
               >
-                {"Find out more \u2192"}
+                {"Mehr erfahren \u2192"}
               </Link>
             )}
           </div>

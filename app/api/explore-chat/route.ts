@@ -4,24 +4,24 @@ import { TOURS, type TourDetail } from "@/lib/tour-data"
 
 const toursArray = Object.values(TOURS)
 
-const systemPrompt = `You are the Explore travel assistant, a friendly and knowledgeable expert on all Explore trips and adventures. You help customers find their perfect trip, answer questions about destinations, itineraries, and practicalities, and guide them towards booking.
+const systemPrompt = `Du bist der E.ON Energie-Berater, ein freundlicher und kompetenter Experte für alle E.ON Energie-Produkte und -Tarife. Du hilfst Kunden, den passenden Strom- oder Gastarif zu finden, beantwortest Fragen zu Tarifen, Solaranlagen, Wärmepumpen und E-Mobilität und begleitest sie zur Bestellung.
 
-Key behaviors:
-- Be warm, enthusiastic and conversational — like a well-travelled friend giving personal recommendations
-- When a user asks to find or explore trips, use the searchTrips tool
-- When a user wants details about a specific trip, use getTripDetails
-- When a user asks about dates or availability, use getAvailableDepartures
-- When a user seems unsure or says "help me choose" / "find me a trip" / "I don't know where to go", use startGuidedSelling to launch the interactive trip finder
-- NEVER call startGuidedSelling more than once per conversation. Once the trip finder has been completed, use searchTrips with the user's stated preferences instead
-- After startGuidedSelling completes and returns preferences, immediately call searchTrips with those preferences to show matching trips
-- Always provide helpful context alongside tool results — a sentence or two framing the results
-- Mention the Explore Flex policy when relevant (free changes and cancellation up to 60 days before departure)
-- Prices are in GBP (British Pounds)
-- Be concise — keep text responses short and let the rich components do the heavy lifting
-- ALWAYS use the searchTrips tool to show trip results. NEVER list trips as plain text bullet points — always call searchTrips so the user sees the rich card components
-- When describing trips or destinations in text, use short paragraphs with bold highlights for key details
-- You are an expert on ALL Explore trips. Our current catalogue covers: Japan, Italy, Argentina/Chile, Cuba, Greece, Morocco, Tanzania, South Africa, Vietnam and Iceland.
-- Never make up trips that don't exist in our catalogue.`
+Wichtige Verhaltensregeln:
+- Sei freundlich, kompetent und professionell — wie ein vertrauenswürdiger Energieberater
+- Wenn ein Nutzer nach Tarifen sucht, verwende das searchTrips-Tool
+- Wenn ein Nutzer Details zu einem bestimmten Tarif wissen möchte, verwende getTripDetails
+- Wenn ein Nutzer nach Verfügbarkeit oder Konditionen fragt, verwende getAvailableDepartures
+- Wenn ein Nutzer unsicher ist oder sagt "hilf mir" / "finde den richtigen Tarif" / "ich weiß nicht welcher Tarif", verwende startGuidedSelling um den interaktiven Tarifberater zu starten
+- NIEMALS startGuidedSelling mehr als einmal pro Gespräch aufrufen. Sobald der Tarifberater abgeschlossen ist, verwende searchTrips mit den angegebenen Präferenzen
+- Nach Abschluss von startGuidedSelling sofort searchTrips mit den Präferenzen aufrufen
+- Gib immer hilfreichen Kontext zu den Ergebnissen — ein bis zwei Sätze zur Einordnung
+- Erwähne E.ON Plus bei Gelegenheit (Verträge bündeln und bis zu 200 Euro Rabatt pro Jahr sichern)
+- Preise sind in Euro (EUR)
+- Sei prägnant — halte Textantworten kurz und lass die Komponenten die Hauptarbeit machen
+- IMMER das searchTrips-Tool verwenden um Tarife anzuzeigen. NIEMALS Tarife als reine Textliste auflisten
+- Du bist Experte für ALLE E.ON Produkte: Ökostrom, Erdgas, Solaranlagen, Wärmepumpen, Wallbox & E-Mobilität, Smart Home und E.ON Plus
+- Erfinde niemals Tarife, die es nicht gibt
+- Antworte immer auf Deutsch`
 
 function searchToursFiltered(filters: {
   destination?: string | null
@@ -83,32 +83,32 @@ function searchToursFiltered(filters: {
 const tools = {
   searchTrips: tool({
     description:
-      "Search for Explore trips by destination, trip type, budget, duration, and physical rating. Returns a list of matching trips.",
+      "Suche nach E.ON Energietarifen nach Energieart, Tariftyp, Budget, Laufzeit und Nachhaltigkeitsbewertung. Gibt eine Liste passender Tarife zurück.",
     inputSchema: z.object({
       destination: z
         .string()
         .nullable()
-        .describe("Country or region to filter by, e.g. 'Japan', 'Italy', 'Africa'"),
+        .describe("Energieart zum Filtern, z.B. 'Strom', 'Gas', 'Solar'"),
       tripType: z
         .string()
         .nullable()
-        .describe("Trip type: Discovery, Walking, Cycling, Boat, Wildlife, or null for all"),
+        .describe("Tariftyp: Ökostrom, Gas, Solar, E-Mobilität, Wärmepumpe, oder null für alle"),
       maxBudget: z
         .number()
         .nullable()
-        .describe("Maximum budget per person in GBP"),
+        .describe("Maximales Budget pro Monat in EUR"),
       minDuration: z
         .number()
         .nullable()
-        .describe("Minimum trip duration in days"),
+        .describe("Minimale Vertragslaufzeit in Monaten"),
       maxDuration: z
         .number()
         .nullable()
-        .describe("Maximum trip duration in days"),
+        .describe("Maximale Vertragslaufzeit in Monaten"),
       maxPhysicalRating: z
         .number()
         .nullable()
-        .describe("Maximum physical rating 1-5"),
+        .describe("Maximale Nachhaltigkeitsbewertung 1-5"),
     }),
     execute: async (filters) => {
       const results = searchToursFiltered(filters)
@@ -124,9 +124,9 @@ const tools = {
 
   getTripDetails: tool({
     description:
-      "Get full details for a specific Explore trip, including overview, highlights, itinerary, what's included, and pricing.",
+      "Details zu einem bestimmten E.ON Tarif abrufen, einschließlich Übersicht, Highlights, Konditionen, Inklusivleistungen und Preise.",
     inputSchema: z.object({
-      slug: z.string().describe("The tour slug identifier, e.g. 'japan-in-depth'"),
+      slug: z.string().describe("Der Tarif-Slug, z.B. 'oekostrom'"),
     }),
     execute: async ({ slug }) => {
       const tour = TOURS[slug]
@@ -160,9 +160,9 @@ const tools = {
 
   getAvailableDepartures: tool({
     description:
-      "Get available departure dates and pricing for a specific trip.",
+      "Verfügbare Tarifoptionen und Konditionen für einen bestimmten Tarif abrufen.",
     inputSchema: z.object({
-      slug: z.string().describe("The tour slug identifier"),
+      slug: z.string().describe("Der Tarif-Slug"),
     }),
     execute: async ({ slug }) => {
       const tour = TOURS[slug]
@@ -179,11 +179,11 @@ const tools = {
 
   startGuidedSelling: tool({
     description:
-      "Launch the interactive trip finder questionnaire. Use this when a user is unsure what trip to book, says 'help me find a trip', 'I don't know where to go', or needs personalised recommendations.",
+      "Startet den interaktiven Tarifberater-Fragebogen. Verwende dies, wenn ein Nutzer unsicher ist, welchen Tarif er wählen soll, 'hilf mir den richtigen Tarif zu finden' sagt, oder personalisierte Empfehlungen braucht.",
     inputSchema: z.object({
       greeting: z
         .string()
-        .describe("A short, friendly greeting to show before the questionnaire begins"),
+        .describe("Eine kurze, freundliche Begrüßung, die vor dem Fragebogen angezeigt wird"),
     }),
     // No execute - this is a client-side tool
   }),
@@ -196,21 +196,21 @@ export async function POST(req: Request) {
   let personalizationContext = ""
   if (visitorAudience && visitorAudience !== "default") {
     const audienceLabels: Record<string, string> = {
-      adventure: "walking, cycling, and active adventures",
-      culture: "cultural discovery, food, and heritage trips",
-      family: "family-friendly adventures",
-      returning: "returning customer with previous booking history",
+      adventure: "Ökostrom und erneuerbare Energien",
+      culture: "Smart Home und Energiemanagement",
+      family: "Familientarife und Sparlösungen",
+      returning: "Bestandskunde mit E.ON Plus Potenzial",
     }
-    personalizationContext += `\n\nVisitor Personalization Context:
-- This visitor has been identified as a "${visitorAudience}" audience segment, meaning they are interested in ${audienceLabels[visitorAudience] || visitorAudience}.
-- Prioritize recommendations matching their interests when they ask for suggestions.
-- Tailor your language and examples to their preferences.`
+    personalizationContext += `\n\nBesucher-Personalisierung:
+- Dieser Besucher wurde als "${visitorAudience}"-Segment identifiziert, interessiert an ${audienceLabels[visitorAudience] || visitorAudience}.
+- Priorisiere Empfehlungen, die zu seinen Interessen passen.
+- Passe deine Sprache und Beispiele an seine Präferenzen an.`
   }
   if (visitorTraits?.name) {
-    personalizationContext += `\n- The visitor's name is ${visitorTraits.name}. Use it occasionally to make the conversation feel personal.`
+    personalizationContext += `\n- Der Name des Besuchers ist ${visitorTraits.name}. Verwende ihn gelegentlich, um das Gespräch persönlich zu gestalten.`
   }
   if (visitorEvents?.book_trip) {
-    personalizationContext += `\n- This visitor has previously booked a trip. They are a returning customer — acknowledge this and suggest complementary destinations.`
+    personalizationContext += `\n- Dieser Besucher hat bereits einen Vertrag abgeschlossen. Er ist ein Bestandskunde — erkenne dies an und empfehle ergänzende Produkte wie E.ON Plus.`
   }
 
   const result = streamText({

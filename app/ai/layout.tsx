@@ -16,12 +16,12 @@ const aiSidebarItems = [
     ],
   },
   {
-    label: "AI Showcases",
+    label: "KI-Showcases",
     icon: Sparkles,
     children: [
-      { label: "Overview", href: "/vercel" },
+      { label: "Übersicht", href: "/vercel" },
       { label: "Prompt Coach", href: "/vercel/prompt-coach" },
-      { label: "Image Studio", href: "/vercel/image-studio" },
+      { label: "Bildstudio", href: "/vercel/image-studio" },
       { label: "Content Pipeline", href: "/vercel/content-pipeline" },
     ],
   },

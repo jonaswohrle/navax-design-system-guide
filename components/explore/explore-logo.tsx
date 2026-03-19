@@ -10,10 +10,10 @@ interface ExploreLogoProps {
 export function ExploreLogo({ variant = "color", width = 121, className }: ExploreLogoProps) {
   return (
     <Image
-      src="/images/explore-logo.svg"
-      alt="Explore"
+      src="/images/eon-logo.png"
+      alt="E.ON"
       width={width}
-      height={Math.round((width / 121) * 34)}
+      height={Math.round(width / 4)}
       style={{ width: "auto", height: "auto" }}
       className={cn(
         variant === "white" && "brightness-0 invert",

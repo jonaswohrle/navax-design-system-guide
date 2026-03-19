@@ -8,25 +8,25 @@ interface NavaxLogoProps {
 }
 
 /**
- * Demo logo – renders the pixel-block "DEMO" PNG.
- * - "light" → white logo (for dark backgrounds)
- * - "dark"  → inverted to black (for light backgrounds)
- * - "brand" → white logo (same as light)
+ * E.ON logo – renders the E.ON brand PNG.
+ * - "light" → white logo (for dark backgrounds, using brightness-0 invert)
+ * - "dark"  → original red/orange logo (for light backgrounds)
+ * - "brand" → original red/orange logo
  */
 export function NavaxLogo({ className, variant = "dark", width = 140 }: NavaxLogoProps) {
-  const aspectRatio = 883 / 340 // original image dimensions
+  const aspectRatio = 4 / 1 // approximate E.ON logo dimensions
   const height = Math.round(width / aspectRatio)
 
   return (
     <Image
-      src="/images/demo-logo.png"
-      alt="DEMO"
+      src="/images/eon-logo.png"
+      alt="E.ON"
       width={width}
       height={height}
       style={{ width, height: "auto" }}
       className={cn(
         "object-contain",
-        variant === "dark" && "invert",
+        variant === "light" && "brightness-0 invert",
         className,
       )}
       priority

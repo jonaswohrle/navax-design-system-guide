@@ -11,7 +11,7 @@ interface PersonalizedHeroProps {
   fallbackImageUrl?: string
 }
 
-export function PersonalizedHero({ variants, fallbackImageUrl = "/images/explore/hero-santorini.png" }: PersonalizedHeroProps) {
+export function PersonalizedHero({ variants, fallbackImageUrl = "/images/explore/hero-energy.jpg" }: PersonalizedHeroProps) {
   const personalization = useUnifiedPersonalization()
   const audience = personalization?.audience ?? "default"
 

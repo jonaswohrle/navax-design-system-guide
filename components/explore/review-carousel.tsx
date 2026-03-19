@@ -9,26 +9,26 @@ import type { ReviewItemFields } from "@/lib/contentful"
 const FALLBACK_REVIEWS: ReviewItemFields[] = [
   {
     rating: 5,
-    text: "Absolutely incredible trip. The tour leader was knowledgeable, the group was wonderful and the itinerary was perfectly planned.",
-    customerName: "Sarah M.",
-    tripName: "Japan In Depth",
-    date: "3 days ago",
+    text: "Der Wechsel zu E.ON war super einfach. Alles online erledigt, innerhalb weniger Minuten hatte ich meinen neuen Ökostrom-Tarif.",
+    customerName: "Maria K.",
+    tripName: "E.ON ÖkoStrom",
+    date: "vor 3 Tagen",
     order: 1,
   },
   {
     rating: 5,
-    text: "An amazing adventure from start to finish. The small group size meant we got authentic experiences you'd never find on a larger tour.",
-    customerName: "James T.",
-    tripName: "Adventures in Patagonia",
-    date: "1 week ago",
+    text: "Unsere Solaranlage von E.ON hat sich schneller amortisiert als erwartet. Der Service von der Beratung bis zur Installation war erstklassig.",
+    customerName: "Thomas B.",
+    tripName: "E.ON Solar",
+    date: "vor 1 Woche",
     order: 2,
   },
   {
     rating: 4,
-    text: "Loved every minute of the walking tour along the Amalfi Coast. Stunning scenery, delicious food, and a very well-organised trip.",
-    customerName: "Helen W.",
-    tripName: "Amalfi Coast Walking",
-    date: "2 weeks ago",
+    text: "Mit E.ON Plus spare ich richtig bei Strom und Gas zusammen. Der Kundenservice ist immer freundlich und hilfsbereit.",
+    customerName: "Anna S.",
+    tripName: "E.ON Plus",
+    date: "vor 2 Wochen",
     order: 3,
   },
 ]
@@ -54,7 +54,7 @@ export function ReviewCarousel({ reviews }: ReviewCarouselProps) {
         <div className="mb-8 flex flex-col items-center gap-4 md:flex-row md:justify-between">
           <div>
             <h2 className="font-heading text-2xl font-bold text-foreground lg:text-3xl">
-              Making unforgettable adventures
+              Das sagen unsere Kunden
             </h2>
             <div className="mt-2 flex items-center gap-2">
               <div className="flex">
@@ -67,7 +67,7 @@ export function ReviewCarousel({ reviews }: ReviewCarouselProps) {
               </div>
               <span className="text-sm font-semibold text-foreground">4.6 / 5</span>
               <span className="text-xs text-muted-foreground">
-                Independent service rating based on 7,877 reviews
+                Unabhängige Kundenbewertungen basierend auf 12.543 Bewertungen
               </span>
             </div>
           </div>

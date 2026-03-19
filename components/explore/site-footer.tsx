@@ -9,41 +9,41 @@ import { Input } from "@/components/ui/input"
 
 const FOOTER_COLS = [
   {
-    title: "Popular links",
+    title: "Privatkunden",
     links: [
-      { label: "Contact Us", href: "/about-us" },
-      { label: "Support Site", href: "/about-us" },
-      { label: "Explore Loyalty Club", href: "/about-us" },
-      { label: "The Blog", href: "/blog" },
-      { label: "Careers", href: "/about-us" },
-      { label: "Privacy Centre", href: "/about-us" },
+      { label: "Strom-Tarife", href: "/destinations" },
+      { label: "Gas-Tarife", href: "/experiences" },
+      { label: "Solaranlagen", href: "/about-us" },
+      { label: "Wärmepumpen", href: "/about-us" },
+      { label: "E-Mobilität", href: "/offers" },
+      { label: "Smart Home", href: "/about-us" },
     ],
   },
   {
-    title: "Purpose",
+    title: "Service",
     links: [
-      { label: "B Corp", href: "/about-us" },
-      { label: "Purpose Paper", href: "/about-us" },
-      { label: "Carbon Measurement", href: "/about-us" },
-      { label: "Climate Change", href: "/about-us" },
-      { label: "Animal Protection Policy", href: "/about-us" },
-      { label: "The Explore Foundation", href: "/about-us" },
+      { label: "Hilfe & Kontakt", href: "/about-us" },
+      { label: "Umzugsservice", href: "/about-us" },
+      { label: "Zählerstand melden", href: "/about-us" },
+      { label: "Rechnungen", href: "/about-us" },
+      { label: "E.ON Plus Vorteile", href: "/about-us" },
+      { label: "Energieratgeber", href: "/blog" },
     ],
   },
   {
-    title: "Booking",
+    title: "Unternehmen",
     links: [
-      { label: "Essential Information", href: "/essential-information" },
-      { label: "Travel Updates", href: "/blog" },
-      { label: "Financial Protection", href: "/about-us" },
-      { label: "Booking Conditions", href: "/about-us" },
-      { label: "Travel Agents", href: "/about-us" },
-      { label: "My Explore", href: "/my-explore" },
+      { label: "Über E.ON", href: "/about-us" },
+      { label: "Karriere", href: "/about-us" },
+      { label: "Nachhaltigkeit", href: "/about-us" },
+      { label: "Presse", href: "/about-us" },
+      { label: "Investor Relations", href: "/about-us" },
+      { label: "Mein E.ON", href: "/my-explore" },
     ],
   },
 ]
 
-const TRUST_BADGES = ["IATA", "ABTA No. 5307", "ATOL Protected", "Travel Aware", "B Corp"]
+const TRUST_BADGES = ["TÜV SÜD", "Service König 2025", "CHIP Top Anbieter", "Ökostrom TÜV", "Klimaneutral 2040"]
 
 export function SiteFooter() {
   const [email, setEmail] = useState("")
@@ -86,12 +86,12 @@ export function SiteFooter() {
 
             {/* Newsletter signup */}
             <div className="col-span-2 md:col-span-4 lg:col-span-2">
-              <h3 className="mb-3 text-sm font-bold text-background">Keep up to date</h3>
+              <h3 className="mb-3 text-sm font-bold text-background">Newsletter</h3>
               <p className="mb-3 text-xs text-background/60">
-                Sign up to our newsletter for latest news, deals and travel information
+                Melden Sie sich für unseren Newsletter an und erhalten Sie Energiespar-Tipps und aktuelle Angebote.
               </p>
               {subscribed ? (
-                <p className="text-sm font-semibold text-primary">Thanks for subscribing!</p>
+                <p className="text-sm font-semibold text-primary">Vielen Dank für Ihre Anmeldung!</p>
               ) : (
                 <form
                   className="flex gap-2"
@@ -134,12 +134,12 @@ export function SiteFooter() {
         <div className="border-t border-background/10">
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-[10px] text-background/40 md:flex-row">
             <p>
-              Explore Worldwide Ltd. Reg No: 358755213. VAT No: GB 358755213. Reg office: Nelson House, 55 Victoria Rd, Farnborough, Hants, GU14 7PA.
+              E.ON Energie Deutschland GmbH, Arnulfstraße 203, 80634 München. Registergericht: Amtsgericht München, HRB 164869.
             </p>
             <div className="flex items-center gap-4">
-              <Link href="/about-us" className="hover:text-background/60">Privacy Policy</Link>
-              <Link href="/about-us" className="hover:text-background/60">Cookie Policy</Link>
-              <Link href="/about-us" className="hover:text-background/60">Booking Conditions</Link>
+              <Link href="/about-us" className="hover:text-background/60">Datenschutz</Link>
+              <Link href="/about-us" className="hover:text-background/60">Impressum</Link>
+              <Link href="/about-us" className="hover:text-background/60">AGB</Link>
             </div>
           </div>
         </div>

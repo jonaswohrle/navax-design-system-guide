@@ -22,29 +22,29 @@ interface AppHeaderProps {
 
 const defaultItems: NavItem[] = [
   {
-    label: "Solutions",
+    label: "Privatkunden",
     children: [
-      { label: "Asset Management", href: "#", description: "Manage assets across their lifecycle" },
-      { label: "Capital Planning", href: "#", description: "Optimize budgets and forecasting" },
-      { label: "Operations", href: "#", description: "Streamline maintenance workflows" },
+      { label: "Strom-Tarife", href: "#", description: "Ökostrom und flexible Tarife" },
+      { label: "Gas-Tarife", href: "#", description: "Erdgas mit Preisgarantie" },
+      { label: "Solar & Wärme", href: "#", description: "Solaranlagen und Wärmepumpen" },
     ],
   },
   {
-    label: "Industries",
+    label: "Produkte",
     children: [
-      { label: "Education", href: "#" },
-      { label: "Government", href: "#" },
-      { label: "Healthcare", href: "#" },
-      { label: "Manufacturing", href: "#" },
+      { label: "E-Mobilität", href: "#" },
+      { label: "Smart Home", href: "#" },
+      { label: "Energiemanagement", href: "#" },
+      { label: "E.ON Plus", href: "#" },
     ],
   },
-  { label: "Resources", href: "#" },
-  { label: "Success Stories", href: "#" },
+  { label: "Energieratgeber", href: "#" },
+  { label: "Service", href: "#" },
 ]
 
 export function AppHeader({
   items = defaultItems,
-  ctaLabel = "Request a Demo",
+  ctaLabel = "Tarif berechnen",
   ctaHref = "#",
   className,
 }: AppHeaderProps) {

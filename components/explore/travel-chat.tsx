@@ -15,10 +15,10 @@ import { useUnifiedPersonalization } from "@/components/providers/ninetailed-wra
 const transport = new DefaultChatTransport({ api: "/api/explore-chat" })
 
 const SUGGESTIONS = [
-  "Help me find a trip",
-  "Best destinations for solo travel",
-  "What trips are under \u00A32000?",
-  "Family-friendly adventures",
+  "Hilf mir, den richtigen Stromtarif zu finden",
+  "Was kostet Ökostrom bei E.ON?",
+  "Welcher Tarif passt zu meinem E-Auto?",
+  "Lohnt sich eine Solaranlage?",
 ]
 
 function getMessageText(message: UIMessage): string {
@@ -273,7 +273,7 @@ export function TravelChat() {
           return (
             <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-1.5">
               <Sparkles className="h-3 w-3 animate-spin" />
-              <span>Preparing trip finder...</span>
+              <span>Tarifberater wird vorbereitet...</span>
             </div>
           )
         }
@@ -290,7 +290,7 @@ export function TravelChat() {
               )}
               <div className="flex items-center gap-2 text-xs text-primary py-1">
                 <Sparkles className="h-3 w-3" />
-                <span className="font-medium">{"Answer the questions on the right to find your perfect trip \u2192"}</span>
+                <span className="font-medium">{"Beantworten Sie die Fragen rechts, um Ihren passenden Tarif zu finden \u2192"}</span>
               </div>
             </div>
           )
@@ -302,26 +302,26 @@ export function TravelChat() {
         return (
           <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-1.5">
             <Sparkles className="h-3 w-3 animate-spin" />
-            <span>Searching trips...</span>
+            <span>Tarife werden gesucht...</span>
           </div>
         )
       }
 
       if (state === "output-available") {
-        // Don't show "I found trips" if search returned empty
+        // Don't show "I found tariffs" if search returned empty
         if (toolName === "searchTrips") {
           const trips = (output?.trips || []) as Array<unknown>
           if (trips.length === 0) return null
         }
         const labels: Record<string, string> = {
-          searchTrips: "I found some trips for you \u2192",
-          getTripDetails: "Here are the trip details \u2192",
-          getAvailableDepartures: "Available departures are shown \u2192",
+          searchTrips: "Passende Tarife gefunden \u2192",
+          getTripDetails: "Tarifdetails werden angezeigt \u2192",
+          getAvailableDepartures: "Verfügbare Optionen werden angezeigt \u2192",
         }
         return (
           <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-primary/70 py-1.5">
             <Sparkles className="h-3 w-3" />
-            <span>{labels[toolName] || "Results shown on the right \u2192"}</span>
+            <span>{labels[toolName] || "Ergebnisse rechts angezeigt \u2192"}</span>
           </div>
         )
       }
@@ -335,7 +335,7 @@ export function TravelChat() {
         return (
           <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
             <Sparkles className="h-3 w-3 animate-spin" />
-            <span>Preparing trip finder...</span>
+            <span>Tarifberater wird vorbereitet...</span>
           </div>
         )
       }
@@ -343,7 +343,7 @@ export function TravelChat() {
         return (
           <div key={toolCallId || index} className="my-2">
             <GuidedSellingFlow
-              greeting={(input?.greeting as string) || "Let's find your perfect trip!"}
+              greeting={(input?.greeting as string) || "Finden wir gemeinsam Ihren idealen Tarif!"}
               onComplete={(preferences) => handleGuidedSellingComplete(preferences, toolCallId)}
             />
           </div>
@@ -356,7 +356,7 @@ export function TravelChat() {
       return (
         <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
           <Sparkles className="h-3 w-3 animate-spin" />
-          <span>Searching trips...</span>
+          <span>Tarife werden gesucht...</span>
         </div>
       )
     }
@@ -369,7 +369,7 @@ export function TravelChat() {
       if (trips.length === 0) return null
       return (
         <div key={toolCallId || index} className="my-2">
-          <ChatTripGrid trips={trips as never} totalFound={totalFound} onViewDetails={(slug: string) => sendMessage({ text: `Show me details for the trip "${slug}"` })} />
+          <ChatTripGrid trips={trips as never} totalFound={totalFound} onViewDetails={(slug: string) => sendMessage({ text: `Zeige mir Details zum Tarif "${slug}"` })} />
         </div>
       )
     }
@@ -425,9 +425,9 @@ export function TravelChat() {
             </svg>
           </div>
           <div>
-            <p className="text-sm font-semibold text-foreground">No trips found</p>
+            <p className="text-sm font-semibold text-foreground">Keine Tarife gefunden</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Try adjusting your filters for more results.
+              Passen Sie Ihre Filter an, um mehr Ergebnisse zu erhalten.
             </p>
           </div>
           {filterLabels.length > 0 && (
@@ -485,11 +485,11 @@ export function TravelChat() {
   function getCanvasLabel() {
     const content = canvasContent || displayContent
     if (!content) return ""
-    if (content.kind === "trips") return "Trip Results"
-    if (content.kind === "no-results") return "Search Results"
-    if (content.kind === "detail") return "Trip Details"
-    if (content.kind === "departures") return "Departures"
-    if (content.kind === "guided-selling") return "Trip Finder"
+    if (content.kind === "trips") return "Tarifergebnisse"
+    if (content.kind === "no-results") return "Suchergebnisse"
+    if (content.kind === "detail") return "Tarifdetails"
+    if (content.kind === "departures") return "Verfügbare Optionen"
+    if (content.kind === "guided-selling") return "Tarifberater"
     return ""
   }
 
@@ -508,7 +508,7 @@ export function TravelChat() {
         <button
           onClick={() => setOpen(true)}
           className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-95"
-          aria-label="Open travel assistant"
+          aria-label="Energie-Berater öffnen"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
@@ -524,7 +524,7 @@ export function TravelChat() {
               <span className="text-xs text-primary-foreground/70">|</span>
               <div className="flex items-center gap-1">
                 <Sparkles className="h-3 w-3 text-explore-yellow" />
-                <span className="text-xs font-medium text-primary-foreground">Travel Assistant</span>
+                <span className="text-xs font-medium text-primary-foreground">Energie-Berater</span>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -581,7 +581,7 @@ export function TravelChat() {
                 {messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full gap-4 py-8">
                     <p className="text-sm text-muted-foreground text-center">
-                      Ask me anything about our trips and destinations.
+                      Fragen Sie mich alles rund um Strom, Gas und Energielösungen.
                     </p>
                     <div className="flex flex-wrap justify-center gap-2">
                       {SUGGESTIONS.map((s) => (
@@ -677,7 +677,7 @@ export function TravelChat() {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Ask about trips, destinations..."
+                    placeholder="Fragen zu Strom, Gas, Solar..."
                     rows={1}
                     className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-primary/30"
                   />
@@ -691,7 +691,7 @@ export function TravelChat() {
                   </button>
                 </div>
                 <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
-                  AI-powered assistant. Results may vary.
+                  KI-gestützter Berater. Ergebnisse können variieren.
                 </p>
               </div>
             </div>

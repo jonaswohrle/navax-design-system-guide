@@ -11,10 +11,10 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { useAuth } from "@/lib/auth-context"
 
 const NAV_LINKS = [
-  { label: "Destinations", href: "/destinations", hasMega: true as const, megaType: "destinations" as const },
-  { label: "Experiences", href: "/experiences", hasMega: true as const, megaType: "experiences" as const },
-  { label: "About", href: "/about-us", hasMega: false as const },
-  { label: "Offers", href: "/offers", hasMega: false as const },
+  { label: "Strom", href: "/destinations", hasMega: true as const, megaType: "destinations" as const },
+  { label: "Gas", href: "/experiences", hasMega: true as const, megaType: "experiences" as const },
+  { label: "Solar & Wärme", href: "/about-us", hasMega: false as const },
+  { label: "E-Mobilität", href: "/offers", hasMega: false as const },
 ]
 
 interface SiteHeaderProps {
@@ -45,15 +45,15 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
       <div className="bg-[#8B1A1A] text-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs">
           <Link href="/about-us" className="font-semibold underline underline-offset-2 hover:text-white/80">
-            Support Centre
+            Hilfe & Kontakt
           </Link>
           <div className="flex items-center gap-4">
             <span className="hidden text-white/80 sm:inline">
-              {"Call us, we're open today 9.00am - 7.00pm"}
+              Kundenservice: Mo-Fr 7-20 Uhr, Sa 8-14 Uhr
             </span>
-            <a href="tel:01252218716" className="flex items-center gap-1 font-bold hover:text-white/80">
+            <a href="tel:08001364365" className="flex items-center gap-1 font-bold hover:text-white/80">
               <Phone className="h-3 w-3" />
-              01252 218 716
+              0800 136 4365
             </a>
           </div>
         </div>
@@ -66,7 +66,7 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 lg:py-2.5">
           {/* Logo */}
-          <Link href="/" className="shrink-0" aria-label="Explore home" onMouseEnter={() => setActiveMega(null)}>
+          <Link href="/" className="shrink-0" aria-label="E.ON Home" onMouseEnter={() => setActiveMega(null)}>
             <ExploreLogo variant="white" width={130} />
           </Link>
 
@@ -100,16 +100,16 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
             <Link
               href="/my-explore"
               className="flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-              aria-label="My Explore"
+              aria-label="Mein E.ON"
             >
               <User className="h-5 w-5" />
-              <span className="hidden text-[10px] font-medium lg:block">My Explore</span>
+              <span className="hidden text-[10px] font-medium lg:block">Mein E.ON</span>
             </Link>
 
             <Link
               href="/my-explore?tab=wishlist"
               className="relative flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-              aria-label="Wishlist"
+              aria-label="Merkliste"
             >
               <Heart className={`h-5 w-5 ${wishlist.length > 0 ? "fill-explore-yellow text-explore-yellow" : ""}`} />
               {wishlist.length > 0 && (
@@ -117,16 +117,16 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
                   {wishlist.length}
                 </span>
               )}
-              <span className="hidden text-[10px] font-medium lg:block">Wishlist</span>
+              <span className="hidden text-[10px] font-medium lg:block">Merkliste</span>
             </Link>
 
             <Link
               href="/search"
               className="flex flex-col items-center gap-0.5 rounded px-2.5 py-1.5 text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-              aria-label="Trip Search"
+              aria-label="Tarifsuche"
             >
               <Search className="h-5 w-5" />
-              <span className="hidden text-[10px] font-medium lg:block">Trip Search</span>
+              <span className="hidden text-[10px] font-medium lg:block">Tarifsuche</span>
             </Link>
 
             {/* Mobile menu */}
@@ -157,14 +157,14 @@ export function SiteHeader({ promoBanner }: SiteHeaderProps) {
                     onClick={() => setMobileOpen(false)}
                     className="border-b border-border px-4 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
                   >
-                    Trip Search
+                    Tarifsuche
                   </Link>
                   <Link
                     href="/my-explore"
                     onClick={() => setMobileOpen(false)}
                     className="border-b border-border px-4 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-muted hover:text-primary"
                   >
-                    {user ? "My Dashboard" : "Login / Register"}
+                    {user ? "Mein E.ON" : "Anmelden / Registrieren"}
                   </Link>
                 </nav>
               </SheetContent>
