@@ -24,7 +24,7 @@ const SUGGESTIONS = [
 function getMessageText(message: UIMessage): string {
   if (!message.parts || !Array.isArray(message.parts)) return ""
   return message.parts
-    .filter((p): p is { type: "text"; text: string } => p.type === "text")
+    .filter((p): p is { type: "text"; text: string } => p != null && p.type === "text")
     .map((p) => p.text)
     .join("")
 }
@@ -149,8 +149,10 @@ export function TravelChat() {
       const msg = messages[m]
       if (msg.role !== "assistant" || !msg.parts) continue
       for (let p = msg.parts.length - 1; p >= 0; p--) {
-        const part = msg.parts[p] as { type: string; state?: string; input?: Record<string, unknown>; output?: Record<string, unknown>; toolCallId?: string }
-        if (!part.type.startsWith("tool-")) continue
+        const rawPart = msg.parts[p]
+        if (rawPart == null) continue
+        const part = rawPart as { type: string; state?: string; input?: Record<string, unknown>; output?: Record<string, unknown>; toolCallId?: string }
+        if (!part.type || !part.type.startsWith("tool-")) continue
 
         const toolName = part.type.replace("tool-", "")
 
@@ -260,11 +262,14 @@ export function TravelChat() {
   /* --- Render inline tool indicator for chat column --- */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function renderToolInline(part: any, index: number, isFullscreenMode: boolean) {
-    const toolCallId = part.toolCallId as string
-    const state = part.state as string
-    const input = part.input as Record<string, unknown> | undefined
-    const output = part.output as Record<string, unknown> | undefined
-    const toolName = (part.type as string).replace("tool-", "")
+    try {
+    if (!part || typeof part !== "object" || !part.type) return null
+    const toolCallId = (part.toolCallId ?? "") as string
+    const state = (part.state ?? "") as string
+    const input = (part.input ?? undefined) as Record<string, unknown> | undefined
+    const output = (part.output ?? undefined) as Record<string, unknown> | undefined
+    const toolName = String(part.type).replace("tool-", "")
+    if (!toolName || !state) return null
 
     // In fullscreen with canvas open: show brief inline references
     if (isFullscreenMode && canvasOpen) {
@@ -392,6 +397,7 @@ export function TravelChat() {
     }
 
     return null
+    } catch { return null }
   }
 
   /* --- Canvas panel content --- */
@@ -598,7 +604,7 @@ export function TravelChat() {
                 ) : (
                   messages.map((msg, msgIndex) => {
                     const text = getMessageText(msg)
-                    const hasToolParts = msg.parts?.some((p) => p.type.startsWith("tool-"))
+                    const hasToolParts = msg.parts?.some((p) => p != null && typeof p === "object" && "type" in p && typeof p.type === "string" && p.type.startsWith("tool-"))
 
                     if (msg.role === "assistant" && !text && !hasToolParts) return null
 
@@ -620,10 +626,12 @@ export function TravelChat() {
                             </div>
                           </div>
                         )}
-                        {msg.parts?.map((part, i) => {
-                          if (part.type.startsWith("tool-")) {
-                            return renderToolInline(part, i, fullscreen)
-                          }
+                        {msg.parts?.filter(Boolean).map((part, i) => {
+                          try {
+                            if (part && typeof part === "object" && "type" in part && typeof part.type === "string" && part.type.startsWith("tool-")) {
+                              return renderToolInline(part, i, fullscreen)
+                            }
+                          } catch { /* swallow render errors for individual parts */ }
                           return null
                         })}
                       </div>
@@ -640,7 +648,9 @@ export function TravelChat() {
                 {isStreaming && messages.length > 0 && (() => {
                   const lastMsg = messages[messages.length - 1]
                   const hasVisibleContent = lastMsg?.role === "assistant" && (
-                    getMessageText(lastMsg) || lastMsg.parts?.some((p) => p.type.startsWith("tool-") && (p as { state?: string }).state !== "input-streaming")
+                    getMessageText(lastMsg) || lastMsg.parts?.filter(Boolean).some((p) => {
+                      try { return p != null && typeof p === "object" && "type" in p && typeof (p as {type:string}).type === "string" && (p as {type:string}).type.startsWith("tool-") && (p as { state?: string }).state !== "input-streaming" } catch { return false }
+                    })
                   )
                   if (hasVisibleContent) return null
                   return (
