@@ -4,16 +4,14 @@ import { useCallback } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { Star, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { ReviewItemFields } from "@/lib/contentful"
 
-const FALLBACK_REVIEWS: ReviewItemFields[] = [
+const REVIEWS = [
   {
     rating: 5,
     text: "Der Wechsel zu E.ON war super einfach. Alles online erledigt, innerhalb weniger Minuten hatte ich meinen neuen Ökostrom-Tarif.",
     customerName: "Maria K.",
     tripName: "E.ON ÖkoStrom",
     date: "vor 3 Tagen",
-    order: 1,
   },
   {
     rating: 5,
@@ -21,7 +19,6 @@ const FALLBACK_REVIEWS: ReviewItemFields[] = [
     customerName: "Thomas B.",
     tripName: "E.ON Solar",
     date: "vor 1 Woche",
-    order: 2,
   },
   {
     rating: 4,
@@ -29,16 +26,24 @@ const FALLBACK_REVIEWS: ReviewItemFields[] = [
     customerName: "Anna S.",
     tripName: "E.ON Plus",
     date: "vor 2 Wochen",
-    order: 3,
+  },
+  {
+    rating: 5,
+    text: "Die Wallbox-Installation lief reibungslos. Von der Bestellung bis zur Inbetriebnahme vergingen nur zwei Wochen. Top Service!",
+    customerName: "Michael R.",
+    tripName: "E.ON Wallbox",
+    date: "vor 3 Wochen",
+  },
+  {
+    rating: 5,
+    text: "Endlich ein Energieversorger mit transparenten Preisen. Keine versteckten Kosten, alles wie versprochen. Sehr zufrieden.",
+    customerName: "Sandra W.",
+    tripName: "E.ON Erdgas",
+    date: "vor 1 Monat",
   },
 ]
 
-interface ReviewCarouselProps {
-  reviews?: ReviewItemFields[]
-}
-
-export function ReviewCarousel({ reviews }: ReviewCarouselProps) {
-  const items = reviews && reviews.length > 0 ? reviews : FALLBACK_REVIEWS
+export function ReviewCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     slidesToScroll: 1,
@@ -67,7 +72,7 @@ export function ReviewCarousel({ reviews }: ReviewCarouselProps) {
               </div>
               <span className="text-sm font-semibold text-foreground">4.6 / 5</span>
               <span className="text-xs text-muted-foreground">
-                Unabhängige Kundenbewertungen basierend auf 12.543 Bewertungen
+                basierend auf 12.543 Bewertungen
               </span>
             </div>
           </div>
@@ -78,7 +83,7 @@ export function ReviewCarousel({ reviews }: ReviewCarouselProps) {
               size="icon"
               onClick={scrollPrev}
               className="h-10 w-10 rounded-full"
-              aria-label="Previous review"
+              aria-label="Vorherige Bewertung"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -87,7 +92,7 @@ export function ReviewCarousel({ reviews }: ReviewCarouselProps) {
               size="icon"
               onClick={scrollNext}
               className="h-10 w-10 rounded-full"
-              aria-label="Next review"
+              aria-label="Nächste Bewertung"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -96,7 +101,7 @@ export function ReviewCarousel({ reviews }: ReviewCarouselProps) {
 
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="-ml-4 flex">
-            {items.map((review, idx) => (
+            {REVIEWS.map((review, idx) => (
               <div
                 key={idx}
                 className="min-w-0 shrink-0 grow-0 basis-full pl-4 md:basis-1/2 lg:basis-1/3"

@@ -3,39 +3,31 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { blobUrl } from "@/lib/blob-image-urls"
-import { getAboutSections, getFlexPolicy } from "@/lib/contentful"
 import { FlexBanner } from "@/components/explore/flex-banner"
 
 export const metadata: Metadata = {
-  title: "Why book with us? | About Explore - Explore",
+  title: "Über E.ON | Ihr Energiepartner",
   description:
-    "Discover why Explore has been the UK's leading adventure travel company for over 40 years. Expert leaders, small groups, responsible travel.",
+    "Erfahren Sie, warum über 50 Millionen Kunden E.ON vertrauen. Nachhaltigkeit, Innovation und erstklassiger Service.",
 }
 
-const FALLBACK_SECTIONS = [
-  { number: "1", title: "Unforgettable experiences", content: "Whether it's seeing famous sights, discovering hidden gems, or connecting with local people and cultures, our trips are designed to create memories that last a lifetime. With over 500 tours across 100+ countries, there's an adventure for everyone.", order: 1 },
-  { number: "2", title: "Expert tour leaders", content: "Our tour leaders aren't just guides -- they're passionate experts with insider knowledge and local connections that transform good trips into extraordinary ones. They go above and beyond to make sure every moment counts.", order: 2 },
-  { number: "3", title: "Small group trips", content: "With an average group size of just 11, our trips attract a wonderful mix of solos, couples and friends -- all united by a desire for authentic experiences. Smaller groups mean more flexibility, deeper connections and less environmental impact.", order: 3 },
-  { number: "4", title: "Guaranteed departures", content: "Nearly every departure is guaranteed to run, so you can book flights and plan with confidence. No last-minute cancellations, no stress -- just the excitement of knowing your adventure is happening.", order: 4 },
-  { number: "5", title: "Responsible at heart", content: "We're proud to be a certified B Corp, reflecting our commitment to using business as a force for good. We offset carbon, use local suppliers, and support communities in the destinations we visit.", order: 5 },
-  { number: "6", title: "Join the club! Rewarding loyalty programme", content: "After just one trip, you'll join our loyalty programme and receive discounts on future adventures. The more you explore, the more you save -- with up to 10% off your next booking.", order: 6 },
+const SECTIONS = [
+  { number: "1", title: "100% Ökostrom", content: "Unser Strom stammt vollständig aus erneuerbaren Energiequellen. Mit jedem Tarif leisten Sie einen aktiven Beitrag zur Energiewende und schützen unser Klima für kommende Generationen.", order: 1 },
+  { number: "2", title: "Persönlicher Service", content: "Unser mehrfach ausgezeichneter Kundenservice ist für Sie da -- telefonisch, online und in über 50 E.ON Shops deutschlandweit. Kompetent, freundlich und immer erreichbar.", order: 2 },
+  { number: "3", title: "Faire & transparente Preise", content: "Bei E.ON wissen Sie immer, was Sie bezahlen. Unsere Tarife bieten Preisgarantien, keine versteckten Kosten und volle Transparenz über Ihre Energiekosten.", order: 3 },
+  { number: "4", title: "Nachhaltig handeln", content: "Bis 2040 streben wir CO2-Neutralität an. Als eines der größten Energieunternehmen Europas treiben wir die Energiewende mit Investitionen in erneuerbare Energien aktiv voran.", order: 4 },
+  { number: "5", title: "Innovation & Digitalisierung", content: "Von Smart-Home-Lösungen über intelligente Zähler bis hin zu KI-gestützter Energieberatung -- wir setzen auf modernste Technologie, damit Sie Energie effizienter nutzen können.", order: 5 },
+  { number: "6", title: "E.ON Plus: Mehr sparen", content: "Mit E.ON Plus kombinieren Sie verschiedene Energieverträge und sichern sich jährlich bis zu 200 Euro Rabatt sowie weitere exklusive Vorteile. Je mehr Sie bündeln, desto mehr sparen Sie.", order: 6 },
 ]
 
-export default async function AboutPage() {
-  const [sections, flex] = await Promise.all([
-    getAboutSections(),
-    getFlexPolicy(),
-  ])
-
-  const sectionList = sections?.length ? sections : FALLBACK_SECTIONS
-
+export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Page hero */}
+      {/* Hero */}
       <section className="relative min-h-[50vh] overflow-hidden">
         <Image
-          src={blobUrl("/images/explore/about-hero.jpg")}
-          alt="Group of travelers on an adventure"
+          src={blobUrl("/images/explore/hero-energy.jpg")}
+          alt="E.ON -- Ihr Energiepartner"
           fill
           unoptimized
           className="object-cover"
@@ -46,10 +38,10 @@ export default async function AboutPage() {
         <div className="relative z-10 mx-auto flex min-h-[50vh] max-w-7xl items-end px-4 pb-12">
           <div>
             <h1 className="mb-3 font-heading text-4xl font-bold text-white lg:text-5xl">
-              Unforgettable adventures.
+              Energie für eine bessere Zukunft.
             </h1>
             <p className="max-w-lg text-lg text-white/80">
-              Stories for a lifetime.
+              Ihr zuverlässiger Partner seit über 20 Jahren.
             </p>
           </div>
         </div>
@@ -59,10 +51,10 @@ export default async function AboutPage() {
       <section className="bg-background py-12 lg:py-20">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <h2 className="mb-4 font-heading text-2xl font-bold text-foreground lg:text-3xl">
-            The adventure travel experts
+            Europas größtes Energienetzwerk
           </h2>
           <p className="text-base leading-relaxed text-muted-foreground lg:text-lg">
-            {"Since 1981, we've been pioneering small group adventure travel. Today, we offer over 500 trips to more than 100 countries, led by expert local guides who bring every destination to life. Whether you're a first-time adventurer or a seasoned explorer, our trips are designed to create authentic, unforgettable experiences."}
+            {"E.ON versorgt über 50 Millionen Kunden in Europa mit Strom und Gas. Mit unseren Lösungen für Ökostrom, Solaranlagen, Wärmepumpen und E-Mobilität gestalten wir die Energiezukunft aktiv mit. Unser Ziel: bezahlbare, nachhaltige Energie für alle."}
           </p>
         </div>
       </section>
@@ -71,7 +63,7 @@ export default async function AboutPage() {
       <section className="bg-secondary py-12 lg:py-16">
         <div className="mx-auto max-w-4xl px-4">
           <div className="flex flex-col gap-8">
-            {sectionList.map((section) => (
+            {SECTIONS.map((section) => (
               <div
                 key={section.title}
                 className="flex gap-6 rounded-xl border border-border bg-card p-6"
@@ -101,14 +93,14 @@ export default async function AboutPage() {
               size="lg"
               className="bg-primary px-8 font-heading text-base font-semibold text-primary-foreground hover:bg-hover"
             >
-              <Link href="/destinations">Show me the trips</Link>
+              <Link href="/destinations">Tarife entdecken</Link>
             </Button>
           </div>
         </div>
       </section>
 
       {/* Flex banner */}
-      <FlexBanner policy={flex} />
+      <FlexBanner />
     </div>
   )
 }

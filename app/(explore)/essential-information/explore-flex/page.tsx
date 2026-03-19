@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { ShieldCheck } from "lucide-react"
-import { getFlexPolicy } from "@/lib/contentful"
 import {
   Accordion,
   AccordionContent,
@@ -9,50 +8,48 @@ import {
 } from "@/components/ui/accordion"
 
 export const metadata: Metadata = {
-  title: "Explore Flex | Flexible Booking - Explore",
+  title: "E.ON Plus | Verträge bündeln & sparen",
   description:
-    "Book with confidence with Explore Flex. Our flexible booking policy means you can change your trip dates or switch to a different adventure.",
+    "Mit E.ON Plus kombinieren Sie verschiedene Energieverträge und sichern sich jährlich bis zu 200 Euro Rabatt.",
 }
 
 const FAQS = [
   {
-    question: "What is Explore Flex?",
+    question: "Was ist E.ON Plus?",
     answer:
-      "Explore Flex is our flexible booking policy that lets you change your trip dates or switch to a different adventure. We understand that plans can change, and we want you to book with complete confidence.",
+      "E.ON Plus ist unser Vorteilsprogramm, mit dem Sie verschiedene Energieverträge bündeln und dafür jährlich bis zu 200 Euro Rabatt erhalten. Je mehr Verträge Sie kombinieren, desto mehr sparen Sie.",
   },
   {
-    question: "How far in advance can I change my booking?",
+    question: "Welche Verträge kann ich kombinieren?",
     answer:
-      "You can change your booking up to 60 days before your departure date at no extra cost. Changes made within 60 days of departure may incur an administration fee.",
+      "Sie können Strom-, Gas-, Solar-, Wärmepumpen- und E-Mobilitätsverträge miteinander kombinieren. Auch Verträge unserer Partnerunternehmen für Internet und Mobilfunk sind kompatibel.",
   },
   {
-    question: "Can I transfer my booking to someone else?",
+    question: "Wie erhalte ich den E.ON Plus Rabatt?",
     answer:
-      "Yes, you can transfer your booking to another person at any time before departure, subject to availability. A small administration fee may apply.",
+      "Sobald Sie zwei oder mehr E.ON Verträge haben, wird der E.ON Plus Rabatt automatisch auf Ihrer nächsten Jahresabrechnung gutgeschrieben. Sie müssen sich nicht extra anmelden.",
   },
   {
-    question: "What happens if Explore cancels my trip?",
+    question: "Kann ich E.ON Plus auch nachträglich nutzen?",
     answer:
-      "If we cancel your trip, you will be offered a full refund or the option to transfer to an alternative departure date or a different trip at no extra cost.",
+      "Ja, auch als Bestandskunde können Sie jederzeit weitere Verträge hinzufügen und ab dem nächsten Abrechnungszeitraum vom E.ON Plus Rabatt profitieren.",
   },
   {
-    question: "Does Explore Flex cover flights?",
+    question: "Gibt es eine Mindestlaufzeit?",
     answer:
-      "Explore Flex covers the land-only portion of your trip. If you have booked flights through us, separate terms will apply. We recommend purchasing travel insurance that covers flight changes.",
+      "E.ON Plus ist an keine eigene Mindestlaufzeit gebunden. Der Vorteil gilt, solange Sie mindestens zwei aktive E.ON Verträge haben.",
   },
   {
-    question: "Is there a cost for Explore Flex?",
+    question: "Wie hoch ist der Rabatt genau?",
     answer:
-      "Explore Flex is included as standard with every booking at no additional cost. It's our commitment to giving you peace of mind when you book your adventure.",
+      "Der Rabatt staffelt sich je nach Anzahl der gebündelten Verträge: Ab 2 Verträgen erhalten Sie 60 EUR/Jahr, ab 3 Verträgen 120 EUR/Jahr und ab 4 Verträgen den maximalen Rabatt von 200 EUR/Jahr.",
   },
 ]
 
-export default async function ExploreFlexPage() {
-  const flex = await getFlexPolicy()
-
+export default function ExploreFlexPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Page hero */}
+      {/* Hero */}
       <section className="bg-secondary py-12 lg:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-center gap-4">
@@ -61,10 +58,10 @@ export default async function ExploreFlexPage() {
             </div>
             <div>
               <h1 className="font-heading text-4xl font-bold text-foreground lg:text-5xl">
-                {flex?.heading || "Explore Flex"}
+                E.ON Plus
               </h1>
               <p className="mt-1 text-lg text-primary font-medium">
-                Flexible booking, peace of mind.
+                Verträge bündeln, dauerhaft sparen.
               </p>
             </div>
           </div>
@@ -76,17 +73,16 @@ export default async function ExploreFlexPage() {
         <div className="mx-auto max-w-3xl px-4">
           <div className="mb-10 rounded-xl border border-border bg-card p-6 lg:p-8">
             <h2 className="mb-4 font-heading text-xl font-bold text-foreground">
-              Your wellbeing comes first
+              Mehr bündeln, mehr sparen
             </h2>
             <p className="text-base leading-relaxed text-muted-foreground">
-              {flex?.description ||
-                "We understand that plans change, so we offer a flexible booking policy. With Explore Flex, you can book with confidence knowing that you can change your trip dates or switch to a different adventure. We believe travel should be stress-free from the moment you book."}
+              Mit E.ON Plus kombinieren Sie verschiedene Energieverträge und sichern sich jährlich bis zu 200 Euro Rabatt sowie weitere exklusive Vorteile. Ob Strom und Gas, Solar und Wallbox oder Wärmepumpe und Smart Home -- je mehr Verträge Sie bündeln, desto mehr profitieren Sie.
             </p>
           </div>
 
           <div className="mb-4">
             <h2 className="mb-6 font-heading text-2xl font-bold text-foreground">
-              Frequently asked questions
+              Häufig gestellte Fragen
             </h2>
             <Accordion type="single" collapsible className="w-full">
               {FAQS.map((faq, idx) => (

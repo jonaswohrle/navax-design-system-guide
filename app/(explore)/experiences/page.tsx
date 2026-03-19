@@ -3,12 +3,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { blobUrl } from "@/lib/blob-image-urls"
-import {
-  getExperienceTypes,
-  getTripListings,
-  getTrustPillars,
-  getReviewItems,
-} from "@/lib/contentful"
 import { TripCard } from "@/components/explore/trip-card"
 import { TrustStrip } from "@/components/explore/trust-strip"
 import { ReviewCarousel } from "@/components/explore/review-carousel"
@@ -20,7 +14,7 @@ export const metadata: Metadata = {
     "Entdecken Sie unsere Energieprodukte: Ökostrom, Erdgas, Solaranlagen, Wärmepumpen, E-Mobilität und Smart Home Lösungen.",
 }
 
-const FALLBACK_EXPERIENCES = [
+const EXPERIENCES = [
   { name: "Ökostrom", description: "100% erneuerbare Energie aus Wind und Solar für Ihren Haushalt.", imageUrl: "/images/explore/eon-strom.jpg", slug: "oekostrom", order: 1 },
   { name: "Erdgas", description: "Zuverlässige Gasversorgung mit flexiblen Tarifen und Preisgarantie.", imageUrl: "/images/explore/eon-gas.jpg", slug: "erdgas", order: 2 },
   { name: "Solaranlagen", description: "Eigenen Strom erzeugen und Energiekosten dauerhaft senken.", imageUrl: "/images/explore/eon-solar.jpg", slug: "solar", order: 3 },
@@ -29,26 +23,16 @@ const FALLBACK_EXPERIENCES = [
   { name: "Smart Home", description: "Intelligentes Energiemanagement für maximalen Komfort und Effizienz.", imageUrl: "/images/explore/eon-smarthome.jpg", slug: "smart-home", order: 6 },
 ]
 
-const FALLBACK_TRIPS = [
+const TRIPS = [
   { title: "E.ON ÖkoStrom", destination: "Strom", tripType: "Ökostrom", duration: "12 Monate", price: 29, imageUrl: "/images/explore/eon-strom.jpg", badges: ["Bestseller"], tripCode: "OKO", slug: "oekostrom", order: 1 },
   { title: "E.ON Solar", destination: "Solaranlage", tripType: "Solar", duration: "Einmalig", price: 9990, imageUrl: "/images/explore/eon-solar.jpg", badges: ["0% MwSt."], tripCode: "SOL", slug: "solar", order: 2 },
   { title: "E.ON Erdgas", destination: "Erdgas", tripType: "Gas", duration: "12 Monate", price: 8, imageUrl: "/images/explore/eon-gas.jpg", badges: ["Preisgarantie"], tripCode: "GAS", slug: "erdgas", order: 3 },
 ]
 
-export default async function ExperiencesPage() {
-  const [experiences, trips, pillars, reviews] = await Promise.all([
-    getExperienceTypes(),
-    getTripListings(),
-    getTrustPillars(),
-    getReviewItems(),
-  ])
-
-  const expList = experiences?.length ? experiences : FALLBACK_EXPERIENCES
-  const tripList = trips?.length ? trips : FALLBACK_TRIPS
-
+export default function ExperiencesPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Video hero -- matching destination pages */}
+      {/* Hero */}
       <section className="relative flex min-h-[45vh] items-end overflow-hidden lg:min-h-[55vh]">
         <Image
           src={blobUrl("/images/explore/hero-energy.jpg")}
@@ -73,14 +57,14 @@ export default async function ExperiencesPage() {
 
       <WaveDivider />
 
-      {/* Ways to explore grid */}
+      {/* Products grid */}
       <section className="bg-primary pb-12 pt-4 lg:pb-16">
         <div className="mx-auto max-w-7xl px-4">
           <h2 className="mb-8 font-heading text-2xl font-bold text-white lg:text-3xl">
             Unsere Energieprodukte
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {expList.map((exp) => (
+            {EXPERIENCES.map((exp) => (
               <Link
                 key={exp.name}
                 href={`/experiences/${exp.slug || ""}`}
@@ -88,7 +72,7 @@ export default async function ExperiencesPage() {
               >
                 <div className="relative aspect-[16/9]">
                   <Image
-                    src={blobUrl(exp.imageUrl || "/images/explore/hero-mountains.jpg")}
+                    src={blobUrl(exp.imageUrl)}
                     alt={exp.name}
                     fill
                     unoptimized
@@ -114,14 +98,14 @@ export default async function ExperiencesPage() {
         </div>
       </section>
 
-      {/* Popular trips */}
+      {/* Popular tariffs */}
       <section className="bg-background py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-8 flex items-end justify-between">
             <h2 className="font-heading text-2xl font-bold text-foreground lg:text-3xl">
-            Beliebte Tarife
-          </h2>
-          <Link
+              Beliebte Tarife
+            </h2>
+            <Link
               href="/search"
               className="hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-hover md:flex"
             >
@@ -130,7 +114,7 @@ export default async function ExperiencesPage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {tripList.slice(0, 3).map((trip) => (
+            {TRIPS.map((trip) => (
               <TripCard key={trip.title} trip={trip} />
             ))}
           </div>
@@ -138,10 +122,10 @@ export default async function ExperiencesPage() {
       </section>
 
       {/* Trust strip */}
-      <TrustStrip pillars={pillars?.length ? pillars : undefined} />
+      <TrustStrip />
 
       {/* Reviews */}
-      <ReviewCarousel reviews={reviews?.length ? reviews : undefined} />
+      <ReviewCarousel />
     </div>
   )
 }

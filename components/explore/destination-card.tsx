@@ -1,10 +1,17 @@
 import Image from "next/image"
 import Link from "next/link"
 import { blobUrl } from "@/lib/blob-image-urls"
-import type { DestinationRegionFields } from "@/lib/contentful"
+interface DestinationRegion {
+  name: string
+  imageUrl?: string
+  slug?: string
+  description?: string
+  tripCount?: number
+  order?: number
+}
 
 interface DestinationCardProps {
-  region: DestinationRegionFields
+  region: DestinationRegion
 }
 
 export function DestinationCard({ region }: DestinationCardProps) {
@@ -26,7 +33,7 @@ export function DestinationCard({ region }: DestinationCardProps) {
 
         {region.tripCount && (
           <span className="absolute right-3 top-3 rounded-md bg-card/80 px-2 py-0.5 text-xs font-medium text-foreground backdrop-blur-sm">
-            {region.tripCount} trips
+            {region.tripCount} Tarife
           </span>
         )}
 

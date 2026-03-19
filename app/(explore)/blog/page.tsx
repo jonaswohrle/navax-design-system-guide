@@ -1,33 +1,30 @@
 import type { Metadata } from "next"
-import { getBlogPosts } from "@/lib/contentful"
 import { ContentCard } from "@/components/explore/content-card"
 import { BlogCategoryFilter } from "@/components/explore/blog-category-filter"
 
 export const metadata: Metadata = {
-  title: "Blog | Travel tips, advice and inspiration - Explore",
+  title: "Energieratgeber | Tipps & Wissen - E.ON",
   description:
-    "Get inspired for your next adventure with our travel blog. Tips, guides, destination insights and stories from our expert writers and tour leaders.",
+    "Praktische Tipps rund um Energie, Nachhaltigkeit und Sparen. Von Stromverbrauch senken bis Solaranlage planen.",
 }
 
 const CATEGORIES = [
-  "All",
-  "Adventure Travel",
-  "Cycling",
-  "Culture",
-  "Inspiration",
-  "Wildlife",
-  "Walking",
-  "Family",
-  "Polar",
+  "Alle",
+  "Energieratgeber",
+  "Heizen",
+  "E-Mobilität",
+  "Solar",
+  "Nachhaltigkeit",
+  "Smart Home",
 ]
 
-const FALLBACK_POSTS = [
-  { title: "Walking the Great Wall of China: Everything you need to know", excerpt: "Our guide to walking the Great Wall covers the best sections to visit and how to make the most of this incredible experience.", imageUrl: "/images/explore/blog-great-wall.jpg", publishDate: "2026-03-10", category: "Adventure Travel", slug: "walking-great-wall-china", order: 1 },
-  { title: "Why cycling holidays are more popular than ever", excerpt: "From the vineyards of France to the rice paddies of Vietnam, discover why cycling tours are the fastest growing holiday trend.", imageUrl: "/images/explore/blog-cycling.jpg", publishDate: "2026-03-05", category: "Cycling", slug: "cycling-holidays-popular", order: 2 },
-  { title: "Your first trip to China: A complete guide", excerpt: "Planning your first trip to China? Everything you need to know about visas, culture, food and the best places to visit.", imageUrl: "/images/explore/blog-china-first.jpg", publishDate: "2026-02-28", category: "Adventure Travel", slug: "first-trip-china-guide", order: 3 },
-  { title: "Discovering ancient ground through travel", excerpt: "From Petra to Angkor Wat, explore the world's most awe-inspiring ancient sites and the stories they tell.", imageUrl: "/images/explore/blog-ancient.jpg", publishDate: "2026-02-20", category: "Culture", slug: "ancient-ground-travel", order: 4 },
-  { title: "Destination dupes 2026: Hidden gems to visit instead", excerpt: "Swap overcrowded hotspots for these incredible alternative destinations that offer the same magic with fewer crowds.", imageUrl: "/images/explore/blog-dupes.jpg", publishDate: "2026-02-14", category: "Inspiration", slug: "destination-dupes-2026", order: 5 },
-  { title: "The best places to stargaze around the world", excerpt: "From the Atacama Desert to the Scottish Highlands, discover the darkest skies and most spectacular stargazing spots.", imageUrl: "/images/explore/blog-stargazing.jpg", publishDate: "2026-02-07", category: "Wildlife", slug: "best-stargazing-spots", order: 6 },
+const POSTS = [
+  { title: "Stromverbrauch senken: 10 einfache Tipps", excerpt: "Mit diesen praktischen Tipps können Sie Ihren Stromverbrauch nachhaltig reduzieren und bares Geld sparen.", imageUrl: "/images/explore/blog-energy-tips.jpg", publishDate: "2026-03-10", category: "Energieratgeber", slug: "stromverbrauch-senken-tipps", order: 1 },
+  { title: "So funktioniert eine Wärmepumpe", excerpt: "Wärmepumpen sind die Zukunft des Heizens. Erfahren Sie, wie die Technologie funktioniert und ob sie für Ihr Zuhause geeignet ist.", imageUrl: "/images/explore/eon-waermepumpe.jpg", publishDate: "2026-03-05", category: "Heizen", slug: "waermepumpe-erklaert", order: 2 },
+  { title: "E-Auto laden: Was Sie wissen müssen", excerpt: "Alles rund um das Laden Ihres Elektroautos -- von der eigenen Wallbox bis zur öffentlichen Ladeinfrastruktur.", imageUrl: "/images/explore/eon-emobility.jpg", publishDate: "2026-02-28", category: "E-Mobilität", slug: "e-auto-laden-guide", order: 3 },
+  { title: "Solaranlage planen: Der komplette Leitfaden", excerpt: "Von der Dachprüfung bis zur Inbetriebnahme -- so planen Sie Ihre eigene Photovoltaikanlage richtig.", imageUrl: "/images/explore/eon-solar.jpg", publishDate: "2026-02-20", category: "Solar", slug: "solaranlage-planen-leitfaden", order: 4 },
+  { title: "Energielabel verstehen: A bis G erklärt", excerpt: "Was bedeuten die Energielabels auf Haushaltsgeräten wirklich? Wir erklären die Klassen und worauf Sie achten sollten.", imageUrl: "/images/explore/eon-smarthome.jpg", publishDate: "2026-02-14", category: "Energieratgeber", slug: "energielabel-verstehen", order: 5 },
+  { title: "CO2-Fußabdruck reduzieren: So geht es", excerpt: "Praktische Maßnahmen für den Alltag, mit denen Sie Ihren CO2-Fußabdruck spürbar verringern können.", imageUrl: "/images/explore/eon-strom.jpg", publishDate: "2026-02-07", category: "Nachhaltigkeit", slug: "co2-fussabdruck-reduzieren", order: 6 },
 ]
 
 interface BlogPageProps {
@@ -36,26 +33,24 @@ interface BlogPageProps {
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const sp = await searchParams
-  const posts = await getBlogPosts()
-  const allPosts = posts?.length ? posts : FALLBACK_POSTS
 
-  const activeCategory = sp.category || "All"
+  const activeCategory = sp.category || "Alle"
   const filteredPosts =
-    activeCategory === "All"
-      ? allPosts
-      : allPosts.filter((p) => p.category === activeCategory)
-  const postsToShow = filteredPosts.length > 0 ? filteredPosts : allPosts
+    activeCategory === "Alle"
+      ? POSTS
+      : POSTS.filter((p) => p.category === activeCategory)
+  const postsToShow = filteredPosts.length > 0 ? filteredPosts : POSTS
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Page hero */}
+      {/* Hero */}
       <section className="bg-secondary py-12 lg:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <h1 className="mb-4 font-heading text-4xl font-bold text-foreground lg:text-5xl">
-            Blog
+            Energieratgeber
           </h1>
           <p className="max-w-2xl text-base leading-relaxed text-muted-foreground lg:text-lg">
-            Travel tips, advice and inspiration from our expert writers and tour leaders.
+            Praktische Tipps, Wissen und Inspiration rund um Energie, Nachhaltigkeit und Sparen.
           </p>
         </div>
       </section>
@@ -73,7 +68,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           </div>
 
           {/* Pagination */}
-          <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Pagination">
+          <nav className="mt-10 flex items-center justify-center gap-2" aria-label="Seitennavigation">
             {[1, 2, 3].map((page) => (
               <button
                 key={page}
@@ -86,10 +81,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 {page}
               </button>
             ))}
-            <span className="px-2 text-muted-foreground">...</span>
-            <button className="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-sm font-medium text-foreground transition-colors hover:bg-secondary">
-              10
-            </button>
           </nav>
         </div>
       </section>

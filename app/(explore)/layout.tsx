@@ -1,18 +1,15 @@
 import { SiteHeader } from "@/components/explore/site-header"
 import { SiteFooter } from "@/components/explore/site-footer"
 import { AuthProvider } from "@/lib/auth-context"
-import { getPromoBanner } from "@/lib/contentful"
 
-export default async function ExploreLayout({
+export default function ExploreLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const promoBanner = await getPromoBanner()
-
   return (
     <AuthProvider>
-      <SiteHeader promoBanner={promoBanner} />
+      <SiteHeader />
       <main>{children}</main>
       <SiteFooter />
     </AuthProvider>

@@ -3,15 +3,24 @@
 import Image from "next/image"
 import Link from "next/link"
 import { blobUrl } from "@/lib/blob-image-urls"
-import type { BlogPostFields } from "@/lib/contentful"
+interface BlogPost {
+  title: string
+  excerpt?: string
+  imageUrl?: string
+  publishDate?: string
+  category?: string
+  slug?: string
+  content?: string
+  order?: number
+}
 
 interface ContentCardProps {
-  post: BlogPostFields
+  post: BlogPost
 }
 
 export function ContentCard({ post }: ContentCardProps) {
   const formattedDate = post.publishDate
-    ? new Date(post.publishDate).toLocaleDateString("en-GB", {
+    ? new Date(post.publishDate).toLocaleDateString("de-DE", {
         day: "numeric",
         month: "long",
         year: "numeric",

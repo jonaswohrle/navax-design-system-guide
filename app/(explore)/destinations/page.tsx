@@ -1,44 +1,39 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import {
-  getDestinationRegions,
-  getTripListings,
-  getTrustPillars,
-  getBlogPosts,
-} from "@/lib/contentful"
 import { DestinationCard } from "@/components/explore/destination-card"
 import { TripCard } from "@/components/explore/trip-card"
 import { TrustStrip } from "@/components/explore/trust-strip"
 import { ContentCard } from "@/components/explore/content-card"
 import { DestinationFilters } from "@/components/explore/destination-filters"
-import { getTourCountByRegion, getAllTours } from "@/lib/tour-data"
+import { getAllTours } from "@/lib/tour-data"
 
 export const metadata: Metadata = {
-  title: "Adventure Holiday Destinations | Where To Go On Your Next Tour - Explore",
+  title: "Energieprodukte & Tarife | E.ON Energie",
   description:
-    "Find your perfect adventure holiday destination. Explore offers small group tours to over 100 countries across Europe, Asia, Africa, the Americas and beyond.",
+    "Finden Sie den passenden Energietarif. E.ON bietet Ökostrom, Erdgas, Solar, Wärmepumpen, E-Mobilität und Smart Home Lösungen für Ihr Zuhause.",
 }
 
-const FALLBACK_REGIONS = [
-  { name: "Europe", imageUrl: "/images/explore/dest-europe.jpg", slug: "europe", tripCount: getTourCountByRegion("europe"), order: 1 },
-  { name: "Asia", imageUrl: "/images/explore/dest-asia.jpg", slug: "asia", tripCount: getTourCountByRegion("asia"), order: 2 },
-  { name: "Africa", imageUrl: "/images/explore/dest-africa.jpg", slug: "africa", tripCount: getTourCountByRegion("africa"), order: 3 },
-  { name: "South America", imageUrl: "/images/explore/dest-south-america.jpg", slug: "south-america", tripCount: getTourCountByRegion("south-america"), order: 4 },
-  { name: "Central America", imageUrl: "/images/explore/dest-central-america.jpg", slug: "central-america", tripCount: getTourCountByRegion("central-america"), order: 5 },
-  { name: "Middle East", imageUrl: "/images/explore/dest-middle-east.jpg", slug: "middle-east", tripCount: getTourCountByRegion("middle-east"), order: 6 },
-  { name: "Polar Regions", imageUrl: "/images/explore/dest-polar.jpg", slug: "polar", tripCount: getTourCountByRegion("polar"), order: 7 },
-  { name: "North America", imageUrl: "/images/explore/dest-north-america.jpg", slug: "north-america", tripCount: getTourCountByRegion("north-america"), order: 8 },
-  { name: "Caribbean", imageUrl: "/images/explore/dest-caribbean.jpg", slug: "caribbean", tripCount: getTourCountByRegion("caribbean"), order: 9 },
-  { name: "Australasia", imageUrl: "/images/explore/dest-australasia.jpg", slug: "australasia", tripCount: getTourCountByRegion("australasia"), order: 10 },
+const REGIONS = [
+  { name: "Strom", imageUrl: "/images/explore/eon-strom.jpg", slug: "strom", tripCount: 3, order: 1 },
+  { name: "Gas", imageUrl: "/images/explore/eon-gas.jpg", slug: "gas", tripCount: 2, order: 2 },
+  { name: "Solar", imageUrl: "/images/explore/eon-solar.jpg", slug: "solar", tripCount: 1, order: 3 },
+  { name: "Wärmepumpe", imageUrl: "/images/explore/eon-waermepumpe.jpg", slug: "waermepumpe", tripCount: 1, order: 4 },
+  { name: "E-Mobilität", imageUrl: "/images/explore/eon-emobility.jpg", slug: "e-mobilitaet", tripCount: 1, order: 5 },
+  { name: "Smart Home", imageUrl: "/images/explore/eon-smarthome.jpg", slug: "smart-home", tripCount: 1, order: 6 },
 ]
 
-const TOP_DESTINATIONS = [
-  "India", "Portugal", "Japan", "Italy", "Vietnam",
-  "Spain", "Morocco", "Sri Lanka", "Turkey", "Costa Rica",
+const TOP_CATEGORIES = [
+  "Ökostrom", "Erdgas", "Solar", "Wärmepumpe", "Wallbox",
+  "Smart Home", "E.ON Plus", "Biogas", "Autostrom", "Heizstrom",
 ]
 
-const FALLBACK_TRIPS = getAllTours().map((tour, i) => ({
+const BLOG = [
+  { title: "Stromverbrauch senken: 10 einfache Tipps", excerpt: "Mit diesen praktischen Tipps können Sie Ihren Stromverbrauch nachhaltig reduzieren.", imageUrl: "/images/explore/blog-energy-tips.jpg", publishDate: "2026-03-10", category: "Energieratgeber", slug: "stromverbrauch-senken-tipps", order: 1 },
+  { title: "So funktioniert eine Wärmepumpe", excerpt: "Erfahren Sie, wie die Technologie funktioniert und ob sie für Ihr Zuhause geeignet ist.", imageUrl: "/images/explore/eon-waermepumpe.jpg", publishDate: "2026-03-05", category: "Heizen", slug: "waermepumpe-erklaert", order: 2 },
+]
+
+const ALL_TRIPS = getAllTours().map((tour, i) => ({
   title: tour.title,
   destination: tour.destination,
   tripType: tour.tripType,
@@ -47,18 +42,13 @@ const FALLBACK_TRIPS = getAllTours().map((tour, i) => ({
   originalPrice: tour.originalPrice,
   imageUrl: tour.imageUrl,
   badges: [
-    ...(tour.originalPrice ? ["Discounted"] : []),
-    ...(i < 6 ? ["Best Seller"] : []),
+    ...(tour.originalPrice ? ["Rabatt"] : []),
+    ...(i < 6 ? ["Bestseller"] : []),
   ] as string[],
   tripCode: tour.tripCode,
   slug: tour.slug,
   order: i + 1,
 }))
-
-const FALLBACK_BLOG = [
-  { title: "Walking the Great Wall of China: Everything you need to know", excerpt: "Our guide to walking the Great Wall covers the best sections to visit.", imageUrl: "/images/explore/blog-great-wall.jpg", publishDate: "2026-03-10", category: "Adventure Travel", slug: "walking-great-wall-china", order: 1 },
-  { title: "Why cycling holidays are more popular than ever", excerpt: "Discover why cycling tours are the fastest growing holiday trend.", imageUrl: "/images/explore/blog-cycling.jpg", publishDate: "2026-03-05", category: "Cycling", slug: "cycling-holidays-popular", order: 2 },
-]
 
 interface DestinationsPageProps {
   searchParams: Promise<{ region?: string; type?: string; date?: string }>
@@ -66,25 +56,14 @@ interface DestinationsPageProps {
 
 export default async function DestinationsPage({ searchParams }: DestinationsPageProps) {
   const sp = await searchParams
-  const [regions, trips, pillars, blog] = await Promise.all([
-    getDestinationRegions(),
-    getTripListings(),
-    getTrustPillars(),
-    getBlogPosts(),
-  ])
 
-  const regionList = regions?.length ? regions : FALLBACK_REGIONS
-  const allTrips = trips?.length ? trips : FALLBACK_TRIPS
-  const blogList = blog?.length ? blog : FALLBACK_BLOG
-
-  // Apply filters from hero search
   const activeRegion = sp.region || null
   const activeType = sp.type || null
   const activeDate = sp.date || null
 
-  const filteredTrips = allTrips.filter((trip) => {
+  const filteredTrips = ALL_TRIPS.filter((trip) => {
     if (activeRegion) {
-      const regionName = regionList.find((r) => r.slug === activeRegion)?.name?.toLowerCase()
+      const regionName = REGIONS.find((r) => r.slug === activeRegion)?.name?.toLowerCase()
       if (regionName && trip.destination && !trip.destination.toLowerCase().includes(regionName)) {
         return false
       }
@@ -97,19 +76,19 @@ export default async function DestinationsPage({ searchParams }: DestinationsPag
     return true
   })
 
-  const tripsToShow = filteredTrips.length > 0 ? filteredTrips : allTrips
+  const tripsToShow = filteredTrips.length > 0 ? filteredTrips : ALL_TRIPS
   const hasFilters = activeRegion || activeType || activeDate
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Page hero -- crimson red like the real Explore site */}
+      {/* Hero */}
       <section className="bg-primary py-12 lg:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <h1 className="mb-4 font-heading text-4xl font-bold text-primary-foreground lg:text-5xl">
-            Destinations
+            Energieprodukte & Tarife
           </h1>
           <p className="max-w-2xl text-base leading-relaxed text-primary-foreground/80 lg:text-lg">
-            {"We offer small group adventure holidays to over 100 countries worldwide. Whether you're looking for cultural discovery in Asia, wildlife encounters in Africa, or trekking in South America, we've got the perfect trip for you."}
+            {"Entdecken Sie unsere vielfältigen Energielösungen für Ihr Zuhause. Von Ökostrom über Solar bis hin zu Wärmepumpen -- finden Sie den Tarif, der zu Ihnen passt."}
           </p>
         </div>
       </section>
@@ -124,53 +103,53 @@ export default async function DestinationsPage({ searchParams }: DestinationsPag
         />
       )}
 
-      {/* Region grid */}
+      {/* Category grid */}
       <section className="bg-background py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4">
           <h2 className="mb-8 font-heading text-2xl font-bold text-foreground lg:text-3xl">
-            Where will your next tour take you?
+            Welche Energielösung passt zu Ihnen?
           </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {regionList.map((region) => (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+            {REGIONS.map((region) => (
               <DestinationCard key={region.name} region={region} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Top 10 destinations */}
+      {/* Top categories */}
       <section className="bg-secondary py-10">
         <div className="mx-auto max-w-7xl px-4">
           <h3 className="mb-6 text-center font-heading text-lg font-semibold text-foreground">
-            Top 10 destinations
+            Beliebte Kategorien
           </h3>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {TOP_DESTINATIONS.map((dest) => (
+            {TOP_CATEGORIES.map((cat) => (
               <Link
-                key={dest}
+                key={cat}
                 href="/destinations"
                 className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary hover:text-primary"
               >
-                {dest}
+                {cat}
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Popular trips */}
+      {/* Tariffs */}
       <section className="bg-background py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-8 flex items-end justify-between">
             <h2 className="font-heading text-2xl font-bold text-foreground lg:text-3xl">
-              {hasFilters ? "Matching adventure tours" : "Popular adventure tours"}
+              {hasFilters ? "Passende Tarife" : "Beliebte Tarife"}
             </h2>
             {!hasFilters && (
               <Link
                 href="/destinations"
                 className="hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-hover md:flex"
               >
-                View all tours
+                Alle Tarife ansehen
                 <ArrowRight className="h-4 w-4" />
               </Link>
             )}
@@ -184,17 +163,17 @@ export default async function DestinationsPage({ searchParams }: DestinationsPag
       </section>
 
       {/* Trust strip */}
-      <TrustStrip pillars={pillars?.length ? pillars : undefined} />
+      <TrustStrip />
 
-      {/* Blog inspiration */}
-      {blogList.length > 0 && (
+      {/* Blog */}
+      {BLOG.length > 0 && (
         <section className="bg-background py-12 lg:py-16">
           <div className="mx-auto max-w-7xl px-4">
             <h2 className="mb-8 font-heading text-2xl font-bold text-foreground lg:text-3xl">
-              More adventure holiday destination inspiration
+              Energieratgeber
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {blogList.slice(0, 4).map((post) => (
+              {BLOG.map((post) => (
                 <ContentCard key={post.title} post={post} />
               ))}
             </div>

@@ -5,7 +5,13 @@ import {
   IconResponsibleAtHeart,
 } from "./brand-icons"
 import { WaveUnderline } from "./wave-underline"
-import type { TrustPillarFields } from "@/lib/contentful"
+
+interface TrustPillar {
+  title: string
+  description?: string
+  icon?: string
+  order?: number
+}
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Sparkles: <IconUnforgettableExperiences className="h-16 w-16 lg:h-20 lg:w-20" />,
@@ -14,7 +20,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   Heart: <IconResponsibleAtHeart className="h-16 w-16 lg:h-20 lg:w-20" />,
 }
 
-const FALLBACK_PILLARS: TrustPillarFields[] = [
+const PILLARS: TrustPillar[] = [
   {
     title: "100% Ökostrom",
     description:
@@ -45,17 +51,10 @@ const FALLBACK_PILLARS: TrustPillarFields[] = [
   },
 ]
 
-interface TrustStripProps {
-  pillars?: TrustPillarFields[]
-}
-
-export function TrustStrip({ pillars }: TrustStripProps) {
-  const items = pillars && pillars.length > 0 ? pillars : FALLBACK_PILLARS
-
+export function TrustStrip() {
   return (
     <section className="bg-card py-14 lg:py-20">
       <div className="mx-auto max-w-7xl px-4">
-        {/* Left column heading + right pillars layout matching real site */}
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-16">
           {/* Left heading */}
           <div className="lg:col-span-1">
@@ -71,7 +70,7 @@ export function TrustStrip({ pillars }: TrustStripProps) {
           {/* Right pillars grid */}
           <div className="lg:col-span-2">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-              {items.map((pillar) => (
+              {PILLARS.map((pillar) => (
                 <div key={pillar.title} className="flex flex-col">
                   <div className="mb-3 text-primary">
                     {ICON_MAP[pillar.icon || "Sparkles"] ?? (

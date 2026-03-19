@@ -1,35 +1,28 @@
 import Image from "next/image"
 import Link from "next/link"
 import { blobUrl } from "@/lib/blob-image-urls"
-import type { PromoCardFields } from "@/lib/contentful"
 
-const FALLBACK_PROMOS: PromoCardFields[] = [
+const PROMOS = [
   { title: "Ökostrom-Tarife", subtitle: "100% erneuerbare Energie für Ihr Zuhause", imageUrl: "/images/explore/eon-strom.jpg", linkUrl: "/destinations", order: 1 },
   { title: "Solaranlagen", subtitle: "Eigenen Strom erzeugen & sparen", imageUrl: "/images/explore/eon-solar.jpg", linkUrl: "/destinations", order: 2 },
   { title: "E-Mobilität", subtitle: "Wallbox & Autostrom-Tarife", imageUrl: "/images/explore/eon-emobility.jpg", linkUrl: "/experiences", order: 3 },
   { title: "Wärmepumpen", subtitle: "Nachhaltig heizen mit E.ON", imageUrl: "/images/explore/eon-waermepumpe.jpg", linkUrl: "/offers", order: 4 },
 ]
 
-interface PromoGridProps {
-  promos?: PromoCardFields[]
-}
-
-export function PromoGrid({ promos }: PromoGridProps) {
-  const items = promos && promos.length > 0 ? promos : FALLBACK_PROMOS
-
+export function PromoGrid() {
   return (
     <section className="bg-background py-12 lg:py-16">
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((promo) => (
+          {PROMOS.map((promo) => (
             <Link
               key={promo.title}
-              href={promo.linkUrl || "/destinations"}
+              href={promo.linkUrl}
               className="group relative block overflow-hidden rounded-xl"
             >
               <div className="relative aspect-[4/3]">
                 <Image
-                  src={blobUrl(promo.imageUrl || "/images/explore/eon-strom.jpg")}
+                  src={blobUrl(promo.imageUrl)}
                   alt={promo.title}
                   fill
                   unoptimized

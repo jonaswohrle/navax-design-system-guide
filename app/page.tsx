@@ -1,20 +1,8 @@
 import Link from "next/link"
-import {
-  getExploreHero,
-  getPromoBanner,
-  getTrustPillars,
-  getPromoCards,
-  getTripListings,
-  getReviewItems,
-  getFlexPolicy,
-  getBlogPosts,
-  getPersonalizedHeroes,
-} from "@/lib/contentful"
 import { SiteHeader } from "@/components/explore/site-header"
 import { SiteFooter } from "@/components/explore/site-footer"
 import { AuthProvider } from "@/lib/auth-context"
 import { HeroSearch } from "@/components/explore/hero-search"
-import { PersonalizedHero } from "@/components/explore/personalized-hero"
 import { TrustStrip } from "@/components/explore/trust-strip"
 import { PromoGrid } from "@/components/explore/promo-grid"
 import { ReviewCarousel } from "@/components/explore/review-carousel"
@@ -26,17 +14,9 @@ import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 /* ------------------------------------------------------------------ */
-/*  Fallback data                                                      */
+/*  Hardcoded E.ON content                                             */
 /* ------------------------------------------------------------------ */
-const FALLBACK_HERO = {
-  title: "Energie neu denken",
-  subtitle: "Strom, Gas & Solarlösungen für Ihr Zuhause",
-  ctaText: "Tarif berechnen",
-  ctaLink: "/destinations",
-  backgroundImageUrl: "/images/explore/hero-energy.jpg",
-}
-
-const FALLBACK_TRIPS = [
+const TRIPS = [
   { title: "E.ON ÖkoStrom", destination: "Strom", tripType: "Ökostrom", duration: "12 Monate", price: 29, imageUrl: "/images/explore/eon-strom.jpg", badges: ["Bestseller"], tripCode: "OKO", slug: "oekostrom", order: 1 },
   { title: "E.ON ÖkoStrom Home & Drive", destination: "Strom & E-Auto", tripType: "Ökostrom", duration: "24 Monate", price: 34, originalPrice: 39, imageUrl: "/images/explore/eon-emobility.jpg", badges: ["Rabatt", "Bestseller"], tripCode: "OHD", slug: "oekostrom-home-drive", order: 2 },
   { title: "E.ON Erdgas", destination: "Erdgas", tripType: "Gas", duration: "12 Monate", price: 8, imageUrl: "/images/explore/eon-gas.jpg", badges: ["Preisgarantie"], tripCode: "GAS", slug: "erdgas", order: 3 },
@@ -44,7 +24,7 @@ const FALLBACK_TRIPS = [
   { title: "E.ON Home Comfort", destination: "Smart Home", tripType: "Energiemanagement", duration: "Monatlich", price: 12, imageUrl: "/images/explore/eon-smarthome.jpg", badges: ["Neu"], tripCode: "HC", slug: "home-comfort", order: 5 },
 ]
 
-const FALLBACK_BLOG = [
+const BLOG = [
   { title: "Stromverbrauch senken: 10 einfache Tipps", excerpt: "Mit diesen praktischen Tipps können Sie Ihren Stromverbrauch nachhaltig reduzieren und bares Geld sparen.", imageUrl: "/images/explore/blog-energy-tips.jpg", publishDate: "2026-03-10", category: "Energieratgeber", slug: "stromverbrauch-senken-tipps", order: 1 },
   { title: "So funktioniert eine Wärmepumpe", excerpt: "Wärmepumpen sind die Zukunft des Heizens. Erfahren Sie, wie die Technologie funktioniert und ob sie für Ihr Zuhause geeignet ist.", imageUrl: "/images/explore/eon-waermepumpe.jpg", publishDate: "2026-03-05", category: "Heizen", slug: "waermepumpe-erklaert", order: 2 },
   { title: "E-Auto laden: Was Sie wissen müssen", excerpt: "Alles rund um das Laden Ihres Elektroautos -- von der eigenen Wallbox bis zur öffentlichen Ladeinfrastruktur.", imageUrl: "/images/explore/eon-emobility.jpg", publishDate: "2026-02-28", category: "E-Mobilität", slug: "e-auto-laden-guide", order: 3 },
@@ -53,47 +33,23 @@ const FALLBACK_BLOG = [
 /* ------------------------------------------------------------------ */
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
-export default async function Page() {
-  const [hero, promoBanner, pillars, promos, trips, reviews, flex, blog, heroVariants] =
-    await Promise.all([
-      getExploreHero(),
-      getPromoBanner(),
-      getTrustPillars(),
-      getPromoCards(),
-      getTripListings(),
-      getReviewItems(),
-      getFlexPolicy(),
-      getBlogPosts(),
-      getPersonalizedHeroes(),
-    ])
-
-  const h = hero ?? FALLBACK_HERO
-  const tripList = trips?.length ? trips : FALLBACK_TRIPS
-  const blogList = blog?.length ? blog : FALLBACK_BLOG
-
+export default function Page() {
   return (
     <AuthProvider>
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <SiteHeader promoBanner={promoBanner} />
+      <SiteHeader />
 
-      {/* Personalized hero -- selects variant based on visitor audience */}
-      {heroVariants && heroVariants.length > 0 ? (
-        <PersonalizedHero
-          variants={heroVariants}
-          fallbackImageUrl={h.backgroundImageUrl || "/images/explore/hero-energy.jpg"}
-        />
-      ) : (
-        <HeroSearch backgroundImageUrl={h.backgroundImageUrl || "/images/explore/hero-energy.jpg"} />
-      )}
+      {/* Hero */}
+      <HeroSearch backgroundImageUrl="/images/explore/hero-energy.jpg" />
 
       {/* Trust strip */}
-      <TrustStrip pillars={pillars?.length ? pillars : undefined} />
+      <TrustStrip />
 
       {/* Promo grid */}
-      <PromoGrid promos={promos?.length ? promos : undefined} />
+      <PromoGrid />
 
-      {/* Brand story -- matching E.ON layout */}
+      {/* Brand story */}
       <section className="bg-secondary py-12 lg:py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="max-w-2xl">
@@ -111,9 +67,9 @@ export default async function Page() {
       </section>
 
       {/* Reviews carousel */}
-      <ReviewCarousel reviews={reviews?.length ? reviews : undefined} />
+      <ReviewCarousel />
 
-      {/* Recommended trips */}
+      {/* Recommended tariffs */}
       <section className="bg-secondary py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-8 flex items-end justify-between">
@@ -130,7 +86,7 @@ export default async function Page() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {tripList.slice(0, 5).map((trip) => (
+            {TRIPS.map((trip) => (
               <TripCard key={trip.title} trip={trip} />
             ))}
           </div>
@@ -149,7 +105,7 @@ export default async function Page() {
       {/* AI/Tech CTA */}
       <AiCtaBanner />
 
-      {/* Blog inspiration */}
+      {/* Blog */}
       <section className="bg-background py-12 lg:py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-8 flex items-end justify-between">
@@ -166,7 +122,7 @@ export default async function Page() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {blogList.slice(0, 3).map((post) => (
+            {BLOG.map((post) => (
               <ContentCard key={post.title} post={post} />
             ))}
           </div>
@@ -174,7 +130,7 @@ export default async function Page() {
       </section>
 
       {/* Flex banner */}
-      <FlexBanner policy={flex} />
+      <FlexBanner />
 
       {/* Footer */}
       <SiteFooter />
