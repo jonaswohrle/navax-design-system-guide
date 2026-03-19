@@ -23,6 +23,20 @@ Wichtige Verhaltensregeln:
 - Erfinde niemals Tarife, die es nicht gibt
 - Antworte immer auf Deutsch`
 
+// Normalize German energy terms for flexible matching
+function normalizeEnergyTerm(term: string): string {
+  const t = term.toLowerCase().trim()
+  const map: Record<string, string> = {
+    "strom": "strom", "ökostrom": "strom", "oekostrom": "strom", "elektrizität": "strom",
+    "gas": "gas", "erdgas": "gas", "biogas": "gas", "heizgas": "gas",
+    "solar": "solar", "solaranlage": "solar", "photovoltaik": "solar", "pv": "solar",
+    "wärmepumpe": "wärmepumpe", "waermepumpe": "wärmepumpe", "heizung": "wärmepumpe",
+    "e-auto": "e-auto", "wallbox": "e-auto", "elektroauto": "e-auto", "e-mobilität": "e-auto", "emobilität": "e-auto", "laden": "e-auto",
+    "smart home": "smart home", "smarthome": "smart home", "smart": "smart home", "energiemanagement": "smart home",
+  }
+  return map[t] || t
+}
+
 function searchToursFiltered(filters: {
   destination?: string | null
   tripType?: string | null
@@ -34,17 +48,22 @@ function searchToursFiltered(filters: {
   let results = toursArray
 
   if (filters.destination) {
-    const dest = filters.destination.toLowerCase()
+    const normalized = normalizeEnergyTerm(filters.destination)
     results = results.filter(
       (t) =>
-        t.destination.toLowerCase().includes(dest) ||
-        t.country.toLowerCase().includes(dest)
+        normalizeEnergyTerm(t.destination) === normalized ||
+        t.destination.toLowerCase().includes(filters.destination!.toLowerCase()) ||
+        t.country.toLowerCase().includes(filters.destination!.toLowerCase())
     )
   }
 
   if (filters.tripType) {
-    const type = filters.tripType.toLowerCase()
-    results = results.filter((t) => t.tripType.toLowerCase().includes(type))
+    const normalized = normalizeEnergyTerm(filters.tripType)
+    results = results.filter((t) => {
+      const tourNorm = normalizeEnergyTerm(t.tripType)
+      return tourNorm === normalized ||
+        t.tripType.toLowerCase().includes(filters.tripType!.toLowerCase())
+    })
   }
 
   if (filters.maxBudget) {
@@ -63,6 +82,11 @@ function searchToursFiltered(filters: {
     results = results.filter(
       (t) => t.physicalRating <= filters.maxPhysicalRating!
     )
+  }
+
+  // If no results found with strict filtering, return all tariffs
+  if (results.length === 0) {
+    results = toursArray
   }
 
   return results.slice(0, 6).map((t) => ({
@@ -214,7 +238,7 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: "openai/gpt-5.2",
+    model: "openai/gpt-4.1",
     system: systemPrompt + personalizationContext,
     messages: await convertToModelMessages(messages),
     tools,
