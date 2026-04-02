@@ -16,80 +16,56 @@ You help HARTMANN's marketing and content teams manage their digital presence us
 ## HARTMANN Context
 
 **Brand Identity:**
-- Tagline: "Hilft. Pflegt. Sch\u00fctzt." (Helps. Cares. Protects.)
+- Tagline: "Hilft. Pflegt. Schuetzt." (Helps. Cares. Protects.)
 - Brand Colors: Bright Blue #0045FF (primary), Dark Blue #001689 (secondary), White #FFFFFF
 - Logo: HARTMANN wordmark in Dark Blue
 - Tone of Voice: Professional, trustworthy, caring, scientifically grounded. Always respond in English unless the user writes in another language.
 
 **Key Product Lines:**
-- Sterillium -- hand disinfection (market leader in Europe, used in 90%+ of German hospitals)
-- MoliCare -- incontinence care products (pads, pants, skin care, bed protection)
-- HydroClean -- wound care / wound dressings (active wound cleansing)
+- Sterillium -- hand disinfection (market leader in Europe)
+- MoliCare -- incontinence care products
+- HydroClean -- wound care / wound dressings
 - Hydrosorb -- transparent hydrogel wound dressing
-- TenderWet -- superabsorber wound pad for deep wounds
-- Foliodress -- surgical gowns, drapes, and OR supplies
-- Bacillol -- surface disinfection (wipes and liquids)
+- TenderWet -- superabsorber wound pad
+- Foliodress -- surgical gowns, drapes, OR supplies
+- Bacillol -- surface disinfection
 - Peha-soft -- examination and protective gloves
 - Zetuvit -- absorbent wound pads
-- Cosmopor -- self-adhesive wound dressings for post-op care
+- Cosmopor -- self-adhesive wound dressings
 
 **Market Segments:**
-- Kliniken (Hospitals) -- largest segment, focus on infection prevention, wound care, OR supplies
-- Pflegeheime (Care Homes / Nursing Homes) -- incontinence management, skin care, wound prevention
-- Arztpraxen (Medical Practices) -- wound care, disinfection, examination supplies
-- Apotheken (Pharmacies) -- consumer-facing products, Sterillium consumer range
-- Rettungsdienste (Emergency Services) -- first aid, wound care supplies
-- Privatanwender (Private Consumers) -- OTC products via pharmacies and online
+- Kliniken (Hospitals), Pflegeheime (Care Homes), Arztpraxen (Medical Practices),
+  Apotheken (Pharmacies), Rettungsdienste (Emergency Services), Privatanwender (Consumers)
 
 **Competence Areas:**
-- Wundversorgung (Wound Care) -- HydroClean, Hydrosorb, TenderWet, Zetuvit, Cosmopor
-- Inkontinenzmanagement (Incontinence Management) -- MoliCare product range
-- Infektionsmanagement (Infection Prevention / Disinfection) -- Sterillium, Bacillol
-- OP-Versorgung (Surgical Supplies) -- Foliodress, Peha-soft
-
-## Sitecore Environment Information
-
-When users ask about sites or pages, you have access to the Sitecore XM Cloud environment. Key details:
-- **Sites** may be named like "HARTMANN", "hartmann.info", "hartmann-direct", etc. Always use list_sites first to discover the exact site names before making page operations.
-- **Page Templates** available typically include: Page, Landing Page, Product Page, Category Page, Article, Blog Post
-- **Common Components**: Rich Text, Hero Banner, Product Card, Image Gallery, CTA Block, Accordion, Tab Panel, Form, Video Player
-- **Page Paths** follow the pattern: /Home, /Home/Products, /Home/Products/Sterillium, etc.
-
-## Homepage Content Management
-
-You can directly update the HARTMANN homepage content using the update_homepage_content tool. The homepage at / displays content from these Sitecore components:
-- **HeroBanner** -- hero section with headline, subheadline, tagline, CTAs, and background image
-- **TrustStrip** -- trust indicators (200+ Jahre, Hilft.Pflegt.Schuetzt., Forschung, Qualitaet)
-- **ProductAreasGrid** -- three product area cards (Wundversorgung, Desinfektion, Inkontinenz)
-- **MarketSegmentsGrid** -- four market segment cards (Kliniken, Pflegeheime, Ambulante Pflege, Apotheken)
-- **CtaBanner** -- call-to-action banner for Sitecore AI
-- **AboutSection** -- about HARTMANN section
-
-When users ask to change homepage content, use update_homepage_content. Changes appear immediately on the live homepage.
+- Wundversorgung (Wound Care), Inkontinenzmanagement (Incontinence Management),
+  Infektionsmanagement (Infection Prevention), OP-Versorgung (Surgical Supplies)
 
 ## Tool Usage Guidelines
 
-- **Always call list_sites first** when a user mentions sites, to discover the actual site names in the environment.
-- When a tool returns an error object (with "error": true), explain the issue clearly and suggest alternatives.
-- If a tool result contains a "content" array with "text" type items, parse the text content for the user.
-- Some tools return results wrapped in MCP format: { content: [{ type: "text", text: "..." }] }. Unwrap and summarize the actual data for the user.
-- For create operations, always confirm what was created and suggest logical next steps (e.g., after creating a page, suggest adding components).
+- Always call list_sites first when working with sites to discover actual site names.
+- When a tool returns an error (error: true), explain the issue clearly and suggest next steps.
+- Some tools return MCP format: { content: [{ type: "text", text: "..." }] }. Parse and summarize.
+- For create operations, confirm what was created and suggest logical next steps.
+- If tool calls fail with 404 or 403 errors, this usually means the XM Cloud environment needs to be configured.
+  Explain this clearly and offer to help with tasks that don't require the Sitecore backend.
+
+## Homepage Content Management
+
+You can directly update the HARTMANN homepage content using update_homepage_content.
+This tool works independently of the Sitecore backend connection and changes appear immediately.
+Available components: HeroBanner, TrustStrip, ProductAreasGrid, MarketSegmentsGrid, CtaBanner, AboutSection.
 
 ## Behavior Guidelines
 
-- Use professional medical/healthcare terminology appropriately
-- Reference real HARTMANN products and market segments when suggesting content
-- When creating pages, suggest structures relevant to healthcare product marketing (product detail pages, clinical evidence pages, training materials, etc.)
-- Apply HARTMANN brand guidelines when discussing design or content
-- Be concise -- let the rich tool results do the heavy lifting
-- When a tool returns data, provide a brief helpful summary alongside it
-- If a tool call fails or returns unexpected data, explain what happened in simple terms and suggest what to try next
-- Always use the appropriate tool when available -- never describe actions you could perform with a tool call
-- Format responses with clear markdown: use ## headings, **bold** for emphasis, and bullet lists for structured information`
+- Use professional medical/healthcare terminology
+- Be concise -- let rich tool results do the heavy lifting
+- Always use appropriate tools when available
+- Format responses with markdown headings, bold, and bullet lists`
 
 /**
  * Wraps sitecoreMCP.callTool with error handling.
- * This is a plain function (NOT recursive) that calls the MCP client.
+ * Detects Sitecore MCP isError responses and converts them to structured errors.
  */
 async function mcpCall(
   toolName: string,
@@ -98,15 +74,22 @@ async function mcpCall(
   try {
     const result = await sitecoreMCP.callTool(toolName, args)
 
-    // The Sitecore MCP returns errors as: { content: [{ type: "text", text: "ERROR: ..." }], isError: true }
-    // Convert these into a structured error object the AI and UI can understand.
-    if (result && typeof result === "object" && (result as Record<string, unknown>).isError === true) {
-      const content = (result as Record<string, unknown>).content as Array<{ type: string; text: string }> | undefined
+    // Sitecore MCP returns errors as: { content: [{ type: "text", text: "ERROR: ..." }], isError: true }
+    if (
+      result &&
+      typeof result === "object" &&
+      (result as Record<string, unknown>).isError === true
+    ) {
+      const content = (result as Record<string, unknown>).content as
+        | Array<{ type: string; text: string }>
+        | undefined
       const errorText = content?.[0]?.text || "Unknown Sitecore error"
       return {
         error: true,
         message: errorText,
-        suggestion: "This may indicate the Sitecore XM Cloud environment is not fully configured for this automation client. Check that the client has access to the correct XM Cloud project.",
+        suggestion:
+          "This may indicate the Sitecore XM Cloud environment needs configuration. " +
+          "Check that the automation client has access to an active XM Cloud project with a deployed CM instance.",
       }
     }
 
@@ -117,82 +100,92 @@ async function mcpCall(
       error: true,
       message: `Failed to call ${toolName}: ${msg}`,
       suggestion:
-        "The Sitecore MCP endpoint may be temporarily unavailable or the credentials may need to be checked.",
+        "The Sitecore MCP endpoint may be temporarily unavailable or credentials may need to be checked.",
     }
   }
 }
 
 /**
- * AI SDK tools that proxy to Sitecore MCP.
- * Every execute() calls mcpCall() which delegates to sitecoreMCP.callTool().
- * There is NO recursion possible -- mcpCall calls sitecoreMCP, not itself.
+ * AI SDK tools -- names match the actual Sitecore Marketer MCP tool names exactly.
+ * Full list from MCP tools/list: 48 tools across site, page, component, content,
+ * asset, personalization, and brief management.
  */
 const tools = {
   /* ── Site Management ──────────────────────────────────────── */
   list_sites: tool({
     description:
-      "List all available Sitecore sites. Returns site names, IDs, and languages. Always call this first before any page or site operations.",
+      "List all available Sitecore sites with their basic info (name, display name, URL). Always call this first.",
     inputSchema: z.object({}),
     execute: async () => mcpCall("list_sites"),
   }),
 
-  get_site_details: tool({
-    description:
-      "Get detailed information about a specific Sitecore site including its configuration and settings.",
-    inputSchema: z.object({
-      siteName: z.string().describe("The name of the site to get details for"),
-    }),
-    execute: async ({ siteName }) => mcpCall("get_site_details", { siteName }),
-  }),
-
-  get_page_tree: tool({
-    description:
-      "Get the page tree (hierarchical structure of pages) for a Sitecore site. Shows the sitemap-like structure.",
+  get_site_information: tool({
+    description: "Get details of a specific site including ID, name, and root path.",
     inputSchema: z.object({
       siteName: z.string().describe("The name of the site"),
     }),
-    execute: async ({ siteName }) => mcpCall("get_page_tree", { siteName }),
+    execute: async ({ siteName }) =>
+      mcpCall("get_site_information", { siteName }),
+  }),
+
+  get_all_pages_by_site: tool({
+    description:
+      "Get all pages for a site (the page tree / sitemap structure), including each page's ID and path.",
+    inputSchema: z.object({
+      siteName: z.string().describe("The name of the site"),
+    }),
+    execute: async ({ siteName }) =>
+      mcpCall("get_all_pages_by_site", { siteName }),
+  }),
+
+  get_all_languages: tool({
+    description: "Get all languages configured in the Sitecore environment.",
+    inputSchema: z.object({}),
+    execute: async () => mcpCall("get_all_languages"),
+  }),
+
+  search_site: tool({
+    description:
+      "Search for pages in a site matching a search term in titles and content.",
+    inputSchema: z.object({
+      siteName: z.string().describe("Site name"),
+      searchTerm: z.string().describe("Search query"),
+    }),
+    execute: async (args) => mcpCall("search_site", args),
   }),
 
   /* ── Page Management ──────────────────────────────────────── */
   create_page: tool({
-    description:
-      "Create a new page in a Sitecore site. Specify parent path, template, and page name.",
+    description: "Create a new page using a specified template under a parent page.",
     inputSchema: z.object({
       siteName: z.string().describe("Target site name"),
-      parentPath: z
-        .string()
-        .describe("Parent page path where the new page will be created, e.g. '/Home'"),
+      parentPath: z.string().describe("Parent page path, e.g. '/Home'"),
       pageName: z.string().describe("Name of the new page"),
-      template: z
-        .string()
-        .optional()
-        .describe("Page template to use, e.g. 'Page', 'Landing Page'"),
+      template: z.string().optional().describe("Page template, e.g. 'Page', 'Landing Page'"),
     }),
     execute: async (args) => mcpCall("create_page", args),
   }),
 
-  get_page_details: tool({
-    description:
-      "Get details of a specific page including its metadata, template, and fields.",
-    inputSchema: z.object({
-      siteName: z.string().describe("Site name"),
-      pagePath: z.string().describe("Full path to the page, e.g. '/Home/Products/Sterillium'"),
-    }),
-    execute: async (args) => mcpCall("get_page_details", args),
-  }),
-
-  get_page_content: tool({
-    description: "Get the content (components and their field values) of a page.",
+  get_page: tool({
+    description: "Get page details including ID, name, and path.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
     }),
-    execute: async (args) => mcpCall("get_page_content", args),
+    execute: async (args) => mcpCall("get_page", args),
+  }),
+
+  get_page_html: tool({
+    description: "Get the HTML content of a specific page.",
+    inputSchema: z.object({
+      siteName: z.string().describe("Site name"),
+      pagePath: z.string().describe("Full path to the page"),
+    }),
+    execute: async (args) => mcpCall("get_page_html", args),
   }),
 
   get_page_screenshot: tool({
-    description: "Take a screenshot/preview of a published page. Returns a screenshot URL.",
+    description: "Take a screenshot/preview of a published page.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
@@ -200,202 +193,220 @@ const tools = {
     execute: async (args) => mcpCall("get_page_screenshot", args),
   }),
 
-  update_page: tool({
-    description: "Update a page's metadata or field values.",
+  get_page_preview_url: tool({
+    description: "Get the URL to preview a page.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
-      fields: z
-        .record(z.string())
-        .describe("Object of field names and their new values to update"),
     }),
-    execute: async (args) => mcpCall("update_page", args),
+    execute: async (args) => mcpCall("get_page_preview_url", args),
+  }),
+
+  add_language_to_page: tool({
+    description: "Add a new language version for an existing page.",
+    inputSchema: z.object({
+      siteName: z.string().describe("Site name"),
+      pagePath: z.string().describe("Full path to the page"),
+      language: z.string().describe("Language code, e.g. 'de-DE', 'fr-FR'"),
+    }),
+    execute: async (args) => mcpCall("add_language_to_page", args),
   }),
 
   /* ── Component Management ─────────────────────────────────── */
-  add_component: tool({
-    description:
-      "Add a component to a page. Components are the building blocks of page content in Sitecore.",
+  add_component_on_page: tool({
+    description: "Add a component to a specific placeholder on a page.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
-      componentName: z
-        .string()
-        .describe("Name of the component to add, e.g. 'Rich Text', 'Hero Banner', 'Product Card'"),
-      placeholder: z
-        .string()
-        .optional()
-        .describe("Placeholder/slot to add the component to"),
-      fields: z
-        .record(z.string())
-        .optional()
-        .describe("Initial field values for the component"),
+      componentName: z.string().describe("Component name, e.g. 'Rich Text', 'Hero Banner'"),
+      placeholder: z.string().optional().describe("Placeholder/slot to add the component to"),
     }),
-    execute: async (args) => mcpCall("add_component", args),
+    execute: async (args) => mcpCall("add_component_on_page", args),
   }),
 
-  update_component_content: tool({
-    description: "Update the content/field values of an existing component on a page.",
+  get_components_on_page: tool({
+    description: "Get list of components currently on a specific page.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
-      componentId: z.string().describe("ID of the component to update"),
-      fields: z.record(z.string()).describe("Field values to update"),
     }),
-    execute: async (args) => mcpCall("update_component_content", args),
+    execute: async (args) => mcpCall("get_components_on_page", args),
+  }),
+
+  list_components: tool({
+    description: "List all components available for a specific site.",
+    inputSchema: z.object({
+      siteName: z.string().describe("Site name"),
+    }),
+    execute: async ({ siteName }) => mcpCall("list_components", { siteName }),
+  }),
+
+  get_component: tool({
+    description: "Get details of a specific component including datasource options.",
+    inputSchema: z.object({
+      componentId: z.string().describe("Component ID"),
+    }),
+    execute: async ({ componentId }) =>
+      mcpCall("get_component", { componentId }),
+  }),
+
+  remove_component_on_page: tool({
+    description: "Remove a component from a page.",
+    inputSchema: z.object({
+      siteName: z.string().describe("Site name"),
+      pagePath: z.string().describe("Full path to the page"),
+      componentId: z.string().describe("ID of the component to remove"),
+    }),
+    execute: async (args) => mcpCall("remove_component_on_page", args),
+  }),
+
+  set_component_datasource: tool({
+    description: "Set the datasource for a component on a page.",
+    inputSchema: z.object({
+      siteName: z.string().describe("Site name"),
+      pagePath: z.string().describe("Full path to the page"),
+      componentId: z.string().describe("Component ID"),
+      datasourceId: z.string().describe("Datasource item ID"),
+    }),
+    execute: async (args) => mcpCall("set_component_datasource", args),
+  }),
+
+  /* ── Content Management ───────────────────────────────────── */
+  create_content_item: tool({
+    description: "Create a new content item with specified template and field values.",
+    inputSchema: z.object({
+      parentPath: z.string().describe("Parent item path"),
+      itemName: z.string().describe("Name of the new item"),
+      templateId: z.string().describe("Template ID to use"),
+      fields: z.record(z.string()).optional().describe("Field values"),
+    }),
+    execute: async (args) => mcpCall("create_content_item", args),
+  }),
+
+  update_content: tool({
+    description: "Update an existing content item's fields and language.",
+    inputSchema: z.object({
+      itemId: z.string().describe("Item ID to update"),
+      fields: z.record(z.string()).describe("Field values to update"),
+      language: z.string().optional().describe("Language version to update"),
+    }),
+    execute: async (args) => mcpCall("update_content", args),
+  }),
+
+  get_content_item_by_path: tool({
+    description: "Get content item details by its path in the content tree.",
+    inputSchema: z.object({
+      itemPath: z.string().describe("Full path to the content item"),
+    }),
+    execute: async ({ itemPath }) =>
+      mcpCall("get_content_item_by_path", { itemPath }),
+  }),
+
+  get_content_item_by_id: tool({
+    description: "Get content item details by its ID.",
+    inputSchema: z.object({
+      itemId: z.string().describe("Item ID"),
+    }),
+    execute: async ({ itemId }) =>
+      mcpCall("get_content_item_by_id", { itemId }),
   }),
 
   /* ── Asset Management ─────────────────────────────────────── */
   search_assets: tool({
-    description:
-      "Search for digital assets (images, documents, videos) in the Sitecore media library.",
+    description: "Search for digital assets (images, documents, videos) in the media library.",
     inputSchema: z.object({
-      query: z
-        .string()
-        .describe("Search query, e.g. 'Sterillium product photo', 'wound care illustration'"),
+      query: z.string().describe("Search query, e.g. 'Sterillium product photo'"),
     }),
     execute: async ({ query }) => mcpCall("search_assets", { query }),
   }),
 
-  get_asset_details: tool({
+  get_asset_information: tool({
     description: "Get detailed metadata for a specific asset.",
     inputSchema: z.object({
       assetId: z.string().describe("The ID of the asset"),
     }),
-    execute: async ({ assetId }) => mcpCall("get_asset_details", { assetId }),
+    execute: async ({ assetId }) =>
+      mcpCall("get_asset_information", { assetId }),
+  }),
+
+  update_asset: tool({
+    description: "Update metadata and properties of an existing asset (alt text, description, tags).",
+    inputSchema: z.object({
+      assetId: z.string().describe("Asset ID"),
+      fields: z.record(z.string()).describe("Fields to update"),
+    }),
+    execute: async (args) => mcpCall("update_asset", args),
   }),
 
   /* ── Personalization ──────────────────────────────────────── */
-  list_personalization_variants: tool({
-    description:
-      "List all personalization variants configured for a page. Shows different content versions for different audiences.",
+  get_perso_ver_by_page: tool({
+    description: "Get all personalization variants defined for a specific page.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
     }),
-    execute: async (args) => mcpCall("list_personalization_variants", args),
+    execute: async (args) => mcpCall("get_perso_ver_by_page", args),
   }),
 
-  create_personalization_variant: tool({
+  create_perso_version: tool({
     description:
-      "Create a personalization variant for a page, targeting a specific audience (e.g., hospital buyers vs. pharmacy visitors).",
+      "Create a new personalization variant for a page, targeting a specific audience.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
-      variantName: z
-        .string()
-        .describe("Name for the variant, e.g. 'Hospital Visitors'"),
-      audience: z
-        .string()
-        .optional()
-        .describe("Target audience description, e.g. 'Healthcare professionals in hospitals'"),
-      condition: z.string().optional().describe("Targeting condition or rule"),
+      variantName: z.string().describe("Name for the variant"),
+      audience: z.string().optional().describe("Target audience description"),
     }),
-    execute: async (args) => mcpCall("create_personalization_variant", args),
+    execute: async (args) => mcpCall("create_perso_version", args),
   }),
 
   /* ── Brand Kits ───────────────────────────────────────────── */
-  list_brand_kits: tool({
-    description:
-      "List all brand kits. Brand kits define brand identity (colors, fonts, guidelines) for AI content generation.",
+  list_brandkits: tool({
+    description: "List all brand kits (brand identity definitions for AI content generation).",
     inputSchema: z.object({}),
-    execute: async () => mcpCall("list_brand_kits"),
+    execute: async () => mcpCall("list_brandkits"),
   }),
 
-  get_brand_kit_details: tool({
-    description:
-      "Get detailed information about a specific brand kit including colors, fonts, tone of voice, and guidelines.",
+  get_brandkit_by_id: tool({
+    description: "Get details of a specific brand kit (colors, fonts, tone, guidelines).",
     inputSchema: z.object({
-      brandKitId: z.string().describe("The ID of the brand kit"),
+      brandKitId: z.string().describe("Brand kit ID"),
     }),
-    execute: async ({ brandKitId }) => mcpCall("get_brand_kit_details", { brandKitId }),
-  }),
-
-  create_brand_kit: tool({
-    description:
-      "Create a new brand kit with brand colors, fonts, tone of voice, and guidelines.",
-    inputSchema: z.object({
-      name: z.string().describe("Name for the brand kit, e.g. 'HARTMANN Global'"),
-      description: z.string().optional().describe("Description of what this brand kit is for"),
-      colors: z
-        .array(z.string())
-        .optional()
-        .describe("Brand colors as hex values, e.g. ['#0045FF', '#001689']"),
-      fonts: z.array(z.string()).optional().describe("Font names used by the brand"),
-      toneOfVoice: z
-        .string()
-        .optional()
-        .describe("Description of the brand's tone of voice"),
-      guidelines: z.string().optional().describe("Additional brand guidelines text"),
-    }),
-    execute: async (args) => mcpCall("create_brand_kit", args),
+    execute: async ({ brandKitId }) =>
+      mcpCall("get_brandkit_by_id", { brandKitId }),
   }),
 
   /* ── Briefs ───────────────────────────────────────────────── */
-  create_brief: tool({
-    description:
-      "Create a marketing brief using AI. Generates content based on brand kit, objectives, and target audience.",
-    inputSchema: z.object({
-      title: z.string().describe("Brief title, e.g. 'Sterillium Q3 Campaign'"),
-      objective: z.string().describe("Campaign objective or goal"),
-      targetAudience: z
-        .string()
-        .describe("Target audience description, e.g. 'Hospital infection control managers'"),
-      brandKitId: z
-        .string()
-        .optional()
-        .describe("ID of the brand kit to use for style guidance"),
-      additionalContext: z
-        .string()
-        .optional()
-        .describe("Any additional context or requirements"),
-    }),
-    execute: async (args) => mcpCall("create_brief", args),
-  }),
-
-  list_briefs: tool({
-    description: "List all created marketing briefs.",
+  list_brief_types: tool({
+    description: "List all available marketing brief types.",
     inputSchema: z.object({}),
-    execute: async () => mcpCall("list_briefs"),
+    execute: async () => mcpCall("list_brief_types"),
   }),
 
-  get_brief_details: tool({
-    description: "Get the full content and details of a specific marketing brief.",
+  generate_brief: tool({
+    description: "Generate a marketing brief using AI based on objectives and audience.",
     inputSchema: z.object({
-      briefId: z.string().describe("The ID of the brief"),
+      title: z.string().describe("Brief title"),
+      objective: z.string().describe("Campaign objective"),
+      targetAudience: z.string().describe("Target audience description"),
+      brandKitId: z.string().optional().describe("Brand kit ID for style guidance"),
+      additionalContext: z.string().optional().describe("Additional context"),
     }),
-    execute: async ({ briefId }) => mcpCall("get_brief_details", { briefId }),
+    execute: async (args) => mcpCall("generate_brief", args),
   }),
 
-  /* ── Jobs ─────────────────────────────────────────────────── */
-  get_job_status: tool({
-    description:
-      "Check the status of an asynchronous job (e.g., page creation, asset upload, brief generation).",
-    inputSchema: z.object({
-      jobId: z.string().describe("The ID of the job to check"),
-    }),
-    execute: async ({ jobId }) => mcpCall("get_job_status", { jobId }),
-  }),
-
-  /* ── Homepage Content (local demo) ───────────────────────── */
+  /* ── Homepage Content (local, always works) ────────────────── */
   update_homepage_content: tool({
     description:
-      "Update content on the HARTMANN homepage. This publishes changes immediately. " +
-      "Available components: HeroBanner (headline, subheadline, tagline, ctaPrimaryLabel, ctaPrimaryHref, ctaSecondaryLabel, ctaSecondaryHref), " +
-      "TrustStrip (items array), ProductAreasGrid (sectionLabel, headline, areas array), " +
-      "MarketSegmentsGrid (sectionLabel, headline, segments array), " +
-      "CtaBanner (sectionLabel, headline, description, ctaPrimaryLabel, ctaPrimaryHref, ctaSecondaryLabel, ctaSecondaryHref), " +
-      "AboutSection (sectionLabel, headline, paragraphs array). " +
-      "Use this tool when the user asks to update, change, or modify homepage content.",
+      "Update content on the HARTMANN homepage. This always works and publishes changes immediately. " +
+      "Components: HeroBanner, TrustStrip, ProductAreasGrid, MarketSegmentsGrid, CtaBanner, AboutSection.",
     inputSchema: z.object({
       componentName: z
         .string()
-        .describe(
-          "The component to update: HeroBanner, TrustStrip, ProductAreasGrid, MarketSegmentsGrid, CtaBanner, or AboutSection"
-        ),
+        .describe("Component to update: HeroBanner, TrustStrip, ProductAreasGrid, MarketSegmentsGrid, CtaBanner, or AboutSection"),
       fields: z
         .record(z.unknown())
-        .describe("The field values to update. Only include fields you want to change."),
+        .describe("Field values to update. Only include fields you want to change."),
     }),
     execute: async ({ componentName, fields }) => {
       try {
