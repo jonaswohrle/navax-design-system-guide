@@ -131,11 +131,24 @@ function ToolCard({
 
 export function SiteListCard({ data }: { data: unknown }) {
   const parsed = tryParseContent(data)
+
+  // If the parsed result is an error object, don't render it as a site
+  if (
+    parsed &&
+    typeof parsed === "object" &&
+    !Array.isArray(parsed) &&
+    (parsed as Record<string, unknown>).error === true
+  ) {
+    return <ErrorResult data={parsed as Record<string, unknown>} />
+  }
+
   const sites = Array.isArray(parsed)
     ? parsed
     : (parsed as Record<string, unknown>)?.sites
       ? ((parsed as Record<string, unknown>).sites as unknown[])
-      : [parsed]
+      : parsed && typeof parsed === "object" && ((parsed as Record<string, unknown>).name || (parsed as Record<string, unknown>).siteName)
+        ? [parsed]
+        : []
 
   return (
     <ToolCard icon={Globe} label="Sites" count={sites.length}>
@@ -456,7 +469,7 @@ export function AssetGrid({ data }: { data: unknown }) {
   )
 }
 
-/* ── Personalization Card ────────────────────────────────────── */
+/* ── Personalization Card ──────────────────��─────────────────── */
 
 export function PersonalizationCard({ data }: { data: unknown }) {
   const parsed = tryParseContent(data)
@@ -659,7 +672,7 @@ export function BrandKitCard({ data }: { data: unknown }) {
   )
 }
 
-/* ── Brief Preview ───────────────────────────────────────────── */
+/* ── Brief Preview ─────────────────���─────────────────────────── */
 
 export function BriefPreview({ data }: { data: unknown }) {
   const parsed = tryParseContent(data) as Record<string, unknown>
