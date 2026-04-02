@@ -97,12 +97,25 @@ async function mcpCall(
 ): Promise<unknown> {
   try {
     const result = await sitecoreMCP.callTool(toolName, args)
+
+    // The Sitecore MCP returns errors as: { content: [{ type: "text", text: "ERROR: ..." }], isError: true }
+    // Convert these into a structured error object the AI and UI can understand.
+    if (result && typeof result === "object" && (result as Record<string, unknown>).isError === true) {
+      const content = (result as Record<string, unknown>).content as Array<{ type: string; text: string }> | undefined
+      const errorText = content?.[0]?.text || "Unknown Sitecore error"
+      return {
+        error: true,
+        message: errorText,
+        suggestion: "This may indicate the Sitecore XM Cloud environment is not fully configured for this automation client. Check that the client has access to the correct XM Cloud project.",
+      }
+    }
+
     return result
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     return {
       error: true,
-      message: `Failed to retrieve ${toolName}: ${msg}`,
+      message: `Failed to call ${toolName}: ${msg}`,
       suggestion:
         "The Sitecore MCP endpoint may be temporarily unavailable or the credentials may need to be checked.",
     }
