@@ -10,36 +10,32 @@
 
 @layer base {
   :root {
-    /* ── Explore Brand: Crimson Red #C8102E + Warm White + Dark Navy ── */
+    /* ── HARTMANN Brand: Navy #001689 + Blue #0045FF + Clean White ── */
     --background: 0 0% 100%;
-    --foreground: 210 11% 15%;
+    --foreground: 220 20% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 210 11% 15%;
+    --card-foreground: 220 20% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 11% 15%;
+    --popover-foreground: 220 20% 12%;
 
-    /* Primary: Explore crimson red #C8102E */
-    --primary: 350 85% 42%;
+    /* Primary: HARTMANN Blue #0045FF */
+    --primary: 224 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Light warm gray for section backgrounds */
-    --secondary: 30 14% 96%;
-    --secondary-foreground: 210 11% 15%;
+    /* Secondary: Light cool gray for section backgrounds */
+    --secondary: 220 20% 97%;
+    --secondary-foreground: 220 20% 12%;
 
     /* Muted: Neutral grays */
-    --muted: 220 9% 94%;
+    --muted: 220 14% 94%;
     --muted-foreground: 220 9% 46%;
 
-    /* Accent: Teal/green for secondary CTAs */
-    --accent: 173 58% 39%;
+    /* Accent: HARTMANN Navy #001689 */
+    --accent: 228 100% 27%;
     --accent-foreground: 0 0% 100%;
 
-    /* Explore Yellow -- used for CTAs, highlights, promo banners */
-    --explore-yellow: 45 100% 51%;
-    --explore-yellow-foreground: 210 11% 15%;
-
-    /* Hover: Darker crimson */
-    --hover: 350 85% 35%;
+    /* Hover: Darker blue */
+    --hover: 224 100% 40%;
     --hover-foreground: 0 0% 100%;
 
     /* Destructive */
@@ -55,20 +51,20 @@
     --warning-foreground: 0 0% 100%;
 
     /* Info */
-    --info: 213 65% 30%;
+    --info: 228 100% 27%;
     --info-foreground: 0 0% 100%;
 
     /* Borders & inputs */
     --border: 220 13% 87%;
     --input: 220 13% 87%;
-    --ring: 350 85% 42%;
+    --ring: 224 100% 50%;
 
     /* Charts */
-    --chart-1: 350 85% 42%;
-    --chart-2: 173 58% 39%;
+    --chart-1: 224 100% 50%;
+    --chart-2: 228 100% 27%;
     --chart-3: 220 9% 46%;
-    --chart-4: 30 50% 75%;
-    --chart-5: 350 40% 85%;
+    --chart-4: 200 60% 65%;
+    --chart-5: 224 40% 80%;
 
     --radius: 0.5rem;
 

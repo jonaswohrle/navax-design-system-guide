@@ -5,6 +5,7 @@ import {
   MessageSquare,
   ImagePlus,
   GitBranch,
+  Globe,
   ArrowRight,
   Code2,
   Cpu,
@@ -122,7 +123,25 @@ export default function AIShowcasesPage() {
           ))}
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <DemoCard
+            title="Sitecore Content Studio"
+            description="AI-powered content management for HARTMANN. Create pages, manage assets, and personalize experiences for wound care, hygiene, and incontinence products -- all via natural language and 48 MCP tools."
+            href="/vercel/sitecore/chat"
+            icon={Globe}
+            concepts={["MCP Tools", "Agent Loop", "Sitecore", "HARTMANN"]}
+            sdkPattern={`streamText({\n  model: "openai/gpt-5.2",\n  tools: { /* 20 Sitecore MCP tools */ },\n  stopWhen: stepCountIs(8)\n})`}
+          />
+          <DemoCard
+            title="Content Pipeline"
+            description="Multi-model agent: Gemini researches HARTMANN products, GPT-5.2 drafts medical content, Gemini generates a hero image -- all streaming into a live blog post."
+            href="/vercel/content-pipeline"
+            icon={GitBranch}
+            concepts={["Multi-Model", "Parallel AI", "SSE Streaming", "Pipeline"]}
+            sdkPattern={`// 3 models in parallel\nawait Promise.allSettled([\n  generateText({ model: "openai/..." }),\n  generateText({ model: "google/..." })\n])`}
+          />
+        </div>
+        <div className="grid gap-8 lg:grid-cols-2">
           <DemoCard
             title="Prompt Coach"
             description="Get AI feedback on your prompts. See quality scores, detailed analysis, and rewritten versions in real-time."
@@ -138,14 +157,6 @@ export default function AIShowcasesPage() {
             icon={ImagePlus}
             concepts={["Multimodal Input", "Image Generation", "File Upload", "Base64"]}
             sdkPattern={`generateText({\n  model: "google/gemini-3-pro-image",\n  providerOptions: { google: {\n    responseModalities: ["TEXT","IMAGE"]\n  }}\n})`}
-          />
-          <DemoCard
-            title="Content Pipeline"
-            description="Multi-model agent: Gemini researches the web, GPT-5.2 drafts, Gemini generates a hero image -- all streaming into a live blog."
-            href="/vercel/content-pipeline"
-            icon={GitBranch}
-            concepts={["Multi-Model", "Parallel AI", "SSE Streaming", "Pipeline"]}
-            sdkPattern={`// 3 models in parallel\nawait Promise.allSettled([\n  generateText({ model: "openai/..." }),\n  generateText({ model: "google/..." })\n])`}
           />
         </div>
 

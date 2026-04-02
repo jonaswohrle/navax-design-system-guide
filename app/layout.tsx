@@ -28,8 +28,8 @@ const playfair = Playfair_Display({
 const geistMono = GeistMono
 
 export const metadata: Metadata = {
-  title: 'Book Adventure Travel & Small Group Tours | Explore',
-  description: 'Explore offers small group adventure holidays to over 100 countries worldwide. Award-winning tours with expert leaders. Book your next adventure today.',
+  title: 'HARTMANN | Hilft. Pflegt. Sch\u00fctzt. -- Sitecore AI Showcase',
+  description: 'PAUL HARTMANN AG -- Innovative Medizin- und Pflegeprodukte. Entdecken Sie unsere Sitecore AI-gest\u00fctzten Content-Management-L\u00f6sungen.',
 }
 
 export default function RootLayout({
