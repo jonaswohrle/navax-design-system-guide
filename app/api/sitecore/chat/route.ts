@@ -417,7 +417,15 @@ const tools = {
 }
 
 export async function POST(req: Request) {
-  const { messages } = await req.json()
+  const body = await req.json().catch(() => ({}))
+  const messages = body?.messages
+
+  if (!messages || !Array.isArray(messages) || messages.length === 0) {
+    return new Response(
+      JSON.stringify({ error: "messages array is required" }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
+    )
+  }
 
   const result = streamText({
     model: "openai/gpt-5.2",

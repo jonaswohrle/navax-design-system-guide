@@ -3,8 +3,6 @@ import Image from "next/image"
 import { ArrowRight, Shield, Heart, Microscope, Building2, Users, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { HartmannHeader } from "@/components/hartmann/site-header"
-// Footer inlined to avoid persistent Turbopack resolution cache bug
-// Original source: components/hartmann/site-footer.tsx
 import {
   getHomepageContent,
   type HeroBanner,
@@ -260,7 +258,7 @@ function AboutSectionComponent({ fields }: { fields: AboutSection["fields"] }) {
   )
 }
 
-/* ── Inline Footer ───────────────────────────────────────────── */
+/* ── Footer ──────────────────────────────────────────────────── */
 
 const FOOTER_COLS = [
   {
@@ -342,7 +340,6 @@ function HartmannFooter() {
 export default function Page() {
   const page = getHomepageContent()
 
-  // Extract typed components from the Sitecore page data
   const hero = page.components.find((c) => c.componentName === "HeroBanner") as HeroBanner | undefined
   const trust = page.components.find((c) => c.componentName === "TrustStrip") as TrustStrip | undefined
   const products = page.components.find((c) => c.componentName === "ProductAreasGrid") as ProductAreasGrid | undefined
