@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+/* HARTMANN site footer -- product/industry/company/service columns */
 const FOOTER_COLS = [
   {
     title: "Produkte",

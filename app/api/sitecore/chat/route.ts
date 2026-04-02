@@ -16,7 +16,7 @@ You help HARTMANN's marketing and content teams manage their digital presence us
 ## HARTMANN Context
 
 **Brand Identity:**
-- Tagline: "Hilft. Pflegt. Schützt." (Helps. Cares. Protects.)
+- Tagline: "Hilft. Pflegt. Sch\u00fctzt." (Helps. Cares. Protects.)
 - Brand Colors: Bright Blue #0045FF (primary), Dark Blue #001689 (secondary), White #FFFFFF
 - Logo: HARTMANN wordmark in Dark Blue
 - Tone of Voice: Professional, trustworthy, caring, scientifically grounded. Always respond in English unless the user writes in another language.
@@ -88,28 +88,31 @@ When users ask to change homepage content, use update_homepage_content. Changes 
 - Format responses with clear markdown: use ## headings, **bold** for emphasis, and bullet lists for structured information`
 
 /**
- * Safe wrapper for MCP tool calls -- catches errors and returns
- * a structured error object instead of throwing.
+ * Wraps sitecoreMCP.callTool with error handling.
+ * This is a plain function (NOT recursive) that calls the MCP client.
  */
-async function safeCall(
-  name: string,
+async function mcpCall(
+  toolName: string,
   args: Record<string, unknown> = {}
 ): Promise<unknown> {
   try {
-    return await sitecoreMCP.callTool(name, args)
-  } catch (e) {
+    const result = await sitecoreMCP.callTool(toolName, args)
+    return result
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
     return {
       error: true,
-      message: `Tool "${name}" failed: ${(e as Error).message}`,
+      message: `Failed to retrieve ${toolName}: ${msg}`,
       suggestion:
-        "The Sitecore MCP endpoint may be temporarily unavailable. Try again in a moment.",
+        "The Sitecore MCP endpoint may be temporarily unavailable or the credentials may need to be checked.",
     }
   }
 }
 
 /**
- * Define AI SDK tools that proxy to Sitecore MCP tool calls.
- * Each tool's execute() delegates to the MCP client via safeCall().
+ * AI SDK tools that proxy to Sitecore MCP.
+ * Every execute() calls mcpCall() which delegates to sitecoreMCP.callTool().
+ * There is NO recursion possible -- mcpCall calls sitecoreMCP, not itself.
  */
 const tools = {
   /* ── Site Management ──────────────────────────────────────── */
@@ -117,7 +120,7 @@ const tools = {
     description:
       "List all available Sitecore sites. Returns site names, IDs, and languages. Always call this first before any page or site operations.",
     inputSchema: z.object({}),
-    execute: async () => safeCall("list_sites"),
+    execute: async () => mcpCall("list_sites"),
   }),
 
   get_site_details: tool({
@@ -126,8 +129,7 @@ const tools = {
     inputSchema: z.object({
       siteName: z.string().describe("The name of the site to get details for"),
     }),
-    execute: async ({ siteName }) =>
-      safeCall("get_site_details", { siteName }),
+    execute: async ({ siteName }) => mcpCall("get_site_details", { siteName }),
   }),
 
   get_page_tree: tool({
@@ -136,8 +138,7 @@ const tools = {
     inputSchema: z.object({
       siteName: z.string().describe("The name of the site"),
     }),
-    execute: async ({ siteName }) =>
-      safeCall("get_page_tree", { siteName }),
+    execute: async ({ siteName }) => mcpCall("get_page_tree", { siteName }),
   }),
 
   /* ── Page Management ──────────────────────────────────────── */
@@ -148,18 +149,14 @@ const tools = {
       siteName: z.string().describe("Target site name"),
       parentPath: z
         .string()
-        .describe(
-          "Parent page path where the new page will be created, e.g. '/Home'"
-        ),
+        .describe("Parent page path where the new page will be created, e.g. '/Home'"),
       pageName: z.string().describe("Name of the new page"),
       template: z
         .string()
         .optional()
-        .describe(
-          "Page template to use, e.g. 'Page', 'Landing Page'"
-        ),
+        .describe("Page template to use, e.g. 'Page', 'Landing Page'"),
     }),
-    execute: async (args) => safeCall("create_page", args),
+    execute: async (args) => mcpCall("create_page", args),
   }),
 
   get_page_details: tool({
@@ -169,46 +166,37 @@ const tools = {
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page, e.g. '/Home/Products/Sterillium'"),
     }),
-    execute: async (args) =>
-      safeCall("get_page_details", args),
+    execute: async (args) => mcpCall("get_page_details", args),
   }),
 
   get_page_content: tool({
-    description:
-      "Get the content (components and their field values) of a page.",
+    description: "Get the content (components and their field values) of a page.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
     }),
-    execute: async (args) =>
-      safeCall("get_page_content", args),
+    execute: async (args) => mcpCall("get_page_content", args),
   }),
 
   get_page_screenshot: tool({
-    description:
-      "Take a screenshot/preview of a published page. Returns a screenshot URL.",
+    description: "Take a screenshot/preview of a published page. Returns a screenshot URL.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
     }),
-    execute: async (args) =>
-      safeCall("get_page_screenshot", args),
+    execute: async (args) => mcpCall("get_page_screenshot", args),
   }),
 
   update_page: tool({
-    description:
-      "Update a page's metadata or field values.",
+    description: "Update a page's metadata or field values.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
       fields: z
         .record(z.string())
-        .describe(
-          "Object of field names and their new values to update"
-        ),
+        .describe("Object of field names and their new values to update"),
     }),
-    execute: async (args) =>
-      safeCall("update_page", args),
+    execute: async (args) => mcpCall("update_page", args),
   }),
 
   /* ── Component Management ─────────────────────────────────── */
@@ -230,25 +218,18 @@ const tools = {
         .optional()
         .describe("Initial field values for the component"),
     }),
-    execute: async (args) =>
-      safeCall("add_component", args),
+    execute: async (args) => mcpCall("add_component", args),
   }),
 
   update_component_content: tool({
-    description:
-      "Update the content/field values of an existing component on a page.",
+    description: "Update the content/field values of an existing component on a page.",
     inputSchema: z.object({
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
-      componentId: z
-        .string()
-        .describe("ID of the component to update"),
-      fields: z
-        .record(z.string())
-        .describe("Field values to update"),
+      componentId: z.string().describe("ID of the component to update"),
+      fields: z.record(z.string()).describe("Field values to update"),
     }),
-    execute: async (args) =>
-      safeCall("update_component_content", args),
+    execute: async (args) => mcpCall("update_component_content", args),
   }),
 
   /* ── Asset Management ─────────────────────────────────────── */
@@ -258,22 +239,17 @@ const tools = {
     inputSchema: z.object({
       query: z
         .string()
-        .describe(
-          "Search query, e.g. 'Sterillium product photo', 'wound care illustration'"
-        ),
+        .describe("Search query, e.g. 'Sterillium product photo', 'wound care illustration'"),
     }),
-    execute: async ({ query }) =>
-      safeCall("search_assets", { query }),
+    execute: async ({ query }) => mcpCall("search_assets", { query }),
   }),
 
   get_asset_details: tool({
-    description:
-      "Get detailed metadata for a specific asset.",
+    description: "Get detailed metadata for a specific asset.",
     inputSchema: z.object({
       assetId: z.string().describe("The ID of the asset"),
     }),
-    execute: async ({ assetId }) =>
-      safeCall("get_asset_details", { assetId }),
+    execute: async ({ assetId }) => mcpCall("get_asset_details", { assetId }),
   }),
 
   /* ── Personalization ──────────────────────────────────────── */
@@ -284,8 +260,7 @@ const tools = {
       siteName: z.string().describe("Site name"),
       pagePath: z.string().describe("Full path to the page"),
     }),
-    execute: async (args) =>
-      safeCall("list_personalization_variants", args),
+    execute: async (args) => mcpCall("list_personalization_variants", args),
   }),
 
   create_personalization_variant: tool({
@@ -300,16 +275,10 @@ const tools = {
       audience: z
         .string()
         .optional()
-        .describe(
-          "Target audience description, e.g. 'Healthcare professionals in hospitals'"
-        ),
-      condition: z
-        .string()
-        .optional()
-        .describe("Targeting condition or rule"),
+        .describe("Target audience description, e.g. 'Healthcare professionals in hospitals'"),
+      condition: z.string().optional().describe("Targeting condition or rule"),
     }),
-    execute: async (args) =>
-      safeCall("create_personalization_variant", args),
+    execute: async (args) => mcpCall("create_personalization_variant", args),
   }),
 
   /* ── Brand Kits ───────────────────────────────────────────── */
@@ -317,8 +286,7 @@ const tools = {
     description:
       "List all brand kits. Brand kits define brand identity (colors, fonts, guidelines) for AI content generation.",
     inputSchema: z.object({}),
-    execute: async () =>
-      safeCall("list_brand_kits", {}),
+    execute: async () => mcpCall("list_brand_kits"),
   }),
 
   get_brand_kit_details: tool({
@@ -327,8 +295,7 @@ const tools = {
     inputSchema: z.object({
       brandKitId: z.string().describe("The ID of the brand kit"),
     }),
-    execute: async ({ brandKitId }) =>
-      safeCall("get_brand_kit_details", { brandKitId }),
+    execute: async ({ brandKitId }) => mcpCall("get_brand_kit_details", { brandKitId }),
   }),
 
   create_brand_kit: tool({
@@ -336,31 +303,19 @@ const tools = {
       "Create a new brand kit with brand colors, fonts, tone of voice, and guidelines.",
     inputSchema: z.object({
       name: z.string().describe("Name for the brand kit, e.g. 'HARTMANN Global'"),
-      description: z
-        .string()
-        .optional()
-        .describe("Description of what this brand kit is for"),
+      description: z.string().optional().describe("Description of what this brand kit is for"),
       colors: z
         .array(z.string())
         .optional()
         .describe("Brand colors as hex values, e.g. ['#0045FF', '#001689']"),
-      fonts: z
-        .array(z.string())
-        .optional()
-        .describe("Font names used by the brand"),
+      fonts: z.array(z.string()).optional().describe("Font names used by the brand"),
       toneOfVoice: z
         .string()
         .optional()
-        .describe(
-          "Description of the brand's tone of voice"
-        ),
-      guidelines: z
-        .string()
-        .optional()
-        .describe("Additional brand guidelines text"),
+        .describe("Description of the brand's tone of voice"),
+      guidelines: z.string().optional().describe("Additional brand guidelines text"),
     }),
-    execute: async (args) =>
-      safeCall("create_brand_kit", args),
+    execute: async (args) => mcpCall("create_brand_kit", args),
   }),
 
   /* ── Briefs ───────────────────────────────────────────────── */
@@ -368,17 +323,11 @@ const tools = {
     description:
       "Create a marketing brief using AI. Generates content based on brand kit, objectives, and target audience.",
     inputSchema: z.object({
-      title: z
-        .string()
-        .describe("Brief title, e.g. 'Sterillium Q3 Campaign'"),
-      objective: z
-        .string()
-        .describe("Campaign objective or goal"),
+      title: z.string().describe("Brief title, e.g. 'Sterillium Q3 Campaign'"),
+      objective: z.string().describe("Campaign objective or goal"),
       targetAudience: z
         .string()
-        .describe(
-          "Target audience description, e.g. 'Hospital infection control managers'"
-        ),
+        .describe("Target audience description, e.g. 'Hospital infection control managers'"),
       brandKitId: z
         .string()
         .optional()
@@ -388,24 +337,21 @@ const tools = {
         .optional()
         .describe("Any additional context or requirements"),
     }),
-    execute: async (args) =>
-      safeCall("create_brief", args),
+    execute: async (args) => mcpCall("create_brief", args),
   }),
 
   list_briefs: tool({
     description: "List all created marketing briefs.",
     inputSchema: z.object({}),
-    execute: async () => safeCall("list_briefs", {}),
+    execute: async () => mcpCall("list_briefs"),
   }),
 
   get_brief_details: tool({
-    description:
-      "Get the full content and details of a specific marketing brief.",
+    description: "Get the full content and details of a specific marketing brief.",
     inputSchema: z.object({
       briefId: z.string().describe("The ID of the brief"),
     }),
-    execute: async ({ briefId }) =>
-      safeCall("get_brief_details", { briefId }),
+    execute: async ({ briefId }) => mcpCall("get_brief_details", { briefId }),
   }),
 
   /* ── Jobs ─────────────────────────────────────────────────── */
@@ -415,8 +361,7 @@ const tools = {
     inputSchema: z.object({
       jobId: z.string().describe("The ID of the job to check"),
     }),
-    execute: async ({ jobId }) =>
-      safeCall("get_job_status", { jobId }),
+    execute: async ({ jobId }) => mcpCall("get_job_status", { jobId }),
   }),
 
   /* ── Homepage Content (local demo) ───────────────────────── */
@@ -441,20 +386,18 @@ const tools = {
     }),
     execute: async ({ componentName, fields }) => {
       try {
-        const res = await fetch(
-          `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/api/sitecore/content`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ componentName, fields }),
-          }
-        )
+        const baseUrl = process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : "http://localhost:3000"
+        const res = await fetch(`${baseUrl}/api/sitecore/content`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ componentName, fields }),
+        })
         return await res.json()
-      } catch (e) {
-        return {
-          error: true,
-          message: `Failed to update homepage: ${(e as Error).message}`,
-        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err)
+        return { error: true, message: `Failed to update homepage: ${msg}` }
       }
     },
   }),
