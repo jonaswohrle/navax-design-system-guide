@@ -3,6 +3,11 @@
  *
  * Connects to the Sitecore Marketer MCP server via Streamable HTTP transport.
  * Uses Client Credentials (automation client) for authentication -- no browser OAuth needed.
+ *
+ * IMPORTANT: The Sitecore MCP endpoint may respond with either:
+ *   - application/json  (direct JSON-RPC response)
+ *   - text/event-stream (SSE with JSON-RPC payload in a "data:" line)
+ * This client handles both transparently.
  */
 
 const MCP_ENDPOINT =
@@ -65,6 +70,59 @@ function jsonrpc(method: string, params?: Record<string, unknown>) {
   }
 }
 
+/**
+ * Parse a response that may be either JSON or SSE (text/event-stream).
+ * SSE responses contain one or more "data: {json}" lines; we extract the
+ * last JSON-RPC result from them.
+ */
+async function parseResponse(res: Response): Promise<Record<string, unknown>> {
+  const contentType = res.headers.get("content-type") || ""
+
+  // Direct JSON response
+  if (contentType.includes("application/json")) {
+    return res.json()
+  }
+
+  // SSE / text/event-stream response -- read as text and extract JSON from data: lines
+  const text = await res.text()
+
+  // Try parsing the whole body as JSON first (some endpoints return JSON with wrong content-type)
+  try {
+    return JSON.parse(text)
+  } catch {
+    // Not direct JSON, continue to SSE parsing
+  }
+
+  // Extract "data:" lines from SSE
+  const lines = text.split("\n")
+  let lastData: Record<string, unknown> | null = null
+
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (trimmed.startsWith("data:")) {
+      const jsonStr = trimmed.slice(5).trim()
+      if (jsonStr && jsonStr !== "[DONE]") {
+        try {
+          lastData = JSON.parse(jsonStr)
+        } catch {
+          // Skip unparseable data lines
+        }
+      }
+    }
+  }
+
+  if (lastData) {
+    return lastData
+  }
+
+  // Last resort: return the raw text wrapped in a result
+  return {
+    result: {
+      content: [{ type: "text", text }],
+    },
+  }
+}
+
 /* ── MCP Client ──────────────────────────────────────────────── */
 
 export interface MCPToolInfo {
@@ -77,6 +135,15 @@ export class SitecoreMCPClient {
   private sessionId: string | null = null
   private tools: MCPToolInfo[] = []
   private initPromise: Promise<void> | null = null
+
+  private headers(token: string): Record<string, string> {
+    return {
+      "Content-Type": "application/json",
+      Accept: "application/json, text/event-stream",
+      Authorization: `Bearer ${token}`,
+      ...(this.sessionId ? { "Mcp-Session-Id": this.sessionId } : {}),
+    }
+  }
 
   /** Ensure client is initialized (idempotent) */
   async ensureInitialized(): Promise<void> {
@@ -96,11 +163,7 @@ export class SitecoreMCPClient {
     // Step 1: Initialize
     const initRes = await fetch(MCP_ENDPOINT, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json, text/event-stream",
-        Authorization: `Bearer ${token}`,
-      },
+      headers: this.headers(token),
       body: JSON.stringify(
         jsonrpc("initialize", {
           protocolVersion: "2025-03-26",
@@ -115,19 +178,18 @@ export class SitecoreMCPClient {
       throw new Error(`MCP initialize failed ${initRes.status}: ${text}`)
     }
 
+    // Extract session ID from either header casing
     this.sessionId =
       initRes.headers.get("mcp-session-id") ||
       initRes.headers.get("Mcp-Session-Id")
 
-    // Step 2: Send initialized notification
+    // Parse the init response (may be SSE)
+    await parseResponse(initRes)
+
+    // Step 2: Send initialized notification (fire-and-forget)
     await fetch(MCP_ENDPOINT, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json, text/event-stream",
-        Authorization: `Bearer ${token}`,
-        ...(this.sessionId ? { "Mcp-Session-Id": this.sessionId } : {}),
-      },
+      headers: this.headers(token),
       body: JSON.stringify({
         jsonrpc: "2.0",
         method: "notifications/initialized",
@@ -137,12 +199,7 @@ export class SitecoreMCPClient {
     // Step 3: List tools
     const toolsRes = await fetch(MCP_ENDPOINT, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json, text/event-stream",
-        Authorization: `Bearer ${token}`,
-        ...(this.sessionId ? { "Mcp-Session-Id": this.sessionId } : {}),
-      },
+      headers: this.headers(token),
       body: JSON.stringify(jsonrpc("tools/list")),
     })
 
@@ -151,8 +208,10 @@ export class SitecoreMCPClient {
       throw new Error(`MCP tools/list failed ${toolsRes.status}: ${text}`)
     }
 
-    const toolsData = await toolsRes.json()
-    this.tools = toolsData.result?.tools ?? []
+    const toolsData = await parseResponse(toolsRes)
+    this.tools =
+      (toolsData.result as Record<string, unknown>)?.tools as MCPToolInfo[] ??
+      []
   }
 
   /** Get list of available tools */
@@ -169,17 +228,14 @@ export class SitecoreMCPClient {
     await this.ensureInitialized()
 
     const token = await getSitecoreToken()
+    const body = JSON.stringify(
+      jsonrpc("tools/call", { name, arguments: args })
+    )
+
     const res = await fetch(MCP_ENDPOINT, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json, text/event-stream",
-        Authorization: `Bearer ${token}`,
-        ...(this.sessionId ? { "Mcp-Session-Id": this.sessionId } : {}),
-      },
-      body: JSON.stringify(
-        jsonrpc("tools/call", { name, arguments: args })
-      ),
+      headers: this.headers(token),
+      body,
     })
 
     if (!res.ok) {
@@ -192,31 +248,26 @@ export class SitecoreMCPClient {
         const retryToken = await getSitecoreToken()
         const retryRes = await fetch(MCP_ENDPOINT, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json, text/event-stream",
-            Authorization: `Bearer ${retryToken}`,
-            ...(this.sessionId
-              ? { "Mcp-Session-Id": this.sessionId }
-              : {}),
-          },
-          body: JSON.stringify(
-            jsonrpc("tools/call", { name, arguments: args })
-          ),
+          headers: this.headers(retryToken),
+          body,
         })
 
         if (!retryRes.ok) {
           const text = await retryRes.text()
-          throw new Error(
-            `MCP tool call retry failed ${retryRes.status}: ${text}`
-          )
+          return {
+            error: true,
+            message: `MCP tool call failed after retry (${retryRes.status})`,
+            details: text.slice(0, 500),
+          }
         }
 
-        const retryData = await retryRes.json()
+        const retryData = await parseResponse(retryRes)
         if (retryData.error) {
           return {
             error: true,
-            message: retryData.error.message || "MCP tool error",
+            message:
+              (retryData.error as Record<string, unknown>)?.message ||
+              "MCP tool error",
             details: retryData.error,
           }
         }
@@ -224,14 +275,19 @@ export class SitecoreMCPClient {
       }
 
       const text = await res.text()
-      throw new Error(`MCP tool call failed ${res.status}: ${text}`)
+      return {
+        error: true,
+        message: `MCP tool call failed (${res.status})`,
+        details: text.slice(0, 500),
+      }
     }
 
-    const data = await res.json()
+    const data = await parseResponse(res)
     if (data.error) {
       return {
         error: true,
-        message: data.error.message || "MCP tool error",
+        message:
+          (data.error as Record<string, unknown>)?.message || "MCP tool error",
         details: data.error,
       }
     }

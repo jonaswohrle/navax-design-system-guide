@@ -7,5 +7,6 @@ __v0_jsx-dev-runtime.ts
 node_modules/
 .next/
 .vercel/
+.vercel
 .env*.local
 .DS_Store

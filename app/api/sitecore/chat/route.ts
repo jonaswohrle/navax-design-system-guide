@@ -17,30 +17,51 @@ You help HARTMANN's marketing and content teams manage their digital presence us
 
 **Brand Identity:**
 - Tagline: "Hilft. Pflegt. Schützt." (Helps. Cares. Protects.)
-- Brand Colors: Bright Blue #0045FF (primary), Dark Blue #001689 (secondary)
+- Brand Colors: Bright Blue #0045FF (primary), Dark Blue #001689 (secondary), White #FFFFFF
 - Logo: HARTMANN wordmark in Dark Blue
+- Tone of Voice: Professional, trustworthy, caring, scientifically grounded. Write in German for the DACH market unless asked otherwise.
 
 **Key Product Lines:**
-- Sterillium -- hand disinfection (market leader)
-- MoliCare -- incontinence care products
-- HydroClean -- wound care / wound dressings
-- Foliodress -- surgical gowns and OR supplies
-- Bacillol -- surface disinfection
-- Peha-soft -- examination gloves
+- Sterillium -- hand disinfection (market leader in Europe, used in 90%+ of German hospitals)
+- MoliCare -- incontinence care products (pads, pants, skin care, bed protection)
+- HydroClean -- wound care / wound dressings (active wound cleansing)
+- Hydrosorb -- transparent hydrogel wound dressing
+- TenderWet -- superabsorber wound pad for deep wounds
+- Foliodress -- surgical gowns, drapes, and OR supplies
+- Bacillol -- surface disinfection (wipes and liquids)
+- Peha-soft -- examination and protective gloves
+- Zetuvit -- absorbent wound pads
+- Cosmopor -- self-adhesive wound dressings for post-op care
 
 **Market Segments:**
-- Kliniken (Hospitals)
-- Pflegeheime (Care Homes / Nursing Homes)
-- Arztpraxen (Medical Practices)
-- Apotheken (Pharmacies)
-- Rettungsdienste (Emergency Services)
-- Privatanwender (Private Consumers)
+- Kliniken (Hospitals) -- largest segment, focus on infection prevention, wound care, OR supplies
+- Pflegeheime (Care Homes / Nursing Homes) -- incontinence management, skin care, wound prevention
+- Arztpraxen (Medical Practices) -- wound care, disinfection, examination supplies
+- Apotheken (Pharmacies) -- consumer-facing products, Sterillium consumer range
+- Rettungsdienste (Emergency Services) -- first aid, wound care supplies
+- Privatanwender (Private Consumers) -- OTC products via pharmacies and online
 
 **Competence Areas:**
-- Wundversorgung (Wound Care)
-- Inkontinenzmanagement (Incontinence Management)
-- Infektionsmanagement (Infection Prevention / Disinfection)
-- OP-Bedarf (Surgical Supplies)
+- Wundversorgung (Wound Care) -- HydroClean, Hydrosorb, TenderWet, Zetuvit, Cosmopor
+- Inkontinenzmanagement (Incontinence Management) -- MoliCare product range
+- Infektionsmanagement (Infection Prevention / Disinfection) -- Sterillium, Bacillol
+- OP-Versorgung (Surgical Supplies) -- Foliodress, Peha-soft
+
+## Sitecore Environment Information
+
+When users ask about sites or pages, you have access to the Sitecore XM Cloud environment. Key details:
+- **Sites** may be named like "HARTMANN", "hartmann.info", "hartmann-direct", etc. Always use list_sites first to discover the exact site names before making page operations.
+- **Page Templates** available typically include: Page, Landing Page, Product Page, Category Page, Article, Blog Post
+- **Common Components**: Rich Text, Hero Banner, Product Card, Image Gallery, CTA Block, Accordion, Tab Panel, Form, Video Player
+- **Page Paths** follow the pattern: /Home, /Home/Products, /Home/Products/Sterillium, etc.
+
+## Tool Usage Guidelines
+
+- **Always call list_sites first** when a user mentions sites, to discover the actual site names in the environment.
+- When a tool returns an error object (with "error": true), explain the issue clearly and suggest alternatives.
+- If a tool result contains a "content" array with "text" type items, parse the text content for the user.
+- Some tools return results wrapped in MCP format: { content: [{ type: "text", text: "..." }] }. Unwrap and summarize the actual data for the user.
+- For create operations, always confirm what was created and suggest logical next steps (e.g., after creating a page, suggest adding components).
 
 ## Behavior Guidelines
 
@@ -50,20 +71,41 @@ You help HARTMANN's marketing and content teams manage their digital presence us
 - Apply HARTMANN brand guidelines when discussing design or content
 - Be concise -- let the rich tool results do the heavy lifting
 - When a tool returns data, provide a brief helpful summary alongside it
-- If a tool returns an error, explain what happened and suggest next steps
-- Always use the appropriate tool when available -- never describe actions you could perform with a tool call`
+- If a tool call fails or returns unexpected data, explain what happened in simple terms and suggest what to try next
+- Always use the appropriate tool when available -- never describe actions you could perform with a tool call
+- Format responses with clear markdown: use ## headings, **bold** for emphasis, and bullet lists for structured information`
+
+/**
+ * Safe wrapper for MCP tool calls -- catches errors and returns
+ * a structured error object instead of throwing.
+ */
+async function safeCall(
+  name: string,
+  args: Record<string, unknown> = {}
+): Promise<unknown> {
+  try {
+    return await safeCall(name, args)
+  } catch (e) {
+    return {
+      error: true,
+      message: `Tool "${name}" failed: ${(e as Error).message}`,
+      suggestion:
+        "The Sitecore MCP endpoint may be temporarily unavailable. Try again in a moment.",
+    }
+  }
+}
 
 /**
  * Define AI SDK tools that proxy to Sitecore MCP tool calls.
- * Each tool's execute() delegates to the MCP client.
+ * Each tool's execute() delegates to the MCP client via safeCall().
  */
 const tools = {
   /* ── Site Management ──────────────────────────────────────── */
   list_sites: tool({
     description:
-      "List all available Sitecore sites. Returns site names, IDs, and languages.",
+      "List all available Sitecore sites. Returns site names, IDs, and languages. Always call this first before any page or site operations.",
     inputSchema: z.object({}),
-    execute: async () => sitecoreMCP.callTool("list_sites", {}),
+    execute: async () => safeCall("list_sites"),
   }),
 
   get_site_details: tool({
@@ -73,7 +115,7 @@ const tools = {
       siteName: z.string().describe("The name of the site to get details for"),
     }),
     execute: async ({ siteName }) =>
-      sitecoreMCP.callTool("get_site_details", { siteName }),
+      safeCall("get_site_details", { siteName }),
   }),
 
   get_page_tree: tool({
@@ -83,7 +125,7 @@ const tools = {
       siteName: z.string().describe("The name of the site"),
     }),
     execute: async ({ siteName }) =>
-      sitecoreMCP.callTool("get_page_tree", { siteName }),
+      safeCall("get_page_tree", { siteName }),
   }),
 
   /* ── Page Management ──────────────────────────────────────── */
@@ -105,7 +147,7 @@ const tools = {
           "Page template to use, e.g. 'Page', 'Landing Page'"
         ),
     }),
-    execute: async (args) => sitecoreMCP.callTool("create_page", args),
+    execute: async (args) => safeCall("create_page", args),
   }),
 
   get_page_details: tool({
@@ -116,7 +158,7 @@ const tools = {
       pagePath: z.string().describe("Full path to the page, e.g. '/Home/Products/Sterillium'"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("get_page_details", args),
+      safeCall("get_page_details", args),
   }),
 
   get_page_content: tool({
@@ -127,7 +169,7 @@ const tools = {
       pagePath: z.string().describe("Full path to the page"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("get_page_content", args),
+      safeCall("get_page_content", args),
   }),
 
   get_page_screenshot: tool({
@@ -138,7 +180,7 @@ const tools = {
       pagePath: z.string().describe("Full path to the page"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("get_page_screenshot", args),
+      safeCall("get_page_screenshot", args),
   }),
 
   update_page: tool({
@@ -154,7 +196,7 @@ const tools = {
         ),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("update_page", args),
+      safeCall("update_page", args),
   }),
 
   /* ── Component Management ─────────────────────────────────── */
@@ -177,7 +219,7 @@ const tools = {
         .describe("Initial field values for the component"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("add_component", args),
+      safeCall("add_component", args),
   }),
 
   update_component_content: tool({
@@ -194,7 +236,7 @@ const tools = {
         .describe("Field values to update"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("update_component_content", args),
+      safeCall("update_component_content", args),
   }),
 
   /* ── Asset Management ─────────────────────────────────────── */
@@ -209,7 +251,7 @@ const tools = {
         ),
     }),
     execute: async ({ query }) =>
-      sitecoreMCP.callTool("search_assets", { query }),
+      safeCall("search_assets", { query }),
   }),
 
   get_asset_details: tool({
@@ -219,7 +261,7 @@ const tools = {
       assetId: z.string().describe("The ID of the asset"),
     }),
     execute: async ({ assetId }) =>
-      sitecoreMCP.callTool("get_asset_details", { assetId }),
+      safeCall("get_asset_details", { assetId }),
   }),
 
   /* ── Personalization ──────────────────────────────────────── */
@@ -231,7 +273,7 @@ const tools = {
       pagePath: z.string().describe("Full path to the page"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("list_personalization_variants", args),
+      safeCall("list_personalization_variants", args),
   }),
 
   create_personalization_variant: tool({
@@ -255,7 +297,7 @@ const tools = {
         .describe("Targeting condition or rule"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("create_personalization_variant", args),
+      safeCall("create_personalization_variant", args),
   }),
 
   /* ── Brand Kits ───────────────────────────────────────────── */
@@ -264,7 +306,7 @@ const tools = {
       "List all brand kits. Brand kits define brand identity (colors, fonts, guidelines) for AI content generation.",
     inputSchema: z.object({}),
     execute: async () =>
-      sitecoreMCP.callTool("list_brand_kits", {}),
+      safeCall("list_brand_kits", {}),
   }),
 
   get_brand_kit_details: tool({
@@ -274,7 +316,7 @@ const tools = {
       brandKitId: z.string().describe("The ID of the brand kit"),
     }),
     execute: async ({ brandKitId }) =>
-      sitecoreMCP.callTool("get_brand_kit_details", { brandKitId }),
+      safeCall("get_brand_kit_details", { brandKitId }),
   }),
 
   create_brand_kit: tool({
@@ -306,7 +348,7 @@ const tools = {
         .describe("Additional brand guidelines text"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("create_brand_kit", args),
+      safeCall("create_brand_kit", args),
   }),
 
   /* ── Briefs ───────────────────────────────────────────────── */
@@ -335,13 +377,13 @@ const tools = {
         .describe("Any additional context or requirements"),
     }),
     execute: async (args) =>
-      sitecoreMCP.callTool("create_brief", args),
+      safeCall("create_brief", args),
   }),
 
   list_briefs: tool({
     description: "List all created marketing briefs.",
     inputSchema: z.object({}),
-    execute: async () => sitecoreMCP.callTool("list_briefs", {}),
+    execute: async () => safeCall("list_briefs", {}),
   }),
 
   get_brief_details: tool({
@@ -351,7 +393,7 @@ const tools = {
       briefId: z.string().describe("The ID of the brief"),
     }),
     execute: async ({ briefId }) =>
-      sitecoreMCP.callTool("get_brief_details", { briefId }),
+      safeCall("get_brief_details", { briefId }),
   }),
 
   /* ── Jobs ─────────────────────────────────────────────────── */
@@ -362,7 +404,7 @@ const tools = {
       jobId: z.string().describe("The ID of the job to check"),
     }),
     execute: async ({ jobId }) =>
-      sitecoreMCP.callTool("get_job_status", { jobId }),
+      safeCall("get_job_status", { jobId }),
   }),
 }
 
