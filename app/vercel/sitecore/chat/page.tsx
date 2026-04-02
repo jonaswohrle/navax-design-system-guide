@@ -36,7 +36,7 @@ const STARTERS = [
   },
   {
     label: "Create a Page",
-    text: "Create a new landing page for Sterillium hand disinfection with a hero banner and product features section",
+    text: "Create a new landing page for Sterillium hand disinfection under /Home/Products with a hero banner and product features section",
     icon: FileText,
     desc: "Build product pages with AI-powered content",
   },
@@ -73,6 +73,7 @@ function Message({ message }: { message: UIMessage }) {
 
   return (
     <div className={cn("flex gap-3", isUser ? "flex-row-reverse" : "flex-row")}>
+      {/* Avatar */}
       <div
         className={cn(
           "flex h-8 w-8 shrink-0 items-center justify-center rounded-full",
@@ -88,6 +89,7 @@ function Message({ message }: { message: UIMessage }) {
         )}
       </div>
 
+      {/* Parts */}
       <div
         className={cn(
           "flex max-w-[min(88%,640px)] flex-col gap-3",
@@ -95,6 +97,7 @@ function Message({ message }: { message: UIMessage }) {
         )}
       >
         {message.parts.map((part, idx) => {
+          /* ── Text ────────────────────────────────── */
           if (part.type === "text" && part.text.trim()) {
             return (
               <div
@@ -119,20 +122,34 @@ function Message({ message }: { message: UIMessage }) {
             )
           }
 
-          if (part.type === "tool-invocation") {
-            const toolName = part.toolInvocation.toolName
-            const state = part.toolInvocation.state
+          /* ── Tool parts (AI SDK 6 format) ────────── */
+          if (part.type.startsWith("tool-") || part.type === "dynamic-tool") {
+            // Extract tool info based on part type
+            const toolPart = part as {
+              type: string
+              toolCallId: string
+              state: string
+              toolName?: string
+              input?: unknown
+              output?: unknown
+            }
 
-            if (state === "call" || state === "partial-call") {
+            const toolName =
+              toolPart.toolName || toolPart.type.replace("tool-", "")
+            const { state } = toolPart
+
+            // Loading state
+            if (state === "input-streaming" || state === "input-available") {
               return <ToolLoading key={idx} toolName={toolName} />
             }
 
-            if (state === "result") {
+            // Result state
+            if (state === "output-available") {
               return (
                 <div key={idx} className="w-full max-w-[min(100%,560px)]">
                   <ToolResultRouter
                     toolName={toolName}
-                    data={part.toolInvocation.result}
+                    data={toolPart.output}
                   />
                 </div>
               )
@@ -183,7 +200,7 @@ export default function SitecoreChatPage() {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      {/* Header */}
+      {/* Header bar */}
       <div className="flex h-14 shrink-0 items-center justify-between border-b border-[#222] bg-[#0a0a0a] px-4">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0045FF]/15">
@@ -211,9 +228,10 @@ export default function SitecoreChatPage() {
       </div>
 
       {/* Messages area */}
-      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto bg-[#050505]">
+      <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto bg-[#050505]">
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center gap-8 px-4 py-12">
+            {/* Empty state hero */}
             <div className="flex flex-col items-center gap-4 text-center">
               <div className="relative">
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0045FF]/10">
@@ -227,14 +245,13 @@ export default function SitecoreChatPage() {
                 <h2 className="text-xl font-semibold text-white text-balance">
                   HARTMANN Content Studio
                 </h2>
-                <p className="mt-1.5 max-w-md text-sm text-[#888] leading-relaxed">
+                <p className="mt-1.5 max-w-md text-sm leading-relaxed text-[#888]">
                   Manage HARTMANN&apos;s Sitecore content with natural language.
-                  Create pages, search assets, personalize experiences, and generate
-                  marketing briefs.
+                  Create pages, search assets, personalize experiences, and
+                  generate marketing briefs.
                 </p>
               </div>
-
-              <div className="flex flex-wrap justify-center gap-2 mt-1">
+              <div className="mt-1 flex flex-wrap justify-center gap-2">
                 {[
                   "Sitecore MCP",
                   "48 Tools",
@@ -251,7 +268,8 @@ export default function SitecoreChatPage() {
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 w-full max-w-3xl">
+            {/* Starter grid */}
+            <div className="grid w-full max-w-3xl gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {STARTERS.map((s) => (
                 <button
                   key={s.label}
@@ -265,7 +283,7 @@ export default function SitecoreChatPage() {
                     <p className="text-sm font-semibold text-white">
                       {s.label}
                     </p>
-                    <p className="mt-0.5 text-xs text-[#777] leading-relaxed">
+                    <p className="mt-0.5 text-xs leading-relaxed text-[#777]">
                       {s.desc}
                     </p>
                   </div>
@@ -278,6 +296,7 @@ export default function SitecoreChatPage() {
             {messages.map((msg) => (
               <Message key={msg.id} message={msg} />
             ))}
+            {/* Typing indicator */}
             {isDisabled &&
               messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-3">
@@ -295,7 +314,7 @@ export default function SitecoreChatPage() {
         )}
       </div>
 
-      {/* Input area -- send button INSIDE the input border */}
+      {/* Input area */}
       <div className="shrink-0 border-t border-[#222] bg-[#0a0a0a] px-4 py-3 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <div className="flex items-end rounded-xl border border-[#333] bg-[#111] px-3 py-2 transition-shadow focus-within:border-[#0045FF]/50 focus-within:shadow-[0_0_0_2px_rgba(0,69,255,0.1)]">
@@ -316,7 +335,7 @@ export default function SitecoreChatPage() {
               placeholder="Ask about HARTMANN sites, pages, assets, or personalization..."
               rows={1}
               disabled={isDisabled}
-              className="min-h-[36px] max-h-[160px] flex-1 resize-none border-0 bg-transparent text-sm leading-relaxed text-white outline-none placeholder:text-[#666] disabled:opacity-50"
+              className="max-h-[160px] min-h-[36px] flex-1 resize-none border-0 bg-transparent text-sm leading-relaxed text-white outline-none placeholder:text-[#666] disabled:opacity-50"
               aria-label="Chat input"
             />
             <Button

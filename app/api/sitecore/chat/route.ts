@@ -55,6 +55,18 @@ When users ask about sites or pages, you have access to the Sitecore XM Cloud en
 - **Common Components**: Rich Text, Hero Banner, Product Card, Image Gallery, CTA Block, Accordion, Tab Panel, Form, Video Player
 - **Page Paths** follow the pattern: /Home, /Home/Products, /Home/Products/Sterillium, etc.
 
+## Homepage Content Management
+
+You can directly update the HARTMANN homepage content using the update_homepage_content tool. The homepage at / displays content from these Sitecore components:
+- **HeroBanner** -- hero section with headline, subheadline, tagline, CTAs, and background image
+- **TrustStrip** -- trust indicators (200+ Jahre, Hilft.Pflegt.Schuetzt., Forschung, Qualitaet)
+- **ProductAreasGrid** -- three product area cards (Wundversorgung, Desinfektion, Inkontinenz)
+- **MarketSegmentsGrid** -- four market segment cards (Kliniken, Pflegeheime, Ambulante Pflege, Apotheken)
+- **CtaBanner** -- call-to-action banner for Sitecore AI
+- **AboutSection** -- about HARTMANN section
+
+When users ask to change homepage content, use update_homepage_content. Changes appear immediately on the live homepage.
+
 ## Tool Usage Guidelines
 
 - **Always call list_sites first** when a user mentions sites, to discover the actual site names in the environment.
@@ -84,7 +96,7 @@ async function safeCall(
   args: Record<string, unknown> = {}
 ): Promise<unknown> {
   try {
-    return await safeCall(name, args)
+    return await sitecoreMCP.callTool(name, args)
   } catch (e) {
     return {
       error: true,
@@ -405,6 +417,46 @@ const tools = {
     }),
     execute: async ({ jobId }) =>
       safeCall("get_job_status", { jobId }),
+  }),
+
+  /* ── Homepage Content (local demo) ───────────────────────── */
+  update_homepage_content: tool({
+    description:
+      "Update content on the HARTMANN homepage. This publishes changes immediately. " +
+      "Available components: HeroBanner (headline, subheadline, tagline, ctaPrimaryLabel, ctaPrimaryHref, ctaSecondaryLabel, ctaSecondaryHref), " +
+      "TrustStrip (items array), ProductAreasGrid (sectionLabel, headline, areas array), " +
+      "MarketSegmentsGrid (sectionLabel, headline, segments array), " +
+      "CtaBanner (sectionLabel, headline, description, ctaPrimaryLabel, ctaPrimaryHref, ctaSecondaryLabel, ctaSecondaryHref), " +
+      "AboutSection (sectionLabel, headline, paragraphs array). " +
+      "Use this tool when the user asks to update, change, or modify homepage content.",
+    inputSchema: z.object({
+      componentName: z
+        .string()
+        .describe(
+          "The component to update: HeroBanner, TrustStrip, ProductAreasGrid, MarketSegmentsGrid, CtaBanner, or AboutSection"
+        ),
+      fields: z
+        .record(z.unknown())
+        .describe("The field values to update. Only include fields you want to change."),
+    }),
+    execute: async ({ componentName, fields }) => {
+      try {
+        const res = await fetch(
+          `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/api/sitecore/content`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ componentName, fields }),
+          }
+        )
+        return await res.json()
+      } catch (e) {
+        return {
+          error: true,
+          message: `Failed to update homepage: ${(e as Error).message}`,
+        }
+      }
+    },
   }),
 }
 

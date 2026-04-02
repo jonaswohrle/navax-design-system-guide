@@ -256,11 +256,50 @@ export const homepageContent: SitecorePage = {
   ],
 }
 
+/* ── Runtime state (mutable for demo) ────────────────────────── */
+
+/**
+ * Runtime overlay: the AI chat can push content updates here,
+ * and the homepage will merge them on top of the base content.
+ * This simulates Sitecore publishing changes in real time.
+ */
+let runtimeOverrides: Partial<Record<string, SitecoreComponent>> = {}
+
+/**
+ * Apply an override for a specific component.
+ * Called by the API when the AI creates/updates content.
+ */
+export function applyContentOverride(
+  componentName: string,
+  fields: Record<string, unknown>
+): void {
+  const base = homepageContent.components.find(
+    (c) => c.componentName === componentName
+  )
+  if (base) {
+    runtimeOverrides[componentName] = {
+      ...base,
+      fields: { ...base.fields, ...fields },
+    } as SitecoreComponent
+  }
+}
+
+/**
+ * Get all applied overrides (for the API to report back).
+ */
+export function getContentOverrides(): Record<string, unknown> {
+  return { ...runtimeOverrides }
+}
+
 /**
  * Fetch homepage content.
+ * Merges base content with any runtime overrides from the AI chat.
  * In production this would call the Sitecore Layout Service API.
- * For the demo, we return the pre-defined content structure.
  */
 export function getHomepageContent(): SitecorePage {
-  return homepageContent
+  const components = homepageContent.components.map((comp) => {
+    const override = runtimeOverrides[comp.componentName]
+    return override || comp
+  })
+  return { ...homepageContent, components }
 }
