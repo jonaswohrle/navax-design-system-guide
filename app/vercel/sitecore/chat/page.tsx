@@ -16,6 +16,10 @@ import {
   FileCheck,
   User,
   Bot,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  Info,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Markdown from "react-markdown"
@@ -163,11 +167,100 @@ function Message({ message }: { message: UIMessage }) {
   )
 }
 
+/* ── Connection Health Banner ────────────────────────────────── */
+
+type HealthStatus = {
+  status: string
+  message: string
+  details: { token: boolean; mcp: boolean; sites: boolean; org?: string; tenant?: string }
+  suggestion?: string
+}
+
+function ConnectionBanner({ health, onDismiss }: { health: HealthStatus | null; onDismiss: () => void }) {
+  if (!health || health.status === "connected") return null
+
+  const isWarning = health.details.token && health.details.mcp
+  const Icon = isWarning ? AlertTriangle : XCircle
+  const borderColor = isWarning ? "border-yellow-500/30" : "border-red-500/30"
+  const bgColor = isWarning ? "bg-yellow-500/5" : "bg-red-500/5"
+  const iconColor = isWarning ? "text-yellow-500" : "text-red-400"
+  const titleColor = isWarning ? "text-yellow-400" : "text-red-400"
+
+  return (
+    <div className={cn("mx-4 mt-3 rounded-lg border p-3 lg:mx-8", borderColor, bgColor)}>
+      <div className="flex items-start gap-3">
+        <Icon className={cn("mt-0.5 h-4 w-4 shrink-0", iconColor)} />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <p className={cn("text-xs font-semibold", titleColor)}>
+              {health.status === "missing_credentials"
+                ? "Sitecore credentials not configured"
+                : health.status === "sites_unavailable"
+                  ? "XM Cloud environment not fully ready"
+                  : "Connection issue"}
+            </p>
+            <button onClick={onDismiss} className="shrink-0 text-[10px] text-[#666] hover:text-[#999]">
+              Dismiss
+            </button>
+          </div>
+          <div className="mt-1.5 flex flex-wrap items-center gap-3 text-[10px]">
+            <span className="flex items-center gap-1">
+              {health.details.token ? (
+                <CheckCircle2 className="h-3 w-3 text-green-500" />
+              ) : (
+                <XCircle className="h-3 w-3 text-red-400" />
+              )}
+              <span className="text-[#888]">Auth</span>
+            </span>
+            <span className="flex items-center gap-1">
+              {health.details.mcp ? (
+                <CheckCircle2 className="h-3 w-3 text-green-500" />
+              ) : (
+                <XCircle className="h-3 w-3 text-red-400" />
+              )}
+              <span className="text-[#888]">MCP</span>
+            </span>
+            <span className="flex items-center gap-1">
+              {health.details.sites ? (
+                <CheckCircle2 className="h-3 w-3 text-green-500" />
+              ) : (
+                <XCircle className="h-3 w-3 text-red-400" />
+              )}
+              <span className="text-[#888]">Sites API</span>
+            </span>
+            {health.details.org && (
+              <span className="text-[#555]">
+                Org: {health.details.org}
+                {health.details.tenant ? ` / ${health.details.tenant}` : ""}
+              </span>
+            )}
+          </div>
+          {health.suggestion && (
+            <div className="mt-2 flex items-start gap-1.5 rounded bg-black/20 px-2 py-1.5 text-[10px] leading-relaxed text-[#888]">
+              <Info className="mt-0.5 h-3 w-3 shrink-0 text-[#555]" />
+              <span>{health.suggestion}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ── Main Page ──────────────────────────────────────────────── */
 
 export default function SitecoreChatPage() {
   const [input, setInput] = React.useState("")
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
+  const [health, setHealth] = React.useState<HealthStatus | null>(null)
+  const [showBanner, setShowBanner] = React.useState(true)
+
+  React.useEffect(() => {
+    fetch("/api/sitecore/health")
+      .then((r) => r.json())
+      .then((data: HealthStatus) => setHealth(data))
+      .catch(() => {})
+  }, [])
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
   const transport = React.useMemo(
@@ -226,6 +319,9 @@ export default function SitecoreChatPage() {
           GPT-5.2
         </span>
       </div>
+
+      {/* Connection status */}
+      {showBanner && <ConnectionBanner health={health} onDismiss={() => setShowBanner(false)} />}
 
       {/* Messages area */}
       <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto bg-[#050505]">
