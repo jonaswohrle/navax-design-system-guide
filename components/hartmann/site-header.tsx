@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, Search, Globe, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -46,16 +47,15 @@ export function HartmannHeader() {
       <nav className={`bg-white transition-shadow duration-200 ${scrolled ? "shadow-md" : "border-b border-border"}`}>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="HARTMANN home">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded bg-[#001689]">
-                <span className="text-sm font-black text-white">H</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-base font-bold text-[#001689] leading-none tracking-tight">HARTMANN</span>
-                <span className="text-[9px] font-medium text-[#0045FF] leading-none tracking-widest">HILFT. PFLEGT. SCH&Uuml;TZT.</span>
-              </div>
-            </div>
+          <Link href="/" className="shrink-0" aria-label="HARTMANN home">
+            <Image
+              src="/images/hartmann-logo.png"
+              alt="HARTMANN"
+              width={160}
+              height={64}
+              className="h-10 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop nav links */}
@@ -93,11 +93,14 @@ export function HartmannHeader() {
               </SheetTrigger>
               <SheetContent side="left" className="w-80 bg-white p-0">
                 <SheetTitle className="sr-only">Navigation</SheetTitle>
-                <div className="flex items-center gap-2 bg-[#001689] px-4 py-4">
-                  <div className="flex h-8 w-8 items-center justify-center rounded bg-white">
-                    <span className="text-sm font-black text-[#001689]">H</span>
-                  </div>
-                  <span className="text-base font-bold text-white">HARTMANN</span>
+                <div className="flex items-center bg-[#001689] px-4 py-4">
+                  <Image
+                    src="/images/hartmann-logo.png"
+                    alt="HARTMANN"
+                    width={120}
+                    height={48}
+                    className="h-8 w-auto brightness-0 invert"
+                  />
                 </div>
                 <nav className="flex flex-col">
                   {NAV_LINKS.map((link) => (

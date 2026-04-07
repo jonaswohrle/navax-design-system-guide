@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 const FOOTER_COLS = [
   {
@@ -47,6 +48,15 @@ export function HartmannFooter() {
     <footer>
       <div className="bg-[#001689] text-white">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+          <div className="mb-10">
+            <Image
+              src="/images/hartmann-logo.png"
+              alt="HARTMANN"
+              width={160}
+              height={64}
+              className="h-10 w-auto brightness-0 invert"
+            />
+          </div>
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {FOOTER_COLS.map((col) => (
               <div key={col.title}>

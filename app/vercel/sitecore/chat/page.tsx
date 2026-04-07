@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import { useChat } from "@ai-sdk/react"
 import { DefaultChatTransport } from "ai"
 import type { UIMessage } from "ai"
@@ -296,12 +297,16 @@ export default function SitecoreChatPage() {
       {/* Header bar */}
       <div className="flex h-14 shrink-0 items-center justify-between border-b border-[#222] bg-[#0a0a0a] px-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0045FF]/15">
-            <Globe className="h-4 w-4 text-[#0045FF]" />
-          </div>
+          <Image
+            src="/images/hartmann-logo.png"
+            alt="HARTMANN"
+            width={100}
+            height={40}
+            className="h-7 w-auto"
+          />
           <div>
             <h1 className="text-sm font-semibold text-white">
-              HARTMANN Content Studio
+              Content Studio
             </h1>
             <p className="flex items-center gap-1.5 text-[11px] text-[#777]">
               Powered by{" "}
@@ -329,17 +334,16 @@ export default function SitecoreChatPage() {
           <div className="flex h-full flex-col items-center justify-center gap-8 px-4 py-12">
             {/* Empty state hero */}
             <div className="flex flex-col items-center gap-4 text-center">
-              <div className="relative">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0045FF]/10">
-                  <Globe className="h-8 w-8 text-[#0045FF]" />
-                </div>
-                <div className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-[#001689] text-white">
-                  <Bot className="h-3 w-3" />
-                </div>
-              </div>
+              <Image
+                src="/images/hartmann-logo.png"
+                alt="HARTMANN"
+                width={200}
+                height={80}
+                className="h-14 w-auto"
+              />
               <div>
                 <h2 className="text-xl font-semibold text-white text-balance">
-                  HARTMANN Content Studio
+                  Content Studio
                 </h2>
                 <p className="mt-1.5 max-w-md text-sm leading-relaxed text-[#888]">
                   Manage HARTMANN&apos;s Sitecore content with natural language.
