@@ -1,4 +1,4 @@
-import { streamText, tool } from "ai"
+import { streamText, convertToModelMessages, tool, stepCountIs } from "ai"
 import { z } from "zod"
 
 /* ── HARTMANN Product Catalog ─────────────────────────────────── */
@@ -100,7 +100,7 @@ export async function POST(req: Request) {
   const { messages } = await req.json()
 
   const result = streamText({
-    model: "anthropic/claude-sonnet-4",
+    model: "openai/gpt-5-mini",
     system: `You are the HARTMANN Product Advisor, a helpful customer-facing assistant for hartmann.info.
 You help healthcare professionals and patients find the right PAUL HARTMANN medical and care products.
 
@@ -126,11 +126,11 @@ You help healthcare professionals and patients find the right PAUL HARTMANN medi
 - NEVER invent product data. Only share information returned by tools.
 - When displaying products, always mention key features and applications.
 - For wound care questions, always recommend professional medical assessment.`,
-    messages,
+    messages: await convertToModelMessages(messages),
     tools: {
       searchProducts: tool({
         description: "Search HARTMANN products by category, application, or keyword. Returns matching products with details.",
-        parameters: z.object({
+        inputSchema: z.object({
           query: z.string().optional().describe("Search keyword"),
           category: z.enum(["Wundversorgung", "Desinfektion", "Inkontinenz", "all"]).optional().describe("Product category filter"),
         }),
@@ -158,7 +158,7 @@ You help healthcare professionals and patients find the right PAUL HARTMANN medi
       }),
       getProductDetails: tool({
         description: "Get detailed information about a specific HARTMANN product by its ID.",
-        parameters: z.object({
+        inputSchema: z.object({
           productId: z.string().describe("Product ID (e.g., 'sterillium', 'hydroclean')"),
         }),
         execute: async ({ productId }) => {
@@ -169,13 +169,13 @@ You help healthcare professionals and patients find the right PAUL HARTMANN medi
       }),
       startProductFinder: tool({
         description: "Start an interactive guided product finder. Use this when the user is unsure which product they need. Returns a greeting and the tool call ID for the guided flow.",
-        parameters: z.object({
+        inputSchema: z.object({
           greeting: z.string().describe("A warm greeting to start the product finder"),
         }),
       }),
       findNearbyPartner: tool({
         description: "Find nearby HARTMANN partner pharmacies or medical supply stores.",
-        parameters: z.object({
+        inputSchema: z.object({
           postalCode: z.string().optional().describe("German postal code (PLZ)"),
           city: z.string().optional().describe("City name"),
         }),
@@ -192,8 +192,8 @@ You help healthcare professionals and patients find the right PAUL HARTMANN medi
         },
       }),
     },
-    maxSteps: 3,
+    stopWhen: stepCountIs(5),
   })
 
-  return result.toDataStreamResponse()
+  return result.toUIMessageStreamResponse()
 }

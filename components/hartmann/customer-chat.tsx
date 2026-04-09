@@ -1,9 +1,7 @@
 "use client"
 
-import { useCallback, useState, useRef, useEffect, useMemo } from "react"
+import { useCallback, useState, useRef, useEffect } from "react"
 import { useChat } from "@ai-sdk/react"
-import { DefaultChatTransport } from "ai"
-import type { UIMessage } from "ai"
 import Image from "next/image"
 import {
   MessageCircle,
@@ -24,8 +22,6 @@ import {
 import ReactMarkdown from "react-markdown"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-
-const transport = new DefaultChatTransport({ api: "/api/hartmann-chat" })
 
 const SUGGESTIONS = [
   "Welches Produkt fuer chronische Wunden?",
@@ -291,10 +287,9 @@ export function HartmannCustomerChat() {
   const [open, setOpen] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
-  const [inputValue, setInputValue] = useState("")
 
-  const { messages, sendMessage, status, addToolOutput, setMessages } = useChat({
-    transport,
+  const { messages, input, handleInputChange, handleSubmit, status, addToolOutput, setMessages, setInput } = useChat({
+    api: "/api/hartmann-chat",
     id: "hartmann-customer-chat",
     onError: (err) => console.error("[v0] Chat error:", err),
   })
@@ -322,21 +317,24 @@ export function HartmannCustomerChat() {
   }, [])
 
   /* --- Handlers --- */
-  const handleSend = useCallback(() => {
-    const text = inputValue.trim()
-    if (!text || isStreaming) return
-    sendMessage({ text })
-    setInputValue("")
-  }, [inputValue, sendMessage, isStreaming])
-
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend() }
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault()
+        const form = document.getElementById("hartmann-chat-form") as HTMLFormElement | null
+        form?.requestSubmit()
+      }
     },
-    [handleSend]
+    []
   )
 
-  const handleSuggestion = useCallback((text: string) => { sendMessage({ text }) }, [sendMessage])
+  const handleSuggestion = useCallback((text: string) => {
+    setInput(text)
+    setTimeout(() => {
+      const form = document.getElementById("hartmann-chat-form") as HTMLFormElement | null
+      form?.requestSubmit()
+    }, 50)
+  }, [setInput])
 
   const handleReset = useCallback(() => { setMessages([]) }, [setMessages])
 
@@ -344,7 +342,6 @@ export function HartmannCustomerChat() {
   const handleFinderComplete = useCallback(
     (answers: Record<string, string>, toolCallId: string) => {
       addToolOutput({
-        tool: "startProductFinder",
         toolCallId,
         output: JSON.stringify(answers),
       })
@@ -408,7 +405,7 @@ export function HartmannCustomerChat() {
           <ProductGrid
             products={products}
             totalFound={totalFound}
-            onViewDetails={(id) => sendMessage({ text: `Zeige mir Details zu "${id}"` })}
+            onViewDetails={(id) => handleSuggestion(`Zeige mir Details zu "${id}"`)}
           />
         </div>
       )
@@ -548,10 +545,10 @@ export function HartmannCustomerChat() {
 
       {/* Input */}
       <div className="border-t border-[#001689]/10 bg-white px-3 py-3">
-        <div className="flex items-end gap-2">
+        <form id="hartmann-chat-form" onSubmit={handleSubmit} className="flex items-end gap-2">
           <textarea
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            value={input}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Fragen Sie zu Produkten, Anwendungen..."
             rows={1}
@@ -560,15 +557,15 @@ export function HartmannCustomerChat() {
             aria-label="Nachricht eingeben"
           />
           <Button
-            onClick={handleSend}
-            disabled={isStreaming || !inputValue.trim()}
+            type="submit"
+            disabled={isStreaming || !input.trim()}
             size="icon"
             className="h-9 w-9 shrink-0 rounded-xl bg-[#001689] hover:bg-[#0045FF]"
             aria-label="Senden"
           >
             <Send className="h-3.5 w-3.5" />
           </Button>
-        </div>
+        </form>
         <p className="mt-1.5 text-center text-[9px] text-[#999]">
           HARTMANN Produktberater | Fuer medizinische Beratung wenden Sie sich an Ihren Arzt.
         </p>
