@@ -10,36 +10,36 @@
 
 @layer base {
   :root {
-    /* ── Explore Brand: Crimson Red #C8102E + Warm White + Dark Navy ── */
+    /* ── HARTMANN Brand: Dark Blue #002F6C + White + Light Gray ── */
     --background: 0 0% 100%;
-    --foreground: 210 11% 15%;
+    --foreground: 213 100% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 210 11% 15%;
+    --card-foreground: 213 100% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 210 11% 15%;
+    --popover-foreground: 213 100% 15%;
 
-    /* Primary: Explore crimson red #C8102E */
-    --primary: 350 85% 42%;
+    /* Primary: HARTMANN Dark Blue #002F6C */
+    --primary: 213 100% 21%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Light warm gray for section backgrounds */
-    --secondary: 30 14% 96%;
-    --secondary-foreground: 210 11% 15%;
+    /* Secondary: Light gray for section backgrounds */
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 213 100% 15%;
 
     /* Muted: Neutral grays */
-    --muted: 220 9% 94%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 210 14% 93%;
+    --muted-foreground: 210 10% 46%;
 
-    /* Accent: Teal/green for secondary CTAs */
-    --accent: 173 58% 39%;
+    /* Accent: HARTMANN medium blue for secondary CTAs */
+    --accent: 210 70% 45%;
     --accent-foreground: 0 0% 100%;
 
-    /* Explore Yellow -- used for CTAs, highlights, promo banners */
-    --explore-yellow: 45 100% 51%;
-    --explore-yellow-foreground: 210 11% 15%;
+    /* HARTMANN green -- used for highlights and sustainability CTAs */
+    --explore-yellow: 152 60% 40%;
+    --explore-yellow-foreground: 0 0% 100%;
 
-    /* Hover: Darker crimson */
-    --hover: 350 85% 35%;
+    /* Hover: Slightly lighter blue */
+    --hover: 213 90% 30%;
     --hover-foreground: 0 0% 100%;
 
     /* Destructive */
@@ -55,32 +55,32 @@
     --warning-foreground: 0 0% 100%;
 
     /* Info */
-    --info: 213 65% 30%;
+    --info: 213 80% 40%;
     --info-foreground: 0 0% 100%;
 
     /* Borders & inputs */
-    --border: 220 13% 87%;
-    --input: 220 13% 87%;
-    --ring: 350 85% 42%;
+    --border: 210 18% 87%;
+    --input: 210 18% 87%;
+    --ring: 213 100% 21%;
 
     /* Charts */
-    --chart-1: 350 85% 42%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 220 9% 46%;
-    --chart-4: 30 50% 75%;
-    --chart-5: 350 40% 85%;
+    --chart-1: 213 100% 21%;
+    --chart-2: 210 70% 45%;
+    --chart-3: 210 10% 46%;
+    --chart-4: 152 60% 40%;
+    --chart-5: 213 40% 70%;
 
-    --radius: 0.5rem;
+    --radius: 0.375rem;
 
     /* Sidebar -- Dark navy for AI section */
-    --sidebar-background: 213 65% 15%;
+    --sidebar-background: 213 100% 15%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 167 100% 39%;
-    --sidebar-primary-foreground: 213 65% 15%;
-    --sidebar-accent: 213 55% 20%;
+    --sidebar-primary: 210 70% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 213 80% 20%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 213 50% 22%;
-    --sidebar-ring: 167 100% 39%;
+    --sidebar-border: 213 60% 22%;
+    --sidebar-ring: 210 70% 55%;
   }
 
   .dark {

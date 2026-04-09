@@ -4,7 +4,7 @@ import { Inter, DM_Sans, Playfair_Display } from 'next/font/google'
 import { GeistMono } from 'geist/font/mono'
 
 import './globals.css'
-import { ChatLoader } from '@/components/explore/chat-loader'
+import { HartmannChatLoader } from '@/components/hartmann/hartmann-chat-loader'
 import { NinetailedWrapper } from '@/components/providers/ninetailed-wrapper'
 
 const inter = Inter({
@@ -27,8 +27,8 @@ const playfair = Playfair_Display({
 const geistMono = GeistMono
 
 export const metadata: Metadata = {
-  title: 'Book Adventure Travel & Small Group Tours | Explore',
-  description: 'Explore offers small group adventure holidays to over 100 countries worldwide. Award-winning tours with expert leaders. Book your next adventure today.',
+  title: 'HARTMANN | Hilft. Pflegt. Schutzt.',
+  description: 'Die HARTMANN GRUPPE ist ein fuhrender europaischer Anbieter von Systemlosungen fur Medizin und Pflege. Medizinisches Fachpersonal und Patienten verlassen sich tagtaglich auf unsere Produkte.',
 }
 
 export default function RootLayout({
@@ -37,11 +37,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmSans.variable} ${playfair.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="de" className={`${inter.variable} ${dmSans.variable} ${playfair.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
         <NinetailedWrapper>
           {children}
-          <ChatLoader />
+          <HartmannChatLoader />
         </NinetailedWrapper>
       </body>
     </html>
