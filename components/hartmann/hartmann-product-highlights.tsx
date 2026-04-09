@@ -9,9 +9,9 @@ interface HartmannProductHighlightsProps {
 
 export function HartmannProductHighlights({ products }: HartmannProductHighlightsProps) {
   return (
-    <section className="bg-secondary py-12 lg:py-16">
-      <div className="mx-auto max-w-7xl px-4">
-        <h2 className="mb-8 text-center font-heading text-2xl font-bold text-foreground lg:text-3xl">
+    <section className="bg-white py-14 lg:py-20">
+      <div className="mx-auto max-w-[1200px] px-6">
+        <h2 className="mb-10 text-center text-[22px] font-bold text-[#1a1a2e] lg:text-[28px]">
           Produkthighlights
         </h2>
 
@@ -19,29 +19,32 @@ export function HartmannProductHighlights({ products }: HartmannProductHighlight
           {products.map((product) => (
             <div
               key={product.id}
-              className="group overflow-hidden rounded-md border border-border bg-background transition-shadow hover:shadow-lg"
+              className="group flex flex-col"
             >
-              <div className="relative aspect-[4/3] overflow-hidden">
+              {/* Product image */}
+              <div className="relative mb-4 aspect-square overflow-hidden rounded-sm bg-[#f8f8f8]">
                 <Image
                   src={product.imageUrl}
                   alt={product.title}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover p-2 transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <div className="p-5">
-                <h3 className="mb-1 font-heading text-base font-bold text-foreground">
-                  {product.title}
-                </h3>
-                <p className="mb-2 text-xs font-medium text-primary">
+
+              {/* Product info */}
+              <div className="flex flex-1 flex-col">
+                <p className="mb-1 text-[11px] text-[#555]">
                   {product.subtitle}
                 </p>
-                <p className="mb-4 text-xs leading-relaxed text-muted-foreground">
+                <h3 className="mb-2 text-[15px] font-bold leading-tight text-[#002F6C]">
+                  {product.title}
+                </h3>
+                <p className="mb-3 flex-1 text-[11px] leading-[1.7] text-[#555]">
                   {product.description}
                 </p>
                 <Link
                   href={product.linkUrl}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-primary transition-colors hover:text-hover"
+                  className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#002F6C] transition-colors hover:text-[#001d44]"
                 >
                   Mehr erfahren
                   <ArrowRight className="h-3 w-3" />
@@ -49,6 +52,16 @@ export function HartmannProductHighlights({ products }: HartmannProductHighlight
               </div>
             </div>
           ))}
+        </div>
+
+        {/* "Alle Produkte ansehen" button */}
+        <div className="mt-12 flex justify-center">
+          <Link
+            href="#"
+            className="inline-block rounded-sm bg-[#002F6C] px-8 py-3 text-[13px] font-bold text-white transition-colors hover:bg-[#001d44]"
+          >
+            Alle Produkte ansehen
+          </Link>
         </div>
       </div>
     </section>

@@ -129,9 +129,9 @@ export interface HartmannIntroSection {
 export async function getHartmannHero(): Promise<HartmannHero> {
   return {
     id: SITECORE_IDS.home,
-    title: "Hilft. Pflegt. Schutzt.",
+    title: "Hilft. Pflegt. Sch\u00FCtzt.",
     subtitle:
-      "Die HARTMANN GRUPPE ist ein fuhrender europaischer Anbieter von Systemlosungen fur Medizin und Pflege. Medizinisches Fachpersonal und Patienten verlassen sich tagtaglich auf unsere Produkte.",
+      "Die HARTMANN GRUPPE ist ein f\u00FChrender europ\u00E4ischer Anbieter von Systeml\u00F6sungen f\u00FCr Medizin und Pflege. Medizinisches Fachpersonal und Patienten verlassen sich tagt\u00E4glich auf unsere Produkte.",
     backgroundImageUrl: "/images/hartmann-hero.png",
   }
 }
@@ -139,9 +139,9 @@ export async function getHartmannHero(): Promise<HartmannHero> {
 export async function getHartmannIntro(): Promise<HartmannIntroSection> {
   return {
     id: `${SITECORE_IDS.home}-intro`,
-    title: "Innovative Losungen fur Medizin und Pflege",
+    title: "Innovative L\u00F6sungen f\u00FCr Medizin und Pflege",
     description:
-      "Wir bei HARTMANN setzen unser klinisches und medizinisches Fachwissen fur Losungen ein, die stets einem zentralen Zweck dienen: Sie sollen das Leben und die Arbeit des medizinischen Fachpersonals und Patienten verbessern. Strategisch verfolgen wir klare Ziele: Wir bringen innovative Produkte mit echtem Mehrwert auf den Markt. Wir verbessern signifikant unsere Kostenposition. Wir entwickeln digitale Services und Geschaftsmodelle. Und wir richten unsere Kernsegmente Wundversorgung, Inkontinenz- und Infektionsmanagement auf attraktive Marktsegmente aus. Dabei investieren wir gezielt in ein langfristig profitables Wachstum.",
+      "Wir bei HARTMANN setzen unser klinisches und medizinisches Fachwissen f\u00FCr L\u00F6sungen ein, die stets einem zentralen Zweck dienen: Sie sollen das Leben und die Arbeit des medizinischen Fachpersonals und Patienten verbessern.\n\nStrategisch verfolgen wir klare Ziele: Wir bringen innovative Produkte mit echtem Mehrwert auf den Markt. Wir verbessern signifikant unsere Kostenposition. Wir entwickeln digitale Services und Gesch\u00E4ftsmodelle. Und wir richten unsere Kernsegmente Wundversorgung, Inkontinenz- und Infektionsmanagement auf attraktive Marktsegmente aus. Dabei investieren wir gezielt in ein langfristig profitables Wachstum.",
   }
 }
 
@@ -151,9 +151,9 @@ export async function getHartmannPartnerCategories(): Promise<HartmannPartnerCat
     { id: `${SITECORE_IDS.branchen}-2`, name: "Ambulante Pflegedienste", order: 2 },
     { id: `${SITECORE_IDS.branchen}-3`, name: "Apotheken", order: 3 },
     { id: `${SITECORE_IDS.branchen}-4`, name: "Arztpraxen", order: 4 },
-    { id: `${SITECORE_IDS.branchen}-5`, name: "Betriebe & Institutionen", order: 5 },
+    { id: `${SITECORE_IDS.branchen}-5`, name: "Betriebe & Instutionen", order: 5 },
     { id: `${SITECORE_IDS.branchen}-6`, name: "Fachhandel medical & hygiene", order: 6 },
-    { id: `${SITECORE_IDS.branchen}-7`, name: "Homecare & Sanitatshauser", order: 7 },
+    { id: `${SITECORE_IDS.branchen}-7`, name: "Homecare & Sanit\u00E4tsh\u00E4user", order: 7 },
     { id: `${SITECORE_IDS.branchen}-8`, name: "Kliniken", order: 8 },
     { id: `${SITECORE_IDS.branchen}-9`, name: "Pflegeheime", order: 9 },
     { id: `${SITECORE_IDS.branchen}-10`, name: "Privatanwender", order: 10 },
@@ -168,7 +168,7 @@ export async function getHartmannCompetencies(): Promise<HartmannCompetency[]> {
       title: "Wunde",
       label: "Academy",
       description:
-        "HARTMANN bietet Produkte fur eine einfachere und schnellere Wundheilung. Entdecken Sie ein breites Spektrum an Lern- und Wissensinhalten fur das Wundmanagement.",
+        "HARTMANN bietet Produkte f\u00FCr eine einfachere und schnellere Wundheilung. Entdecken Sie ein breites Spektrum an Lern- und Wissensinhalten f\u00FCr das Wundmanagement.",
       imageUrl: "/images/hartmann-wunde.jpg",
       linkUrl: "#",
       order: 1,
@@ -178,7 +178,7 @@ export async function getHartmannCompetencies(): Promise<HartmannCompetency[]> {
       title: "Inkontinenz",
       label: "Academy",
       description:
-        "Wir bemuhen uns, die Lebensqualitat von Menschen, die mit Inkontinenz leben, zu verbessern.",
+        "Wir bem\u00FChen uns, die Lebensqualit\u00E4t von Menschen, die mit Inkontinenz leben, zu verbessern.",
       imageUrl: "/images/hartmann-inkontinenz.jpg",
       linkUrl: "#",
       order: 2,
@@ -188,7 +188,7 @@ export async function getHartmannCompetencies(): Promise<HartmannCompetency[]> {
       title: "Desinfektion",
       label: "Academy",
       description:
-        "Eine zuverlassige Hygiene ist entscheidend bei allen Massnahmen in Therapie und Pflege. Dazu zahlt auch eine durchdachte Desinfektion von Handen, Haut und Flachen.",
+        "Eine zuverl\u00E4ssige Hygiene ist entscheidend bei allen Ma\u00DFnahmen in Therapie und Pflege. Dazu z\u00E4hlt auch eine durchdachte Desinfektion von H\u00E4nden, Haut und Fl\u00E4chen.",
       imageUrl: "/images/hartmann-desinfektion.jpg",
       linkUrl: "#",
       order: 3,
@@ -198,7 +198,7 @@ export async function getHartmannCompetencies(): Promise<HartmannCompetency[]> {
       title: "OP",
       label: "Academy",
       description:
-        "Eine kompetente OP-Planung und -Durchfuhrung, besonders bei komplexen Eingriffen, erfordert umfassendes und aktuelles Wissen.",
+        "Eine kompetente OP-Planung und -Durchf\u00FChrung, besonders bei komplexen Eingriffen, erfordert umfassendes und aktuelles Wissen.",
       imageUrl: "/images/hartmann-op.jpg",
       linkUrl: "#",
       order: 4,
@@ -213,8 +213,8 @@ export async function getHartmannProductHighlights(): Promise<HartmannProductHig
       title: "HydroClean\u00AE",
       subtitle: "Polyacrylat-Wundauflagen",
       description:
-        "Die hydroaktive Superabsorber-Wundauflage fur eine wirksame Wundreinigung und die effektive Wundbettvorbereitung.",
-      imageUrl: "/images/hartmann-wunde.jpg",
+        "Die hydroaktive Superabsorber-Wundauflage f\u00FCr eine wirksame Wundreinigung und die effektive Wundbettvorbereitung.",
+      imageUrl: "/images/hartmann-hydroclean.jpg",
       linkUrl: "#",
       order: 1,
     },
@@ -223,18 +223,18 @@ export async function getHartmannProductHighlights(): Promise<HartmannProductHig
       title: "MoliCare\u00AE premium Mobile 5 Tropfen",
       subtitle: "Mittlere Inkontinenz",
       description:
-        "Bequem, diskret und einfach anzuwenden - diese Einweghosen bieten zuverlassigen Schutz bei mittlerer Inkontinenz. Jetzt mit einer verbesserten Passform fur mehr Komfort und Diskretion.",
-      imageUrl: "/images/hartmann-inkontinenz.jpg",
+        "Bequem, diskret und einfach anzuwenden - diese Einweghosen bieten zuverl\u00E4ssigen Schutz bei mittlerer Inkontinenz. Jetzt mit einer verbesserten Passform f\u00FCr mehr Komfort und Diskretion.*",
+      imageUrl: "/images/hartmann-molicare.jpg",
       linkUrl: "#",
       order: 2,
     },
     {
       id: `${SITECORE_IDS.produkte}-sterillium`,
       title: "Sterillium\u00AE",
-      subtitle: "Handedesinfektion",
+      subtitle: "H\u00E4ndedesinfektion",
       description:
-        "Der Klassiker der alkoholischen Handedesinfektion mit sehr guter Hautvertraglichkeit. Inaktiviert Noroviren innerhalb der hygienischen Handedesinfektion.",
-      imageUrl: "/images/hartmann-desinfektion.jpg",
+        "Der Klassiker der alkoholischen H\u00E4ndedesinfektion mit sehr guter Hautvertr\u00E4glichkeit. Inaktiviert Noroviren innerhalb der hygienischen H\u00E4ndedesinfektion.",
+      imageUrl: "/images/hartmann-sterillium.jpg",
       linkUrl: "#",
       order: 3,
     },
@@ -242,8 +242,8 @@ export async function getHartmannProductHighlights(): Promise<HartmannProductHig
       id: `${SITECORE_IDS.produkte}-foliodress`,
       title: "Foliodress\u00AE Eye Protect",
       subtitle: "Mehrweg-Schutzbrillen",
-      description: "Der sichere und komfortable Extraschutz fur die Augen.",
-      imageUrl: "/images/hartmann-op.jpg",
+      description: "Der sichere und komfortable Extraschutz f\u00FCr die Augen.",
+      imageUrl: "/images/hartmann-foliodress.jpg",
       linkUrl: "#",
       order: 4,
     },
@@ -254,9 +254,9 @@ export async function getHartmannBacillolPromo(): Promise<HartmannBacillolPromo>
   return {
     id: `${SITECORE_IDS.produkte}-bacillol`,
     title: "Bacillol\u00AE 30 Sensitive Green Tissues",
-    subtitle: "Unser Bestseller \u2013 jetzt nachhaltig.",
+    subtitle: "Unser Bestseller \u2013 jetzt nachhaltig",
     description:
-      "Weniger Emissionen und Abfall, mehr fur die Umwelt: Die neuen Bacillol\u00AE 30 Sensitive Green Tissues helfen Gesundheitseinrichtungen dabei, nachhaltiger zu werden. Entdecken Sie jetzt die Vorteile unserer neuesten Innovation im Bereich der Flachendesinfektion.",
+      "Weniger Emissionen und Abfall, mehr f\u00FCr die Umwelt: Die neuen Bacillol\u00AE 30 Sensitive Green Tissues helfen Gesundheitseinrichtungen dabei, nachhaltiger zu werden. Entdecken Sie jetzt die Vorteile unserer neuesten Innovation im Bereich der Fl\u00E4chendesinfektion.",
     imageUrl: "/images/hartmann-bacillol.jpg",
     linkUrl: "#",
   }
@@ -265,11 +265,11 @@ export async function getHartmannBacillolPromo(): Promise<HartmannBacillolPromo>
 export async function getHartmannPrivatanwender(): Promise<HartmannPrivatanwender> {
   return {
     id: `${SITECORE_IDS.home}-privatanwender`,
-    title: "Entdecken Sie unsere Produktwelten fur Privatanwender!",
+    title: "Entdecken Sie unsere Produktwelten f\u00FCr Privatanwender!",
     description:
-      "Unsere Expertise im Professional-Bereich setzen wir auch fur Sie als Privatkunden ein! Auf unserer HARTMANN direct Plattform bieten wir Ihnen hochwertige Produkte in den Bereichen Inkontinenz, Desinfektion, Wund- und Hautpflege \u2013 alles, was Sie fur Ihre Gesundheit und Pflege benotigen. Ihre Vorteile auf einen Blick:",
+      "Unsere Expertise im Professional-Bereich setzen wir auch f\u00FCr Sie als Privatkunden ein! Auf unserer HARTMANN direct Plattform bieten wir Ihnen hochwertige Produkte in den Bereichen Inkontinenz, Desinfektion, Wund- und Hautpflege \u2013 alles, was Sie f\u00FCr Ihre Gesundheit und Pflege ben\u00F6tigen.",
     benefits: [
-      "Grosse Produktauswahl",
+      "Gro\u00DFe Produktauswahl",
       "Musterbestellungen",
       "Fachwissen zur Gesundheit und Pflege",
     ],
@@ -282,10 +282,10 @@ export async function getHartmannAboutCards(): Promise<HartmannAboutCard[]> {
   return [
     {
       id: SITECORE_IDS.ueberHartmann,
-      title: "Uber HARTMANN",
+      title: "\u00DCber HARTMANN",
       label: "Unternehmensseite",
       description:
-        "Eine lange Geschichte innovativer Gesundheitslosungen, starke Unternehmenswerte, uber 10.000 Mitarbeitende in 36 Landern, vier Segmente medizinischer Expertise \u2013 das sind einige der vielen Bausteine der einzigartigen DNA von HARTMANN. Was uns sonst noch ausmacht, erfahren Sie hier.",
+        "Eine lange Geschichte innovativer Gesundheitsl\u00F6sungen, starke Unternehmenswerte, \u00FCber 10.000 Mitarbeitende in 36 L\u00E4ndern, vier Segmente medizinischer Expertise \u2013 das sind einige der vielen Bausteine der einzigartigen DNA von HARTMANN. Was uns sonst noch ausmacht, erfahren Sie hier.",
       imageUrl: "/images/hartmann-about.jpg",
       linkUrl: "#",
       order: 1,
@@ -295,8 +295,8 @@ export async function getHartmannAboutCards(): Promise<HartmannAboutCard[]> {
       title: "Ihre Karriere bei HARTMANN",
       label: "Karriere",
       description:
-        "Sie brennen fur Gesundheitsthemen und mochten medizinischem Fachpersonal und Patienten das Leben erleichtern? Hier erfahren Sie, warum Sie bei HARTMANN genau richtig sind.",
-      imageUrl: "/images/hartmann-about.jpg",
+        "Sie brennen f\u00FCr Gesundheitsthemen und m\u00F6chten medizinischem Fachpersonal und Patienten das Leben erleichtern? Hier erfahren Sie, warum Sie bei HARTMANN genau richtig sind.",
+      imageUrl: "/images/hartmann-karriere.jpg",
       linkUrl: "#",
       order: 2,
     },
@@ -306,7 +306,7 @@ export async function getHartmannAboutCards(): Promise<HartmannAboutCard[]> {
       label: "Kontakt",
       description:
         "Wir freuen uns auf Ihre Fragen, Kommentare und Anmerkungen.",
-      imageUrl: "/images/hartmann-about.jpg",
+      imageUrl: "/images/hartmann-kontakt.jpg",
       linkUrl: "#",
       order: 3,
     },
@@ -324,35 +324,27 @@ export async function getHartmannNavigation(): Promise<HartmannNavigation> {
           { label: "Wundversorgung", href: "#" },
           { label: "Desinfektion", href: "#" },
           { label: "Inkontinenzversorgung", href: "#" },
+          { label: "OP-Produkte", href: "#" },
         ],
       },
       {
-        label: "Branchen",
+        label: "Academy",
+        href: "#",
+        children: [
+          { label: "Wunde", href: "#" },
+          { label: "Inkontinenz", href: "#" },
+          { label: "Desinfektion", href: "#" },
+          { label: "OP", href: "#" },
+        ],
+      },
+      {
+        label: "L\u00F6sungen",
         href: "#",
         children: [
           { label: "Kliniken", href: "#" },
           { label: "Pflegeheime", href: "#" },
           { label: "Ambulante Pflege", href: "#" },
           { label: "Apotheken", href: "#" },
-        ],
-      },
-      {
-        label: "Unternehmen",
-        href: "#",
-        children: [
-          { label: "Uber HARTMANN", href: "#" },
-          { label: "Karriere", href: "#" },
-          { label: "Nachhaltigkeit", href: "#" },
-          { label: "Investor Relations", href: "#" },
-        ],
-      },
-      {
-        label: "Service",
-        href: "#",
-        children: [
-          { label: "Kontakt", href: "#" },
-          { label: "Schulungen", href: "#" },
-          { label: "Downloads", href: "#" },
         ],
       },
     ],
@@ -384,7 +376,7 @@ export async function getHartmannFooter(): Promise<HartmannFooter> {
       {
         title: "Unternehmen",
         links: [
-          { label: "Uber HARTMANN", href: "#" },
+          { label: "\u00DCber HARTMANN", href: "#" },
           { label: "Karriere", href: "#" },
           { label: "Nachhaltigkeit", href: "#" },
           { label: "Investor Relations", href: "#" },

@@ -27,8 +27,8 @@ const playfair = Playfair_Display({
 const geistMono = GeistMono
 
 export const metadata: Metadata = {
-  title: 'HARTMANN | Hilft. Pflegt. Schutzt.',
-  description: 'Die HARTMANN GRUPPE ist ein fuhrender europaischer Anbieter von Systemlosungen fur Medizin und Pflege. Medizinisches Fachpersonal und Patienten verlassen sich tagtaglich auf unsere Produkte.',
+  title: 'HARTMANN | Hilft. Pflegt. Sch\u00FCtzt.',
+  description: 'Die HARTMANN GRUPPE ist ein f\u00FChrender europ\u00E4ischer Anbieter von Systeml\u00F6sungen f\u00FCr Medizin und Pflege. Medizinisches Fachpersonal und Patienten verlassen sich tagt\u00E4glich auf unsere Produkte.',
 }
 
 export default function RootLayout({

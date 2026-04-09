@@ -7,27 +7,27 @@ interface HartmannHeroProps {
 
 export function HartmannHero({ hero }: HartmannHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-primary">
-      <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col lg:flex-row lg:items-center">
-          {/* Text content */}
-          <div className="relative z-10 flex-1 px-6 py-12 lg:px-12 lg:py-20">
-            <h1 className="mb-4 font-heading text-3xl font-bold text-primary-foreground lg:text-5xl xl:text-6xl text-balance">
+    <section className="relative bg-white">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="flex flex-col lg:flex-row lg:items-stretch">
+          {/* Text content - left side, ~45% width */}
+          <div className="flex flex-1 flex-col justify-center px-6 py-10 lg:max-w-[480px] lg:py-16 lg:pr-12">
+            <h1 className="mb-5 text-[28px] font-bold leading-tight text-[#1a1a2e] lg:text-[36px]">
               {hero.title}
             </h1>
-            <p className="max-w-xl text-sm leading-relaxed text-primary-foreground/80 lg:text-base">
+            <p className="text-[14px] leading-[1.7] text-[#555]">
               {hero.subtitle}
             </p>
           </div>
 
-          {/* Hero image */}
-          <div className="relative flex-1">
-            <div className="relative aspect-[16/9] lg:aspect-auto lg:h-[420px] xl:h-[480px]">
+          {/* Hero image - right side, ~55% width */}
+          <div className="relative flex-1 lg:flex-[1.2]">
+            <div className="relative aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[380px]">
               <Image
                 src={hero.backgroundImageUrl}
-                alt="HARTMANN - Hilft. Pflegt. Schutzt."
+                alt="HARTMANN - Hilft. Pflegt. Sch\u00FCtzt."
                 fill
-                className="object-cover object-right"
+                className="object-cover object-center"
                 priority
               />
             </div>

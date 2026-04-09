@@ -9,29 +9,31 @@ interface HartmannFooterProps {
 export function HartmannFooter({ footer }: HartmannFooterProps) {
   return (
     <footer>
-      {/* Main footer */}
-      <div className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16">
+      {/* Main footer - dark navy */}
+      <div className="bg-[#002F6C]">
+        <div className="mx-auto max-w-[1200px] px-6 py-12 lg:py-16">
+          {/* Logo */}
           <div className="mb-10">
             <Image
               src="/images/hartmann-logo.png"
               alt="HARTMANN"
-              width={160}
-              height={48}
-              className="h-10 w-auto brightness-0 invert"
+              width={140}
+              height={42}
+              className="h-9 w-auto brightness-0 invert"
             />
           </div>
 
+          {/* Footer columns */}
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {footer.columns.map((col) => (
               <div key={col.title}>
-                <h3 className="mb-4 text-sm font-bold text-primary-foreground">{col.title}</h3>
-                <ul className="flex flex-col gap-2.5">
+                <h3 className="mb-4 text-[13px] font-bold text-white">{col.title}</h3>
+                <ul className="flex flex-col gap-2">
                   {col.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-xs text-primary-foreground/70 transition-colors hover:text-primary-foreground"
+                        className="text-[12px] text-white/60 transition-colors hover:text-white"
                       >
                         {link.label}
                       </Link>
@@ -44,18 +46,18 @@ export function HartmannFooter({ footer }: HartmannFooterProps) {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-primary-foreground/10 bg-primary">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-4 md:flex-row">
-          <p className="text-[11px] text-primary-foreground/50">
+      {/* Bottom legal bar */}
+      <div className="bg-[#001d44]">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-3 px-6 py-4 md:flex-row">
+          <p className="text-[11px] text-white/40">
             {footer.companyInfo}
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             {footer.legalLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-[11px] text-primary-foreground/50 transition-colors hover:text-primary-foreground/80"
+                className="text-[11px] text-white/40 transition-colors hover:text-white/70"
               >
                 {link.label}
               </Link>
