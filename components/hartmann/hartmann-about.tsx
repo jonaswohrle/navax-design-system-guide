@@ -14,22 +14,11 @@ export function HartmannAbout({ cards }: HartmannAboutProps) {
         <h2 className="mb-10 text-center text-[22px] font-bold text-[#1a1a2e] lg:text-[28px]">
           {"\u00DCber HARTMANN"}
         </h2>
-
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {cards.map((card) => (
-            <div
-              key={card.id}
-              className="group flex flex-col overflow-hidden rounded-sm bg-white shadow-sm transition-shadow hover:shadow-md"
-            >
-              {/* Card image */}
+            <div key={card.id} className="group flex flex-col overflow-hidden rounded-sm bg-white shadow-sm transition-shadow hover:shadow-md">
               <div className="relative aspect-[16/10] overflow-hidden">
-                <Image
-                  src={card.imageUrl}
-                  alt={card.title}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                {/* Category label overlay */}
+                <Image src={card.imageUrl} alt={card.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
                 <div className="absolute left-4 top-4">
                   <span className="inline-flex items-center gap-1.5 rounded-sm bg-[#002F6C] px-3 py-1 text-[10px] font-semibold text-white">
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -40,20 +29,11 @@ export function HartmannAbout({ cards }: HartmannAboutProps) {
                   </span>
                 </div>
               </div>
-
-              {/* Card content */}
               <div className="flex flex-1 flex-col p-5">
-                <h3 className="mb-3 text-[16px] font-bold text-[#1a1a2e]">
-                  {card.title}
-                </h3>
-                <p className="mb-4 flex-1 text-[12px] leading-[1.7] text-[#555]">
-                  {card.description}
-                </p>
+                <h3 className="mb-3 text-[16px] font-bold text-[#1a1a2e]">{card.title}</h3>
+                <p className="mb-4 flex-1 text-[12px] leading-[1.7] text-[#555]">{card.description}</p>
                 <div className="flex items-center justify-between border-t border-[#e5e7eb] pt-4">
-                  <Link
-                    href={card.linkUrl}
-                    className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#002F6C] transition-colors hover:text-[#001d44]"
-                  >
+                  <Link href={card.linkUrl} className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#002F6C] transition-colors hover:text-[#001d44]">
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                   <button className="text-[#999] transition-colors hover:text-[#002F6C]" aria-label="Teilen">

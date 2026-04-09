@@ -6,10 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 
-/* -------------------------------------------------------------------------- */
-/*  Types & Data                                                              */
-/* -------------------------------------------------------------------------- */
-
 interface GuidedSellingResult {
   categories: string[]
   setting: string
@@ -73,10 +69,6 @@ const STEPS = [
   { title: "Priorit\u00E4t", question: "Was ist Ihnen bei der Produktwahl am wichtigsten?" },
 ]
 
-/* -------------------------------------------------------------------------- */
-/*  Component                                                                 */
-/* -------------------------------------------------------------------------- */
-
 export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingProps) {
   const [step, setStep] = useState(0)
   const [categories, setCategories] = useState<string[]>([])
@@ -116,12 +108,8 @@ export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingPro
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
             <Sparkles className="h-6 w-6 text-primary animate-pulse" />
           </div>
-          <h4 className="text-sm font-semibold text-foreground">
-            Ihre Produktempfehlungen werden erstellt...
-          </h4>
-          <p className="text-xs text-muted-foreground">
-            Basierend auf Ihren Angaben finden wir die optimalen HARTMANN Produkte
-          </p>
+          <h4 className="text-sm font-semibold text-foreground">Ihre Produktempfehlungen werden erstellt...</h4>
+          <p className="text-xs text-muted-foreground">Basierend auf Ihren Angaben finden wir die optimalen HARTMANN Produkte</p>
         </CardContent>
       </Card>
     )
@@ -129,7 +117,6 @@ export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingPro
 
   return (
     <Card className="overflow-hidden border-border bg-card">
-      {/* Header with progress */}
       <div className="border-b border-border bg-primary/5 px-5 py-4">
         <div className="flex items-center gap-2 mb-3">
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary">
@@ -143,47 +130,24 @@ export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingPro
         <div className="flex items-center gap-1.5">
           {STEPS.map((s, i) => (
             <div key={s.title} className="flex-1 flex flex-col items-center gap-1">
-              <div
-                className={cn(
-                  "h-1.5 w-full rounded-full transition-all duration-300",
-                  i < step ? "bg-primary" : i === step ? "bg-primary/60" : "bg-border"
-                )}
-              />
-              <span className={cn(
-                "text-[9px] hidden sm:block",
-                i <= step ? "text-primary font-medium" : "text-muted-foreground"
-              )}>{s.title}</span>
+              <div className={cn("h-1.5 w-full rounded-full transition-all duration-300", i < step ? "bg-primary" : i === step ? "bg-primary/60" : "bg-border")} />
+              <span className={cn("text-[9px] hidden sm:block", i <= step ? "text-primary font-medium" : "text-muted-foreground")}>{s.title}</span>
             </div>
           ))}
         </div>
       </div>
 
       <CardContent className="p-5">
-        <h4 className="mb-4 text-sm font-semibold text-foreground">
-          {STEPS[step].question}
-        </h4>
+        <h4 className="mb-4 text-sm font-semibold text-foreground">{STEPS[step].question}</h4>
 
-        {/* Step 0: Categories (multi-select) */}
         {step === 0 && (
           <div className="grid grid-cols-1 gap-2">
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon
               const selected = categories.includes(cat.id)
               return (
-                <button
-                  key={cat.id}
-                  onClick={() => toggleMulti(categories, setCategories, cat.id)}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg border p-3 text-left transition-all",
-                    selected
-                      ? "border-primary bg-primary/5 shadow-sm"
-                      : "border-border bg-card hover:border-primary/30"
-                  )}
-                >
-                  <div className={cn(
-                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg",
-                    selected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                  )}>
+                <button key={cat.id} onClick={() => toggleMulti(categories, setCategories, cat.id)} className={cn("flex items-center gap-3 rounded-lg border p-3 text-left transition-all", selected ? "border-primary bg-primary/5 shadow-sm" : "border-border bg-card hover:border-primary/30")}>
+                  <div className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", selected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
                     <Icon className="h-4 w-4" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -197,27 +161,14 @@ export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingPro
           </div>
         )}
 
-        {/* Step 1: Setting (single select) */}
         {step === 1 && (
           <div className="grid grid-cols-2 gap-2">
             {SETTINGS.map((s) => {
               const Icon = s.icon
               const selected = setting === s.id
               return (
-                <button
-                  key={s.id}
-                  onClick={() => setSetting(s.id)}
-                  className={cn(
-                    "flex flex-col items-center gap-2 rounded-lg border p-3 text-center transition-all",
-                    selected
-                      ? "border-primary bg-primary/5 shadow-sm"
-                      : "border-border bg-card hover:border-primary/30"
-                  )}
-                >
-                  <div className={cn(
-                    "flex h-8 w-8 items-center justify-center rounded-full",
-                    selected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                  )}>
+                <button key={s.id} onClick={() => setSetting(s.id)} className={cn("flex flex-col items-center gap-2 rounded-lg border p-3 text-center transition-all", selected ? "border-primary bg-primary/5 shadow-sm" : "border-border bg-card hover:border-primary/30")}>
+                  <div className={cn("flex h-8 w-8 items-center justify-center rounded-full", selected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
                     <Icon className="h-4 w-4" />
                   </div>
                   <span className="text-[11px] font-medium text-foreground leading-tight">{s.label}</span>
@@ -228,22 +179,12 @@ export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingPro
           </div>
         )}
 
-        {/* Step 2: Needs (multi-select, filtered by category) */}
         {step === 2 && (
           <div className="grid grid-cols-1 gap-2">
             {NEEDS.map((need) => {
               const selected = needs.includes(need.id)
               return (
-                <button
-                  key={need.id}
-                  onClick={() => toggleMulti(needs, setNeeds, need.id)}
-                  className={cn(
-                    "flex items-center justify-between rounded-lg border p-3 text-left transition-all",
-                    selected
-                      ? "border-primary bg-primary/5 shadow-sm"
-                      : "border-border bg-card hover:border-primary/30"
-                  )}
-                >
+                <button key={need.id} onClick={() => toggleMulti(needs, setNeeds, need.id)} className={cn("flex items-center justify-between rounded-lg border p-3 text-left transition-all", selected ? "border-primary bg-primary/5 shadow-sm" : "border-border bg-card hover:border-primary/30")}>
                   <div>
                     <span className="text-xs font-medium text-foreground">{need.label}</span>
                     <span className="block text-[10px] text-muted-foreground">{need.description}</span>
@@ -255,22 +196,12 @@ export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingPro
           </div>
         )}
 
-        {/* Step 3: Patient Group */}
         {step === 3 && (
           <div className="grid grid-cols-2 gap-2">
             {PATIENT_GROUPS.map((pg) => {
               const selected = patientGroup === pg.id
               return (
-                <button
-                  key={pg.id}
-                  onClick={() => setPatientGroup(pg.id)}
-                  className={cn(
-                    "flex items-center gap-2 rounded-lg border p-3 text-left transition-all",
-                    selected
-                      ? "border-primary bg-primary/5 shadow-sm"
-                      : "border-border bg-card hover:border-primary/30"
-                  )}
-                >
+                <button key={pg.id} onClick={() => setPatientGroup(pg.id)} className={cn("flex items-center gap-2 rounded-lg border p-3 text-left transition-all", selected ? "border-primary bg-primary/5 shadow-sm" : "border-border bg-card hover:border-primary/30")}>
                   <Users className={cn("h-4 w-4 shrink-0", selected ? "text-primary" : "text-muted-foreground")} />
                   <span className="text-xs font-medium text-foreground">{pg.label}</span>
                   {selected && <Check className="ml-auto h-3.5 w-3.5 shrink-0 text-primary" />}
@@ -280,22 +211,12 @@ export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingPro
           </div>
         )}
 
-        {/* Step 4: Priority */}
         {step === 4 && (
           <div className="grid grid-cols-1 gap-2">
             {PRIORITIES.map((p) => {
               const selected = priority === p.id
               return (
-                <button
-                  key={p.id}
-                  onClick={() => setPriority(p.id)}
-                  className={cn(
-                    "flex items-center justify-between rounded-lg border p-3 text-left transition-all",
-                    selected
-                      ? "border-primary bg-primary/5 shadow-sm"
-                      : "border-border bg-card hover:border-primary/30"
-                  )}
-                >
+                <button key={p.id} onClick={() => setPriority(p.id)} className={cn("flex items-center justify-between rounded-lg border p-3 text-left transition-all", selected ? "border-primary bg-primary/5 shadow-sm" : "border-border bg-card hover:border-primary/30")}>
                   <div>
                     <span className="text-xs font-medium text-foreground">{p.label}</span>
                     <span className="block text-[10px] text-muted-foreground">{p.description}</span>
@@ -307,25 +228,14 @@ export function HartmannGuidedSelling({ greeting, onComplete }: GuidedSellingPro
           </div>
         )}
 
-        {/* Navigation */}
         <div className="mt-4 flex items-center gap-2">
           {step > 0 && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setStep((s) => s - 1)}
-              className="text-xs"
-            >
+            <Button size="sm" variant="ghost" onClick={() => setStep((s) => s - 1)} className="text-xs">
               <ArrowLeft className="mr-1 h-3 w-3" />
               {"Zur\u00FCck"}
             </Button>
           )}
-          <Button
-            size="sm"
-            className="ml-auto bg-primary text-xs text-primary-foreground hover:bg-hover"
-            disabled={!canAdvance}
-            onClick={handleNext}
-          >
+          <Button size="sm" className="ml-auto bg-primary text-xs text-primary-foreground hover:bg-hover" disabled={!canAdvance} onClick={handleNext}>
             {step === 4 ? (
               <>
                 Produkte finden

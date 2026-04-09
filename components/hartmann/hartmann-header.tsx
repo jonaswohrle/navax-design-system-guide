@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, ChevronDown, Menu, X } from "lucide-react"
+import { Search, Menu, X } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import type { HartmannNavigation } from "@/lib/sitecore"
@@ -50,7 +50,6 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
               Investoren
             </Link>
           </div>
-          {/* Mobile: show brand name */}
           <div className="flex w-full items-center justify-between md:hidden">
             <span className="text-[11px] text-white/80">HARTMANN Gruppe</span>
             <Search className="h-3.5 w-3.5 text-white/80" />
@@ -64,7 +63,6 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
         onMouseLeave={() => setActiveDropdown(null)}
       >
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6">
-          {/* Logo - left aligned */}
           <Link href="/" className="shrink-0 py-3" aria-label="HARTMANN Home" onMouseEnter={() => setActiveDropdown(null)}>
             <Image
               src="/images/hartmann-logo.png"
@@ -76,7 +74,6 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
             />
           </Link>
 
-          {/* Center navigation - uppercase links like original */}
           <ul className="hidden items-center lg:flex" onMouseEnter={() => {}}>
             {navigation.items.map((item) => (
               <li
@@ -92,13 +89,11 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
                   }`}
                 >
                   {item.label}
-                  {/* Active indicator line */}
                   {activeDropdown === item.label && (
                     <span className="absolute bottom-0 left-5 right-5 h-[3px] bg-[#002F6C]" />
                   )}
                 </button>
 
-                {/* Dropdown */}
                 {activeDropdown === item.label && item.children && (
                   <div className="absolute left-0 top-full z-50 w-56 border border-[#e5e7eb] bg-white py-2 shadow-lg">
                     {item.children.map((child) => (
@@ -116,7 +111,6 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
             ))}
           </ul>
 
-          {/* Right: search icon */}
           <div className="flex items-center gap-3" onMouseEnter={() => setActiveDropdown(null)}>
             <button
               className="hidden p-2 text-[#1a1a2e] transition-colors hover:text-[#002F6C] lg:flex"
@@ -125,7 +119,6 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
               <Search className="h-5 w-5" />
             </button>
 
-            {/* Mobile menu */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-[#1a1a2e] lg:hidden" aria-label="Menu">

@@ -12,7 +12,6 @@ export function HartmannPartners({ categories }: HartmannPartnersProps) {
           HARTMANN Ihr Partner im Gesundheitswesen
         </h2>
 
-        {/* Blue pill-shaped tag buttons - matching original layout */}
         <div className="flex flex-wrap justify-center gap-2.5">
           {categories.map((cat) => (
             <button

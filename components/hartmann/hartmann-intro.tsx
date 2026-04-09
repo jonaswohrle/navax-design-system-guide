@@ -19,16 +19,15 @@ export function HartmannIntro({ intro }: HartmannIntroProps) {
           ))}
         </div>
 
-        {/* Horizontal navigation dots - like the original breadcrumb strip */}
         <div className="mt-12 flex items-center justify-center">
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
             {[
-              { icon: "\u2302", label: "Start" },
-              { icon: "\u2764", label: "Ihr Partner" },
-              { icon: "\u2714", label: "Unsere Kompetenzen" },
-              { icon: "\u2605", label: "F\u00FCr Privatanwender" },
-              { icon: "\u25CF", label: "Unsere Produkte" },
-              { icon: "\u25CB", label: "\u00DCber HARTMANN" },
+              { label: "Start" },
+              { label: "Ihr Partner" },
+              { label: "Unsere Kompetenzen" },
+              { label: "F\u00FCr Privatanwender" },
+              { label: "Unsere Produkte" },
+              { label: "\u00DCber HARTMANN" },
             ].map((item) => (
               <button
                 key={item.label}

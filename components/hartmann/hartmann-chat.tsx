@@ -29,9 +29,6 @@ function getMessageText(message: UIMessage): string {
     .join("")
 }
 
-/* ------------------------------------------------------------------ */
-/*  Canvas content types                                               */
-/* ------------------------------------------------------------------ */
 type CanvasContent =
   | { kind: "products"; products: Array<Record<string, unknown>>; totalFound: number }
   | { kind: "no-results"; filtersApplied: Record<string, unknown> }
@@ -41,9 +38,6 @@ type CanvasContent =
   | { kind: "guided-selling"; greeting: string; toolCallId: string; input: Record<string, unknown> | undefined }
   | null
 
-/* ------------------------------------------------------------------ */
-/*  Skeleton loader for canvas                                         */
-/* ------------------------------------------------------------------ */
 function CanvasSkeleton({ label }: { label?: string }) {
   return (
     <div className="space-y-4 animate-pulse">
@@ -67,9 +61,6 @@ function CanvasSkeleton({ label }: { label?: string }) {
   )
 }
 
-/* ------------------------------------------------------------------ */
-/*  Academy card (rendered in canvas)                                  */
-/* ------------------------------------------------------------------ */
 function AcademyCard({ info }: { info: Record<string, unknown> }) {
   const offerings = (info.offerings || []) as string[]
   return (
@@ -108,9 +99,6 @@ function AcademyCard({ info }: { info: Record<string, unknown> }) {
   )
 }
 
-/* ------------------------------------------------------------------ */
-/*  Markdown renderer                                                  */
-/* ------------------------------------------------------------------ */
 const markdownComponents = {
   p: ({ children }: { children?: React.ReactNode }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
   strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-bold">{children}</strong>,
@@ -127,9 +115,7 @@ const markdownComponents = {
   h2: ({ children }: { children?: React.ReactNode }) => <p className="mb-1.5 text-sm font-bold">{children}</p>,
   h3: ({ children }: { children?: React.ReactNode }) => <p className="mb-1 text-sm font-semibold">{children}</p>,
   a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline underline-offset-2 hover:text-primary/80">
-      {children}
-    </a>
+    <a href={href} target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline underline-offset-2 hover:text-primary/80">{children}</a>
   ),
   hr: () => <hr className="my-2 border-border" />,
   blockquote: ({ children }: { children?: React.ReactNode }) => (
@@ -140,9 +126,6 @@ const markdownComponents = {
   ),
 }
 
-/* ================================================================== */
-/*  HartmannChat component                                             */
-/* ================================================================== */
 export function HartmannChat() {
   const [open, setOpen] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
@@ -167,7 +150,6 @@ export function HartmannChat() {
 
   const isStreaming = status === "streaming" || status === "submitted"
 
-  /* --- Extract latest canvas content from messages --- */
   const canvasContent = useMemo<CanvasContent>(() => {
     for (let m = messages.length - 1; m >= 0; m--) {
       const msg = messages[m]
@@ -178,7 +160,6 @@ export function HartmannChat() {
 
         const toolName = part.type.replace("tool-", "")
 
-        // Guided selling: client-side tool, show when input is available
         if (toolName === "startGuidedSelling" && part.state === "input-available") {
           return {
             kind: "guided-selling",
@@ -214,7 +195,6 @@ export function HartmannChat() {
     return null
   }, [messages])
 
-  /* --- Track canvas state --- */
   useEffect(() => {
     if (canvasContent !== null) {
       lastCanvasRef.current = canvasContent
@@ -229,7 +209,6 @@ export function HartmannChat() {
   const hasCanvas = canvasContent !== null || (canvasLoading && lastCanvasRef.current !== null)
   const displayContent = canvasContent || lastCanvasRef.current
 
-  /* --- Auto-scroll --- */
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight
   }, [])
@@ -242,7 +221,6 @@ export function HartmannChat() {
     setShowScrollBtn(scrollHeight - scrollTop - clientHeight > 100)
   }, [])
 
-  /* --- Handlers --- */
   const handleSend = useCallback(() => {
     const text = inputValue.trim()
     if (!text) return
@@ -265,7 +243,6 @@ export function HartmannChat() {
     setCanvasLoading(false)
   }, [setMessages])
 
-  /* --- Guided selling complete handler --- */
   const handleGuidedSellingComplete = useCallback(
     (preferences: Record<string, unknown>, toolCallId: string) => {
       addToolOutput({
@@ -278,7 +255,6 @@ export function HartmannChat() {
     [addToolOutput]
   )
 
-  /* --- Render inline tool indicator for chat column --- */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function renderToolInline(part: any, index: number, isFullscreenMode: boolean) {
     const toolCallId = part.toolCallId as string
@@ -287,14 +263,12 @@ export function HartmannChat() {
     const output = part.output as Record<string, unknown> | undefined
     const toolName = (part.type as string).replace("tool-", "")
 
-    // In fullscreen with canvas open: show brief inline references
     if (isFullscreenMode && canvasOpen) {
       if (toolName === "startGuidedSelling") {
         if (state === "input-streaming") {
           return (
             <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-1.5">
-              <Sparkles className="h-3 w-3 animate-spin" />
-              <span>Produktberater wird vorbereitet...</span>
+              <Sparkles className="h-3 w-3 animate-spin" /><span>Produktberater wird vorbereitet...</span>
             </div>
           )
         }
@@ -355,13 +329,11 @@ export function HartmannChat() {
       return null
     }
 
-    // Non-fullscreen (or canvas closed): render inline cards
     if (toolName === "startGuidedSelling") {
       if (state === "input-streaming") {
         return (
           <div key={toolCallId || index} className="flex items-center gap-2 text-xs text-muted-foreground py-2">
-            <Sparkles className="h-3 w-3 animate-spin" />
-            <span>Produktberater wird vorbereitet...</span>
+            <Sparkles className="h-3 w-3 animate-spin" /><span>Produktberater wird vorbereitet...</span>
           </div>
         )
       }
@@ -394,18 +366,13 @@ export function HartmannChat() {
 
     if (state !== "output-available" || !output) return null
 
-    // Inline product grid (non-fullscreen)
     if (toolName === "searchProducts") {
       const products = (output.products || []) as Array<Record<string, unknown>>
       const totalFound = (output.totalFound || 0) as number
       if (products.length === 0) return null
       return (
         <div key={toolCallId || index} className="my-2">
-          <ChatProductGrid
-            products={products as never}
-            totalFound={totalFound}
-            onViewDetails={(slug: string) => sendMessage({ text: `Zeige mir Details zu "${slug}"` })}
-          />
+          <ChatProductGrid products={products as never} totalFound={totalFound} onViewDetails={(slug: string) => sendMessage({ text: `Zeige mir Details zu "${slug}"` })} />
         </div>
       )
     }
@@ -414,62 +381,39 @@ export function HartmannChat() {
       if (output.error) return null
       return (
         <div key={toolCallId || index} className="my-2">
-          <ChatProductDetail
-            product={output as never}
-            onViewRelated={(slug: string) => sendMessage({ text: `Zeige mir verwandte Produkte zu "${slug}"` })}
-          />
+          <ChatProductDetail product={output as never} onViewRelated={(slug: string) => sendMessage({ text: `Zeige mir verwandte Produkte zu "${slug}"` })} />
         </div>
       )
     }
 
     if (toolName === "showContactInfo") {
-      return (
-        <div key={toolCallId || index} className="my-2">
-          <ChatContactCard info={output as never} />
-        </div>
-      )
+      return <div key={toolCallId || index} className="my-2"><ChatContactCard info={output as never} /></div>
     }
 
     if (toolName === "showAcademyInfo") {
-      return (
-        <div key={toolCallId || index} className="my-2">
-          <AcademyCard info={output} />
-        </div>
-      )
+      return <div key={toolCallId || index} className="my-2"><AcademyCard info={output} /></div>
     }
 
     return null
   }
 
-  /* --- Canvas panel content --- */
   function renderCanvas() {
-    if (canvasLoading && !canvasContent) {
-      return <CanvasSkeleton label="Ergebnisse laden..." />
-    }
+    if (canvasLoading && !canvasContent) return <CanvasSkeleton label="Ergebnisse laden..." />
 
     const content = canvasContent || displayContent
     if (!content) return null
 
     if (content.kind === "guided-selling") {
-      return (
-        <HartmannGuidedSelling
-          greeting={content.greeting}
-          onComplete={(preferences) => handleGuidedSellingComplete(preferences, content.toolCallId)}
-        />
-      )
+      return <HartmannGuidedSelling greeting={content.greeting} onComplete={(preferences) => handleGuidedSellingComplete(preferences, content.toolCallId)} />
     }
 
     if (content.kind === "no-results") {
       return (
         <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
-          <div className="rounded-full bg-muted p-4">
-            <Bandage className="h-8 w-8 text-muted-foreground" />
-          </div>
+          <div className="rounded-full bg-muted p-4"><Bandage className="h-8 w-8 text-muted-foreground" /></div>
           <div>
             <p className="text-sm font-semibold text-foreground">Keine Produkte gefunden</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Versuchen Sie es mit anderen Suchbegriffen oder starten Sie den Produktberater.
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">Versuchen Sie es mit anderen Suchbegriffen oder starten Sie den Produktberater.</p>
           </div>
         </div>
       )
@@ -478,11 +422,7 @@ export function HartmannChat() {
     if (content.kind === "products") {
       return (
         <div className={cn(canvasLoading && "opacity-50 pointer-events-none")}>
-          <ChatProductGrid
-            products={content.products as never}
-            totalFound={content.totalFound}
-            onViewDetails={(slug: string) => sendMessage({ text: `Zeige mir Details zu "${slug}"` })}
-          />
+          <ChatProductGrid products={content.products as never} totalFound={content.totalFound} onViewDetails={(slug: string) => sendMessage({ text: `Zeige mir Details zu "${slug}"` })} />
         </div>
       )
     }
@@ -490,10 +430,7 @@ export function HartmannChat() {
     if (content.kind === "detail") {
       return (
         <div className={cn(canvasLoading && "opacity-50 pointer-events-none")}>
-          <ChatProductDetail
-            product={content.product as never}
-            onViewRelated={(slug: string) => sendMessage({ text: `Zeige mir verwandte Produkte zu "${slug}"` })}
-          />
+          <ChatProductDetail product={content.product as never} onViewRelated={(slug: string) => sendMessage({ text: `Zeige mir verwandte Produkte zu "${slug}"` })} />
         </div>
       )
     }
@@ -517,7 +454,6 @@ export function HartmannChat() {
     return null
   }
 
-  /* --- Canvas label --- */
   function getCanvasLabel() {
     const content = canvasContent || displayContent
     if (!content) return ""
@@ -530,17 +466,12 @@ export function HartmannChat() {
     return ""
   }
 
-  /* --- Panel sizing --- */
   const panelClasses = fullscreen
     ? "fixed inset-0 z-50 flex flex-col bg-card"
     : "fixed bottom-6 right-6 z-50 flex h-[620px] w-[440px] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl max-sm:bottom-0 max-sm:right-0 max-sm:h-full max-sm:w-full max-sm:rounded-none"
 
-  /* ================================================================ */
-  /*  Render                                                           */
-  /* ================================================================ */
   return (
     <>
-      {/* FAB button */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
@@ -551,19 +482,11 @@ export function HartmannChat() {
         </button>
       )}
 
-      {/* Chat panel */}
       {open && (
         <div className={panelClasses}>
-          {/* Header */}
           <div className={cn("flex items-center justify-between bg-primary px-4 py-3 shrink-0", fullscreen && "px-6 py-4")}>
             <div className="flex items-center gap-2">
-              <Image
-                src="/images/hartmann-logo.png"
-                alt="HARTMANN"
-                width={fullscreen ? 110 : 90}
-                height={30}
-                className="h-6 w-auto brightness-0 invert"
-              />
+              <Image src="/images/hartmann-logo.png" alt="HARTMANN" width={fullscreen ? 110 : 90} height={30} className="h-6 w-auto brightness-0 invert" />
               <span className="text-xs text-primary-foreground/50">|</span>
               <div className="flex items-center gap-1.5">
                 <Sparkles className="h-3 w-3 text-primary-foreground/80" />
@@ -572,55 +495,27 @@ export function HartmannChat() {
             </div>
             <div className="flex items-center gap-1">
               {messages.length > 0 && (
-                <button
-                  onClick={handleReset}
-                  className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
-                  aria-label="Neuer Chat"
-                  title="Neuer Chat"
-                >
+                <button onClick={handleReset} className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors" aria-label="Neuer Chat" title="Neuer Chat">
                   <RotateCcw className="h-4 w-4" />
                 </button>
               )}
               {fullscreen && hasCanvas && (
-                <button
-                  onClick={() => setCanvasOpen((c) => !c)}
-                  className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
-                  aria-label={canvasOpen ? "Panel ausblenden" : "Panel einblenden"}
-                  title={canvasOpen ? "Panel ausblenden" : "Panel einblenden"}
-                >
+                <button onClick={() => setCanvasOpen((c) => !c)} className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors" aria-label={canvasOpen ? "Panel ausblenden" : "Panel einblenden"} title={canvasOpen ? "Panel ausblenden" : "Panel einblenden"}>
                   {canvasOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
                 </button>
               )}
-              <button
-                onClick={() => setFullscreen((f) => !f)}
-                className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
-                aria-label={fullscreen ? "Vollbild beenden" : "Vollbild"}
-              >
+              <button onClick={() => setFullscreen((f) => !f)} className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors" aria-label={fullscreen ? "Vollbild beenden" : "Vollbild"}>
                 {fullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
               </button>
-              <button
-                onClick={() => { setOpen(false); setFullscreen(false) }}
-                className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
-                aria-label="Chat schlie\u00DFen"
-              >
+              <button onClick={() => { setOpen(false); setFullscreen(false) }} className="rounded-full p-1.5 text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors" aria-label="Chat schlie\u00DFen">
                 <X className="h-4 w-4" />
               </button>
             </div>
           </div>
 
-          {/* Body: split in fullscreen when canvas has content */}
           <div className="flex flex-1 min-h-0">
-            {/* ---- Left: Chat column ---- */}
             <div className={cn("flex flex-1 flex-col min-w-0", fullscreen && hasCanvas && canvasOpen && "max-w-[50%]")}>
-              {/* Messages */}
-              <div
-                ref={scrollRef}
-                onScroll={handleScroll}
-                className={cn(
-                  "flex-1 overflow-y-auto px-4 py-3 space-y-3",
-                  fullscreen && "px-6 py-4"
-                )}
-              >
+              <div ref={scrollRef} onScroll={handleScroll} className={cn("flex-1 overflow-y-auto px-4 py-3 space-y-3", fullscreen && "px-6 py-4")}>
                 {messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full gap-6 py-8">
                     <div className="flex flex-col items-center gap-3">
@@ -629,56 +524,36 @@ export function HartmannChat() {
                       </div>
                       <div className="text-center">
                         <p className="text-sm font-semibold text-foreground">HARTMANN Gesundheitsassistent</p>
-                        <p className="mt-1 text-xs text-muted-foreground">
-                          {"Wie kann ich Ihnen helfen? Fragen Sie mich zu unseren Produkten, L\u00F6sungen oder Schulungen."}
-                        </p>
+                        <p className="mt-1 text-xs text-muted-foreground">{"Wie kann ich Ihnen helfen? Fragen Sie mich zu unseren Produkten, L\u00F6sungen oder Schulungen."}</p>
                       </div>
                     </div>
 
-                    {/* Quick action cards */}
                     <div className="w-full grid grid-cols-2 gap-2">
-                      <button
-                        onClick={() => handleSuggestion("Helfen Sie mir bei der Produktauswahl")}
-                        className="flex flex-col items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 p-3 text-center transition-colors hover:bg-primary/10"
-                      >
+                      <button onClick={() => handleSuggestion("Helfen Sie mir bei der Produktauswahl")} className="flex flex-col items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 p-3 text-center transition-colors hover:bg-primary/10">
                         <Stethoscope className="h-5 w-5 text-primary" />
                         <span className="text-[11px] font-medium text-foreground">Produktberater</span>
                         <span className="text-[9px] text-muted-foreground">Interaktive Beratung</span>
                       </button>
-                      <button
-                        onClick={() => handleSuggestion("Produkte f\u00FCr Wundversorgung")}
-                        className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card p-3 text-center transition-colors hover:bg-muted/50"
-                      >
+                      <button onClick={() => handleSuggestion("Produkte f\u00FCr Wundversorgung")} className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card p-3 text-center transition-colors hover:bg-muted/50">
                         <Bandage className="h-5 w-5 text-primary" />
                         <span className="text-[11px] font-medium text-foreground">Wundversorgung</span>
                         <span className="text-[9px] text-muted-foreground">Produkte entdecken</span>
                       </button>
-                      <button
-                        onClick={() => handleSuggestion("Schulungen & Academy")}
-                        className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card p-3 text-center transition-colors hover:bg-muted/50"
-                      >
+                      <button onClick={() => handleSuggestion("Schulungen & Academy")} className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card p-3 text-center transition-colors hover:bg-muted/50">
                         <BookOpen className="h-5 w-5 text-primary" />
                         <span className="text-[11px] font-medium text-foreground">Academy</span>
                         <span className="text-[9px] text-muted-foreground">Fortbildung & Wissen</span>
                       </button>
-                      <button
-                        onClick={() => handleSuggestion("Kontakt aufnehmen")}
-                        className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card p-3 text-center transition-colors hover:bg-muted/50"
-                      >
+                      <button onClick={() => handleSuggestion("Kontakt aufnehmen")} className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card p-3 text-center transition-colors hover:bg-muted/50">
                         <Send className="h-5 w-5 text-primary" />
                         <span className="text-[11px] font-medium text-foreground">Kontakt</span>
                         <span className="text-[9px] text-muted-foreground">Direkt anfragen</span>
                       </button>
                     </div>
 
-                    {/* Text suggestions */}
                     <div className="flex flex-wrap justify-center gap-2">
                       {SUGGESTIONS.slice(1).map((s) => (
-                        <button
-                          key={s}
-                          onClick={() => handleSuggestion(s)}
-                          className="rounded-full border border-border bg-card px-3 py-1.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
-                        >
+                        <button key={s} onClick={() => handleSuggestion(s)} className="rounded-full border border-border bg-card px-3 py-1.5 text-[10px] font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground">
                           {s}
                         </button>
                       ))}
@@ -695,14 +570,7 @@ export function HartmannChat() {
                       <div key={`${msg.id}-${msgIndex}`}>
                         {text && (
                           <div className={cn("flex", msg.role === "user" ? "justify-end" : "justify-start")}>
-                            <div
-                              className={cn(
-                                "max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-                                msg.role === "user"
-                                  ? "bg-primary text-primary-foreground rounded-br-md"
-                                  : "bg-secondary text-secondary-foreground rounded-bl-md"
-                              )}
-                            >
+                            <div className={cn("max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed", msg.role === "user" ? "bg-primary text-primary-foreground rounded-br-md" : "bg-secondary text-secondary-foreground rounded-bl-md")}>
                               <div className="prose-chat">
                                 <ReactMarkdown components={markdownComponents}>{text}</ReactMarkdown>
                               </div>
@@ -710,9 +578,7 @@ export function HartmannChat() {
                           </div>
                         )}
                         {msg.parts?.map((part, i) => {
-                          if (part.type.startsWith("tool-")) {
-                            return renderToolInline(part, i, fullscreen)
-                          }
+                          if (part.type.startsWith("tool-")) return renderToolInline(part, i, fullscreen)
                           return null
                         })}
                       </div>
@@ -746,20 +612,14 @@ export function HartmannChat() {
                 })()}
               </div>
 
-              {/* Scroll-to-bottom */}
               {showScrollBtn && (
                 <div className="relative">
-                  <button
-                    onClick={scrollToBottom}
-                    className="absolute -top-10 left-1/2 -translate-x-1/2 rounded-full bg-card border border-border p-1.5 shadow-md z-10"
-                    aria-label="Nach unten scrollen"
-                  >
+                  <button onClick={scrollToBottom} className="absolute -top-10 left-1/2 -translate-x-1/2 rounded-full bg-card border border-border p-1.5 shadow-md z-10" aria-label="Nach unten scrollen">
                     <ArrowDown className="h-3.5 w-3.5 text-muted-foreground" />
                   </button>
                 </div>
               )}
 
-              {/* Input */}
               <div className={cn("border-t border-border bg-card p-3 shrink-0", fullscreen && "px-6 py-4")}>
                 <div className="flex items-end gap-2">
                   <textarea
@@ -779,30 +639,19 @@ export function HartmannChat() {
                     <Send className="h-4 w-4" />
                   </button>
                 </div>
-                <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
-                  {"KI-gest\u00FCtzter Assistent \u2022 Ergebnisse k\u00F6nnen variieren"}
-                </p>
+                <p className="mt-1.5 text-center text-[10px] text-muted-foreground">{"KI-gest\u00FCtzter Assistent \u2022 Ergebnisse k\u00F6nnen variieren"}</p>
               </div>
             </div>
 
-            {/* ---- Right: Canvas panel (fullscreen only) ---- */}
             {fullscreen && hasCanvas && canvasOpen && (
               <div className="flex w-[50%] flex-col border-l border-border bg-muted/30">
-                {/* Canvas header */}
                 <div className="flex items-center gap-2 border-b border-border px-5 py-3 shrink-0">
                   <div className={cn("h-2 w-2 rounded-full bg-primary", (isStreaming || canvasLoading) && "animate-pulse")} />
-                  <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
-                    {getCanvasLabel()}
-                  </span>
-                  {canvasLoading && (
-                    <span className="text-[10px] text-muted-foreground ml-auto">Wird aktualisiert...</span>
-                  )}
+                  <span className="text-xs font-semibold uppercase tracking-wider text-foreground">{getCanvasLabel()}</span>
+                  {canvasLoading && <span className="text-[10px] text-muted-foreground ml-auto">Wird aktualisiert...</span>}
                 </div>
-                {/* Canvas body */}
                 <div className="flex-1 overflow-y-auto p-5">
-                  <div className="animate-in fade-in duration-200">
-                    {renderCanvas()}
-                  </div>
+                  <div className="animate-in fade-in duration-200">{renderCanvas()}</div>
                 </div>
               </div>
             )}

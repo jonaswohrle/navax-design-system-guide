@@ -10,7 +10,6 @@ export function HartmannHero({ hero }: HartmannHeroProps) {
     <section className="relative bg-white">
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col lg:flex-row lg:items-stretch">
-          {/* Text content - left side, ~45% width */}
           <div className="flex flex-1 flex-col justify-center px-6 py-10 lg:max-w-[480px] lg:py-16 lg:pr-12">
             <h1 className="mb-5 text-[28px] font-bold leading-tight text-[#1a1a2e] lg:text-[36px]">
               {hero.title}
@@ -19,13 +18,11 @@ export function HartmannHero({ hero }: HartmannHeroProps) {
               {hero.subtitle}
             </p>
           </div>
-
-          {/* Hero image - right side, ~55% width */}
           <div className="relative flex-1 lg:flex-[1.2]">
             <div className="relative aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[380px]">
               <Image
                 src={hero.backgroundImageUrl}
-                alt="HARTMANN - Hilft. Pflegt. Sch\u00FCtzt."
+                alt="HARTMANN - Hilft. Pflegt. Sch&uuml;tzt."
                 fill
                 className="object-cover object-center"
                 priority
