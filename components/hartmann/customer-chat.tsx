@@ -301,6 +301,13 @@ export function HartmannCustomerChat() {
 
   const isStreaming = status === "streaming" || status === "submitted"
 
+  /* --- Listen for external open event (e.g. from header nav) --- */
+  useEffect(() => {
+    const handler = () => setOpen(true)
+    window.addEventListener("hartmann:open-chat", handler)
+    return () => window.removeEventListener("hartmann:open-chat", handler)
+  }, [])
+
   /* --- Auto-scroll --- */
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight

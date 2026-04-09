@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, Search, Globe, ChevronDown } from "lucide-react"
+import { Menu, Search, Globe, ChevronDown, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 
@@ -13,7 +13,6 @@ const NAV_LINKS = [
   { label: "Branchen", href: "/vercel/sitecore" },
   { label: "Wissen & News", href: "/vercel/sitecore" },
   { label: "Unternehmen", href: "/vercel/sitecore" },
-  { label: "Sitecore AI", href: "/vercel/sitecore/chat", highlight: true },
 ]
 
 export function HartmannHeader() {
@@ -80,6 +79,14 @@ export function HartmannHeader() {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
+            <Button
+              onClick={() => window.dispatchEvent(new CustomEvent("hartmann:open-chat"))}
+              className="hidden gap-1.5 bg-[#0045FF] text-xs font-semibold text-white hover:bg-[#0035CC] lg:flex"
+              size="sm"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              KI-Berater
+            </Button>
             <Button variant="ghost" size="icon" className="text-foreground/60 hover:text-[#001689]" aria-label="Suche">
               <Search className="h-5 w-5" />
             </Button>
@@ -108,13 +115,21 @@ export function HartmannHeader() {
                       key={link.href + link.label}
                       href={link.href}
                       onClick={() => setMobileOpen(false)}
-                      className={`border-b border-border px-4 py-3.5 text-sm font-medium transition-colors hover:bg-muted ${
-                        link.highlight ? "text-[#0045FF] font-semibold" : "text-foreground"
-                      }`}
+                      className="border-b border-border px-4 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                     >
                       {link.label}
                     </Link>
                   ))}
+                  <button
+                    onClick={() => {
+                      setMobileOpen(false)
+                      window.dispatchEvent(new CustomEvent("hartmann:open-chat"))
+                    }}
+                    className="flex items-center gap-2 border-b border-border px-4 py-3.5 text-sm font-semibold text-[#0045FF] transition-colors hover:bg-muted"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    KI-Berater
+                  </button>
                 </nav>
               </SheetContent>
             </Sheet>
