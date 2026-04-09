@@ -11,10 +11,10 @@ export function HartmannCompetencies({ competencies }: HartmannCompetenciesProps
   return (
     <section className="bg-white py-12 lg:py-16">
       <div className="mx-auto max-w-[1200px] px-6">
-        <h2 className="mb-2 text-center text-[22px] font-bold text-[#1a1a2e] lg:text-[28px]">
+        <h2 className="mb-2 text-center text-[22px] font-bold text-foreground lg:text-[28px]">
           Unsere Kompetenz
         </h2>
-        <p className="mx-auto mb-10 max-w-[700px] text-center text-[13px] leading-[1.7] text-[#555]">
+        <p className="mx-auto mb-10 max-w-[700px] text-center text-[13px] leading-[1.7] text-muted-foreground">
           {"Vertrauen und Kompetenz von HARTMANN machen uns einzigartig. Darauf k\u00F6nnen Sie sich verlassen: Wir sind da, wenn Sie uns brauchen."}
         </p>
 
@@ -26,14 +26,14 @@ export function HartmannCompetencies({ competencies }: HartmannCompetenciesProps
               </div>
               <div className="p-5">
                 <div className="mb-2 flex items-center gap-1.5">
-                  <span className="inline-flex items-center gap-1 rounded-sm bg-[#002F6C] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white">
+                  <span className="inline-flex items-center gap-1 rounded-sm bg-primary px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white">
                     <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                     {comp.label}
                   </span>
                 </div>
-                <h3 className="mb-2 text-[16px] font-bold text-[#1a1a2e]">{comp.title}</h3>
-                <p className="mb-4 text-[12px] leading-[1.7] text-[#555]">{comp.description}</p>
-                <Link href={comp.linkUrl} className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#002F6C] transition-colors hover:text-[#001d44]">
+                <h3 className="mb-2 text-[16px] font-bold text-foreground">{comp.title}</h3>
+                <p className="mb-4 text-[12px] leading-[1.7] text-muted-foreground">{comp.description}</p>
+                <Link href={comp.linkUrl} className="inline-flex items-center gap-1 text-[12px] font-semibold text-primary transition-colors hover:text-hover">
                   Mehr erfahren
                   <ArrowRight className="h-3 w-3" />
                 </Link>

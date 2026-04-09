@@ -26,7 +26,7 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
   return (
     <header className="sticky top-0 z-50">
       {/* Top utility bar - dark navy blue like original */}
-      <div className="bg-[#002F6C]">
+      <div className="bg-primary">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-2">
           <div className="hidden items-center gap-6 md:flex">
             <Link href="#" className="text-[11px] text-white/80 transition-colors hover:text-white">
@@ -59,7 +59,7 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
 
       {/* Main navigation bar - white */}
       <nav
-        className={`bg-white transition-shadow duration-200 ${scrolled ? "shadow-md" : "border-b border-[#e5e7eb]"}`}
+        className={`bg-white transition-shadow duration-200 ${scrolled ? "shadow-md" : "border-b border-border"}`}
         onMouseLeave={() => setActiveDropdown(null)}
       >
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6">
@@ -84,23 +84,23 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
                 <button
                   className={`relative px-5 py-5 text-[13px] font-bold uppercase tracking-wide transition-colors ${
                     activeDropdown === item.label
-                      ? "text-[#002F6C]"
-                      : "text-[#1a1a2e] hover:text-[#002F6C]"
+                      ? "text-primary"
+                      : "text-foreground hover:text-primary"
                   }`}
                 >
                   {item.label}
                   {activeDropdown === item.label && (
-                    <span className="absolute bottom-0 left-5 right-5 h-[3px] bg-[#002F6C]" />
+                    <span className="absolute bottom-0 left-5 right-5 h-[3px] bg-primary" />
                   )}
                 </button>
 
                 {activeDropdown === item.label && item.children && (
-                  <div className="absolute left-0 top-full z-50 w-56 border border-[#e5e7eb] bg-white py-2 shadow-lg">
+                  <div className="absolute left-0 top-full z-50 w-56 border border-border bg-white py-2 shadow-lg">
                     {item.children.map((child) => (
                       <Link
                         key={child.label}
                         href={child.href}
-                        className="block px-5 py-2.5 text-[13px] text-[#333] transition-colors hover:bg-[#f5f5f5] hover:text-[#002F6C]"
+                        className="block px-5 py-2.5 text-[13px] text-foreground transition-colors hover:bg-secondary hover:text-primary"
                       >
                         {child.label}
                       </Link>
@@ -113,7 +113,7 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
 
           <div className="flex items-center gap-3" onMouseEnter={() => setActiveDropdown(null)}>
             <button
-              className="hidden p-2 text-[#1a1a2e] transition-colors hover:text-[#002F6C] lg:flex"
+              className="hidden p-2 text-foreground transition-colors hover:text-primary lg:flex"
               aria-label="Suche"
             >
               <Search className="h-5 w-5" />
@@ -121,13 +121,13 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
 
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-[#1a1a2e] lg:hidden" aria-label="Menu">
+                <Button variant="ghost" size="icon" className="text-foreground lg:hidden" aria-label="Menu">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-80 bg-white p-0">
                 <SheetTitle className="sr-only">Navigation</SheetTitle>
-                <div className="flex items-center justify-between bg-[#002F6C] px-4 py-3">
+                <div className="flex items-center justify-between bg-primary px-4 py-3">
                   <Image
                     src="/images/hartmann-logo.png"
                     alt="HARTMANN"
@@ -141,22 +141,22 @@ export function HartmannHeader({ navigation }: HartmannHeaderProps) {
                 </div>
                 <nav className="flex flex-col">
                   {navigation.items.map((item) => (
-                    <div key={item.label} className="border-b border-[#e5e7eb]">
+                    <div key={item.label} className="border-b border-border">
                       <Link
                         href={item.href}
                         onClick={() => setMobileOpen(false)}
-                        className="block px-5 py-3.5 text-[13px] font-bold uppercase tracking-wide text-[#1a1a2e]"
+                        className="block px-5 py-3.5 text-[13px] font-bold uppercase tracking-wide text-foreground"
                       >
                         {item.label}
                       </Link>
                       {item.children && (
-                        <div className="bg-[#f8f8f8] pb-2">
+                        <div className="bg-secondary pb-2">
                           {item.children.map((child) => (
                             <Link
                               key={child.label}
                               href={child.href}
                               onClick={() => setMobileOpen(false)}
-                              className="block px-8 py-2 text-[12px] text-[#555] hover:text-[#002F6C]"
+                              className="block px-8 py-2 text-[12px] text-muted-foreground hover:text-primary"
                             >
                               {child.label}
                             </Link>

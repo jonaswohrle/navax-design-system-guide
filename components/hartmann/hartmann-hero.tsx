@@ -11,10 +11,10 @@ export function HartmannHero({ hero }: HartmannHeroProps) {
       <div className="mx-auto max-w-[1200px]">
         <div className="flex flex-col lg:flex-row lg:items-stretch">
           <div className="flex flex-1 flex-col justify-center px-6 py-10 lg:max-w-[480px] lg:py-16 lg:pr-12">
-            <h1 className="mb-5 text-[28px] font-bold leading-tight text-[#1a1a2e] lg:text-[36px]">
+            <h1 className="mb-5 text-[28px] font-bold leading-tight text-foreground lg:text-[36px]">
               {hero.title}
             </h1>
-            <p className="text-[14px] leading-[1.7] text-[#555]">
+            <p className="text-[14px] leading-[1.7] text-muted-foreground">
               {hero.subtitle}
             </p>
           </div>

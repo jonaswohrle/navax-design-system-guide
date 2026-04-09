@@ -9,7 +9,7 @@ interface HartmannFooterProps {
 export function HartmannFooter({ footer }: HartmannFooterProps) {
   return (
     <footer>
-      <div className="bg-[#002F6C]">
+      <div className="bg-primary">
         <div className="mx-auto max-w-[1200px] px-6 py-12 lg:py-16">
           <div className="mb-10">
             <Image src="/images/hartmann-logo.png" alt="HARTMANN" width={140} height={42} className="h-9 w-auto brightness-0 invert" />
@@ -30,7 +30,7 @@ export function HartmannFooter({ footer }: HartmannFooterProps) {
           </div>
         </div>
       </div>
-      <div className="bg-[#001d44]">
+      <div className="bg-hover">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-3 px-6 py-4 md:flex-row">
           <p className="text-[11px] text-white/40">{footer.companyInfo}</p>
           <div className="flex items-center gap-5">
