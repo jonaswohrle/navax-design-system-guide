@@ -10,36 +10,36 @@
 
 @layer base {
   :root {
-    /* ── HARTMANN Brand: Dark Blue #002F6C + White + Light Gray ── */
+    /* ── HARTMANN Brand: Red #C8102E + White + Warm Gray ── */
     --background: 0 0% 100%;
-    --foreground: 213 100% 15%;
+    --foreground: 0 50% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 213 100% 15%;
+    --card-foreground: 0 50% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 213 100% 15%;
+    --popover-foreground: 0 50% 12%;
 
-    /* Primary: HARTMANN Dark Blue #002F6C */
-    --primary: 213 100% 21%;
+    /* Primary: HARTMANN Red #C8102E */
+    --primary: 350 85% 42%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Light gray for section backgrounds */
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 213 100% 15%;
+    /* Secondary: Light warm gray for section backgrounds */
+    --secondary: 0 10% 96%;
+    --secondary-foreground: 0 50% 12%;
 
-    /* Muted: Neutral grays */
-    --muted: 210 14% 93%;
-    --muted-foreground: 210 10% 46%;
+    /* Muted: Warm neutral grays */
+    --muted: 0 6% 93%;
+    --muted-foreground: 0 5% 46%;
 
-    /* Accent: HARTMANN medium blue for secondary CTAs */
-    --accent: 210 70% 45%;
+    /* Accent: Darker red for secondary CTAs */
+    --accent: 350 75% 35%;
     --accent-foreground: 0 0% 100%;
 
-    /* HARTMANN green -- used for highlights and sustainability CTAs */
-    --explore-yellow: 152 60% 40%;
+    /* Highlight: Warm amber for sustainability / promo CTAs */
+    --explore-yellow: 25 90% 50%;
     --explore-yellow-foreground: 0 0% 100%;
 
-    /* Hover: Slightly lighter blue */
-    --hover: 213 90% 30%;
+    /* Hover: Deeper crimson */
+    --hover: 350 85% 34%;
     --hover-foreground: 0 0% 100%;
 
     /* Destructive */
@@ -55,57 +55,57 @@
     --warning-foreground: 0 0% 100%;
 
     /* Info */
-    --info: 213 80% 40%;
+    --info: 350 60% 50%;
     --info-foreground: 0 0% 100%;
 
     /* Borders & inputs */
-    --border: 210 18% 87%;
-    --input: 210 18% 87%;
-    --ring: 213 100% 21%;
+    --border: 0 10% 87%;
+    --input: 0 10% 87%;
+    --ring: 350 85% 42%;
 
     /* Charts */
-    --chart-1: 213 100% 21%;
-    --chart-2: 210 70% 45%;
-    --chart-3: 210 10% 46%;
-    --chart-4: 152 60% 40%;
-    --chart-5: 213 40% 70%;
+    --chart-1: 350 85% 42%;
+    --chart-2: 350 75% 35%;
+    --chart-3: 0 5% 46%;
+    --chart-4: 25 90% 50%;
+    --chart-5: 350 40% 70%;
 
     --radius: 0.375rem;
 
-    /* Sidebar -- Dark navy for AI section */
-    --sidebar-background: 213 100% 15%;
+    /* Sidebar -- Dark red for AI section */
+    --sidebar-background: 350 70% 15%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 210 70% 55%;
+    --sidebar-primary: 350 85% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 213 80% 20%;
+    --sidebar-accent: 350 60% 22%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 213 60% 22%;
-    --sidebar-ring: 210 70% 55%;
+    --sidebar-border: 350 50% 22%;
+    --sidebar-ring: 350 85% 55%;
   }
 
   .dark {
-    /* ── Dark theme for AI section ── */
-    --background: 213 65% 10%;
+    /* ── Dark theme for AI section (red) ── */
+    --background: 350 50% 8%;
     --foreground: 0 0% 95%;
-    --card: 213 55% 13%;
+    --card: 350 40% 11%;
     --card-foreground: 0 0% 95%;
-    --popover: 213 55% 13%;
+    --popover: 350 40% 11%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 167 100% 39%;
-    --primary-foreground: 213 65% 15%;
+    --primary: 350 85% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 213 50% 18%;
+    --secondary: 350 30% 16%;
     --secondary-foreground: 0 0% 90%;
 
-    --muted: 213 40% 20%;
-    --muted-foreground: 215 16% 60%;
+    --muted: 350 25% 18%;
+    --muted-foreground: 0 10% 60%;
 
-    --accent: 213 50% 18%;
+    --accent: 350 30% 16%;
     --accent-foreground: 0 0% 95%;
 
-    --hover: 167 100% 39%;
-    --hover-foreground: 213 65% 15%;
+    --hover: 350 85% 60%;
+    --hover-foreground: 0 0% 100%;
 
     --destructive: 0 63% 45%;
     --destructive-foreground: 0 0% 100%;
@@ -116,27 +116,27 @@
     --warning: 38 80% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --info: 213 65% 50%;
+    --info: 350 60% 55%;
     --info-foreground: 0 0% 100%;
 
-    --border: 213 40% 22%;
-    --input: 213 40% 22%;
-    --ring: 167 100% 39%;
+    --border: 350 25% 20%;
+    --input: 350 25% 20%;
+    --ring: 350 85% 55%;
 
-    --chart-1: 167 100% 39%;
-    --chart-2: 213 50% 50%;
-    --chart-3: 215 16% 47%;
-    --chart-4: 167 40% 55%;
-    --chart-5: 216 33% 40%;
+    --chart-1: 350 85% 55%;
+    --chart-2: 350 50% 45%;
+    --chart-3: 0 10% 47%;
+    --chart-4: 25 70% 55%;
+    --chart-5: 350 33% 40%;
 
-    --sidebar-background: 213 65% 8%;
+    --sidebar-background: 350 50% 6%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 167 100% 39%;
-    --sidebar-primary-foreground: 213 65% 15%;
-    --sidebar-accent: 213 55% 15%;
+    --sidebar-primary: 350 85% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 350 40% 14%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 213 50% 15%;
-    --sidebar-ring: 167 100% 39%;
+    --sidebar-border: 350 35% 15%;
+    --sidebar-ring: 350 85% 55%;
   }
 
   /* ── Valtech / NAVAX dark theme for /vercel section ── */
