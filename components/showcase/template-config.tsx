@@ -24,7 +24,7 @@ const COMPONENT_NAMES = [
   "feature-card", "command-menu", "user-menu", "stepper", "kbd",
 ]
 
-const V0_RULES_TEXT = `Always use the Valtech design system when building UI.
+const V0_RULES_TEXT = `Always use the Brightly design system when building UI.
 
 Registry URL: ${REGISTRY_URL}/r
 
@@ -35,8 +35,8 @@ Import from @/components/ds/<component-name>
 
 Available components: ${COMPONENT_NAMES.join(", ")}
 
-Use the Valtech design system components instead of custom implementations.
-Always use the Valtech brand tokens defined in globals.css (primary = beige, background = black).`
+Use the Brightly design system components instead of custom implementations.
+Always use the Brightly brand tokens defined in globals.css (primary = green #00C9A7, foreground = navy #0C2340).`
 
 const MCP_CONFIG = `{
   "mcpServers": {
@@ -145,7 +145,7 @@ export function ShowcaseTemplateConfig() {
           </p>
         </div>
         <Text variant="small" className="mb-6">
-          Open the starter template in v0 to get a project with the NAVAX
+          Open the starter template in v0 to get a project with the Brightly
           header, footer, brand tokens, and fonts already configured.
           Then add more components from the registry as you build.
         </Text>
@@ -153,7 +153,7 @@ export function ShowcaseTemplateConfig() {
         <div className="rounded-lg border-2 border-primary/20 bg-primary/5 p-6 flex flex-col items-center gap-4 text-center">
           <OpenStarterInV0Button />
           <Text variant="caption" className="max-w-md">
-            Creates a new v0 project with the NAVAX app shell.
+            Creates a new v0 project with the Brightly app shell.
             All {COMPONENT_NAMES.length} components are available to add on demand.
           </Text>
         </div>

@@ -83,7 +83,7 @@ export function ShowcaseAdvanced() {
           <div className="w-64">
             <UserMenu
               name="Jonas Wohrle"
-              email="jonas@navax.com"
+              email="jonas@brightly.com"
               onProfile={() => {}}
               onSettings={() => {}}
               onSignOut={() => {}}
@@ -169,7 +169,7 @@ export function ShowcaseAdvanced() {
         <Text variant="small" className="mb-4">Customer quotes with ratings and avatars.</Text>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <TestimonialCard
-            quote="NAVAX transformed our ERP deployment. The team was professional and delivery was ahead of schedule."
+            quote="Brightly transformed our asset management. The team was professional and delivery was ahead of schedule."
             name="Maria Huber"
             role="CTO"
             company="Alpine Solutions"
