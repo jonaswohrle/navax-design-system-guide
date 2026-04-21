@@ -1,35 +1,17 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Inter, DM_Sans, Playfair_Display } from 'next/font/google'
-import { GeistMono } from 'geist/font/mono'
-import { SpeedInsights } from '@vercel/speed-insights/next'
+import { GeistPixelSquare } from 'geist/font/pixel'
 
 import './globals.css'
-import { ChatLoader } from '@/components/explore/chat-loader'
-import { NinetailedWrapper } from '@/components/providers/ninetailed-wrapper'
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-})
-
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
-  weight: ['400', '500', '600', '700'],
-})
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-playfair',
-  weight: ['400', '700', '900'],
-})
-
-const geistMono = GeistMono
+const _pixel = GeistPixelSquare
 
 export const metadata: Metadata = {
-  title: 'Book Adventure Travel & Small Group Tours | Explore',
-  description: 'Explore offers small group adventure holidays to over 100 countries worldwide. Award-winning tours with expert leaders. Book your next adventure today.',
+  title: 'DEMO',
+  description: 'The experience innovation company',
+  icons: {
+    icon: '/images/valtech-logo.png',
+  },
 }
 
 export default function RootLayout({
@@ -38,13 +20,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmSans.variable} ${playfair.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={_pixel.variable}>
       <body className="font-sans antialiased">
-        <NinetailedWrapper>
-          {children}
-          <ChatLoader />
-        </NinetailedWrapper>
-        <SpeedInsights />
+        {children}
       </body>
     </html>
   )
