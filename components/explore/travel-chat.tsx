@@ -112,18 +112,21 @@ export function TravelChat() {
   const [canvasLoading, setCanvasLoading] = useState(false)
   const personalization = useUnifiedPersonalization()
 
-  // Memoize body with serialized deps to prevent infinite re-render loop.
-  // The personalization provider returns new object refs each render, so we
-  // serialize to JSON for a stable comparison key.
-  const audience = personalization?.audience ?? "default"
-  const traitsJson = JSON.stringify(personalization?.profile?.traits ?? {})
-  const eventsJson = JSON.stringify(personalization?.profile?.events ?? {})
-  const chatBody = useMemo(() => ({
-    visitorAudience: audience,
-    visitorTraits: JSON.parse(traitsJson),
-    visitorEvents: JSON.parse(eventsJson),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [audience, traitsJson, eventsJson])
+  // Keep personalization data in a ref so the useChat body never changes
+  // identity, which prevents infinite re-render loops.
+  const personalizationRef = useRef({
+    visitorAudience: personalization?.audience ?? "default",
+    visitorTraits: personalization?.profile?.traits ?? {},
+    visitorEvents: personalization?.profile?.events ?? {},
+  })
+  useEffect(() => {
+    personalizationRef.current.visitorAudience = personalization?.audience ?? "default"
+    personalizationRef.current.visitorTraits = personalization?.profile?.traits ?? {}
+    personalizationRef.current.visitorEvents = personalization?.profile?.events ?? {}
+  }, [personalization?.audience, personalization?.profile?.traits, personalization?.profile?.events])
+
+  // Stable body object -- same reference across renders
+  const [chatBody] = useState(() => personalizationRef.current)
 
   const { messages, sendMessage, status, addToolOutput, error, setMessages } = useChat({
     transport,
