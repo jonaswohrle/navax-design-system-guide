@@ -23,7 +23,7 @@ function V0Logo({ className }: { className?: string }) {
 }
 
 /**
- * Opens the Brightly starter template in v0 -- header, footer, layout, and brand tokens.
+ * Opens the NAVAX starter template in v0 -- header, footer, layout, and brand tokens.
  * Uses window.location.origin so the URL works on any deployment (preview or production).
  */
 export function OpenStarterInV0Button({ className }: { className?: string }) {
@@ -40,7 +40,7 @@ export function OpenStarterInV0Button({ className }: { className?: string }) {
     <button
       type="button"
       onClick={handleClick}
-      aria-label="Open Brightly starter template in v0"
+      aria-label="Open NAVAX starter template in v0"
       className={cn(
         "inline-flex items-center gap-2 rounded-[8px] bg-white px-5 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-white/90 cursor-pointer",
         className,

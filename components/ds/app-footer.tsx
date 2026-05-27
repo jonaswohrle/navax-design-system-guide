@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { BrightlyLogo } from "./brightly-logo"
+import { ValtechLogo } from "./valtech-logo"
 
 interface FooterColumn {
   title: string
@@ -17,19 +17,19 @@ const defaultColumns: FooterColumn[] = [
   {
     title: "Solutions",
     links: [
-      { label: "Asset Management", href: "#" },
-      { label: "Capital Planning", href: "#" },
-      { label: "Maintenance", href: "#" },
-      { label: "Operations", href: "#" },
+      { label: "ERP", href: "#" },
+      { label: "CRM", href: "#" },
+      { label: "Business Intelligence", href: "#" },
+      { label: "Automation", href: "#" },
     ],
   },
   {
     title: "Industries",
     links: [
-      { label: "Education", href: "#" },
-      { label: "Government", href: "#" },
-      { label: "Healthcare", href: "#" },
       { label: "Manufacturing", href: "#" },
+      { label: "Professional Services", href: "#" },
+      { label: "Construction", href: "#" },
+      { label: "Trade", href: "#" },
     ],
   },
   {
@@ -45,7 +45,7 @@ const defaultColumns: FooterColumn[] = [
     title: "Resources",
     links: [
       { label: "Blog", href: "#" },
-      { label: "Case Studies", href: "#" },
+      { label: "Whitepapers", href: "#" },
       { label: "Events", href: "#" },
       { label: "Newsletter", href: "#" },
     ],
@@ -55,19 +55,19 @@ const defaultColumns: FooterColumn[] = [
 export function AppFooter({
   columns = defaultColumns,
   className,
-  companyName = "Brightly, A Siemens Company",
+  companyName = "Valtech",
 }: AppFooterProps) {
   const year = new Date().getFullYear()
 
   return (
-    <footer className={cn("bg-foreground text-background", className)}>
+    <footer className={cn("bg-background text-foreground", className)}>
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           {/* Brand column */}
           <div className="flex flex-col gap-4 lg:max-w-xs">
-            <BrightlyLogo variant="light" width={120} />
-            <p className="text-sm leading-relaxed text-background/60">
-              Empowering you through partnership and innovation. Smart asset management solutions for every industry.
+            <ValtechLogo variant="light" width={120} />
+            <p className="text-sm leading-relaxed text-foreground/50">
+              The experience innovation company. We transform bold ideas into transformative experiences.
             </p>
           </div>
 
@@ -75,13 +75,13 @@ export function AppFooter({
           <div className="grid flex-1 grid-cols-2 gap-8 md:grid-cols-4">
             {columns.map((column) => (
               <div key={column.title}>
-                <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-background/70">{column.title}</h4>
+                <h4 className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-foreground/70">{column.title}</h4>
                 <ul className="flex flex-col gap-2.5">
                   {column.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm text-background/50 transition-colors hover:text-primary"
+                        className="text-sm text-foreground/40 transition-colors hover:text-hover"
                       >
                         {link.label}
                       </Link>
@@ -94,18 +94,18 @@ export function AppFooter({
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-background/10 pt-8 md:flex-row">
-          <p className="text-xs text-background/40">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-foreground/10 pt-8 md:flex-row">
+          <p className="text-xs text-foreground/40">
             {`\u00A9 ${year} ${companyName}. All rights reserved.`}
           </p>
           <div className="flex items-center gap-6">
-            <Link href="#" className="text-xs text-background/40 transition-colors hover:text-primary">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Privacy Policy
             </Link>
-            <Link href="#" className="text-xs text-background/40 transition-colors hover:text-primary">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Terms of Service
             </Link>
-            <Link href="#" className="text-xs text-background/40 transition-colors hover:text-primary">
+            <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
               Imprint
             </Link>
           </div>

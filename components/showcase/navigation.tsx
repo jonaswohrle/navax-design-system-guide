@@ -2,7 +2,7 @@
 
 import React from "react"
 import { Navbar, NavbarLink, Breadcrumbs, TabNav, PageHeader } from "@/components/ds"
-import { BrightlyLogo } from "@/components/ds/brightly-logo"
+import { ValtechLogo } from "@/components/ds/valtech-logo"
 import { Button } from "@/components/ui/button"
 import { Bell, Plus } from "lucide-react"
 
@@ -16,7 +16,7 @@ export function ShowcaseNavigation() {
         <p className="text-sm font-medium mb-3 text-foreground">Navbar</p>
         <div className="rounded-lg border border-border overflow-hidden">
           <Navbar
-            logo={<BrightlyLogo width={100} variant="dark" />}
+            logo={<ValtechLogo width={100} variant="dark" />}
             actions={
               <>
                 <Button variant="ghost" size="icon" aria-label="Notifications">
@@ -44,7 +44,7 @@ export function ShowcaseNavigation() {
             items={[
               { label: "Home", href: "#" },
               { label: "Projects", href: "#" },
-              { label: "Brightly" },
+              { label: "NAVAX" },
             ]}
           />
           <Breadcrumbs
