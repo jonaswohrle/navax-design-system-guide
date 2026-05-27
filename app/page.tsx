@@ -1,187 +1,469 @@
 import Link from "next/link"
+import Image from "next/image"
 import {
-  getExploreHero,
-  getPromoBanner,
-  getTrustPillars,
-  getPromoCards,
-  getTripListings,
-  getReviewItems,
-  getFlexPolicy,
-  getBlogPosts,
-  getPersonalizedHeroes,
-} from "@/lib/contentful"
-import { SiteHeader } from "@/components/explore/site-header"
-import { SiteFooter } from "@/components/explore/site-footer"
-import { AuthProvider } from "@/lib/auth-context"
-import { HeroSearch } from "@/components/explore/hero-search"
-import { PersonalizedHero } from "@/components/explore/personalized-hero"
-import { TrustStrip } from "@/components/explore/trust-strip"
-import { PromoGrid } from "@/components/explore/promo-grid"
-import { ReviewCarousel } from "@/components/explore/review-carousel"
-import { TripCard } from "@/components/explore/trip-card"
-import { FlexBanner } from "@/components/explore/flex-banner"
-import { AiCtaBanner } from "@/components/explore/ai-cta-banner"
-import { ContentCard } from "@/components/explore/content-card"
-import { ArrowRight } from "lucide-react"
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Code2,
+  Cpu,
+  Layers,
+  MessageSquare,
+  ImagePlus,
+  GitBranch,
+  Triangle,
+  type LucideIcon,
+} from "lucide-react"
+import { ValtechLogo } from "@/components/ds/valtech-logo"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-/* ------------------------------------------------------------------ */
-/*  Fallback data                                                      */
-/* ------------------------------------------------------------------ */
-const FALLBACK_HERO = {
-  title: "Explore!",
-  subtitle: "Small group adventures to inspire the soul",
-  ctaText: "Let's go!",
-  ctaLink: "/destinations",
-  backgroundImageUrl: "/images/explore/hero-santorini.png",
+/* ── Reusable blocks ── */
+
+function AgendaItem({
+  number,
+  title,
+  description,
+  href,
+  icon: Icon,
+  isMain,
+}: {
+  number: string
+  title: string
+  description: string
+  href: string
+  icon: LucideIcon
+  isMain?: boolean
+}) {
+  return (
+    <Link href={href} className="group block">
+      <div
+        className={cn(
+          "flex h-full flex-col gap-6 border-t border-foreground/20 pt-6 transition-all group-hover:border-hover",
+          isMain && "border-foreground"
+        )}
+      >
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-medium text-muted-foreground">
+              {number}
+            </span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+              <Icon className="h-5 w-5" />
+            </div>
+          </div>
+          <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-hover" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-xl font-heading font-normal tracking-tight text-foreground transition-colors group-hover:text-hover">
+            {title}
+          </h3>
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+            {description}
+          </p>
+        </div>
+        {isMain && (
+          <span className="self-start rounded-full border border-foreground/30 px-3 py-1 text-xs font-medium text-foreground">
+            Hauptteil
+          </span>
+        )}
+      </div>
+    </Link>
+  )
 }
 
-const FALLBACK_TRIPS = [
-  { title: "Greek Island Hopping", destination: "Greece", tripType: "Discovery", duration: "10 Days", price: 1895, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Best Seller"], tripCode: "GIH", slug: "greek-island-hopping", order: 1 },
-  { title: "Japan In Depth - Footsteps of the Shogun", destination: "Japan", tripType: "Discovery", duration: "12 Days", price: 4245, originalPrice: 4545, imageUrl: "/images/explore/trip-japan.jpg", badges: ["Discounted", "Best Seller"], tripCode: "JS", slug: "japan-in-depth", order: 2 },
-  { title: "Amalfi Coast Walking - Agriturismo", destination: "Italy", tripType: "Walking", duration: "8 Days", price: 1495, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Centre-based", "Best Seller"], tripCode: "NAW", slug: "amalfi-coast-walking", order: 3 },
-  { title: "Discover Morocco", destination: "Morocco", tripType: "Discovery", duration: "10 Days", price: 1295, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Best Seller"], tripCode: "MD", slug: "morocco-discovery", order: 4 },
-  { title: "Adventures in Patagonia", destination: "Argentina & Chile", tripType: "Discovery", duration: "14 Days", price: 5065, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Best Seller"], tripCode: "PA", slug: "adventures-in-patagonia", order: 5 },
-  { title: "Iceland's Ring Road", destination: "Iceland", tripType: "Discovery", duration: "10 Days", price: 3495, imageUrl: "/images/explore/trip-patagonia.jpg", badges: ["Best Seller"], tripCode: "IRR", slug: "iceland-ring-road", order: 6 },
-  { title: "Portugal Highlights", destination: "Portugal", tripType: "Discovery", duration: "9 Days", price: 1595, imageUrl: "/images/explore/trip-amalfi.jpg", badges: ["Best Seller"], tripCode: "PH", slug: "portugal-highlights", order: 7 },
-  { title: "South Africa & Eswatini", destination: "South Africa", tripType: "Wildlife", duration: "10 Days", price: 1395, originalPrice: 1695, imageUrl: "/images/explore/trip-south-africa.jpg", badges: ["Discounted", "Best Seller"], tripCode: "ZK", slug: "south-africa-eswatini", order: 8 },
-]
-
-const FALLBACK_BLOG = [
-  { title: "Walking the Great Wall of China: Everything you need to know", excerpt: "Our guide to walking the Great Wall covers the best sections to visit and how to make the most of this incredible experience.", imageUrl: "/images/explore/blog-great-wall.jpg", publishDate: "2026-03-10", category: "Adventure Travel", slug: "walking-great-wall-china", order: 1 },
-  { title: "Why cycling holidays are more popular than ever", excerpt: "From the vineyards of France to the rice paddies of Vietnam, discover why cycling tours are the fastest growing holiday trend.", imageUrl: "/images/explore/blog-cycling.jpg", publishDate: "2026-03-05", category: "Cycling", slug: "cycling-holidays-popular", order: 2 },
-  { title: "Your first trip to China: A complete guide", excerpt: "Planning your first trip to China? Everything you need to know about visas, culture, food and the best places to visit.", imageUrl: "/images/explore/blog-china-first.jpg", publishDate: "2026-02-28", category: "Adventure Travel", slug: "first-trip-china-guide", order: 3 },
-]
-
-/* ------------------------------------------------------------------ */
-/*  Page                                                               */
-/* ------------------------------------------------------------------ */
-export default async function Page() {
-  const [hero, promoBanner, pillars, promos, trips, reviews, flex, blog, heroVariants] =
-    await Promise.all([
-      getExploreHero(),
-      getPromoBanner(),
-      getTrustPillars(),
-      getPromoCards(),
-      getTripListings(),
-      getReviewItems(),
-      getFlexPolicy(),
-      getBlogPosts(),
-      getPersonalizedHeroes(),
-    ])
-
-  const h = hero ?? FALLBACK_HERO
-  const tripList = trips?.length ? trips : FALLBACK_TRIPS
-  const blogList = blog?.length ? blog : FALLBACK_BLOG
-
+function DemoCard({
+  title,
+  description,
+  href,
+  icon: Icon,
+  concepts,
+}: {
+  title: string
+  description: string
+  href: string
+  icon: LucideIcon
+  concepts: string[]
+}) {
   return (
-    <AuthProvider>
+    <Link href={href} className="group block">
+        <div className="flex h-full flex-col gap-5 border-t border-foreground/20 pt-6 transition-all group-hover:border-hover">
+        <div className="flex items-start justify-between">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+            <Icon className="h-5 w-5" />
+          </div>
+          <ArrowRight className="h-5 w-5 text-foreground/0 transition-all group-hover:translate-x-1 group-hover:text-hover" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-lg font-heading font-normal tracking-tight text-foreground transition-colors group-hover:text-hover">
+            {title}
+          </h3>
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+            {description}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {concepts.map((c) => (
+            <span
+              key={c}
+              className="rounded-full border border-foreground/15 px-3 py-1 text-xs text-muted-foreground"
+            >
+              {c}
+            </span>
+          ))}
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+export default function Page() {
+  return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
-      <SiteHeader promoBanner={promoBanner} />
-
-      {/* Personalized hero -- selects variant based on visitor audience */}
-      {heroVariants && heroVariants.length > 0 ? (
-        <PersonalizedHero
-          variants={heroVariants}
-          fallbackImageUrl={h.backgroundImageUrl || "/images/explore/hero-santorini.png"}
-        />
-      ) : (
-        <HeroSearch backgroundImageUrl={h.backgroundImageUrl || "/images/explore/hero-santorini.png"} />
-      )}
-
-      {/* Trust strip */}
-      <TrustStrip pillars={pillars?.length ? pillars : undefined} />
-
-      {/* Promo grid */}
-      <PromoGrid promos={promos?.length ? promos : undefined} />
-
-      {/* Brand story -- matching real site layout */}
-      <section className="bg-secondary py-12 lg:py-20">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="max-w-2xl">
-            <h2 className="mb-4 font-heading text-3xl font-bold text-foreground lg:text-4xl text-balance">
-              The adventure travel experts
-            </h2>
-            <p className="mb-3 text-sm font-medium uppercase tracking-wider text-primary">
-              Over 40 years of adventure
-            </p>
-            <p className="text-base leading-relaxed text-muted-foreground lg:text-lg">
-              {"Since launching in 1981 with only six tours in a four-page brochure, Explore has grown to offer over 500 trips from classic 'discovery' group tours, solo traveller holidays and active family adventures, to walking holidays and cycling trips. Choose from around 100 countries and explore cultures, landscapes, wildlife and communities from Asia to Africa, the Arctic to the Americas."}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Reviews carousel */}
-      <ReviewCarousel reviews={reviews?.length ? reviews : undefined} />
-
-      {/* Recommended trips */}
-      <section className="bg-secondary py-12 lg:py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-8 flex items-end justify-between">
-            <h2 className="font-heading text-2xl font-bold text-foreground lg:text-3xl">
-              Recommended trips for you
-            </h2>
+      {/* Top bar -- Valtech style: clean, black, minimal */}
+      <header className="fixed top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+          <Link href="/">
+            <ValtechLogo variant="light" width={140} />
+          </Link>
+          <nav className="hidden items-center gap-10 lg:flex">
             <Link
-              href="/destinations"
-              className="hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-hover md:flex"
+              href="/ai/vercel-v0/vercel"
+            className="text-sm text-foreground/70 transition-colors hover:text-hover"
+          >
+            Vercel & v0
+          </Link>
+          <Link
+            href="/ai"
+            className="text-sm text-foreground/70 transition-colors hover:text-hover"
             >
-              Search our tours
-              <ArrowRight className="h-4 w-4" />
+              AI Showcases
+            </Link>
+          </nav>
+          <div className="flex items-center gap-3">
+            <Link href="/ai">
+              <Button size="sm">
+                AI Showcases
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
             </Link>
           </div>
+        </div>
+      </header>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {tripList.slice(0, 5).map((trip) => (
-              <TripCard key={trip.title} trip={trip} />
-            ))}
+      <main>
+        {/* Hero -- Full-screen Valtech-style hero with background image */}
+        <section className="relative flex min-h-screen flex-col justify-end px-6 pb-16 pt-32 overflow-hidden">
+          {/* Background image */}
+          <Image
+            src="/images/hero-bg.png"
+            alt=""
+            fill
+            className="object-cover object-center pointer-events-none"
+            priority
+          />
+          {/* Gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none" />
+          <div className="relative z-10 mx-auto w-full max-w-7xl">
+            <h1 className="max-w-4xl text-5xl font-heading font-normal tracking-tight text-foreground text-balance lg:text-7xl">
+              Welcome to
+              <br />
+              Vercel & v0 Workshop
+            </h1>
           </div>
+        </section>
 
-          <div className="mt-6 text-center md:hidden">
-            <Button asChild variant="outline">
-              <Link href="/destinations">
-                Search our tours
-                <ArrowRight className="ml-1 h-4 w-4" />
+        {/* Workshop Agenda */}
+        <section className="bg-[hsl(30,33%,94%)] text-[hsl(0,0%,10%)]">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:py-28">
+            <h2 className="text-3xl font-heading font-normal tracking-tight text-balance lg:text-5xl">
+              What we'll cover today
+            </h2>
+            <p className="mt-4 max-w-lg text-base text-[hsl(0,0%,40%)] leading-relaxed">
+              Three blocks -- from the platform through hands-on with v0 to
+              inspiration for your own projects.
+            </p>
+            <div className="mt-12 grid gap-8 lg:grid-cols-3">
+              <Link href="/ai/vercel-v0/vercel" className="group block">
+                <div className="flex h-full flex-col gap-6 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-medium text-[hsl(0,0%,40%)]">01</span>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                        <Layers className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
+                      Vercel Platform
+                    </h3>
+                    <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
+                      The platform behind Next.js, Turborepo and the AI SDK. Open Source Foundation, Framework-Defined Infrastructure, Developer Tools and AI Cloud.
+                    </p>
+                  </div>
+                </div>
               </Link>
-            </Button>
+              <Link href="/ai/vercel-v0" className="group block">
+                <div className="flex h-full flex-col gap-6 border-t-2 border-[hsl(0,0%,10%)] pt-6 transition-all group-hover:border-hover">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-medium text-[hsl(0,0%,40%)]">02</span>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                        <Code2 className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
+                      v0 -- AI-Powered Development
+                    </h3>
+                    <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
+                      The main event: v0 changes who can build frontends. AI Code Generation, Git-native Workflows, Design System Integration and how prompts become products.
+                    </p>
+                  </div>
+                  <span className="self-start rounded-full border border-[hsl(0,0%,10%)]/30 px-3 py-1 text-xs font-medium text-[hsl(0,0%,10%)]">
+                    Main part
+                  </span>
+                </div>
+              </Link>
+              <Link href="/ai" className="group block">
+                <div className="flex h-full flex-col gap-6 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-medium text-[hsl(0,0%,40%)]">03</span>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                        <Sparkles className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
+                      AI Showcases -- Project Ideas
+                    </h3>
+                    <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
+                      Interactive demos for inspiration: Prompt Coach, Image Studio and Content Pipeline. Ready-made patterns for AI SDK, Streaming and Multi-Model Pipelines.
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* AI/Tech CTA */}
-      <AiCtaBanner />
-
-      {/* Blog inspiration */}
-      <section className="bg-background py-12 lg:py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mb-8 flex items-end justify-between">
-            <h2 className="font-heading text-2xl font-bold text-foreground lg:text-3xl">
-              Travel inspiration
+        {/* Why v0 -- Key value props */}
+        <section>
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:py-28">
+            <h2 className="text-3xl font-heading font-normal tracking-tight text-foreground text-balance lg:text-5xl">
+              Why v0?
             </h2>
-            <Link
-              href="/blog"
-              className="hidden items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-hover md:flex"
-            >
-              View all articles
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <p className="mt-4 max-w-2xl text-base text-muted-foreground leading-relaxed">
+              v0 is not just a code generator -- it fundamentally changes how teams go from idea
+              to finished product.
+            </p>
+            <div className="mt-16 grid gap-12 sm:grid-cols-3">
+              {[
+                {
+                  title: "Rapid Prototyping",
+                  desc: "Product managers describe an idea in natural language. v0 generates a working prototype in minutes instead of weeks -- how Okta, eBay and Procore already do it.",
+                  icon: Zap,
+                },
+                {
+                  title: "Vibe Coding for Teams",
+                  desc: "Engineering teams use v0 as a coding accelerator. Generate boilerplate, scaffold components, build internal tools -- like Microsoft (6,000+ developers) and Amazon.",
+                  icon: Code2,
+                },
+                {
+                  title: "Design System Integration",
+                  desc: "v0 knows your design tokens, components and patterns. Every generated code automatically follows your design system -- consistent, accessible and on-brand.",
+                  icon: Cpu,
+                },
+              ].map((item) => (
+                <div key={item.title} className="flex flex-col gap-4 border-t border-foreground/20 pt-6">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/20">
+                    <item.icon className="h-5 w-5 text-foreground" />
+                  </div>
+                  <h3 className="text-lg font-heading font-normal text-foreground">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {blogList.slice(0, 3).map((post) => (
-              <ContentCard key={post.title} post={post} />
-            ))}
+        {/* AI Showcases preview */}
+        <section className="bg-[hsl(30,33%,94%)] text-[hsl(0,0%,10%)]">
+          <div className="mx-auto max-w-7xl px-6 py-20 lg:py-28">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-3xl font-heading font-normal tracking-tight text-balance lg:text-5xl">
+                AI Showcases -- Try them out
+              </h2>
+              <p className="max-w-lg text-base text-[hsl(0,0%,40%)] leading-relaxed">
+                Each demo is a working AI application. Test different
+                models, look at the code and get inspired for your own projects.
+              </p>
+            </div>
+            <div className="mt-12 grid gap-8 lg:grid-cols-3">
+              <Link href="/ai/prompt-coach" className="group block">
+                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
+                  <div className="flex items-start justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                      <MessageSquare className="h-5 w-5" />
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
+                      Prompt Coach
+                    </h3>
+                    <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
+                      AI-powered feedback on your prompts. Quality scores, analysis and rewritten versions side by side.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["useChat", "Tool Calling", "Structured Output"].map((c) => (
+                      <span key={c} className="rounded-full border border-[hsl(0,0%,10%)]/15 px-3 py-1 text-xs text-[hsl(0,0%,40%)]">{c}</span>
+                    ))}
+                  </div>
+                </div>
+              </Link>
+              <Link href="/ai/image-studio" className="group block">
+                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
+                  <div className="flex items-start justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                      <ImagePlus className="h-5 w-5" />
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
+                      AI Image Studio
+                    </h3>
+                    <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
+                      Generate and transform images with Gemini 3 Pro. Upload reference images, describe transformations, see results.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["Multimodal", "Image Generation", "File Upload"].map((c) => (
+                      <span key={c} className="rounded-full border border-[hsl(0,0%,10%)]/15 px-3 py-1 text-xs text-[hsl(0,0%,40%)]">{c}</span>
+                    ))}
+                  </div>
+                </div>
+              </Link>
+              <Link href="/ai/content-pipeline" className="group block">
+                <div className="flex h-full flex-col gap-5 border-t border-[hsl(0,0%,10%)]/20 pt-6 transition-all group-hover:border-hover">
+                  <div className="flex items-start justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[hsl(0,0%,10%)]/20 transition-colors group-hover:bg-hover group-hover:text-hover-foreground group-hover:border-hover">
+                      <GitBranch className="h-5 w-5" />
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-transparent transition-all group-hover:translate-x-1 group-hover:text-hover" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-heading font-normal tracking-tight text-[hsl(0,0%,10%)] transition-colors group-hover:text-hover">
+                      Content Pipeline
+                    </h3>
+                    <p className="mt-2 text-sm text-[hsl(0,0%,40%)] leading-relaxed">
+                      A 4-step AI pipeline that researches, writes, reviews and generates images in real-time -- all streamed live.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["SSE Streaming", "Chained AI Calls", "Pipeline"].map((c) => (
+                      <span key={c} className="rounded-full border border-[hsl(0,0%,10%)]/15 px-3 py-1 text-xs text-[hsl(0,0%,40%)]">{c}</span>
+                    ))}
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* References */}
+        <section>
+          <div className="mx-auto max-w-7xl px-6 py-16">
+            <p className="text-center text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              v0 is already used by
+            </p>
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-12 lg:gap-20">
+              {["OpenAI", "Microsoft", "Amazon", "BCG", "WPP"].map((name) => (
+                <span
+                  key={name}
+                  className="text-lg font-heading font-normal tracking-tight text-foreground/40 transition-colors hover:text-hover"
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="bg-[hsl(30,33%,94%)] text-[hsl(0,0%,10%)]">
+          <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 py-20 lg:py-28">
+            <h2 className="max-w-3xl text-3xl font-heading font-normal tracking-tight text-balance lg:text-5xl">
+              Ready to get started?
+            </h2>
+            <p className="max-w-md text-base text-[hsl(0,0%,40%)] leading-relaxed">
+              Start with the Vercel platform or jump directly into the
+              interactive AI showcases.
+            </p>
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <Link href="/ai/vercel-v0/vercel">
+                <Button
+                  size="lg"
+                  className="gap-2 border-[hsl(0,0%,10%)] text-[hsl(0,0%,10%)] hover:bg-hover hover:text-hover-foreground hover:border-hover"
+                >
+                  Vercel & v0
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/ai">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="gap-2 border-[hsl(0,0%,10%)]/30 text-[hsl(0,0%,10%)] hover:border-hover hover:bg-hover hover:text-hover-foreground"
+                >
+                  AI Showcases
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer -- Valtech style: black, minimal */}
+      <footer className="border-t border-foreground/10">
+        <div className="mx-auto max-w-7xl px-6 py-16">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
+            <ValtechLogo variant="light" width={120} />
+            <nav className="flex flex-wrap gap-8 text-sm text-foreground/60">
+              <Link href="/ai/vercel-v0/vercel" className="transition-colors hover:text-hover">Vercel & v0</Link>
+              <Link href="/ai" className="transition-colors hover:text-hover">AI Showcases</Link>
+              <Link href="/ai/prompt-coach" className="transition-colors hover:text-hover">Prompt Coach</Link>
+              <Link href="/ai/image-studio" className="transition-colors hover:text-hover">Image Studio</Link>
+              <Link href="/ai/content-pipeline" className="transition-colors hover:text-hover">Content Pipeline</Link>
+            </nav>
+          </div>
+          <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-foreground/10 pt-8 md:flex-row md:items-center">
+            <p className="text-xs text-foreground/40">
+              Built with v0, AI SDK 6, and Vercel AI Gateway
+            </p>
+            <div className="flex items-center gap-6">
+              <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
+                Privacy Policy
+              </Link>
+              <Link href="#" className="text-xs text-foreground/40 transition-colors hover:text-hover">
+                Imprint
+              </Link>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* Flex banner */}
-      <FlexBanner policy={flex} />
-
-      {/* Footer */}
-      <SiteFooter />
+      </footer>
     </div>
-    </AuthProvider>
   )
 }

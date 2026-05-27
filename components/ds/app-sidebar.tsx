@@ -6,7 +6,7 @@ import { LayoutDashboard, Users, BarChart3, Settings, ChevronLeft, ChevronRight,
 import type { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { NavaxLogo } from "./navax-logo"
+import { ValtechLogo } from "./valtech-logo"
 
 interface SidebarItem {
   label: string
@@ -52,10 +52,11 @@ export function AppSidebar({
   activePath = "#",
   className,
   defaultCollapsed = false,
-  user = { name: "Jonas W.", email: "j.woehrle@demo.com" },
+  user = { name: "Jonas Wöhrle", email: "j.woehrle@navax.com" },
 }: AppSidebarProps) {
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed)
   const [openSections, setOpenSections] = React.useState<string[]>(() => {
+    // Auto-expand sections that contain the active path
     return (items ?? defaultItems)
       .filter((item) => item.children?.some((child) => activePath.startsWith(child.href)))
       .map((item) => item.label)
@@ -79,13 +80,13 @@ export function AppSidebar({
       <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-3">
         {!collapsed && (
           <Link href="/" className="shrink-0">
-            <NavaxLogo variant="light" width={100} />
+            <ValtechLogo variant="light" width={100} />
           </Link>
         )}
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 shrink-0 text-sidebar-foreground hover:bg-sidebar-primary/10 hover:text-sidebar-primary"
+          className="h-8 w-8 shrink-0 text-sidebar-foreground hover:bg-hover/10 hover:text-hover"
           onClick={() => setCollapsed(!collapsed)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
@@ -109,7 +110,7 @@ export function AppSidebar({
                     <button
                       onClick={() => toggleSection(item.label)}
                       className={cn(
-                        "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-primary/10 hover:text-sidebar-primary",
+                        "flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-hover/10 hover:text-hover",
                         collapsed && "justify-center px-0"
                       )}
                       title={collapsed ? item.label : undefined}
@@ -119,7 +120,7 @@ export function AppSidebar({
                         <>
                           <span className="flex-1 text-left">{item.label}</span>
                           {item.badge && (
-                            <span className="rounded-full bg-sidebar-primary/20 px-1.5 py-0.5 text-[10px] font-semibold text-sidebar-primary">
+                            <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                               {item.badge}
                             </span>
                           )}
@@ -134,7 +135,7 @@ export function AppSidebar({
                             <Link
                               href={child.href}
                               className={cn(
-                                "block rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/70 transition-colors hover:text-sidebar-primary",
+                                "block rounded-md px-2 py-1.5 text-sm text-sidebar-foreground/70 transition-colors hover:text-hover",
                                 child.href === activePath && "bg-sidebar-accent font-medium text-sidebar-primary"
                               )}
                             >
@@ -149,7 +150,7 @@ export function AppSidebar({
                   <Link
                     href={item.href || "#"}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-primary/10 hover:text-sidebar-primary",
+                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-hover/10 hover:text-hover",
                       isActive && "bg-sidebar-accent text-sidebar-primary",
                       collapsed && "justify-center px-0"
                     )}
@@ -160,7 +161,7 @@ export function AppSidebar({
                       <>
                         <span className="flex-1">{item.label}</span>
                         {item.badge && (
-                          <span className="rounded-full bg-sidebar-primary/20 px-1.5 py-0.5 text-[10px] font-semibold text-sidebar-primary">
+                          <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                             {item.badge}
                           </span>
                         )}
@@ -177,7 +178,7 @@ export function AppSidebar({
       {/* User section */}
       <div className="border-t border-sidebar-border p-3">
         <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sidebar-primary text-xs font-semibold text-sidebar-primary-foreground">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
             {user.name.split(" ").map((n) => n[0]).join("")}
           </div>
           {!collapsed && (
@@ -187,7 +188,7 @@ export function AppSidebar({
             </div>
           )}
           {!collapsed && (
-            <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0 text-sidebar-foreground/60 hover:text-sidebar-primary" aria-label="Sign out">
+            <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0 text-sidebar-foreground/60 hover:text-hover" aria-label="Sign out">
               <LogOut className="h-3.5 w-3.5" />
             </Button>
           )}

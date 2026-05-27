@@ -10,137 +10,7 @@
 
 @layer base {
   :root {
-    /* ── Explore Brand: Crimson Red #C8102E + Warm White + Dark Navy ── */
-    --background: 0 0% 100%;
-    --foreground: 210 11% 15%;
-    --card: 0 0% 100%;
-    --card-foreground: 210 11% 15%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 11% 15%;
-
-    /* Primary: Explore crimson red #C8102E */
-    --primary: 350 85% 42%;
-    --primary-foreground: 0 0% 100%;
-
-    /* Secondary: Light warm gray for section backgrounds */
-    --secondary: 30 14% 96%;
-    --secondary-foreground: 210 11% 15%;
-
-    /* Muted: Neutral grays */
-    --muted: 220 9% 94%;
-    --muted-foreground: 220 9% 46%;
-
-    /* Accent: Teal/green for secondary CTAs */
-    --accent: 173 58% 39%;
-    --accent-foreground: 0 0% 100%;
-
-    /* Explore Yellow -- used for CTAs, highlights, promo banners */
-    --explore-yellow: 45 100% 51%;
-    --explore-yellow-foreground: 210 11% 15%;
-
-    /* Hover: Darker crimson */
-    --hover: 350 85% 35%;
-    --hover-foreground: 0 0% 100%;
-
-    /* Destructive */
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    /* Success */
-    --success: 160 65% 38%;
-    --success-foreground: 0 0% 100%;
-
-    /* Warning */
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    /* Info */
-    --info: 213 65% 30%;
-    --info-foreground: 0 0% 100%;
-
-    /* Borders & inputs */
-    --border: 220 13% 87%;
-    --input: 220 13% 87%;
-    --ring: 350 85% 42%;
-
-    /* Charts */
-    --chart-1: 350 85% 42%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 220 9% 46%;
-    --chart-4: 30 50% 75%;
-    --chart-5: 350 40% 85%;
-
-    --radius: 0.5rem;
-
-    /* Sidebar -- Dark navy for AI section */
-    --sidebar-background: 213 65% 15%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 167 100% 39%;
-    --sidebar-primary-foreground: 213 65% 15%;
-    --sidebar-accent: 213 55% 20%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 213 50% 22%;
-    --sidebar-ring: 167 100% 39%;
-  }
-
-  .dark {
-    /* ── Dark theme for AI section ── */
-    --background: 213 65% 10%;
-    --foreground: 0 0% 95%;
-    --card: 213 55% 13%;
-    --card-foreground: 0 0% 95%;
-    --popover: 213 55% 13%;
-    --popover-foreground: 0 0% 95%;
-
-    --primary: 167 100% 39%;
-    --primary-foreground: 213 65% 15%;
-
-    --secondary: 213 50% 18%;
-    --secondary-foreground: 0 0% 90%;
-
-    --muted: 213 40% 20%;
-    --muted-foreground: 215 16% 60%;
-
-    --accent: 213 50% 18%;
-    --accent-foreground: 0 0% 95%;
-
-    --hover: 167 100% 39%;
-    --hover-foreground: 213 65% 15%;
-
-    --destructive: 0 63% 45%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 160 55% 38%;
-    --success-foreground: 0 0% 100%;
-
-    --warning: 38 80% 50%;
-    --warning-foreground: 0 0% 100%;
-
-    --info: 213 65% 50%;
-    --info-foreground: 0 0% 100%;
-
-    --border: 213 40% 22%;
-    --input: 213 40% 22%;
-    --ring: 167 100% 39%;
-
-    --chart-1: 167 100% 39%;
-    --chart-2: 213 50% 50%;
-    --chart-3: 215 16% 47%;
-    --chart-4: 167 40% 55%;
-    --chart-5: 216 33% 40%;
-
-    --sidebar-background: 213 65% 8%;
-    --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 167 100% 39%;
-    --sidebar-primary-foreground: 213 65% 15%;
-    --sidebar-accent: 213 55% 15%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 213 50% 15%;
-    --sidebar-ring: 167 100% 39%;
-  }
-
-  /* ── Valtech / NAVAX dark theme for /vercel section ── */
-  .theme-valtech {
+    /* ── Valtech Design: Black #000 + Off-White/Beige #F5F0EB ── */
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
     --card: 0 0% 5%;
@@ -199,6 +69,61 @@
     --radius: 0rem;
 
     /* Sidebar -- dark Valtech style */
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 30 33% 94%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 30 25% 92%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
+
+    --hover: 24 95% 53%;
+    --hover-foreground: 0 0% 0%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 160 55% 32%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 80% 45%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 0 0% 65%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 100%;
+
+    --chart-1: 30 33% 94%;
+    --chart-2: 0 0% 65%;
+    --chart-3: 0 0% 45%;
+    --chart-4: 30 25% 85%;
+    --chart-5: 0 0% 80%;
+
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 90%;
     --sidebar-primary: 0 0% 100%;

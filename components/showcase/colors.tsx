@@ -27,37 +27,37 @@ export function ShowcaseColors() {
     <div className="flex flex-col gap-8">
       {/* Core palette */}
       <div>
-        <p className="text-sm font-medium mb-3 text-foreground">Core Brightly Palette</p>
+        <p className="text-sm font-medium mb-3 text-foreground">Core NAVAX Palette</p>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
           <Swatch
-            name="Green"
+            name="Magenta"
             className="bg-primary"
             textClassName="text-foreground"
-            value="#00C9A7"
+            value="#79217A"
           />
           <Swatch
-            name="Navy"
-            className="bg-foreground"
+            name="Teal"
+            className="bg-secondary"
             textClassName="text-foreground"
-            value="#0C2340"
+            value="#006F6E"
           />
           <Swatch
-            name="Info Blue"
+            name="Blue"
             className="bg-info"
             textClassName="text-foreground"
-            value="#0C3D6E"
+            value="#2769B2"
+          />
+          <Swatch
+            name="Foreground"
+            className="bg-foreground"
+            textClassName="text-foreground"
+            value="#1F2937"
           />
           <Swatch
             name="Background"
             className="bg-background"
             textClassName="text-foreground"
             value="#FFFFFF"
-          />
-          <Swatch
-            name="Secondary"
-            className="bg-secondary"
-            textClassName="text-foreground"
-            value="#F5F7FA"
           />
         </div>
       </div>
@@ -70,7 +70,7 @@ export function ShowcaseColors() {
             name="Accent"
             className="bg-accent"
             textClassName="text-foreground"
-            value="Green tint"
+            value="Teal tint"
           />
           <Swatch
             name="Muted"
