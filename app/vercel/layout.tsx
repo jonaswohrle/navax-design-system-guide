@@ -3,9 +3,9 @@
 import * as React from "react"
 import { usePathname } from "next/navigation"
 import { AppSidebar } from "@/components/ds/app-sidebar"
-import { Sparkles, LayoutDashboard, Triangle } from "lucide-react"
+import { Sparkles, LayoutDashboard, Triangle, Users } from "lucide-react"
 
-const aiSidebarItems = [
+const vercelSidebarItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   {
     label: "Vercel & v0",
@@ -25,14 +25,21 @@ const aiSidebarItems = [
       { label: "Content Pipeline", href: "/vercel/content-pipeline" },
     ],
   },
+  {
+    label: "Personalization",
+    icon: Users,
+    children: [
+      { label: "Live Profile", href: "/vercel/personalization" },
+    ],
+  },
 ]
 
-export default function AILayout({ children }: { children: React.ReactNode }) {
+export default function VercelLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   return (
-    <div className="flex h-screen bg-background text-foreground">
-      <AppSidebar items={aiSidebarItems} activePath={pathname} />
+    <div className="theme-valtech flex h-screen bg-background text-foreground">
+      <AppSidebar items={vercelSidebarItems} activePath={pathname} />
       <main className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">{children}</main>
     </div>
   )

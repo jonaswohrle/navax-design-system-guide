@@ -1,19 +1,16 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import {
   MessageSquare,
   ImagePlus,
   GitBranch,
   ArrowRight,
-  Sparkles,
   Code2,
   Cpu,
   Layers,
   type LucideIcon,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
 
 function DemoCard({
   title,
@@ -49,7 +46,6 @@ function DemoCard({
           </p>
         </div>
 
-        {/* SDK pattern preview */}
         <div className="overflow-hidden rounded-none border border-foreground/10 bg-accent px-4 py-3">
           <pre className="overflow-x-auto text-[11px] font-mono text-muted-foreground leading-relaxed">
             {sdkPattern}
@@ -78,7 +74,6 @@ export default function AIShowcasesPage() {
   return (
     <div className="flex h-full flex-col overflow-y-auto">
       <div className="flex flex-col gap-12 p-6 lg:p-10">
-        {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-3">
             <span className="flex w-fit items-center gap-1.5 rounded-full border border-foreground/30 px-4 py-1.5 text-xs font-medium tracking-wide uppercase text-foreground/70">
@@ -94,7 +89,6 @@ export default function AIShowcasesPage() {
           </div>
         </div>
 
-        {/* Tech stack pills */}
         <div className="grid gap-4 sm:grid-cols-3">
           {[
             {
@@ -128,7 +122,6 @@ export default function AIShowcasesPage() {
           ))}
         </div>
 
-        {/* Demo grid */}
         <div className="grid gap-8 lg:grid-cols-3">
           <DemoCard
             title="Prompt Coach"
@@ -156,7 +149,6 @@ export default function AIShowcasesPage() {
           />
         </div>
 
-        {/* What you'll learn */}
         <div className="border border-foreground/10 bg-accent p-8">
           <h2 className="text-xl font-heading font-normal tracking-tight text-foreground">
             What these demos teach
