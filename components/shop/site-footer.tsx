@@ -1,148 +1,151 @@
-"use client"
-
 import Link from "next/link"
-import Image from "next/image"
-import { Mail, Facebook, Instagram, Youtube, Truck, ShieldCheck, CreditCard, RotateCcw } from "lucide-react"
-import { CATEGORIES } from "@/lib/shop/data"
+import {
+  MapPin,
+  Heart,
+  Mail,
+  Users,
+  Gift,
+  Facebook,
+  Instagram,
+  Youtube,
+  Check,
+  Store,
+  Home,
+  ChevronRight,
+} from "lucide-react"
 
-const serviceLinks = ["Kundenservice", "Kontakt", "Versand & Lieferung", "Bezahlarten", "Rückgabe & Umtausch", "Häufige Fragen"]
-const companyLinks = ["Unternehmen", "Karriere", "Presse", "Nachhaltigkeit", "Filialen", "Geschäftskunden"]
-const legalLinks = ["Impressum", "Datenschutz", "AGB", "Cookie-Einstellungen", "Widerrufsrecht"]
-
-const usps = [
-  { icon: Truck, title: "Kostenloser Versand", text: "ab 49 € Bestellwert" },
-  { icon: RotateCcw, title: "30 Tage Rückgabe", text: "einfach & kostenlos" },
-  { icon: ShieldCheck, title: "Sicher einkaufen", text: "SSL-verschlüsselt" },
-  { icon: CreditCard, title: "Sichere Zahlung", text: "viele Bezahlarten" },
+const benefits = [
+  { icon: MapPin, label: "Filiale finden", href: "#" },
+  { icon: Heart, label: "babywelt", href: "#" },
+  { icon: Mail, label: "Newsletter", href: "#" },
+  { icon: Users, label: "Karriere", href: "#" },
+  { icon: Gift, label: "Gutscheine", href: "#" },
 ]
+
+const legalLinks = [
+  "Impressum",
+  "Datenschutz",
+  "Cookie Einstellungen",
+  "AGB Rossmann Onlineshop",
+  "Kontakt",
+  "Verbraucherschlichtung",
+  "Barrierefreiheitserklärung",
+]
+
+const advantages = ["Sendungsverfolgung", "Kauf auf Rechnung", "Kostenlose Rücksendung"]
+const newsletterPoints = ["alle Angebote zum Werbestart", "tolle Aktionen im Blick", "meine Themen im Mittelpunkt"]
 
 export function SiteFooter() {
   return (
-    <footer className="mt-12 bg-secondary">
-      {/* USP strip */}
-      <div className="border-y border-border bg-card">
-        <div className="mx-auto grid max-w-[1280px] grid-cols-2 gap-4 px-4 py-6 md:grid-cols-4">
-          {usps.map((u) => (
-            <div key={u.title} className="flex items-center gap-3">
-              <u.icon className="h-8 w-8 shrink-0 text-primary" aria-hidden />
-              <div>
-                <p className="text-sm font-semibold text-foreground">{u.title}</p>
-                <p className="text-xs text-muted-foreground">{u.text}</p>
-              </div>
-            </div>
+    <footer className="mt-12">
+      {/* Benefits bar */}
+      <div className="bg-primary text-primary-foreground">
+        <div className="mx-auto grid max-w-[1280px] grid-cols-2 gap-6 px-4 py-6 sm:grid-cols-3 lg:grid-cols-5">
+          {benefits.map((b) => (
+            <Link key={b.label} href={b.href} className="flex items-center gap-3 hover:opacity-90">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-primary-foreground/60">
+                <b.icon className="h-5 w-5" aria-hidden />
+              </span>
+              <span className="text-sm font-medium">{b.label}</span>
+            </Link>
           ))}
         </div>
       </div>
 
-      {/* Newsletter */}
-      <div className="bg-primary">
-        <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-4 px-4 py-8 text-center md:flex-row md:justify-between md:text-left">
-          <div className="flex items-center gap-3 text-primary-foreground">
-            <Mail className="h-9 w-9 shrink-0" aria-hidden />
-            <div>
-              <p className="text-lg font-bold">Newsletter abonnieren & 10% sichern</p>
-              <p className="text-sm opacity-90">Exklusive Angebote, Coupons und Neuheiten direkt per E-Mail.</p>
-            </div>
+      {/* Legal links + social */}
+      <div className="bg-card">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
+          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {legalLinks.map((l) => (
+              <li key={l}>
+                <Link href="#" className="text-sm text-foreground hover:text-primary">
+                  {l}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="flex gap-3">
+            <Link href="#" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-hover">
+              <Facebook className="h-4 w-4" />
+            </Link>
+            <Link href="#" aria-label="YouTube" className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-hover">
+              <Youtube className="h-4 w-4" />
+            </Link>
+            <Link href="#" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-hover">
+              <Instagram className="h-4 w-4" />
+            </Link>
           </div>
-          <form
-            className="flex w-full max-w-md gap-2"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="email"
-              required
-              placeholder="E-Mail-Adresse"
-              aria-label="E-Mail-Adresse"
-              className="h-11 flex-1 rounded-full border-0 px-4 text-sm text-foreground outline-none"
-            />
-            <button
-              type="submit"
-              className="h-11 shrink-0 rounded-full bg-foreground px-5 text-sm font-bold text-card hover:opacity-90"
-            >
-              Anmelden
-            </button>
-          </form>
         </div>
       </div>
 
-      {/* Link columns */}
-      <div className="mx-auto grid max-w-[1280px] grid-cols-2 gap-8 px-4 py-10 md:grid-cols-4">
-        <div>
-          <h3 className="mb-3 text-sm font-bold uppercase text-foreground">Sortiment</h3>
-          <ul className="space-y-2">
-            {CATEGORIES.map((c) => (
-              <li key={c.slug}>
-                <Link href={`/c/${c.slug}`} className="text-sm text-muted-foreground hover:text-primary">
-                  {c.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 className="mb-3 text-sm font-bold uppercase text-foreground">Service & Hilfe</h3>
-          <ul className="space-y-2">
-            {serviceLinks.map((l) => (
-              <li key={l}>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
-                  {l}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 className="mb-3 text-sm font-bold uppercase text-foreground">Unternehmen</h3>
-          <ul className="space-y-2">
-            {companyLinks.map((l) => (
-              <li key={l}>
-                <Link href="#" className="text-sm text-muted-foreground hover:text-primary">
-                  {l}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 className="mb-3 text-sm font-bold uppercase text-foreground">Folge uns</h3>
-          <div className="mb-4 flex gap-3">
-            <Link href="#" aria-label="Facebook" className="text-muted-foreground hover:text-primary">
-              <Facebook className="h-6 w-6" />
-            </Link>
-            <Link href="#" aria-label="Instagram" className="text-muted-foreground hover:text-primary">
-              <Instagram className="h-6 w-6" />
-            </Link>
-            <Link href="#" aria-label="YouTube" className="text-muted-foreground hover:text-primary">
-              <Youtube className="h-6 w-6" />
-            </Link>
+      {/* Advantages / delivery / newsletter */}
+      <div className="bg-secondary">
+        <div className="mx-auto grid max-w-[1280px] gap-8 px-4 py-10 lg:grid-cols-3">
+          {/* Advantages */}
+          <div>
+            <h3 className="mb-4 text-lg font-bold text-foreground">Vorteile beim Online-Kauf</h3>
+            <ul className="space-y-3">
+              {advantages.map((a) => (
+                <li key={a} className="flex items-center gap-3 text-sm text-foreground">
+                  <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  {a}
+                </li>
+              ))}
+            </ul>
           </div>
-          <h3 className="mb-2 text-sm font-bold uppercase text-foreground">Zahlungsarten</h3>
-          <div className="flex flex-wrap gap-2">
-            {["VISA", "Mastercard", "PayPal", "Klarna", "SEPA"].map((p) => (
-              <span
-                key={p}
-                className="rounded border border-border bg-card px-2 py-1 text-[11px] font-semibold text-muted-foreground"
-              >
-                {p}
-              </span>
-            ))}
+
+          {/* Delivery */}
+          <div className="bg-card p-6">
+            <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-foreground">
+              Lieferung in Ihre Filiale oder nach Hause
+            </h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Store className="h-5 w-5" aria-hidden />
+                </span>
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-semibold text-foreground">kostenlose Lieferung in die Filiale</span> ab 20 € Bestellwert
+                </p>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Home className="h-5 w-5" aria-hidden />
+                </span>
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-semibold text-foreground">kostenlose Lieferung nach Hause</span> ab 69 € Bestellwert
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div className="bg-card p-6">
+            <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-foreground">Newsletter abonnieren</h3>
+            <ul className="mb-5 space-y-3">
+              {newsletterPoints.map((n) => (
+                <li key={n} className="flex items-center gap-3 text-sm text-foreground">
+                  <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  {n}
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="#"
+              className="inline-flex items-center gap-1 bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:bg-hover"
+            >
+              <ChevronRight className="h-4 w-4" /> jetzt abonnieren
+            </Link>
           </div>
         </div>
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-border">
-        <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-3 px-4 py-5 md:flex-row">
-          <Image src="/shop/rossmann-logo.png" alt="ROSSMANN - Mein Drogeriemarkt" width={150} height={38} className="h-8 w-auto" />
-          <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-            {legalLinks.map((l) => (
-              <li key={l}>
-                <Link href="#" className="text-xs text-muted-foreground hover:text-primary">
-                  {l}
-                </Link>
-              </li>
-            ))}
-          </ul>
+      <div className="bg-card">
+        <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-2 px-4 py-5 sm:flex-row">
+          <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+            <span>Payment: VISA · Mastercard · PayPal · Klarna · SEPA</span>
+          </p>
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} Dirk Rossmann GmbH – Demo-Nachbau
           </p>

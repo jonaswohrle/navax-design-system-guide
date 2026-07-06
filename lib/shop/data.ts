@@ -3,6 +3,8 @@ export type Category = {
   name: string
   short: string
   description: string
+  heading: string
+  subcategories: string[]
 }
 
 export type Product = {
@@ -26,38 +28,116 @@ export const CATEGORIES: Category[] = [
   {
     slug: "make-up",
     name: "Make-up",
-    short: "Make-up",
-    description: "Foundation, Mascara, Lippenstifte und mehr für deinen perfekten Look.",
+    short: "Make-Up",
+    heading: "Make-up in allen Formen und Farben",
+    description:
+      "Foundation, Mascara, Lippenstifte und mehr für deinen perfekten Look. Entdecke unser Make-up im Online-Shop von ROSSMANN.",
+    subcategories: [
+      "Augen",
+      "Augenbrauen",
+      "Beauty Tools & Accessoires",
+      "Beauty Vorteilssets",
+      "Geschenksets",
+      "Lippen",
+      "Make-Up Paletten",
+      "Nägel",
+      "Pinsel & Accessoires",
+      "Primer & Fixingspray",
+      "Teint",
+    ],
   },
   {
     slug: "pflege-duft",
     name: "Pflege & Duft",
     short: "Pflege & Duft",
-    description: "Gesichtspflege, Körperpflege, Haarpflege und Düfte für jeden Tag.",
+    heading: "Pflege & Duft für dein Wohlbefinden",
+    description:
+      "Gesichtspflege, Körperpflege, Haarpflege und Düfte für jeden Tag. Entdecke unsere Pflegeprodukte im Online-Shop von ROSSMANN.",
+    subcategories: [
+      "Gesichtspflege",
+      "Körperpflege",
+      "Haarpflege",
+      "Duschen & Baden",
+      "Handpflege",
+      "Fußpflege",
+      "Sonnenpflege",
+      "Zahnpflege",
+      "Rasur & Haarentfernung",
+      "Damendüfte",
+      "Herrendüfte",
+    ],
   },
   {
     slug: "baby-spielzeug",
     name: "Baby & Spielzeug",
     short: "Baby & Spielzeug",
-    description: "Alles für dein Baby: Windeln, Pflege, Ernährung und Spielzeug.",
+    heading: "Alles für dein Baby & Kind",
+    description:
+      "Alles für dein Baby: Windeln, Pflege, Ernährung und Spielzeug. Entdecke unsere Babywelt im Online-Shop von ROSSMANN.",
+    subcategories: [
+      "Windeln & Feuchttücher",
+      "Babynahrung",
+      "Babypflege",
+      "Stillen & Fläschchen",
+      "Spielzeug",
+      "Baby-Textilien",
+      "Unterwegs",
+      "Sicherheit & Gesundheit",
+    ],
   },
   {
     slug: "haushalt",
     name: "Haushalt",
     short: "Haushalt",
-    description: "Wasch-, Putz- und Reinigungsmittel sowie praktische Haushaltshelfer.",
+    heading: "Haushalt & Reinigung für dein Zuhause",
+    description:
+      "Wasch-, Putz- und Reinigungsmittel sowie praktische Haushaltshelfer. Entdecke unser Haushaltssortiment im Online-Shop von ROSSMANN.",
+    subcategories: [
+      "Waschmittel",
+      "Weichspüler",
+      "Reinigungsmittel",
+      "Spülmittel",
+      "Papierwaren",
+      "Müllbeutel & Folien",
+      "Raumdüfte",
+      "Batterien",
+    ],
   },
   {
     slug: "gesundheit",
     name: "Gesundheit",
     short: "Gesundheit",
-    description: "Nahrungsergänzung, Erste Hilfe und Produkte für dein Wohlbefinden.",
+    heading: "Gesundheit & Wohlbefinden",
+    description:
+      "Nahrungsergänzung, Erste Hilfe und Produkte für dein Wohlbefinden. Entdecke unser Gesundheitssortiment im Online-Shop von ROSSMANN.",
+    subcategories: [
+      "Nahrungsergänzung",
+      "Vitamine & Mineralstoffe",
+      "Erste Hilfe",
+      "Erkältung",
+      "Verhütung",
+      "Hygiene",
+      "Medizinprodukte",
+      "Sport & Fitness",
+    ],
   },
   {
     slug: "lebensmittel",
     name: "Lebensmittel",
     short: "Lebensmittel",
-    description: "Snacks, Getränke, Bio-Produkte und mehr für deinen Vorrat.",
+    heading: "Lebensmittel & Getränke",
+    description:
+      "Snacks, Getränke, Bio-Produkte und mehr für deinen Vorrat. Entdecke unser Lebensmittelsortiment im Online-Shop von ROSSMANN.",
+    subcategories: [
+      "Süßigkeiten & Snacks",
+      "Getränke",
+      "Kaffee & Tee",
+      "Bio-Lebensmittel",
+      "Frühstück",
+      "Kochen & Backen",
+      "Vegan & Vegetarisch",
+      "Nüsse & Trockenfrüchte",
+    ],
   },
 ]
 

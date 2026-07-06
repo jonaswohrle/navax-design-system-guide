@@ -14,13 +14,13 @@ export default function OffersPage() {
 
   return (
     <div className="mx-auto max-w-[1280px] px-4 py-6">
-      <nav aria-label="Breadcrumb" className="mb-4 flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
-        <Link href="/" className="hover:text-primary">Startseite</Link>
-        <ChevronRight className="h-4 w-4" />
-        <span className="font-medium text-foreground">Angebote</span>
+      <nav aria-label="Breadcrumb" className="mb-6 flex flex-wrap items-center gap-1 text-sm">
+        <Link href="/" className="text-muted-foreground hover:text-primary">Startseite</Link>
+        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+        <span className="text-foreground">Angebote</span>
       </nav>
 
-      <div className="mb-6 rounded-xl bg-primary p-6 text-primary-foreground sm:p-8">
+      <div className="mb-8 bg-primary p-6 text-primary-foreground sm:p-8">
         <span className="text-sm font-bold uppercase tracking-wide">Nur für kurze Zeit</span>
         <h1 className="mt-1 text-2xl font-extrabold sm:text-3xl">Aktuelle Angebote der Woche</h1>
         <p className="mt-1 max-w-xl text-sm opacity-90">

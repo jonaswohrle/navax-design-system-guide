@@ -18,12 +18,12 @@ export function AddToCart({ product }: { product: Product }) {
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <div className="flex items-center rounded-full border border-border">
+      <div className="flex items-center border border-border">
         <button
           type="button"
           aria-label="Menge verringern"
           onClick={() => setQty((q) => Math.max(1, q - 1))}
-          className="flex h-11 w-11 items-center justify-center text-foreground hover:text-primary"
+          className="flex h-12 w-12 items-center justify-center text-foreground transition-colors hover:text-primary"
         >
           <Minus className="h-4 w-4" />
         </button>
@@ -34,7 +34,7 @@ export function AddToCart({ product }: { product: Product }) {
           type="button"
           aria-label="Menge erhöhen"
           onClick={() => setQty((q) => q + 1)}
-          className="flex h-11 w-11 items-center justify-center text-foreground hover:text-primary"
+          className="flex h-12 w-12 items-center justify-center text-foreground transition-colors hover:text-primary"
         >
           <Plus className="h-4 w-4" />
         </button>
@@ -43,7 +43,7 @@ export function AddToCart({ product }: { product: Product }) {
       <button
         type="button"
         onClick={handleAdd}
-        className="flex h-11 flex-1 min-w-[200px] items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground transition-colors hover:bg-hover"
+        className="flex h-12 flex-1 min-w-[220px] items-center justify-center gap-2 bg-primary px-6 text-sm font-bold text-primary-foreground transition-colors hover:bg-hover"
       >
         {added ? (
           <>

@@ -31,7 +31,7 @@ export default function CartPage() {
         </p>
         <Link
           href="/"
-          className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-hover"
+          className="mt-6 inline-flex bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-hover"
         >
           Jetzt einkaufen
         </Link>
@@ -55,24 +55,24 @@ export default function CartPage() {
         {/* Items */}
         <div className="lg:col-span-2">
           {remaining > 0 && (
-            <div className="mb-4 rounded-lg bg-accent p-4 text-sm text-accent-foreground">
+            <div className="mb-4 bg-accent p-4 text-sm text-accent-foreground">
               Noch <strong>{formatPrice(remaining)}</strong> bis zum <strong>kostenlosen Versand</strong>!
             </div>
           )}
 
-          <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+          <ul className="divide-y divide-border border border-border bg-card">
             {items.map((item) => {
               const p = getProduct(item.slug)
               if (!p) return null
               return (
                 <li key={item.slug} className="flex gap-4 p-4">
-                  <Link href={`/p/${p.slug}`} className="relative h-24 w-24 shrink-0 rounded-md border border-border">
+                  <Link href={`/p/${p.slug}`} className="relative h-24 w-24 shrink-0 border border-border">
                     <Image src={p.image || "/placeholder.svg"} alt={p.name} fill sizes="96px" className="object-contain p-1" />
                   </Link>
                   <div className="flex flex-1 flex-col">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="text-xs font-semibold uppercase text-muted-foreground">{p.brand}</p>
+                        <p className="text-xs text-muted-foreground">{p.brand}</p>
                         <Link href={`/p/${p.slug}`} className="text-sm font-medium text-foreground hover:text-primary">
                           {p.name}
                         </Link>
@@ -89,7 +89,7 @@ export default function CartPage() {
                     </div>
 
                     <div className="mt-auto flex items-center justify-between pt-2">
-                      <div className="flex items-center rounded-full border border-border">
+                      <div className="flex items-center border border-border">
                         <button
                           type="button"
                           aria-label="Menge verringern"
@@ -137,7 +137,7 @@ export default function CartPage() {
 
         {/* Summary */}
         <aside className="lg:col-span-1">
-          <div className="sticky top-40 rounded-xl border border-border bg-card p-5">
+          <div className="sticky top-40 border border-border bg-card p-5">
             <h2 className="mb-4 text-lg font-bold text-foreground">Zusammenfassung</h2>
 
             {/* Coupon */}
@@ -148,12 +148,12 @@ export default function CartPage() {
                   value={coupon}
                   onChange={(e) => setCoupon(e.target.value)}
                   placeholder="z.B. ROSSMANN10"
-                  className="h-10 flex-1 rounded-md border border-border bg-card px-3 text-sm outline-none focus:border-primary"
+                  className="h-10 flex-1 border border-border bg-card px-3 text-sm outline-none focus:border-primary"
                 />
                 <button
                   type="button"
                   onClick={() => setCouponApplied(coupon.trim().length > 0)}
-                  className="flex h-10 items-center gap-1 rounded-md bg-foreground px-3 text-sm font-semibold text-card hover:opacity-90"
+                  className="flex h-10 items-center gap-1 bg-foreground px-3 text-sm font-semibold text-card hover:opacity-90"
                 >
                   <Tag className="h-4 w-4" /> Einlösen
                 </button>
@@ -190,9 +190,9 @@ export default function CartPage() {
 
             <button
               type="button"
-              className="mt-4 w-full rounded-full bg-primary py-3 text-sm font-bold text-primary-foreground hover:bg-hover"
+              className="mt-4 flex w-full items-center justify-center gap-2 bg-primary py-3.5 text-sm font-bold text-primary-foreground hover:bg-hover"
             >
-              Zur Kasse
+              <ShoppingCart className="h-4 w-4" /> Zur Kasse
             </button>
             <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-success" /> Sicher & SSL-verschlüsselt bezahlen
