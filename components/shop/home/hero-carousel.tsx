@@ -84,24 +84,33 @@ export function HeroCarousel() {
                 sizes="1280px"
                 className="object-cover"
               />
+              {/* Readability scrim: fades the white background into the photo behind the text */}
               <div
                 className={cn(
-                  "absolute inset-0 flex flex-col justify-center gap-3 p-6 sm:p-12 md:max-w-lg",
-                  slide.align === "right" ? "md:right-0 md:items-start md:text-left" : "md:items-start md:text-left",
+                  "absolute inset-0",
+                  slide.align === "right"
+                    ? "bg-gradient-to-l from-background from-25% via-background/80 via-55% to-transparent to-80%"
+                    : "bg-gradient-to-r from-background from-25% via-background/80 via-55% to-transparent to-80%",
                 )}
-                style={slide.align === "right" ? { marginLeft: "auto" } : undefined}
+                aria-hidden
+              />
+              <div
+                className={cn(
+                  "absolute inset-y-0 flex w-full flex-col justify-center gap-2 p-6 sm:w-1/2 sm:p-10 md:p-14",
+                  slide.align === "right" ? "right-0 items-start text-left" : "left-0 items-start text-left",
+                )}
               >
-                <div className="max-w-md rounded-lg bg-card/85 p-5 backdrop-blur-sm sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
-                  <span className="text-sm font-bold uppercase tracking-wide text-primary">
+                <div className="max-w-md">
+                  <span className="text-xs font-bold uppercase tracking-widest text-primary sm:text-sm">
                     {slide.eyebrow}
                   </span>
-                  <h2 className="mt-1 text-pretty text-2xl font-extrabold leading-tight text-foreground sm:text-3xl md:text-4xl">
+                  <h2 className="mt-2 text-pretty text-3xl font-extrabold leading-[1.1] text-foreground sm:text-4xl md:text-5xl">
                     {slide.title}
                   </h2>
-                  <p className="mt-2 text-sm text-foreground/80 sm:text-base">{slide.text}</p>
+                  <p className="mt-3 max-w-sm text-sm text-muted-foreground sm:text-base">{slide.text}</p>
                   <Link
                     href={slide.href}
-                    className="mt-4 inline-flex rounded-full bg-primary px-6 py-2.5 text-sm font-bold text-primary-foreground hover:bg-hover"
+                    className="mt-5 inline-flex rounded-full bg-primary px-7 py-3 text-sm font-bold text-primary-foreground shadow-sm transition-colors hover:bg-hover"
                   >
                     {slide.cta}
                   </Link>
