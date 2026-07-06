@@ -139,6 +139,61 @@
     --sidebar-ring: 167 100% 39%;
   }
 
+  /* ── ROSSMANN drugstore theme ── */
+  .theme-rossmann {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+
+    /* Primary: ROSSMANN crimson red */
+    --primary: 344 87% 41%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: light warm gray for section backgrounds */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 13%;
+
+    /* Muted */
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 42%;
+
+    /* Accent: soft ROSSMANN pink */
+    --accent: 344 70% 96%;
+    --accent-foreground: 344 87% 32%;
+
+    /* Hover: darker crimson */
+    --hover: 344 87% 34%;
+    --hover-foreground: 0 0% 100%;
+
+    /* Sale/price highlight */
+    --sale: 344 87% 41%;
+    --sale-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 145 63% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 13%;
+    --info: 205 75% 45%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 344 87% 41%;
+
+    --chart-1: 344 87% 41%;
+    --chart-2: 205 75% 45%;
+    --chart-3: 0 0% 55%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 145 63% 38%;
+
+    --radius: 0.375rem;
+  }
+
   /* ── Valtech / NAVAX dark theme for /vercel section ── */
   .theme-valtech {
     --background: 0 0% 0%;
