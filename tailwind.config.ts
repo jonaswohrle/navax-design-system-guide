@@ -11,10 +11,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-playfair)', 'Georgia', 'serif'],
-        mono: ['var(--font-geist-mono)', 'monospace'],
+        sans: ['var(--font-geist-pixel-square)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-geist-pixel-square)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-geist-pixel-square)', 'monospace'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -42,10 +41,6 @@ const config: Config = {
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
-        },
-        'explore-yellow': {
-          DEFAULT: 'hsl(var(--explore-yellow))',
-          foreground: 'hsl(var(--explore-yellow-foreground))',
         },
         hover: {
           DEFAULT: 'hsl(var(--hover))',
