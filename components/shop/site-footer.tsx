@@ -133,7 +133,7 @@ export function SiteFooter() {
       {/* Bottom bar */}
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-[1280px] flex-col items-center justify-between gap-3 px-4 py-5 md:flex-row">
-          <Image src="/shop/rossmann-logo.svg" alt="ROSSMANN" width={150} height={30} className="h-6 w-auto" />
+          <Image src="/shop/rossmann-logo.png" alt="ROSSMANN - Mein Drogeriemarkt" width={150} height={38} className="h-8 w-auto" />
           <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1">
             {legalLinks.map((l) => (
               <li key={l}>

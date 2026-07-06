@@ -67,12 +67,12 @@ export function SiteHeader() {
 
         <Link href="/" aria-label="ROSSMANN Startseite" className="shrink-0">
           <Image
-            src="/shop/rossmann-logo.svg"
-            alt="ROSSMANN"
+            src="/shop/rossmann-logo.png"
+            alt="ROSSMANN - Mein Drogeriemarkt"
             width={190}
-            height={38}
+            height={48}
             priority
-            className="h-9 w-auto"
+            className="h-11 w-auto"
           />
         </Link>
 
@@ -251,7 +251,7 @@ export function SiteHeader() {
           />
           <div className="absolute left-0 top-0 h-full w-80 max-w-[85%] overflow-y-auto bg-card p-4 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
-              <Image src="/shop/rossmann-logo.svg" alt="ROSSMANN" width={150} height={30} className="h-7 w-auto" />
+              <Image src="/shop/rossmann-logo.png" alt="ROSSMANN - Mein Drogeriemarkt" width={150} height={38} className="h-9 w-auto" />
               <button type="button" aria-label="Menü schließen" onClick={() => setMobileOpen(false)}>
                 <X className="h-6 w-6" />
               </button>
