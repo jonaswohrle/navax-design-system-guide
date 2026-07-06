@@ -14,6 +14,9 @@ const utilityLinks = [
   { label: "Karriere", href: "#" },
   { label: "Unternehmen", href: "#" },
   { label: "Geschäftskunden", href: "#" },
+]
+
+const utilityLinksRight = [
   { label: "Nachhaltigkeit", href: "#" },
   { label: "babywelt", href: "#" },
 ]
@@ -41,16 +44,29 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 bg-card shadow-sm">
       {/* Utility bar */}
       <div className="hidden border-b border-border bg-secondary lg:block">
-        <div className="mx-auto flex max-w-[1280px] items-center justify-end gap-5 px-4 py-1.5">
-          {utilityLinks.map((l) => (
-            <Link
-              key={l.label}
-              href={l.href}
-              className="text-xs text-muted-foreground transition-colors hover:text-primary"
-            >
-              {l.label}
-            </Link>
-          ))}
+        <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-1.5">
+          <div className="flex items-center gap-5">
+            {utilityLinks.map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                className="text-xs text-muted-foreground transition-colors hover:text-primary"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
+          <div className="flex items-center gap-5">
+            {utilityLinksRight.map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                className="text-xs text-muted-foreground transition-colors hover:text-primary"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -84,7 +100,7 @@ export function SiteHeader() {
         >
           <input
             type="search"
-            placeholder="Wonach suchst du?"
+            placeholder="Ich suche nach..."
             aria-label="Suchen"
             className="h-11 w-full rounded-full border border-border bg-secondary pl-5 pr-12 text-sm outline-none focus:border-primary focus:bg-card"
           />
@@ -138,7 +154,7 @@ export function SiteHeader() {
         <form role="search" className="relative" onSubmit={(e) => e.preventDefault()}>
           <input
             type="search"
-            placeholder="Wonach suchst du?"
+            placeholder="Ich suche nach..."
             aria-label="Suchen"
             className="h-10 w-full rounded-full border border-border bg-secondary pl-4 pr-11 text-sm outline-none focus:border-primary"
           />

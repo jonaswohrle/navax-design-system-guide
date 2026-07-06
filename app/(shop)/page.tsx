@@ -45,9 +45,7 @@ export default function HomePage() {
 
       {/* Top Picks */}
       <section className="mx-auto max-w-[1280px] px-4 py-8">
-        <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Beziehst du in Trends
-        </div>
+        <div className="mb-1 text-sm text-muted-foreground">Neuheiten &amp; Trends</div>
         <h2 className="mb-5 text-xl font-extrabold text-foreground sm:text-2xl">
           Unsere Top Picks für deinen Alltag
         </h2>
@@ -75,7 +73,10 @@ export default function HomePage() {
       <section className="bg-secondary">
         <div className="mx-auto max-w-[1280px] px-4 py-8">
           <div className="mb-5 flex items-end justify-between">
-            <h2 className="text-xl font-extrabold text-foreground sm:text-2xl">Aktuelle Angebote</h2>
+            <div>
+              <div className="mb-1 text-sm text-muted-foreground">Jede Woche neu für dich</div>
+              <h2 className="text-xl font-extrabold text-foreground sm:text-2xl">Aktuelle Angebote</h2>
+            </div>
             <Link href="/angebote" className="flex items-center text-sm font-semibold text-primary hover:text-hover">
               Alle Angebote entdecken <ChevronRight className="h-4 w-4" />
             </Link>
