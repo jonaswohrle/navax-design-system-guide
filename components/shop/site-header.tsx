@@ -155,7 +155,7 @@ export function SiteHeader() {
       {/* Main nav */}
       <nav aria-label="Hauptnavigation" className="hidden border-t border-border bg-card lg:block">
         <div
-          className="mx-auto flex max-w-[1280px] items-stretch gap-1 px-4"
+          className="mx-auto flex max-w-[1280px] items-stretch justify-between px-4"
           onMouseLeave={() => setOpenMenu(null)}
         >
           {navExtras.map((n) => (
@@ -163,7 +163,7 @@ export function SiteHeader() {
               key={n.slug}
               href="/"
               className={cn(
-                "flex items-center px-3 py-3 text-sm font-bold uppercase tracking-wide transition-colors",
+                "flex items-center whitespace-nowrap px-3 py-3.5 text-[15px] font-normal transition-colors",
                 n.name === "Neu" ? "text-primary hover:text-hover" : "text-foreground hover:text-primary",
               )}
             >
@@ -180,7 +180,7 @@ export function SiteHeader() {
               <Link
                 href={`/c/${cat.slug}`}
                 className={cn(
-                  "flex items-center gap-1 px-3 py-3 text-sm font-semibold uppercase tracking-wide transition-colors",
+                  "flex items-center gap-1 whitespace-nowrap px-3 py-3.5 text-[15px] font-normal transition-colors",
                   openMenu === cat.slug ? "text-primary" : "text-foreground hover:text-primary",
                 )}
               >
@@ -222,19 +222,19 @@ export function SiteHeader() {
 
           <Link
             href="#"
-            className="flex items-center px-3 py-3 text-sm font-semibold uppercase tracking-wide text-foreground transition-colors hover:text-primary"
+            className="flex items-center whitespace-nowrap px-3 py-3.5 text-[15px] font-normal text-foreground transition-colors hover:text-primary"
           >
             Tier
           </Link>
           <Link
             href="#"
-            className="flex items-center px-3 py-3 text-sm font-semibold uppercase tracking-wide text-foreground transition-colors hover:text-primary"
+            className="flex items-center whitespace-nowrap px-3 py-3.5 text-[15px] font-normal text-foreground transition-colors hover:text-primary"
           >
             Marken
           </Link>
           <Link
             href="/angebote"
-            className="ml-auto flex items-center px-3 py-3 text-sm font-bold uppercase tracking-wide text-primary transition-colors hover:text-hover"
+            className="flex items-center whitespace-nowrap px-3 py-3.5 text-[15px] font-normal text-primary transition-colors hover:text-hover"
           >
             Angebote
           </Link>
